@@ -1,0 +1,26 @@
+name: Publish (manual)
+
+# Manual escape hatch to (re)publish the current package.json version to
+# GitHub Packages. The normal path is the Release workflow, triggered by
+# merging a `release/*` PR (see scripts/release.mjs / `npm run release:*`).
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+      - run: npm ci
+      - run: npm run build
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,9 @@
+/* IconButton structure. Colors, sizing and the inside stroke come from the
+   generated component CSS (src/styles/components/icon-button.css, from
+   tokens/components/icon-button.json). Mirrors the Figma Icon Button (Components
+   file, node 8919:1174): square 40/36/32/28/24/20px, 20px glyph at every size. */
+.jspr-icon-btn > svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}

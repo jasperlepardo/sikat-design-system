@@ -1,0 +1,78 @@
+{
+  "$component": {
+    "name": "TextField",
+    "className": "jspr-field",
+    "prefix": "field",
+    "element": "input",
+    "colorAxes": [],
+    "sizeAxis": "size",
+    "states": [
+      "rest",
+      "filled",
+      "hover",
+      "hover-filled",
+      "focus",
+      "read-only",
+      "invalid",
+      "disabled"
+    ],
+    "stateSelectors": {
+      "rest": "",
+      "filled": "[data-filled]:not(:disabled):not([data-disabled]):not([readonly]):not([data-readonly]):not([aria-invalid=\"true\"]):not([data-invalid])",
+      "hover": ":is(:hover, [data-state=\"hover\"]):not(:disabled):not([data-disabled]):not([readonly]):not([data-readonly]):not([aria-invalid=\"true\"]):not([data-invalid])",
+      "hover-filled": "[data-filled]:is(:hover, [data-state=\"hover\"]):not(:focus-within):not(:disabled):not([data-disabled]):not([readonly]):not([data-readonly]):not([aria-invalid=\"true\"]):not([data-invalid])",
+      "focus": ":focus-within:not(:disabled):not([data-disabled]):not([readonly]):not([data-readonly]):not([aria-invalid=\"true\"]):not([data-invalid])",
+      "read-only": ":is([readonly], [data-readonly]):not(:disabled):not([data-disabled])",
+      "invalid": ":is([aria-invalid=\"true\"], [data-invalid]):not(:disabled):not([data-disabled])",
+      "disabled": ":is(:disabled, [data-disabled])"
+    },
+    "slots": {},
+    "base": {}
+  },
+  "colors": {
+    "": {
+      "rest": {
+        "bg": "--color-bg-default",
+        "border": "--color-border-default",
+        "text": "--color-text-body",
+        "placeholder": "--color-text-placeholder"
+      },
+      "filled": {
+        "border": "--color-border-primary"
+      },
+      "hover": {
+        "border": "--color-text-primary"
+      },
+      "hover-filled": {
+        "bg": "--color-bg-tertiary",
+        "border": "--color-border-transparent"
+      },
+      "focus": {
+        "bg": "--color-bg-default",
+        "border": "--color-border-primary"
+      },
+      "read-only": {
+        "bg": "--color-bg-transparent",
+        "border": "--color-border-transparent",
+        "text": "--color-text-body"
+      },
+      "invalid": {
+        "border": "--color-border-danger"
+      },
+      "disabled": {
+        "bg": "--color-bg-default",
+        "border": "--color-border-disabled",
+        "text": "--color-text-disabled"
+      }
+    }
+  },
+  "sizing": {
+    "md": {
+      "h": "--spacing-9",
+      "px": "--spacing-2_5",
+      "fs": "--text-body-sm-font-size",
+      "lh": "--text-body-sm-line-height",
+      "radius": "--rounded-lg"
+    }
+  }
+}
