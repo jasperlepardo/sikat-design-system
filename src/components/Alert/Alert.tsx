@@ -50,13 +50,13 @@ function AlertRoot({
   return (
     <div
       role="alert"
-      className={cn('jspr-alert', className)}
+      className={cn('sikat-alert', className)}
       data-intent={intent}
       data-style={variant}
       data-horizontal={horizontal || undefined}
       {...rest}
     >
-      <div className="jspr-alert__container">{children}</div>
+      <div className="sikat-alert__container">{children}</div>
     </div>
   );
 }
@@ -71,7 +71,7 @@ export interface AlertIconProps {
 
 /** Leading glyph (colored by the Root's intent/style via --alert-icon). */
 function AlertIcon({ children, className }: AlertIconProps) {
-  return <span className={cn('jspr-alert__icon', className)}>{children ?? DEFAULT_ICON}</span>;
+  return <span className={cn('sikat-alert__icon', className)}>{children ?? DEFAULT_ICON}</span>;
 }
 
 /* -------------------------------------------------- Alert.Content / Text / … */
@@ -83,7 +83,7 @@ export interface AlertSlotProps extends HTMLAttributes<HTMLDivElement> {
 /** Content column: groups the text block and the actions (row when horizontal). */
 function AlertContent({ className, children, ...rest }: AlertSlotProps) {
   return (
-    <div className={cn('jspr-alert__main', className)} {...rest}>
+    <div className={cn('sikat-alert__main', className)} {...rest}>
       {children}
     </div>
   );
@@ -92,7 +92,7 @@ function AlertContent({ className, children, ...rest }: AlertSlotProps) {
 /** Text group: title + body. */
 function AlertText({ className, children, ...rest }: AlertSlotProps) {
   return (
-    <div className={cn('jspr-alert__text', className)} {...rest}>
+    <div className={cn('sikat-alert__text', className)} {...rest}>
       {children}
     </div>
   );
@@ -100,7 +100,7 @@ function AlertText({ className, children, ...rest }: AlertSlotProps) {
 
 function AlertTitle({ className, children, ...rest }: AlertSlotProps) {
   return (
-    <div className={cn('jspr-alert__title', className)} {...rest}>
+    <div className={cn('sikat-alert__title', className)} {...rest}>
       {children}
     </div>
   );
@@ -108,7 +108,7 @@ function AlertTitle({ className, children, ...rest }: AlertSlotProps) {
 
 function AlertBody({ className, children, ...rest }: AlertSlotProps) {
   return (
-    <div className={cn('jspr-alert__message', className)} {...rest}>
+    <div className={cn('sikat-alert__message', className)} {...rest}>
       {children}
     </div>
   );
@@ -116,7 +116,7 @@ function AlertBody({ className, children, ...rest }: AlertSlotProps) {
 
 function AlertActions({ className, children, ...rest }: AlertSlotProps) {
   return (
-    <div className={cn('jspr-alert__actions', className)} {...rest}>
+    <div className={cn('sikat-alert__actions', className)} {...rest}>
       {children}
     </div>
   );
@@ -136,7 +136,7 @@ export interface AlertActionProps extends AnchorHTMLAttributes<HTMLAnchorElement
 function AlertAction({ className, style, children, ...rest }: AlertActionProps) {
   return (
     <Link
-      className={cn('jspr-alert__action', className)}
+      className={cn('sikat-alert__action', className)}
       style={{ '--link-text': 'var(--alert-action)', ...style } as CSSProperties}
       {...rest}
     >
@@ -160,7 +160,7 @@ function AlertClose({ onClick, label = 'Dismiss', className }: AlertCloseProps) 
       type="button"
       aria-label={label}
       onClick={onClick}
-      className={cn('jspr-alert__close', className)}
+      className={cn('sikat-alert__close', className)}
     >
       <Icon size={20}>
         <path d="M18 6 6 18M6 6l12 12" />

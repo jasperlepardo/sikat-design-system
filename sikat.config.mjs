@@ -1,5 +1,5 @@
 /**
- * jspr.config.mjs — base (JSPR) design-system config.
+ * sikat.config.mjs — base (SIKAT) design-system config.
  *
  * Only sets brand fonts for now: code emits the full CSS stack (with fallbacks);
  * the Figma push uses the first family (a Figma font variable holds one real

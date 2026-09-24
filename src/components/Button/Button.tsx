@@ -48,15 +48,15 @@ export function Button({
   return (
     <button
       type={type}
-      className={cn('jspr-btn', className)}
+      className={cn('sikat-btn', className)}
       data-intent={intent}
       data-style={variant}
       data-size={size}
       {...rest}
     >
-      {leadingIcon ? <span className="jspr-btn__icon">{leadingIcon}</span> : null}
-      {children != null ? <span className="jspr-btn__content">{children}</span> : null}
-      {trailingIcon ? <span className="jspr-btn__icon">{trailingIcon}</span> : null}
+      {leadingIcon ? <span className="sikat-btn__icon">{leadingIcon}</span> : null}
+      {children != null ? <span className="sikat-btn__content">{children}</span> : null}
+      {trailingIcon ? <span className="sikat-btn__icon">{trailingIcon}</span> : null}
     </button>
   );
 }

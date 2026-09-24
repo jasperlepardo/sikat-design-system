@@ -1,6 +1,6 @@
 /**
  * figma-to-config.mjs — reverse-map a pulled Figma variable manifest back into
- * jspr.config overrides (the Figma→code direction).
+ * sikat.config overrides (the Figma→code direction).
  *
  * Both inputs use the sync-figma manifest shape:
  *   { collections: [{ name, modes, variables: [{ name, type, valuesByMode }] }] }
@@ -27,7 +27,7 @@ const aliasName = (v, mode = 'Value') => {
   return val && val.alias ? val.alias.name : null;
 };
 
-/** Diff pulled vs base manifests → a jspr.config overlay ({ roles?, semantics? }). */
+/** Diff pulled vs base manifests → a sikat.config overlay ({ roles?, semantics? }). */
 export function diffToConfig(base, pulled) {
   const B = byColName(base);
   const P = byColName(pulled);
@@ -105,7 +105,7 @@ export function summarize(overlay) {
 export function serializeConfig(existing, overlay) {
   const merged = deepMerge(existing ?? {}, overlay);
   return (
-    `// jspr.config.js — updated by \`jspr pull figma --write\`.\n` +
+    `// sikat.config.js — updated by \`sikat pull figma --write\`.\n` +
     `// Review via git diff; re-add any dynamic (process.env) values if needed.\n` +
     `export default ${JSON.stringify(merged, null, 2)};\n`
   );

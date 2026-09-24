@@ -22,7 +22,7 @@ roles, not per-property duplicates; one palette; themed via the cascade.
    existing inversion convention.
 4. **Extend base's naming, don't import Figma's families.** Components already use
    `--{role}-{variant}` (e.g. `--primary-default`, `--background-muted`) and
-   `@theme` already maps them to `--color-*`. We extend that set; the jspr
+   `@theme` already maps them to `--color-*`. We extend that set; the sikat
    code↔Figma sync maps roles via the existing varname layer (no need to rename
    to `bg/`·`fg/`).
 
@@ -159,6 +159,6 @@ No structural component changes required by this plan.
 - **`fg`/icon tier:** plan keeps icons on `text-*`/intent (Tailwind-native). Only
   add an `--color-icon-*` set if a real divergence appears (none today).
 - **Dark mode authority:** base keeps its inverted dark theme (Figma has none).
-  When jspr regenerates the Figma, it should *write* base's dark values into the
+  When sikat regenerates the Figma, it should *write* base's dark values into the
   Figma's Dark mode (currently flat) — a follow-up to the pipeline, not this plan.
 ```

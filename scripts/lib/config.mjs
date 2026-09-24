@@ -1,8 +1,8 @@
 /**
  * config.mjs — resolve WHAT to read and WHERE to write, for both this package
- * (dev flow) and a consuming repo (`npx jspr`).
+ * (dev flow) and a consuming repo (`npx sikat`).
  *
- * loadConfig() discovers a jspr.config.{js,mjs,json} in the cwd, merges it over
+ * loadConfig() discovers a sikat.config.{js,mjs,json} in the cwd, merges it over
  * defaults, and computes absolute input/output paths. When the config carries
  * token overrides, materializeTokens() deep-merges the consumer overlays over
  * the package's base token JSON into a temp dir, which every downstream script
@@ -39,7 +39,7 @@ const readJSON = (p) => JSON.parse(readFileSync(p, 'utf8'));
 async function discoverConfig(cwd, explicit) {
   const candidates = explicit
     ? [resolve(cwd, explicit)]
-    : ['jspr.config.js', 'jspr.config.mjs', 'jspr.config.json'].map((f) => join(cwd, f));
+    : ['sikat.config.js', 'sikat.config.mjs', 'sikat.config.json'].map((f) => join(cwd, f));
   for (const p of candidates) {
     if (!existsSync(p)) continue;
     if (p.endsWith('.json')) return readJSON(p);
@@ -66,7 +66,7 @@ export async function loadConfig(opts = {}) {
 
   const overrides = hasTokenOverrides(config);
   const baseTokensDir = join(pkgRoot, 'tokens');
-  const tmpDir = join(tmpdir(), `jspr-${hash(cwd)}`);
+  const tmpDir = join(tmpdir(), `sikat-${hash(cwd)}`);
 
   const tokensDir = overrides ? tmpDir : baseTokensDir;
   const outRoot = opts.out ? resolve(cwd, opts.out) : cwd;
@@ -96,7 +96,7 @@ export async function loadConfig(opts = {}) {
     remRoot: config.spacing?.remRoot ?? 16,
   };
 
-  // Brand fonts: jspr.config `fonts.{sans,serif,mono}` (full CSS stacks). null →
+  // Brand fonts: sikat.config `fonts.{sans,serif,mono}` (full CSS stacks). null →
   // gen-raw keeps Tailwind's default stacks. Not a token override (no tmp-dir).
   const fonts = {
     sans: config.fonts?.sans ?? null,
@@ -104,16 +104,16 @@ export async function loadConfig(opts = {}) {
     mono: config.fonts?.mono ?? null,
   };
 
-  // Brand palette: jspr.config `palette.<family>.{50…950}` adds custom color
+  // Brand palette: sikat.config `palette.<family>.{50…950}` adds custom color
   // families to raw alongside Tailwind's (alpha ramp derived from 500). Not a
   // token override (no tmp-dir).
   const palette = config.palette ?? {};
 
-  // Extra radius steps: jspr.config `radius.<key>` adds brand steps to raw's
+  // Extra radius steps: sikat.config `radius.<key>` adds brand steps to raw's
   // Tailwind scale (e.g. lg-plus), slotted in by size.
   const radius = config.radius ?? {};
 
-  // Extra type sizes: jspr.config `text.<key> = { size, lineHeight }` adds brand
+  // Extra type sizes: sikat.config `text.<key> = { size, lineHeight }` adds brand
   // steps to raw's Tailwind font-size/line-height scale (e.g. 2xs), slotted in by size.
   const text = config.text ?? {};
 

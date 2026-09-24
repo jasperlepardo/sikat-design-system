@@ -16,7 +16,7 @@
  * The variant matrix is capped at ~30 per set: the largest axes are peeled off
  * as "split" axes (one set per split combo) until the remainder fits.
  *
- * Run: node scripts/gen-figma-components.mjs   (after `jspr gen figma`)
+ * Run: node scripts/gen-figma-components.mjs   (after `sikat gen figma`)
  */
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { join, basename } from 'node:path';

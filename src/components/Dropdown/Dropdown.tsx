@@ -30,7 +30,7 @@ export function Dropdown({
       id={id}
       role={role}
       aria-multiselectable={multiselectable || undefined}
-      className={cn('jspr-dropdown', className)}
+      className={cn('sikat-dropdown', className)}
     >
       {children}
     </div>
@@ -82,17 +82,17 @@ export function DropdownItem({
       aria-selected={selected || undefined}
       aria-disabled={disabled || undefined}
       data-active={active ? 'true' : undefined}
-      className={cn('jspr-dropdown__item', className)}
+      className={cn('sikat-dropdown__item', className)}
       onMouseDown={(e) => {
         e.preventDefault();
         if (!disabled) onSelect?.();
       }}
     >
-      {leadingIcon ? <span className="jspr-dropdown__icon">{leadingIcon}</span> : null}
-      {prefix != null ? <span className="jspr-dropdown__affix">{prefix}</span> : null}
-      <span className="jspr-dropdown__label">{children}</span>
-      {suffix != null ? <span className="jspr-dropdown__affix">{suffix}</span> : null}
-      {trailingIcon ? <span className="jspr-dropdown__icon">{trailingIcon}</span> : null}
+      {leadingIcon ? <span className="sikat-dropdown__icon">{leadingIcon}</span> : null}
+      {prefix != null ? <span className="sikat-dropdown__affix">{prefix}</span> : null}
+      <span className="sikat-dropdown__label">{children}</span>
+      {suffix != null ? <span className="sikat-dropdown__affix">{suffix}</span> : null}
+      {trailingIcon ? <span className="sikat-dropdown__icon">{trailingIcon}</span> : null}
     </div>
   );
 }

@@ -52,7 +52,7 @@ export function Link({
   const resolvedRel = rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined);
   return (
     <a
-      className={cn('jspr-link', className)}
+      className={cn('sikat-link', className)}
       data-intent={intent}
       data-state={disabled ? 'disabled' : undefined}
       href={disabled ? undefined : href}
@@ -63,9 +63,9 @@ export function Link({
       onClick={disabled ? (e) => e.preventDefault() : onClick}
       {...rest}
     >
-      {leadingIcon ? <span className="jspr-link__icon">{leadingIcon}</span> : null}
-      <span className="jspr-link__label">{children}</span>
-      {trailingIcon ? <span className="jspr-link__icon">{trailingIcon}</span> : null}
+      {leadingIcon ? <span className="sikat-link__icon">{leadingIcon}</span> : null}
+      <span className="sikat-link__label">{children}</span>
+      {trailingIcon ? <span className="sikat-link__icon">{trailingIcon}</span> : null}
     </a>
   );
 }

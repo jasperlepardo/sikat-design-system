@@ -1,7 +1,7 @@
 {
   "$component": {
     "name": "Badge",
-    "className": "jspr-badge",
+    "className": "sikat-badge",
     "prefix": "badge",
     "element": "span",
     "colorAxes": [

@@ -45,7 +45,7 @@ const alphaRamp = (solid) =>
   Object.fromEntries(Object.entries(ALPHA).map(([lvl, a]) => [lvl, leaf(withAlpha(solid, a))]));
 
 // Brand color mapping (matches the Figma Tokens file). `path` is a raw color
-// family: Tailwind's, or brand.* ramps from jspr.config `palette`.
+// family: Tailwind's, or brand.* ramps from sikat.config `palette`.
 const mapFamily = (path) => {
   const src = rawAt(path);
   const out = {};
@@ -93,13 +93,13 @@ const ratio = (v) => {
 };
 
 // line-height — absolute (rem → px in Figma), one per font size: Tailwind's
-// size × its raw ratio, or the jspr.config `text.<size>.lineHeight` for brand sizes.
+// size × its raw ratio, or the sikat.config `text.<size>.lineHeight` for brand sizes.
 const lineHeight = {};
 for (const [k, size] of Object.entries(raw['font-size'])) {
   const lh = raw['line-height'][k]
     ? `${+(toRem(size.value) * ratio(raw['line-height'][k].value)).toFixed(4)}rem`
     : ctx.text?.[k]?.lineHeight;
-  if (!lh) throw new Error(`no line-height for font-size ${k} (add jspr.config text.${k}.lineHeight)`);
+  if (!lh) throw new Error(`no line-height for font-size ${k} (add sikat.config text.${k}.lineHeight)`);
   lineHeight[k] = { value: lh, type: 'dimension' };
 }
 

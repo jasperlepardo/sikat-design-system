@@ -1,14 +1,14 @@
 /**
  * pull-figma.mjs — Figma → code. Reverse-maps a designer's variable edits back
- * into jspr.config (code stays the source of truth; pull = a proposed config edit).
+ * into sikat.config (code stays the source of truth; pull = a proposed config edit).
  *
  * Read path (any plan): emits figma/pull/read-variables.js — run it via the
- * use_figma MCP, save the returned JSON, then `jspr pull figma --write --from <json>`.
+ * use_figma MCP, save the returned JSON, then `sikat pull figma --write --from <json>`.
  * Read path (Enterprise): if FIGMA_TOKEN + file key are set, GET variables/local
  * directly. Either way, the pulled manifest is diffed against the current
- * variables.json and granular overrides are written into jspr.config.js.
+ * variables.json and granular overrides are written into sikat.config.js.
  *
- * Run: jspr pull figma [--write] [--from <json>] [--figma-file <key>]
+ * Run: sikat pull figma [--write] [--from <json>] [--figma-file <key>]
  */
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -96,21 +96,21 @@ async function restGetManifest(fileKey, token) {
 }
 
 async function loadRawConfig(cwd) {
-  for (const f of ['jspr.config.js', 'jspr.config.mjs', 'jspr.config.json']) {
+  for (const f of ['sikat.config.js', 'sikat.config.mjs', 'sikat.config.json']) {
     const p = join(cwd, f);
     if (!existsSync(p)) continue;
     if (p.endsWith('.json')) return { path: p, config: JSON.parse(readFileSync(p, 'utf8')) };
     const mod = await import(pathToFileURL(p).href);
     return { path: p, config: mod.default ?? mod };
   }
-  return { path: join(cwd, 'jspr.config.js'), config: {} };
+  return { path: join(cwd, 'sikat.config.js'), config: {} };
 }
 
 export async function run(ctx, opts = {}) {
   const basePath = join(ctx.paths.outFigma, 'variables.json');
   if (!existsSync(basePath)) {
     console.error(
-      `✗ ${basePath} not found — run \`jspr gen figma\` first (it's the comparison base).`,
+      `✗ ${basePath} not found — run \`sikat gen figma\` first (it's the comparison base).`,
     );
     process.exit(2);
   }
@@ -126,7 +126,7 @@ export async function run(ctx, opts = {}) {
     const dest = emitReadScript(ctx);
     console.log(`✓ ${dest}`);
     console.log('  Run it via the Figma MCP (use_figma), save the returned JSON, then:');
-    console.log('    jspr pull figma --write --from <saved.json>');
+    console.log('    sikat pull figma --write --from <saved.json>');
     return;
   }
 
@@ -140,7 +140,7 @@ export async function run(ctx, opts = {}) {
   for (const l of lines) console.log('  ~ ' + l);
 
   if (!opts.write) {
-    console.log('\nRe-run with --write to apply these to jspr.config.js.');
+    console.log('\nRe-run with --write to apply these to sikat.config.js.');
     return;
   }
   const { path, config } = await loadRawConfig(ctx.cwd);
@@ -152,7 +152,7 @@ export async function run(ctx, opts = {}) {
   } else {
     writeFileSync(path, serializeConfig(config, overlay));
   }
-  console.log(`\n✓ ${path} updated. Review via git diff, then \`jspr gen\`.`);
+  console.log(`\n✓ ${path} updated. Review via git diff, then \`sikat gen\`.`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

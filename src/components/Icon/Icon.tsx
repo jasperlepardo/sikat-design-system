@@ -26,7 +26,7 @@ export function Icon({
 }: IconProps) {
   return (
     <svg
-      className={cn('jspr-icon', className)}
+      className={cn('sikat-icon', className)}
       width={size}
       height={size}
       viewBox={viewBox}

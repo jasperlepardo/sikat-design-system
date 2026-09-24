@@ -3,7 +3,7 @@
    no color change on hover (underline on hover is a code addition). Label color is text/<intent>, icon color
    fg/<intent>; disabled uses text/disabled + fg/disabled. */
 
-.jspr-link {
+.sikat-link {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-1); /* 4px — Figma Link Button gap */
@@ -16,63 +16,63 @@
   cursor: pointer;
 }
 
-.jspr-link__icon {
+.sikat-link__icon {
   display: inline-flex;
   flex: none;
   color: var(--link-icon, var(--link-text));
 }
 /* Figma icons are 20px. */
-.jspr-link__icon > svg {
+.sikat-link__icon > svg {
   width: 20px;
   height: 20px;
 }
 
 /* Underline the label (not the icons) on hover + keyboard focus — a code
    addition to Figma's Link Button so links stay identifiable beyond color. */
-.jspr-link:hover:not([data-state='disabled']) .jspr-link__label,
-.jspr-link:focus-visible:not([data-state='disabled']) .jspr-link__label {
+.sikat-link:hover:not([data-state='disabled']) .sikat-link__label,
+.sikat-link:focus-visible:not([data-state='disabled']) .sikat-link__label {
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.jspr-link:focus-visible {
+.sikat-link:focus-visible {
   outline: 2px solid var(--color-border-primary);
   outline-offset: 2px;
   border-radius: var(--rounded-sm);
 }
 
 /* Intent colors (Figma Link Button Type axis). */
-.jspr-link[data-intent='default'] {
+.sikat-link[data-intent='default'] {
   --link-text: var(--color-text-heading);
   --link-icon: var(--color-fg-secondary-solid);
 }
-.jspr-link[data-intent='primary'] {
+.sikat-link[data-intent='primary'] {
   --link-text: var(--color-text-primary);
   --link-icon: var(--color-fg-primary);
 }
-.jspr-link[data-intent='success'] {
+.sikat-link[data-intent='success'] {
   --link-text: var(--color-text-success);
   --link-icon: var(--color-fg-success);
 }
-.jspr-link[data-intent='warning'] {
+.sikat-link[data-intent='warning'] {
   --link-text: var(--color-text-warning);
   --link-icon: var(--color-fg-warning);
 }
-.jspr-link[data-intent='danger'] {
+.sikat-link[data-intent='danger'] {
   --link-text: var(--color-text-danger);
   --link-icon: var(--color-fg-danger);
 }
-.jspr-link[data-intent='white'] {
+.sikat-link[data-intent='white'] {
   --link-text: var(--color-text-white);
   --link-icon: var(--color-fg-white);
 }
-.jspr-link[data-intent='black'] {
+.sikat-link[data-intent='black'] {
   --link-text: var(--color-text-black);
   --link-icon: var(--color-fg-black);
 }
 
 /* Disabled last so it overrides the intent colors (same specificity). */
-.jspr-link[data-state='disabled'] {
+.sikat-link[data-state='disabled'] {
   --link-text: var(--color-text-disabled);
   --link-icon: var(--color-fg-disabled);
   cursor: not-allowed;

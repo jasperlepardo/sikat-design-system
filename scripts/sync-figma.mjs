@@ -13,7 +13,7 @@
  * now carries spacing/radius/type/shadows too (from gen-raw-from-tailwind), so
  * this reads raw.json alone — the old tokens/scale.json is gone.
  *
- * Run: npm run figma:sync  (or `jspr gen figma`)
+ * Run: npm run figma:sync  (or `sikat gen figma`)
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';

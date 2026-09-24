@@ -13,7 +13,7 @@
  *   <outComponentsCss>/<name>.css     base + [data-*] selectors per size/state
  *   <outTs>/<name>.manifest.ts        axis const arrays + <name>Spec (drives M4 Figma)
  *
- * Run: npm run components:build  (after the token build) — or `jspr gen`.
+ * Run: npm run components:build  (after the token build) — or `sikat gen`.
  */
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'node:fs';
 import { resolve, join, basename } from 'node:path';
@@ -37,7 +37,7 @@ const DEFAULT_STATE_SELECTORS = {
 // Resolve the component's metadata, filling Button-shaped defaults.
 export function metaOf(name, file) {
   const m = file.$component ?? {};
-  const className = m.className ?? `jspr-${name}`;
+  const className = m.className ?? `sikat-${name}`;
   return {
     name: m.name ?? cap(name),
     className,

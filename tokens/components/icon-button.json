@@ -1,7 +1,7 @@
 {
   "$component": {
     "name": "IconButton",
-    "className": "jspr-icon-btn",
+    "className": "sikat-icon-btn",
     "prefix": "icon-btn",
     "element": "button",
     "colorAxes": [

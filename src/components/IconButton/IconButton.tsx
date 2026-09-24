@@ -29,7 +29,7 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
 
 /**
  * IconButton — the square, icon-only counterpart of `Button`. It shares Button's
- * intent × style × size color matrix (the generated `.jspr-icon-btn` rules), so
+ * intent × style × size color matrix (the generated `.sikat-icon-btn` rules), so
  * it re-themes across light/dark and has real :hover / :focus-visible / :disabled
  * states. `label` is required and becomes the accessible name.
  */
@@ -47,7 +47,7 @@ export function IconButton({
   return (
     <button
       type={type}
-      className={cn('jspr-icon-btn', className)}
+      className={cn('sikat-icon-btn', className)}
       data-intent={intent}
       data-style={variant}
       data-size={size}

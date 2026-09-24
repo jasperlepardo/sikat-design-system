@@ -12,7 +12,7 @@ export type PageProps = HTMLAttributes<HTMLDivElement>;
  */
 export function Page({ className, children, ...rest }: PageProps) {
   return (
-    <div className={cn('jspr-page', className)} {...rest}>
+    <div className={cn('sikat-page', className)} {...rest}>
       {children}
     </div>
   );

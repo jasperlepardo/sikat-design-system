@@ -1,7 +1,7 @@
 /**
- * merge.mjs — deep-merge + config-shorthand compilers for the jspr token layer.
+ * merge.mjs — deep-merge + config-shorthand compilers for the sikat token layer.
  *
- * A consumer's jspr.config.js expresses overrides at every tier. The compilers
+ * A consumer's sikat.config.js expresses overrides at every tier. The compilers
  * here turn its ergonomic shorthands (role → Tailwind family, shade-number
  * semantics, {fam.shade} sugar) into the Style-Dictionary tree shape, and
  * deepMerge() layers those overlays over the base token JSON shipped in the

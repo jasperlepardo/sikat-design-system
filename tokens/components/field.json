@@ -1,7 +1,7 @@
 {
   "$component": {
     "name": "TextField",
-    "className": "jspr-field",
+    "className": "sikat-field",
     "prefix": "field",
     "element": "input",
     "colorAxes": [],

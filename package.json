@@ -21,7 +21,7 @@
     "tokens"
   ],
   "bin": {
-    "jspr": "bin/jspr.mjs"
+    "sikat": "bin/sikat.mjs"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

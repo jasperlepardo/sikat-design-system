@@ -8,7 +8,7 @@
  * Tailwind is resolved from the CONSUMER's repo (their palette), falling back to
  * this package's own install for the dev flow. Output path comes from the ctx.
  *
- * Run: npm run tokens:raw  (or `jspr gen tokens`)
+ * Run: npm run tokens:raw  (or `sikat gen tokens`)
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -64,7 +64,7 @@ export async function run(ctx) {
   }
   if (Object.keys(color).length === 0)
     throw new Error('Parsed 0 colors from Tailwind theme.css — the format may have changed.');
-  // Brand families from jspr.config `palette` (custom ramps Tailwind doesn't ship).
+  // Brand families from sikat.config `palette` (custom ramps Tailwind doesn't ship).
   // A value is either a ramp { 50…950 } or a group of ramps (e.g. brand/<name>).
   const ramp = (shades) => Object.fromEntries(Object.entries(shades).map(([s, v]) => [s, node(v, 'color')]));
   const isRamp = (o) => Object.values(o).every((v) => typeof v === 'string');
@@ -114,7 +114,7 @@ export async function run(ctx) {
   ];
   const spacing = { 0: dim('0px'), px: dim('1px') };
   {
-    // Multiplier precedence: jspr.config spacing.multiplier > Tailwind --spacing > 0.25rem.
+    // Multiplier precedence: sikat.config spacing.multiplier > Tailwind --spacing > 0.25rem.
     const baseMatch = css.match(/^\s*--spacing:\s*([^;]+);/m);
     const tailwindMult = baseMatch ? baseMatch[1] : '0.25rem';
     const remRoot = ctx?.spacing?.remRoot ?? 16;
@@ -132,7 +132,7 @@ export async function run(ctx) {
      multiplier); none/full are Tailwind's rounded-none/full utilities. ---- */
   const radius = { none: dim('0px') };
   for (const [k, v] of Object.entries(collect('radius'))) radius[k] = dim(v);
-  // Brand steps from jspr.config `radius`, slotted in by size so the scale stays ordered.
+  // Brand steps from sikat.config `radius`, slotted in by size so the scale stays ordered.
   {
     const extra = ctx?.radius ?? {};
     for (const k of Object.keys(extra))
@@ -174,7 +174,7 @@ export async function run(ctx) {
   };
 
   /* ---- typography. Font families default to Tailwind's generic stacks; a
-     jspr.config `fonts.{sans,serif,mono}` overrides with brand stacks. ---- */
+     sikat.config `fonts.{sans,serif,mono}` overrides with brand stacks. ---- */
   const fontFamily = Object.fromEntries(
     Object.entries(collect('font', 'sans|serif|mono')).map(([k, v]) => [k, node(v, 'fontFamily')]),
   );
@@ -197,7 +197,7 @@ export async function run(ctx) {
     let m;
     while ((m = re.exec(css))) lineHeight[m[1]] = dim(clean(m[2]));
   }
-  // Brand type steps from jspr.config `text`, slotted in by size so both scales stay ordered.
+  // Brand type steps from sikat.config `text`, slotted in by size so both scales stay ordered.
   {
     const extra = ctx?.text ?? {};
     // Only the size lands in raw; its line-height is set at the primitive tier.

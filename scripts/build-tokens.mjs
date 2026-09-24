@@ -12,7 +12,7 @@
  * Semantic vars use `outputReferences: true`, so they resolve to `var(--p-...)`.
  * Switching `data-theme` re-points the cascade with no rebuild.
  *
- * Run: npm run tokens:build  (or `jspr gen tokens`)
+ * Run: npm run tokens:build  (or `sikat gen tokens`)
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

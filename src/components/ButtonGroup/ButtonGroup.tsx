@@ -23,7 +23,7 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
  * an optional `Link`) inside; the group owns spacing (`--space-md`), the
  * row↔stacked switch, and equal-width `fill`. It doesn't restyle the buttons —
  * they keep their own intents. `orientation`/`align`/`fill` become data-attributes
- * that select the generated `.jspr-button-group` rules.
+ * that select the generated `.sikat-button-group` rules.
  */
 export function ButtonGroup({
   orientation = 'horizontal',
@@ -36,7 +36,7 @@ export function ButtonGroup({
   return (
     <div
       role="group"
-      className={cn('jspr-button-group', className)}
+      className={cn('sikat-button-group', className)}
       data-orientation={orientation}
       data-align={align}
       data-fill={fill || undefined}

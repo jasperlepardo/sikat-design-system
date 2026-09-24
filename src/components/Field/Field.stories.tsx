@@ -245,7 +245,7 @@ export const TypingInteraction: Story = {
     await userEvent.type(input, 'hello');
     await expect(input).toHaveValue('hello');
     // "has Content" is tracked on the field box (the shell around the input).
-    await expect(input.closest('.jspr-field')).toHaveAttribute('data-filled');
+    await expect(input.closest('.sikat-field')).toHaveAttribute('data-filled');
   },
 };
 

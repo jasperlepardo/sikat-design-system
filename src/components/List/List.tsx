@@ -21,7 +21,7 @@ export interface ListProps extends HTMLAttributes<HTMLDivElement> {
  */
 export function List({ className, children, ...rest }: ListProps) {
   return (
-    <div className={cn('jspr-list', className)} {...rest}>
+    <div className={cn('sikat-list', className)} {...rest}>
       {children}
     </div>
   );
@@ -39,7 +39,7 @@ export interface ListGroupProps extends HTMLAttributes<HTMLUListElement> {
 export function ListGroup({ divider = false, className, children, ...rest }: ListGroupProps) {
   return (
     <ul
-      className={cn('jspr-list__group', className)}
+      className={cn('sikat-list__group', className)}
       data-divider={divider || undefined}
       role="list"
       {...rest}
@@ -58,7 +58,7 @@ export interface ListSlotProps extends HTMLAttributes<HTMLSpanElement> {
 /** Media slot — fixed leading/trailing content (icon, badge, chevron). */
 function ListMedia({ className, children, ...rest }: ListSlotProps) {
   return (
-    <span className={cn('jspr-list__media', className)} {...rest}>
+    <span className={cn('sikat-list__media', className)} {...rest}>
       {children}
     </span>
   );
@@ -73,7 +73,7 @@ export interface ListContentProps extends HTMLAttributes<HTMLDivElement> {
 /** Content slot — the flex-1 column holding the title/value pair (or anything). */
 function ListContent({ variant, className, children, ...rest }: ListContentProps) {
   return (
-    <div className={cn('jspr-list__content', className)} data-variant={variant} {...rest}>
+    <div className={cn('sikat-list__content', className)} data-variant={variant} {...rest}>
       {children}
     </div>
   );
@@ -81,7 +81,7 @@ function ListContent({ variant, className, children, ...rest }: ListContentProps
 
 function ListTitle({ className, children, ...rest }: ListSlotProps) {
   return (
-    <span className={cn('jspr-list__title', className)} {...rest}>
+    <span className={cn('sikat-list__title', className)} {...rest}>
       {children}
     </span>
   );
@@ -89,7 +89,7 @@ function ListTitle({ className, children, ...rest }: ListSlotProps) {
 
 function ListValue({ className, children, ...rest }: ListSlotProps) {
   return (
-    <span className={cn('jspr-list__value', className)} {...rest}>
+    <span className={cn('sikat-list__value', className)} {...rest}>
       {children}
     </span>
   );
@@ -145,11 +145,11 @@ export function ListItem({
 
   return (
     <li
-      className={cn('jspr-list__item', className)}
+      className={cn('sikat-list__item', className)}
       data-divider={divider === undefined ? undefined : String(divider)}
       {...rest}
     >
-      <RowTag className="jspr-list__row" data-interactive={interactive || undefined} {...rowProps}>
+      <RowTag className="sikat-list__row" data-interactive={interactive || undefined} {...rowProps}>
         {children != null ? (
           children
         ) : (
@@ -165,7 +165,7 @@ export function ListItem({
           </>
         )}
       </RowTag>
-      <Divider className="jspr-list__divider" />
+      <Divider className="sikat-list__divider" />
     </li>
   );
 }
@@ -177,7 +177,7 @@ export type ListSectionProps = HTMLAttributes<HTMLElement>;
 /** List.Section — a titled group: a `List.Header` over a `List.Group`. */
 function ListSection({ className, children, ...rest }: ListSectionProps) {
   return (
-    <section className={cn('jspr-list__section', className)} {...rest}>
+    <section className={cn('sikat-list__section', className)} {...rest}>
       {children}
     </section>
   );
@@ -204,9 +204,9 @@ function ListHeader({
   ...rest
 }: ListHeaderProps) {
   return (
-    <div className={cn('jspr-list__header', className)} {...rest}>
-      {heading != null ? <Heading className="jspr-list__heading">{heading}</Heading> : null}
-      {subHeading != null ? <p className="jspr-list__subheading">{subHeading}</p> : null}
+    <div className={cn('sikat-list__header', className)} {...rest}>
+      {heading != null ? <Heading className="sikat-list__heading">{heading}</Heading> : null}
+      {subHeading != null ? <p className="sikat-list__subheading">{subHeading}</p> : null}
       {children}
     </div>
   );

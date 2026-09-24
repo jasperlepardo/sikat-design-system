@@ -10,7 +10,7 @@ import '../../styles/components/badge.css';
 import './badge.css';
 
 // The Figma "Badge Counter" shares the Badge intent × style matrix, so it reuses
-// the Badge manifest + the generated .jspr-badge[data-intent][data-style] rules.
+// the Badge manifest + the generated .sikat-badge[data-intent][data-style] rules.
 export { badgeIntents as badgeCounterIntents, badgeStyles as badgeCounterStyles };
 export type { BadgeIntent as BadgeCounterIntent, BadgeStyle as BadgeCounterStyle };
 
@@ -29,7 +29,7 @@ export interface BadgeCounterProps extends Omit<HTMLAttributes<HTMLSpanElement>,
 
 /**
  * BadgeCounter — a fixed 20px circular count pill (e.g. unread notifications).
- * Shares the Badge color matrix via the `.jspr-badge` rules, so `intent`/`variant`
+ * Shares the Badge color matrix via the `.sikat-badge` rules, so `intent`/`variant`
  * re-theme identically; it grows to a pill for multi-digit counts and shows
  * `${max}+` past the cap.
  */
@@ -45,7 +45,7 @@ export function BadgeCounter({
   const content = children ?? (count != null && max != null && count > max ? `${max}+` : count);
   return (
     <span
-      className={cn('jspr-badge', 'jspr-badge--counter', className)}
+      className={cn('sikat-badge', 'sikat-badge--counter', className)}
       data-intent={intent}
       data-style={variant}
       {...rest}

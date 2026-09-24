@@ -111,11 +111,11 @@ export function MultiSelect({
   return (
     <div ref={rootRef} className={cn('relative', className)}>
       <FieldShell
-        className="jspr-field--wrap"
+        className="sikat-field--wrap"
         state={{ size: 'md', filled: selectedOptions.length > 0, disabled, invalid }}
         adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
         after={
-          <span className="jspr-field__icon jspr-field__chevron" aria-hidden="true">
+          <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
             {ChevronDown}
           </span>
         }
@@ -126,14 +126,14 @@ export function MultiSelect({
           }
         }}
       >
-        <span className="jspr-field__chips">
+        <span className="sikat-field__chips">
           {selectedOptions.map((o) => (
-            <span key={o.value} className="jspr-field__chip">
-              <span className="jspr-field__chip-label">{o.label ?? optText(o)}</span>
+            <span key={o.value} className="sikat-field__chip">
+              <span className="sikat-field__chip-label">{o.label ?? optText(o)}</span>
               <button
                 type="button"
                 aria-label={`Remove ${optText(o)}`}
-                className="jspr-field__chip-remove"
+                className="sikat-field__chip-remove"
                 disabled={disabled}
                 onMouseDown={(e) => {
                   e.preventDefault();
@@ -160,7 +160,7 @@ export function MultiSelect({
             disabled={disabled}
             placeholder={selectedOptions.length === 0 ? placeholder : undefined}
             value={query}
-            className="jspr-field__input"
+            className="sikat-field__input"
             style={{ minWidth: '4rem' }}
             onChange={(e) => {
               setQuery(e.target.value);

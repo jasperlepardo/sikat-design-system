@@ -9,7 +9,7 @@
  * <outFigma>/rest-payload.json for inspection instead of calling the API.
  *
  * Env: FIGMA_TOKEN (Variables write scope), FIGMA_FILE_KEY (or --figma-file).
- * Run: jspr gen figma --push variables   (or node scripts/push-figma-rest.mjs)
+ * Run: sikat gen figma --push variables   (or node scripts/push-figma-rest.mjs)
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';

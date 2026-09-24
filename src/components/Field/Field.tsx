@@ -68,7 +68,7 @@ export function FieldShell({
   const { leadingIcon, prefix, suffix, trailingIcon } = adornments;
   return (
     <span
-      className={cn('jspr-field jspr-field--shell', className)}
+      className={cn('sikat-field sikat-field--shell', className)}
       data-size={state.size}
       data-filled={state.filled || undefined}
       data-disabled={state.disabled || undefined}
@@ -77,12 +77,12 @@ export function FieldShell({
       data-state={state.dataState}
       onClick={onClick}
     >
-      {leadingIcon ? <span className="jspr-field__icon">{leadingIcon}</span> : null}
-      {prefix != null ? <span className="jspr-field__affix">{prefix}</span> : null}
+      {leadingIcon ? <span className="sikat-field__icon">{leadingIcon}</span> : null}
+      {prefix != null ? <span className="sikat-field__affix">{prefix}</span> : null}
       {before}
       {children}
-      {suffix != null ? <span className="jspr-field__affix">{suffix}</span> : null}
-      {trailingIcon ? <span className="jspr-field__icon">{trailingIcon}</span> : null}
+      {suffix != null ? <span className="sikat-field__affix">{suffix}</span> : null}
+      {trailingIcon ? <span className="sikat-field__icon">{trailingIcon}</span> : null}
       {after}
     </span>
   );
@@ -161,13 +161,13 @@ export function TextField({
       }}
       adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
       after={
-        <span className="jspr-field__edit" aria-hidden="true">
+        <span className="sikat-field__edit" aria-hidden="true">
           {EditIcon}
         </span>
       }
     >
       <input
-        className="jspr-field__input"
+        className="sikat-field__input"
         aria-invalid={invalid || undefined}
         value={value}
         defaultValue={defaultValue}
@@ -190,9 +190,9 @@ export interface FormLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 
 export function FormLabel({ required, className, children, ...rest }: FormLabelProps) {
   return (
-    <label className={cn('jspr-field__label', className)} {...rest}>
+    <label className={cn('sikat-field__label', className)} {...rest}>
       {children}
-      {required ? <span className="jspr-field__required"> *</span> : null}
+      {required ? <span className="sikat-field__required"> *</span> : null}
     </label>
   );
 }
@@ -238,13 +238,13 @@ export function FormField({
   const describedBy = cn(hint ? hintId : undefined, error ? errorId : undefined) || undefined;
 
   return (
-    <div className={cn('jspr-field-group', className)} data-orientation={orientation}>
+    <div className={cn('sikat-field-group', className)} data-orientation={orientation}>
       {label ? (
         <FormLabel htmlFor={id} required={required}>
           {label}
         </FormLabel>
       ) : null}
-      <div className="jspr-field__fieldset">
+      <div className="sikat-field__fieldset">
         {children({
           id,
           'aria-describedby': describedBy,
@@ -252,11 +252,11 @@ export function FormField({
           invalid: !!error,
         })}
         {error ? (
-          <p id={errorId} className="jspr-field__error">
+          <p id={errorId} className="sikat-field__error">
             {error}
           </p>
         ) : hint ? (
-          <p id={hintId} className="jspr-field__hint">
+          <p id={hintId} className="sikat-field__hint">
             {hint}
           </p>
         ) : null}
@@ -288,7 +288,7 @@ export function Textarea({
   return (
     <textarea
       rows={rows}
-      className={cn('jspr-field jspr-field--multiline', className)}
+      className={cn('sikat-field sikat-field--multiline', className)}
       data-size="md"
       data-filled={filled || undefined}
       aria-invalid={invalid || undefined}
@@ -338,17 +338,17 @@ export function Select({
   const [dataState, selectProps] = takeDataState(rest);
   return (
     <FieldShell
-      className={cn('jspr-field--select', className)}
+      className={cn('sikat-field--select', className)}
       state={{ size, filled, disabled: selectProps.disabled, readOnly, invalid, dataState }}
       adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
       after={
-        <span className="jspr-field__icon jspr-field__chevron" aria-hidden="true">
+        <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
           {ChevronDown}
         </span>
       }
     >
       <select
-        className="jspr-field__input"
+        className="sikat-field__input"
         aria-invalid={invalid || undefined}
         aria-readonly={readOnly || undefined}
         value={value}

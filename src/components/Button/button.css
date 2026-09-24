@@ -4,7 +4,7 @@
    (Components file, node 72:3820): padding-based sizing (40/36/32/28/24/20px),
    per-size radius, medium 14/20 label, 20px icons, a 2px inside stroke, and a
    content wrapper (4px label inset) between the optional leading/trailing icons. */
-.jspr-btn {
+.sikat-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -29,27 +29,27 @@
     box-shadow 120ms ease,
     color 120ms ease;
 }
-.jspr-btn:focus-visible {
+.sikat-btn:focus-visible {
   outline: 2px solid var(--color-border-primary);
   outline-offset: 2px;
 }
-.jspr-btn:disabled,
-.jspr-btn[aria-disabled='true'] {
+.sikat-btn:disabled,
+.sikat-btn[aria-disabled='true'] {
   cursor: not-allowed;
 }
-.jspr-btn__content {
+.sikat-btn__content {
   display: inline-flex;
   align-items: center;
   gap: var(--btn-content-gap);
   padding: var(--btn-content-pad-y) var(--btn-content-pad-x);
 }
-.jspr-btn__icon {
+.sikat-btn__icon {
   display: inline-flex;
   flex: none;
   color: var(--btn-icon);
 }
 /* Figma icons are 20px at every size. */
-.jspr-btn__icon > svg {
+.sikat-btn__icon > svg {
   width: 20px;
   height: 20px;
 }

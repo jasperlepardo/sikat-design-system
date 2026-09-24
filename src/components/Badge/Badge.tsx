@@ -57,29 +57,29 @@ export function Badge({
 }: BadgeProps) {
   return (
     <span
-      className={cn('jspr-badge', className)}
+      className={cn('sikat-badge', className)}
       data-intent={intent}
       data-style={variant}
       data-size={size}
       {...rest}
     >
-      {leadingIcon ? <span className="jspr-badge__icon">{leadingIcon}</span> : null}
+      {leadingIcon ? <span className="sikat-badge__icon">{leadingIcon}</span> : null}
 
-      <span className="jspr-badge__content">
+      <span className="sikat-badge__content">
         {dot ? (
-          <span className="jspr-badge__dot-wrap">
-            <span className="jspr-badge__dot" />
+          <span className="sikat-badge__dot-wrap">
+            <span className="sikat-badge__dot" />
           </span>
         ) : null}
-        {children != null ? <span className="jspr-badge__label">{children}</span> : null}
+        {children != null ? <span className="sikat-badge__label">{children}</span> : null}
       </span>
 
-      {trailingIcon ? <span className="jspr-badge__icon">{trailingIcon}</span> : null}
+      {trailingIcon ? <span className="sikat-badge__icon">{trailingIcon}</span> : null}
 
       {onDismiss ? (
         <button
           type="button"
-          className="jspr-badge__dismiss"
+          className="sikat-badge__dismiss"
           onClick={onDismiss}
           aria-label={dismissLabel}
         >

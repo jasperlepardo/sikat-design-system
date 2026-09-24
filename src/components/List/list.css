@@ -3,46 +3,46 @@
    `variant`: inline (title left / value right), stacked (bold title over value),
    stacked-value (label over bold value). */
 
-.jspr-list {
+.sikat-list {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-6);
 }
 
 /* Section = header over group. */
-.jspr-list__section {
+.sikat-list__section {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-4);
 }
-.jspr-list__header {
+.sikat-list__header {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1);
 }
-.jspr-list__heading {
+.sikat-list__heading {
   color: var(--color-text-heading);
   font-weight: var(--text-semibold);
 }
-.jspr-list__subheading {
+.sikat-list__subheading {
   color: var(--color-text-muted);
 }
 
 /* Group = the <ul> of rows. */
-.jspr-list__group {
+.sikat-list__group {
   display: flex;
   flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.jspr-list__item {
+.sikat-list__item {
   display: flex;
   flex-direction: column;
 }
 
 /* Row. Interactive rows (button/anchor) get hover + focus affordances. */
-.jspr-list__row {
+.sikat-list__row {
   display: flex;
   width: 100%;
   align-items: center;
@@ -56,67 +56,67 @@
   text-align: left;
   text-decoration: none;
 }
-.jspr-list__row[data-interactive] {
+.sikat-list__row[data-interactive] {
   cursor: pointer;
   border-radius: var(--rounded-md);
   padding-inline: var(--spacing-3);
   transition: background-color 120ms ease;
 }
-.jspr-list__row[data-interactive]:hover {
+.sikat-list__row[data-interactive]:hover {
   background-color: var(--color-bg-secondary);
 }
-.jspr-list__row[data-interactive]:focus-visible {
+.sikat-list__row[data-interactive]:focus-visible {
   outline: 2px solid var(--color-border-primary);
   outline-offset: 2px;
 }
 
 /* Slots. */
-.jspr-list__media {
+.sikat-list__media {
   display: inline-flex;
   flex: none;
   align-items: center;
   color: var(--color-text-body);
 }
-.jspr-list__content {
+.sikat-list__content {
   display: flex;
   min-width: 0;
   flex: 1 1 auto;
   gap: var(--spacing-3);
 }
-.jspr-list__content[data-variant='inline'] {
+.sikat-list__content[data-variant='inline'] {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.jspr-list__content[data-variant='stacked'],
-.jspr-list__content[data-variant='stacked-value'] {
+.sikat-list__content[data-variant='stacked'],
+.sikat-list__content[data-variant='stacked-value'] {
   flex-direction: column;
   gap: var(--spacing-1);
 }
-.jspr-list__title {
+.sikat-list__title {
   color: var(--color-text-heading);
 }
-.jspr-list__value {
+.sikat-list__value {
   color: var(--color-text-body);
 }
-.jspr-list__content[data-variant='inline'] .jspr-list__value,
-.jspr-list__content[data-variant='stacked-value'] .jspr-list__value {
+.sikat-list__content[data-variant='inline'] .sikat-list__value,
+.sikat-list__content[data-variant='stacked-value'] .sikat-list__value {
   font-weight: var(--text-medium);
 }
-.jspr-list__content[data-variant='stacked'] .jspr-list__title {
+.sikat-list__content[data-variant='stacked'] .sikat-list__title {
   font-weight: var(--text-medium);
 }
 
 /* Per-item Divider (always rendered; shown only when the group/item asks). */
-.jspr-list__divider {
+.sikat-list__divider {
   display: none;
 }
-.jspr-list__group[data-divider] > .jspr-list__item:not(:last-child) > .jspr-list__divider {
+.sikat-list__group[data-divider] > .sikat-list__item:not(:last-child) > .sikat-list__divider {
   display: block;
 }
-.jspr-list__item[data-divider='true'] > .jspr-list__divider {
+.sikat-list__item[data-divider='true'] > .sikat-list__divider {
   display: block;
 }
-.jspr-list__item[data-divider='false'] > .jspr-list__divider {
+.sikat-list__item[data-divider='false'] > .sikat-list__divider {
   display: none;
 }

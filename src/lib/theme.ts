@@ -12,7 +12,7 @@ import { useCallback, useEffect, useState } from 'react';
  */
 export type ThemeMode = 'light' | 'dark' | 'system';
 
-export const THEME_STORAGE_KEY = 'jspr-theme';
+export const THEME_STORAGE_KEY = 'sikat-theme';
 
 /** Read the persisted mode (defaults to `system`). SSR-safe. */
 export function getThemeMode(): ThemeMode {

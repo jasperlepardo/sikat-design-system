@@ -1,7 +1,7 @@
 {
   "$component": {
     "name": "Alert",
-    "className": "jspr-alert",
+    "className": "sikat-alert",
     "prefix": "alert",
     "element": "div",
     "colorAxes": [

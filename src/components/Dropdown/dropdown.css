@@ -3,7 +3,7 @@
    under the trigger; the consumer wraps trigger + panel in a `position: relative`
    root (see useDropdown). Pairs with useDropdown (open/close) + useListbox
    (keyboard). */
-.jspr-dropdown {
+.sikat-dropdown {
   position: absolute;
   z-index: 20;
   top: 100%;
@@ -21,7 +21,7 @@
 }
 
 /* Dropdown Item: [icon][prefix] label [suffix][icon], 40px row. */
-.jspr-dropdown__item {
+.sikat-dropdown__item {
   display: flex;
   align-items: center;
   gap: var(--spacing-2); /* 8px */
@@ -37,52 +37,52 @@
   user-select: none;
 }
 /* Hover (and the keyboard-active option) = Figma State=Hover. */
-.jspr-dropdown__item:hover:not([aria-disabled='true']),
-.jspr-dropdown__item[data-active='true'] {
+.sikat-dropdown__item:hover:not([aria-disabled='true']),
+.sikat-dropdown__item[data-active='true'] {
   background-color: var(--color-bg-primary-subtle);
 }
 /* Selected = Figma isSelected=True: bold label, no other change. */
-.jspr-dropdown__item[aria-selected='true'] .jspr-dropdown__label {
+.sikat-dropdown__item[aria-selected='true'] .sikat-dropdown__label {
   font-weight: var(--text-bold);
 }
-.jspr-dropdown__label {
+.sikat-dropdown__label {
   flex: 1 1 auto;
   min-width: 0;
 }
-.jspr-dropdown__affix {
+.sikat-dropdown__affix {
   flex: none;
   color: var(--color-text-muted);
   font-weight: var(--text-regular);
 }
-.jspr-dropdown__icon {
+.sikat-dropdown__icon {
   display: flex;
   flex: none;
   color: var(--color-fg-primary);
 }
-.jspr-dropdown__icon > svg {
+.sikat-dropdown__icon > svg {
   width: 24px;
   height: 24px;
 }
 /* Disabled — code addition (Figma has no disabled item). */
-.jspr-dropdown__item[aria-disabled='true'] {
+.sikat-dropdown__item[aria-disabled='true'] {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 /* Scrollbar — Figma "Scrollbar": 8px, bg/secondary track, bg/quarternary thumb,
    fully rounded, 1px inset. Native scrollbar, styled. */
-.jspr-dropdown {
+.sikat-dropdown {
   scrollbar-width: thin;
   scrollbar-color: var(--color-bg-quarternary) var(--color-bg-secondary);
 }
-.jspr-dropdown::-webkit-scrollbar {
+.sikat-dropdown::-webkit-scrollbar {
   width: 8px;
 }
-.jspr-dropdown::-webkit-scrollbar-track {
+.sikat-dropdown::-webkit-scrollbar-track {
   border-radius: var(--rounded-full);
   background-color: var(--color-bg-secondary);
 }
-.jspr-dropdown::-webkit-scrollbar-thumb {
+.sikat-dropdown::-webkit-scrollbar-thumb {
   border: var(--spacing-px) solid var(--color-bg-secondary);
   border-radius: var(--rounded-full);
   background-color: var(--color-bg-quarternary);

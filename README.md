@@ -122,7 +122,7 @@ Tailwind users can also import just the theme to get per-property semantic
 utilities (`bg-default`, `bg-primary`, `text-heading`, `border-default`,
 `fg-primary`, …) plus token-driven scales (`p-4`, `rounded-md`, `shadow-md`).
 The theme resets Tailwind's default palette, so utilities come from these tokens
-(overridable via `jspr`):
+(overridable via `sikat`):
 
 ```css
 @import '@jasperlepardo/sikat-design-system/theme';
@@ -177,18 +177,18 @@ component re-themes across light/dark and is documented in **Storybook**
   primitives the combobox family (Combobox, MultiSelect, Autocomplete) is built on.
 
 `Button`, `IconButton`, and `Alert` are **component-token driven** (generated
-`.jspr-*` CSS from `tokens/components/*.json`); the rest use semantic Tailwind
+`.sikat-*` CSS from `tokens/components/*.json`); the rest use semantic Tailwind
 utilities (with a little committed CSS for layout pieces like
 Page/ButtonGroup/List/Dropdown/Alert).
 
-## Customizing as a consumer (`jspr`)
+## Customizing as a consumer (`sikat`)
 
-Downstream projects don't fork — they **extend**. Add a `jspr.config.js` and run the
-bundled `jspr` CLI to regenerate your own token CSS / `@theme`, TS manifests, and a
+Downstream projects don't fork — they **extend**. Add a `sikat.config.js` and run the
+bundled `sikat` CLI to regenerate your own token CSS / `@theme`, TS manifests, and a
 full Figma library (variables + components). Your repo stays the source of truth.
 
 ```js
-// jspr.config.js
+// sikat.config.js
 export default {
   // Where generated files land in your repo.
   out: { css: 'src/design/css', ts: 'src/design/generated', figma: '.figma' },
@@ -221,31 +221,31 @@ export default {
 > in CSS and `spacing/1 = 5` in Figma.
 
 ```bash
-npx jspr gen            # tokens + Figma (default: all)
-npx jspr gen tokens     # just the @theme CSS + TS manifests
-npx jspr gen figma      # variables.json + push scripts + component scripts
+npx sikat gen            # tokens + Figma (default: all)
+npx sikat gen tokens     # just the @theme CSS + TS manifests
+npx sikat gen figma      # variables.json + push scripts + component scripts
 ```
 
 Overrides are layered (most specific wins): `roles` → `semantics` → `scale` / `raw`
 → component files, deep-merged over the base tokens into **one resolved tree** that
-drives both the CSS and Figma. With no `jspr.config`, the CLI reproduces this repo's
+drives both the CSS and Figma. With no `sikat.config`, the CLI reproduces this repo's
 own output unchanged.
 
 ## Figma (code ↔ design)
 
-**Code → Figma.** `npx jspr gen figma` (or `npm run figma:sync` for variables only)
+**Code → Figma.** `npx sikat gen figma` (or `npm run figma:sync` for variables only)
 emits a Figma-ready manifest and runnable scripts under your Figma out dir:
 
 - `variables.json` + `push/*.js` — collections **Raw**, **Primitive**, **Semantic**
   (Light/Dark modes), Tailwind oklch → `{ r, g, b, a }`, cross-tier refs as variable
   aliases. Push via the Figma plugin / MCP (`use_figma`), or headlessly with
-  `jspr gen figma --push variables` (REST — **Figma Enterprise only**).
+  `sikat gen figma --push variables` (REST — **Figma Enterprise only**).
 - `components/<name>/*.js` — `use_figma` scripts that build component sets with
   variants bound to the semantic variables (large matrices auto-split to ≤30 per
   set). Run these **after** the variables exist.
 
-**Figma → code.** `jspr pull figma` reverse-maps a designer's variable edits back
-into `jspr.config.js` (`--write` to apply, then re-run `jspr gen`). It reads via the
+**Figma → code.** `sikat pull figma` reverse-maps a designer's variable edits back
+into `sikat.config.js` (`--write` to apply, then re-run `sikat gen`). It reads via the
 `use_figma` plugin (any plan) or REST (Enterprise). Code stays the source of truth —
 a pull is a _proposed_ config edit you review via git diff.
 
@@ -259,7 +259,7 @@ a pull is a _proposed_ config edit you review via git diff.
 | `npm run build-storybook`               | Build the static Storybook site                            |
 | `npm run figma:sync`                    | Emit the Figma variable manifest                           |
 | `npm run figma:push`                    | Push variables via REST (Figma Enterprise)                 |
-| `npx jspr gen` / `pull figma`           | Consumer generate / Figma→config pull (see above)          |
+| `npx sikat gen` / `pull figma`           | Consumer generate / Figma→config pull (see above)          |
 | `npm run lint` / `typecheck` / `format` | Quality gates                                              |
 
 ## Publishing

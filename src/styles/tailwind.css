@@ -23,7 +23,7 @@ body {
 
 /* Inline-SVG icons sized by <Icon>; mono icons use currentColor so they
    follow text color. */
-.jspr-icon {
+.sikat-icon {
   display: inline-flex;
   flex: none;
   line-height: 0;

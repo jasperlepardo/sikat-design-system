@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * jspr — design-system CLI. The consuming repo is the source of truth: it
- * provides jspr.config.{js,mjs,json} (token overrides) and runs this to
+ * sikat — design-system CLI. The consuming repo is the source of truth: it
+ * provides sikat.config.{js,mjs,json} (token overrides) and runs this to
  * generate token/@theme CSS, TS manifests, and the Figma library.
  *
- *   jspr gen [tokens|figma|components|all]   (default: all)
+ *   sikat gen [tokens|figma|components|all]   (default: all)
  *     --config <path>  --out <dir>  --figma-file <key>  --dry-run
- *   jspr pull figma [--write] [--file <key>]   (M6)
+ *   sikat pull figma [--write] [--file <key>]   (M6)
  *
  * Subcommands import each step's run(ctx) — one config resolution, one temp dir.
  */
@@ -36,14 +36,14 @@ function parseArgs(argv) {
 }
 
 function usage() {
-  console.log(`jspr — design system generator
+  console.log(`sikat — design system generator
 
 Usage:
-  jspr gen [tokens|figma|components|all]   generate from jspr.config (default: all)
-  jspr pull figma [--write]                pull Figma variable edits → jspr.config (M6)
+  sikat gen [tokens|figma|components|all]   generate from sikat.config (default: all)
+  sikat pull figma [--write]                pull Figma variable edits → sikat.config (M6)
 
 Flags:
-  --config <path>     explicit jspr.config location
+  --config <path>     explicit sikat.config location
   --out <dir>         output root override
   --figma-file <key>  target Figma file key
   --dry-run           resolve + merge, write nothing
@@ -85,7 +85,7 @@ const ctx = await loadConfig({
 });
 
 if (flags['dry-run']) {
-  console.log('jspr dry-run — resolved context:');
+  console.log('sikat dry-run — resolved context:');
   console.log(
     JSON.stringify(
       { overrides: ctx.overrides, paths: ctx.paths, figmaFile: ctx.figmaFile },

@@ -3,11 +3,11 @@
    from tokens/components/field.json). Mirrors the Figma Field (Components file,
    node 6905:936) and its Text Field / Textarea / Select / Multi Select types.
 
-   `.jspr-field` is the visible box. TextField, Select and MultiSelect render it as
+   `.sikat-field` is the visible box. TextField, Select and MultiSelect render it as
    a shell (`--shell`) around the native control (`__input`), carrying state as
    data-attributes ([data-filled] / [data-disabled] / [data-readonly] /
    [data-invalid], :focus-within); Textarea is the box itself. */
-.jspr-field {
+.sikat-field {
   display: block;
   width: 100%;
   box-sizing: border-box;
@@ -31,33 +31,33 @@
     color 120ms ease,
     box-shadow 120ms ease;
 }
-.jspr-field::placeholder,
-.jspr-field__input::placeholder {
+.sikat-field::placeholder,
+.sikat-field__input::placeholder {
   color: var(--field-placeholder);
 }
 /* Focus ring — code addition (Figma has no focus state); the border switches to
    primary via the generated focus state. */
-.jspr-field:focus-within:not(:is(:disabled, [data-disabled])) {
+.sikat-field:focus-within:not(:is(:disabled, [data-disabled])) {
   box-shadow:
     inset 0 0 0 var(--border-width-1) var(--field-border),
     0 0 0 2px color-mix(in oklch, var(--color-border-primary) 40%, transparent);
 }
-.jspr-field:is(:disabled, [data-disabled]),
-.jspr-field[data-disabled] .jspr-field__input {
+.sikat-field:is(:disabled, [data-disabled]),
+.sikat-field[data-disabled] .sikat-field__input {
   cursor: not-allowed;
 }
-.jspr-field:is([readonly], [data-readonly]) {
+.sikat-field:is([readonly], [data-readonly]) {
   cursor: default;
 }
 
 /* ── Shell: [leading icon][prefix] control [suffix][trailing icon][chevron|edit] ── */
-.jspr-field--shell {
+.sikat-field--shell {
   display: flex;
   align-items: center;
   gap: var(--spacing-2); /* 8px — Figma Field/gap */
   cursor: text;
 }
-.jspr-field__input {
+.sikat-field__input {
   flex: 1 1 auto;
   min-width: 0;
   height: 100%;
@@ -70,52 +70,52 @@
   outline: none;
   appearance: none;
 }
-.jspr-field__icon {
+.sikat-field__icon {
   display: flex;
   flex: none;
   color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
 }
-.jspr-field__icon > svg,
-.jspr-field__edit > svg {
+.sikat-field__icon > svg,
+.sikat-field__edit > svg {
   width: 20px;
   height: 20px;
 }
-.jspr-field__affix {
+.sikat-field__affix {
   flex: none;
   color: var(--color-text-caption); /* Figma Prefix / Suffix */
   white-space: nowrap;
 }
 
 /* Select: the whole box opens the native picker; chevron-down trails. */
-.jspr-field--select {
+.sikat-field--select {
   position: relative;
   cursor: pointer;
 }
-.jspr-field--select .jspr-field__input {
+.sikat-field--select .sikat-field__input {
   cursor: inherit;
 }
-.jspr-field--select:not([data-filled]) .jspr-field__input {
+.sikat-field--select:not([data-filled]) .sikat-field__input {
   color: var(--field-placeholder); /* empty-valued option = placeholder */
 }
-.jspr-field--select[data-readonly] .jspr-field__input {
+.sikat-field--select[data-readonly] .sikat-field__input {
   pointer-events: none;
 }
 
 /* Filled + hover: Figma's trailing edit (pencil) icon. */
-.jspr-field__edit {
+.sikat-field__edit {
   display: none;
   flex: none;
   color: var(--color-fg-tertiary-solid);
 }
-.jspr-field[data-filled]:is(:hover, [data-state='hover']):not(:focus-within):not(
+.sikat-field[data-filled]:is(:hover, [data-state='hover']):not(:focus-within):not(
     :is([data-disabled], [data-readonly], [data-invalid])
   )
-  > .jspr-field__edit {
+  > .sikat-field__edit {
   display: flex;
 }
 
 /* Textarea (Figma Textarea): one line + 48px of room below by default. */
-.jspr-field--multiline {
+.sikat-field--multiline {
   height: auto;
   padding-block: var(--spacing-2) var(--spacing-12); /* 8px top, 48px bottom */
   resize: vertical;
@@ -123,14 +123,14 @@
 
 /* MultiSelect: wraps chips; each chip is the Figma Badge (Default / Solid /
    Extra Small) with a dismiss button. */
-.jspr-field--wrap {
+.sikat-field--wrap {
   height: auto;
   min-height: var(--field-h);
   flex-wrap: wrap;
   row-gap: var(--spacing-1);
   padding-block: var(--spacing-2); /* 8px */
 }
-.jspr-field__chips {
+.sikat-field__chips {
   display: flex;
   flex: 1 1 auto;
   flex-wrap: wrap;
@@ -138,7 +138,7 @@
   gap: var(--spacing-1); /* 4px — Figma Content gap */
   min-width: 0;
 }
-.jspr-field__chip {
+.sikat-field__chip {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-0_5); /* 2px */
@@ -150,10 +150,10 @@
   line-height: var(--text-body-xs-line-height); /* 16px */
   font-weight: var(--text-medium);
 }
-.jspr-field__chip-label {
+.sikat-field__chip-label {
   padding-inline: var(--spacing-1); /* 4px — Figma Badge content inset */
 }
-.jspr-field__chip-remove {
+.sikat-field__chip-remove {
   display: flex;
   flex: none;
   width: 16px;
@@ -164,18 +164,18 @@
   color: var(--color-fg-secondary-solid);
   cursor: pointer;
 }
-.jspr-field__chip-remove > svg {
+.sikat-field__chip-remove > svg {
   width: 12px;
   height: 12px;
 }
 
 /* ── Composed field: _Form Label + Fieldset (control + Helper) ── */
-.jspr-field-group {
+.sikat-field-group {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1); /* label ↔ fieldset: 4px */
 }
-.jspr-field__fieldset {
+.sikat-field__fieldset {
   display: flex;
   min-width: 0;
   flex: 1 1 auto;
@@ -184,12 +184,12 @@
 }
 /* Figma Orientation=Vertical: label in a fixed 200px column beside the field,
    vertically centered on the 36px control row. */
-.jspr-field-group[data-orientation='vertical'] {
+.sikat-field-group[data-orientation='vertical'] {
   flex-direction: row;
   align-items: flex-start;
   gap: var(--spacing-4);
 }
-.jspr-field-group[data-orientation='vertical'] > .jspr-field__label {
+.sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
   display: flex;
   flex: none;
   align-items: center;
@@ -197,7 +197,7 @@
   min-height: var(--field-h, var(--spacing-9));
 }
 
-.jspr-field__label {
+.sikat-field__label {
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
   font-size: var(--text-body-sm-font-size); /* 14px */
   line-height: var(--text-body-sm-line-height); /* 20px */
@@ -206,25 +206,25 @@
 }
 /* Label follows the control's state (Figma: disabled → text/muted, read-only →
    bg/quarternary-solid as bound in the Figma file). */
-.jspr-field-group:has(.jspr-field:is(:disabled, [data-disabled])) .jspr-field__label {
+.sikat-field-group:has(.sikat-field:is(:disabled, [data-disabled])) .sikat-field__label {
   color: var(--color-text-muted);
 }
-.jspr-field-group:has(
-    .jspr-field:is([readonly], [data-readonly]):not(:is(:disabled, [data-disabled]))
+.sikat-field-group:has(
+    .sikat-field:is([readonly], [data-readonly]):not(:is(:disabled, [data-disabled]))
   )
-  .jspr-field__label {
+  .sikat-field__label {
   color: var(--color-bg-quarternary-solid);
 }
-.jspr-field__required {
+.sikat-field__required {
   color: var(--color-text-danger);
 }
-.jspr-field__hint,
-.jspr-field__error {
+.sikat-field__hint,
+.sikat-field__error {
   font-size: var(--text-body-xs-font-size); /* 12px */
   line-height: var(--text-body-xs-line-height); /* 16px */
   font-weight: var(--text-regular);
   color: var(--color-text-caption);
 }
-.jspr-field__error {
+.sikat-field__error {
   color: var(--color-text-danger);
 }
