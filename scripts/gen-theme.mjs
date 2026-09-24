@@ -76,7 +76,7 @@ const css = `/**
  * through. Colors are themed @utility (bg-/text-/border-/fg-); scales route through
  * the primitive vars; shadow is composed from parts; breakpoints stay on Tailwind's
  * (CSS @media can't use var(), and they equal ours).
- * Exported as "@jasperlepardo/base-design-system/theme".
+ * Exported as "@jasperlepardo/sikat-design-system/theme".
  */
 @theme {
   /* reset Tailwind's defaults → token-only */

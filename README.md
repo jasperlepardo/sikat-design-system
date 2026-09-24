@@ -64,7 +64,7 @@ just removes the attribute (so the OS media query takes over); `light`/`dark`
 set it. The choice persists to `localStorage`.
 
 ```tsx
-import { useTheme, setThemeMode } from '@jasperlepardo/base-design-system';
+import { useTheme, setThemeMode } from '@jasperlepardo/sikat-design-system';
 
 // imperatively
 setThemeMode('dark'); // 'light' | 'dark' | 'system'
@@ -77,7 +77,7 @@ To avoid a flash of the wrong theme on load, inline `themeScript` in `<head>`
 **before** the stylesheet:
 
 ```tsx
-import { themeScript } from '@jasperlepardo/base-design-system';
+import { themeScript } from '@jasperlepardo/sikat-design-system';
 // <head><script dangerouslySetInnerHTML={{ __html: themeScript }} /></head>
 ```
 
@@ -94,11 +94,11 @@ Published to **GitHub Packages**. Consumers add a scoped registry line to their
 ```
 
 ```bash
-npm install @jasperlepardo/base-design-system
+npm install @jasperlepardo/sikat-design-system
 ```
 
 ```tsx
-import { Button, Card, Badge } from '@jasperlepardo/base-design-system';
+import { Button, Card, Badge } from '@jasperlepardo/sikat-design-system';
 // The package injects its CSS automatically on import.
 
 export function Example() {
@@ -125,7 +125,7 @@ The theme resets Tailwind's default palette, so utilities come from these tokens
 (overridable via `jspr`):
 
 ```css
-@import '@jasperlepardo/base-design-system/theme';
+@import '@jasperlepardo/sikat-design-system/theme';
 ```
 
 ## Components
@@ -276,7 +276,7 @@ a pull is a _proposed_ config edit you review via git diff.
    (`scripts/release.mjs`).
 
 2. **Merge the PR** once CI passes. The **Release** workflow
-   (`.github/workflows/release.yml`) then publishes `@jasperlepardo/base-design-system`
+   (`.github/workflows/release.yml`) then publishes `@jasperlepardo/sikat-design-system`
    to **GitHub Packages**, tags `vX.Y.Z`, and creates the GitHub Release — all with
    the built-in `GITHUB_TOKEN` (no extra secret).
 

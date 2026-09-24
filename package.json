@@ -1,12 +1,12 @@
 {
-  "name": "@jasperlepardo/base-design-system",
+  "name": "@jasperlepardo/sikat-design-system",
   "version": "0.12.0",
   "type": "module",
   "license": "MIT",
   "description": "Base Design System — Tailwind-palette tokens (raw → primitives → semantics), light/dark themes, React components, built with Style Dictionary + Tailwind v4 + Storybook, mirrored into Figma.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jasperlepardo/base-design-system.git"
+    "url": "git+https://github.com/jasperlepardo/sikat-design-system.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
