@@ -1,7 +1,7 @@
 # Code ↔ Figma reconciliation — decisions log
 
 Reconciling the **code** token system (source of truth, Tailwind-aligned) against the
-**JSPR-Tokens** Figma (`4A0TgVbwojrRl48lG0GeBu`, the older BDO-origin library), segment
+**SIKAT-Tokens** Figma (`4A0TgVbwojrRl48lG0GeBu`, the older BDO-origin library), segment
 by segment. Default resolution where Tailwind settles it: **code wins → the Figma is
 regenerated/pushed from code.** Implementation is batched at the end (before publish).
 

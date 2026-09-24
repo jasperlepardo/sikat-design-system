@@ -1,7 +1,7 @@
-# Plan — align base's semantic tokens with the JSPR-Tokens Figma, the Tailwind way
+# Plan — align base's semantic tokens with the SIKAT-Tokens Figma, the Tailwind way
 
 ## Goal
-Expand base's semantic layer to cover the JSPR-Tokens Figma library
+Expand base's semantic layer to cover the SIKAT-Tokens Figma library
 (`4A0TgVbwojrRl48lG0GeBu`) — **values and roles** — while staying **Tailwind-native**:
 roles, not per-property duplicates; one palette; themed via the cascade.
 

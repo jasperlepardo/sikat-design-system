@@ -19,7 +19,7 @@
 > A few deep neutral "solid" darks (`bg/secondary-solid` etc.) and `text`
 > `caption`/`placeholder`/`*_on-primary` remain unported until a component needs them.
 
-Compares the **JSPR-Tokens** Figma library (`4A0TgVbwojrRl48lG0GeBu`, `03 Semantics`
+Compares the **SIKAT-Tokens** Figma library (`4A0TgVbwojrRl48lG0GeBu`, `03 Semantics`
 collection — 224 vars, 105 of them color) against base's semantic layer
 (`src/styles/tokens/theme-{light,dark}.css`, ~46 color semantics).
 
