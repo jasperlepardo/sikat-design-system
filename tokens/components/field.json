@@ -73,6 +73,13 @@
       "fs": "--text-body-sm-font-size",
       "lh": "--text-body-sm-line-height",
       "radius": "--rounded-lg"
+    },
+    "xl": {
+      "h": "--spacing-10",
+      "px": "--spacing-2_5",
+      "fs": "--text-body-sm-font-size",
+      "lh": "--text-body-sm-line-height",
+      "radius": "--spacing-3"
     }
   }
 }

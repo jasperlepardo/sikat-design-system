@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Page } from './Page';
 import { Section } from '../Section/Section';
+import { Navbar } from '../Navbar/Navbar';
 
 const meta = {
   title: 'Layout/Page',
@@ -15,9 +16,7 @@ type Story = StoryObj<typeof meta>;
 export const Shell: Story = {
   render: () => (
     <Page style={{ minHeight: 320 }}>
-      <nav className="bg-secondary px-6 py-3 text-sm font-medium text-heading shadow-sm">
-        Sticky Navbar
-      </nav>
+      <Navbar type="control-plane" />
       <Section>
         <Section.Container>
           <p className="text-body">Body content — the footer pins to the bottom on short pages.</p>
