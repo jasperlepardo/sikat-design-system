@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    dts({ include: ['src'], exclude: ['**/*.stories.tsx', '**/*.test.tsx'] }),
+    dts({ include: ['src'], exclude: ['**/*.stories.tsx', '**/*.test.{ts,tsx}'] }),
   ],
   build: {
     lib: {
