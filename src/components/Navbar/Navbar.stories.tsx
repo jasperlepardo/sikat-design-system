@@ -128,5 +128,15 @@ export const Narrow: StoryObj<typeof meta> = {
       }
     const search = canvasElement.querySelector('.sikat-navbar__search')!.getBoundingClientRect();
     await expect(search.width).toBeLessThan(520);
+    // Buttons hug their content (Figma): squares stay square, nothing is squeezed.
+    const size = (name: string) => {
+      const r = within(canvasElement).getByRole('button', { name }).getBoundingClientRect();
+      return [Math.round(r.width), r.height];
+    };
+    await expect(size('Apps')).toEqual([32, 32]);
+    await expect(size('Create')).toEqual([36, 36]);
+    await expect(size('Notifications')).toEqual([32, 32]);
+    await expect(size('Settings')).toEqual([32, 32]);
+    await expect(size('Sikat Tech Inc.')).toEqual([134, 32]);
   },
 };

@@ -124,7 +124,7 @@ export function Navbar({
               />
               <IconButton
                 label="Create"
-                intent="default"
+                intent="primary"
                 variant="solid"
                 size="large"
                 className="sikat-navbar__create"
@@ -136,7 +136,7 @@ export function Navbar({
             <div className="sikat-navbar__end">
               <Button
                 intent="default"
-                variant="ghost"
+                variant="link"
                 size="medium"
                 trailingIcon={<Glyph src={chevronGlyph} />}
                 onClick={onOrganizationClick}

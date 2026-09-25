@@ -2,6 +2,11 @@
    generated component CSS (src/styles/components/icon-button.css, from
    tokens/components/icon-button.json). Mirrors the Figma Icon Button (Components
    file, node 8919:1174): square 40/36/32/28/24/20px, 20px glyph at every size. */
+/* Figma sizes the Icon Button "Hug": it keeps its square box and never shrinks
+   inside a flex row (e.g. a narrow Navbar). */
+.sikat-icon-btn {
+  flex-shrink: 0;
+}
 .sikat-icon-btn > svg {
   flex: none;
   width: 20px;
