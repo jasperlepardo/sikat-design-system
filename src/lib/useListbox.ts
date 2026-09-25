@@ -154,6 +154,7 @@ export function useListbox({
     activeIndex,
     setActiveIndex,
     onKeyDown,
-    activeId: open && activeIndex >= 0 ? getItemId(activeIndex) : undefined,
+    activeId:
+      open && activeIndex >= 0 && activeIndex < itemCount ? getItemId(activeIndex) : undefined,
   };
 }

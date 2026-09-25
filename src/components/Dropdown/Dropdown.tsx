@@ -1,14 +1,12 @@
-import type { ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import './dropdown.css';
 
-export interface DropdownProps {
-  id?: string;
+export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   /** ARIA role for the panel (default `listbox`). */
   role?: 'listbox' | 'menu';
   /** Sets `aria-multiselectable` (e.g. MultiSelect). */
   multiselectable?: boolean;
-  className?: string;
   children: ReactNode;
 }
 
@@ -19,18 +17,18 @@ export interface DropdownProps {
  * the trigger.
  */
 export function Dropdown({
-  id,
   role = 'listbox',
   multiselectable,
   className,
   children,
+  ...rest
 }: DropdownProps) {
   return (
     <div
-      id={id}
       role={role}
       aria-multiselectable={multiselectable || undefined}
       className={cn('sikat-dropdown', className)}
+      {...rest}
     >
       {children}
     </div>

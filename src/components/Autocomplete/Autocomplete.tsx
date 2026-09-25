@@ -96,6 +96,8 @@ export function Autocomplete({
     setOpen(false);
   };
 
+  const showList = open && filtered.length > 0;
+
   const { activeIndex, onKeyDown, activeId } = useListbox({
     itemCount: filtered.length,
     open,
@@ -111,8 +113,8 @@ export function Autocomplete({
         id={id}
         type="text"
         role="combobox"
-        aria-expanded={open}
-        aria-controls={listId}
+        aria-expanded={showList}
+        aria-controls={showList ? listId : undefined}
         aria-autocomplete="list"
         aria-activedescendant={activeId}
         aria-invalid={invalid || undefined}
@@ -138,7 +140,7 @@ export function Autocomplete({
         onKeyDown={onKeyDown}
         {...aria}
       />
-      {open && filtered.length > 0 ? (
+      {showList ? (
         <Dropdown id={listId}>
           {filtered.map((s, i) => (
             <DropdownItem
