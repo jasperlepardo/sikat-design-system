@@ -63,11 +63,9 @@
   width: 24px;
   height: 24px;
 }
-/* Disabled — code addition (Figma has no disabled item). */
-.sikat-dropdown__item[aria-disabled='true'] {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+/* Disabled options (aria-disabled) have no visual state of their own — the Figma
+   Dropdown Item defines none. They are skipped by the keyboard, can't be
+   selected, and don't take the hover tint (above). */
 
 /* Scrollbar — Figma "Scrollbar": 8px, bg/secondary track, bg/quarternary thumb,
    fully rounded, 1px inset. Native scrollbar, styled. */
