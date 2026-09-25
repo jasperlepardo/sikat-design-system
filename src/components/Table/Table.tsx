@@ -17,6 +17,9 @@ export interface TableColumn<T> {
   cell?: (row: T) => ReactNode;
   /** Shows the sort control on the header (Figma header cell hover). */
   sortable?: boolean;
+  /** Keep the header visually blank (Figma Spacer header cell) but named for
+   *  assistive tech — e.g. drag-handle or expand columns. */
+  srOnlyHeader?: boolean;
 }
 
 export type TableSortDirection = 'asc' | 'desc';
@@ -205,7 +208,15 @@ export function Table<T>({
                     }
                   >
                     <span className="sikat-table__th-inner">
-                      <span className="sikat-table__th-label">{col.header}</span>
+                      <span
+                        className={
+                          col.srOnlyHeader
+                            ? 'sikat-table__visually-hidden'
+                            : 'sikat-table__th-label'
+                        }
+                      >
+                        {col.header}
+                      </span>
                       {col.sortable ? (
                         <button
                           type="button"
