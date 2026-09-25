@@ -1,0 +1,122 @@
+/* PageHeader structure. Mirrors the Figma Header (Components file, Headers page,
+   set 17447:35967: Page Type = Table | Forms). */
+.sikat-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--spacing-3_5) var(--spacing-4);
+  border-radius: var(--rounded-2xl);
+  background-color: var(--color-bg-secondary);
+  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+}
+
+/* Top Bar: title block left, button groups right. */
+.sikat-page-header__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+.sikat-page-header__start {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: var(--spacing-2_5);
+}
+.sikat-page-header[data-type='forms'] .sikat-page-header__start {
+  gap: var(--spacing-1);
+}
+.sikat-page-header[data-type='forms'] .sikat-page-header__leading {
+  margin-right: var(--spacing-1_5);
+}
+.sikat-page-header__leading {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.sikat-page-header__titles {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: center;
+}
+.sikat-page-header__title-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1_5);
+}
+/* Page Title: Body/lg/Medium, text/heading. */
+.sikat-page-header__title {
+  margin: 0;
+  color: var(--color-text-heading);
+  font-size: var(--text-body-lg-font-size);
+  line-height: var(--text-body-lg-line-height);
+  letter-spacing: var(--text-body-lg-letter-spacing);
+  font-weight: var(--text-medium);
+  white-space: nowrap;
+}
+/* Subcopy: Body/xs/Medium, text/body. */
+.sikat-page-header__subcopy {
+  margin: 0;
+  color: var(--color-text-body);
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  letter-spacing: var(--text-body-xs-letter-spacing);
+  font-weight: var(--text-medium);
+  white-space: nowrap;
+}
+.sikat-page-header__title-icon {
+  display: flex;
+  flex: none;
+  color: var(--color-fg-default-solid);
+}
+
+/* Buttons Group: operations | divider | core actions — 12px apart, 4px inside. */
+.sikat-page-header__end {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+.sikat-page-header__group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+/* Figma divider: a 20px line asset (2px, round caps) rotated vertical. */
+.sikat-page-header__divider {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 2px;
+  height: 20px;
+}
+.sikat-page-header__divider > img {
+  flex: none;
+  width: 20px;
+  max-width: none; /* opt out of the base img { max-width: 100% } */
+  height: 2px;
+  transform: rotate(90deg);
+}
+
+.sikat-page-header__tabs {
+  display: flex;
+}
+
+.sikat-page-header__glyph {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}

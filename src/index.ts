@@ -100,6 +100,14 @@ export type {
 export { Tabs, tabsVariants } from './components/Tabs/Tabs';
 export type { TabsProps, TabItem, TabsVariant } from './components/Tabs/Tabs';
 
+export {
+  PageHeader,
+  PageHeaderIcon,
+  pageHeaderIcons,
+  pageHeaderTypes,
+} from './components/PageHeader/PageHeader';
+export type { PageHeaderProps, PageHeaderType } from './components/PageHeader/PageHeader';
+
 export { Page } from './components/Page/Page';
 export type { PageProps } from './components/Page/Page';
 
