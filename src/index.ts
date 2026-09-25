@@ -89,6 +89,14 @@ export type {
 export { Navbar, navbarTypes } from './components/Navbar/Navbar';
 export type { NavbarProps, NavbarType } from './components/Navbar/Navbar';
 
+export { SideNav, SideNavIcon, sideNavOrientations } from './components/SideNav/SideNav';
+export type {
+  SideNavProps,
+  SideNavItem,
+  SideNavSection,
+  SideNavOrientation,
+} from './components/SideNav/SideNav';
+
 export { Page } from './components/Page/Page';
 export type { PageProps } from './components/Page/Page';
 
