@@ -52,12 +52,12 @@
     "primary/solid": {
       "rest": {
         "bg": "--color-bg-primary",
-        "icon": "--color-fg-default-solid",
-        "heading": "--color-text-heading",
-        "body": "--color-text-heading",
+        "icon": "--color-fg-white",
+        "heading": "--color-text-heading_on-primary",
+        "body": "--color-text-body_on-primary",
         "border": "--color-border-transparent",
-        "action": "--color-text-heading",
-        "close": "--color-fg-default-solid"
+        "action": "--color-text-white",
+        "close": "--color-fg-white"
       }
     },
     "primary/outline": {
@@ -85,12 +85,12 @@
     "success/solid": {
       "rest": {
         "bg": "--color-bg-success",
-        "icon": "--color-fg-default-solid",
-        "heading": "--color-text-heading",
-        "body": "--color-text-heading",
+        "icon": "--color-fg-white",
+        "heading": "--color-text-heading_on-primary",
+        "body": "--color-text-body_on-primary",
         "border": "--color-border-transparent",
-        "action": "--color-text-heading",
-        "close": "--color-fg-default-solid"
+        "action": "--color-text-white",
+        "close": "--color-fg-white"
       }
     },
     "success/outline": {
@@ -118,12 +118,12 @@
     "warning/solid": {
       "rest": {
         "bg": "--color-bg-warning",
-        "icon": "--color-fg-default-solid",
-        "heading": "--color-text-heading",
-        "body": "--color-text-heading",
+        "icon": "--color-fg-white",
+        "heading": "--color-text-heading_on-primary",
+        "body": "--color-text-body_on-primary",
         "border": "--color-border-transparent",
-        "action": "--color-text-heading",
-        "close": "--color-fg-default-solid"
+        "action": "--color-text-white",
+        "close": "--color-fg-white"
       }
     },
     "warning/outline": {
@@ -151,12 +151,12 @@
     "danger/solid": {
       "rest": {
         "bg": "--color-bg-danger",
-        "icon": "--color-fg-default-solid",
-        "heading": "--color-text-heading",
-        "body": "--color-text-heading",
+        "icon": "--color-fg-white",
+        "heading": "--color-text-heading_on-primary",
+        "body": "--color-text-body_on-primary",
         "border": "--color-border-transparent",
-        "action": "--color-text-heading",
-        "close": "--color-fg-default-solid"
+        "action": "--color-text-white",
+        "close": "--color-fg-white"
       }
     },
     "danger/outline": {
