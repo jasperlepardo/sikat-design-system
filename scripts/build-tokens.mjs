@@ -114,8 +114,11 @@ export async function run(ctx) {
   });
 
   // 2) Per-theme: base (for reference resolution) + shared + that theme's semantics.
+  // Semantic vars reference --p-*/--raw-* defined in base.css, so SD's
+  // "filtered out token references" warning is expected here; silence it.
   for (const theme of THEMES) {
     await build({
+      log: { warnings: 'disabled' },
       source: [...BASE, ...SHARED_SEMANTIC, theme.file],
       platforms: {
         css: {

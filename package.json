@@ -41,7 +41,7 @@
     "tokens:theme": "node scripts/gen-theme.mjs",
     "tokens:build": "node scripts/build-tokens.mjs",
     "components:build": "node scripts/build-components.mjs",
-    "tokens": "npm run tokens:raw && npm run tokens:build && npm run components:build",
+    "tokens": "npm run components:build",
     "figma:sync": "node scripts/sync-figma.mjs",
     "figma:push": "node scripts/push-figma-rest.mjs",
     "prestorybook": "npm run tokens",
