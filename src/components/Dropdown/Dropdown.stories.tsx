@@ -191,6 +191,17 @@ export const ItemPlayground: StoryObj<DropdownItemPlaygroundArgs> = {
     const style = getComputedStyle(item);
     await expect(style.fontSize).toBe('14px');
     await expect(style.lineHeight).toBe('20px');
+    // Fonts = Figma Body/sm: DM Sans (opsz follows the 14px size, as in Figma),
+    // Medium label, Regular affixes.
+    await expect(style.fontFamily).toMatch(/^"?DM Sans"?/);
+    await expect(style.fontOpticalSizing).toBe('auto');
+    await expect(document.fonts.check('500 14px "DM Sans"')).toBe(true);
+    await expect(getComputedStyle(item.querySelector('.sikat-dropdown__label')!).fontWeight).toBe(
+      '500',
+    );
+    for (const affix of item.querySelectorAll('.sikat-dropdown__affix')) {
+      await expect(getComputedStyle(affix).fontWeight).toBe('400');
+    }
     for (const svg of item.querySelectorAll('.sikat-dropdown__icon > svg')) {
       await expect(svg.getBoundingClientRect().width).toBe(20);
     }

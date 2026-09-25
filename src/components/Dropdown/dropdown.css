@@ -64,9 +64,21 @@
   width: 20px;
   height: 20px;
 }
-/* Disabled options (aria-disabled) have no visual state of their own — the Figma
-   Dropdown Item defines none. They are skipped by the keyboard, can't be
-   selected, and don't take the hover tint (above). */
+/* Disabled = Figma Dropdown Item variables, States mode "Disabled":
+   background bg/disabled, label + affixes text/disabled, icon bg/disabled.
+   Disabled options are skipped by the keyboard, can't be selected, and don't
+   take the hover tint (above). */
+.sikat-dropdown__item[aria-disabled='true'] {
+  background-color: var(--color-bg-disabled);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+.sikat-dropdown__item[aria-disabled='true'] .sikat-dropdown__affix {
+  color: var(--color-text-disabled);
+}
+.sikat-dropdown__item[aria-disabled='true'] .sikat-dropdown__icon {
+  color: var(--color-bg-disabled);
+}
 
 /* Scrollbar — Figma "Scrollbar": 8px, bg/secondary track, bg/quarternary thumb,
    fully rounded, 1px inset. Native scrollbar, styled. */
