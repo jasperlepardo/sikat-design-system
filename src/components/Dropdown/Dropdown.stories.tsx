@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useId, useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import { Dropdown, DropdownItem } from './Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
@@ -81,6 +82,36 @@ type Story = StoryObj<typeof meta>;
 /** Foundation demo — a working select built from useDropdown + useListbox + Dropdown. */
 export const SelectMenuExample: Story = {
   render: () => <SelectMenu />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('combobox');
+    const activeName = () =>
+      canvasElement.querySelector(
+        `#${CSS.escape(trigger.getAttribute('aria-activedescendant') ?? '')}`,
+      )?.textContent;
+
+    // Click opens with the first option active; arrows + Enter select and close.
+    await userEvent.click(trigger);
+    await expect(canvas.getAllByRole('option')).toHaveLength(OPTIONS.length);
+    await expect(activeName()).toBe('Apple');
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    await expect(trigger).toHaveTextContent('Banana');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+
+    // Type-ahead on the closed trigger opens and jumps to the match.
+    await userEvent.keyboard('c');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(activeName()).toBe('Cherry');
+    await userEvent.keyboard('{Enter}');
+    await expect(trigger).toHaveTextContent('Cherry');
+
+    // Reopening highlights the selection; Escape closes without changing it.
+    await userEvent.keyboard(' ');
+    await expect(activeName()).toBe('Cherry');
+    await userEvent.keyboard('{End}{Escape}');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toHaveTextContent('Cherry');
+  },
 };
 
 const CircleIcon = (

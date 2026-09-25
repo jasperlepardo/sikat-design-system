@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { Form } from './Form';
 import { TextField, Select, FormField } from '../Field/Field';
 import { Divider } from '../Divider/Divider';
@@ -9,14 +10,21 @@ const meta = {
   title: 'Layout/Form',
   component: Form,
   tags: ['autodocs'],
+  args: { onSubmit: fn() },
 } satisfies Meta<typeof Form>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Composed: Story = {
-  render: () => (
-    <Form style={{ maxWidth: 480 }} onSubmit={(e) => e.preventDefault()}>
+  render: (args) => (
+    <Form
+      style={{ maxWidth: 480 }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        args.onSubmit?.(e);
+      }}
+    >
       <Form.Section>
         <Form.Header heading="Your details" subHeading="How we'll reach you" />
         <Form.Group>
@@ -48,4 +56,17 @@ export const Composed: Story = {
       </ButtonGroup>
     </Form>
   ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.type(canvas.getByLabelText('Full name'), 'Ada Lovelace');
+    await userEvent.type(canvas.getByLabelText('Email'), 'ada@example.com');
+    await userEvent.selectOptions(canvas.getByLabelText('Country'), 'Singapore');
+
+    // Cancel is type="button" and must not submit.
+    await userEvent.click(canvas.getByRole('button', { name: 'Cancel' }));
+    await expect(args.onSubmit).not.toHaveBeenCalled();
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Save' }));
+    await expect(args.onSubmit).toHaveBeenCalledOnce();
+  },
 };

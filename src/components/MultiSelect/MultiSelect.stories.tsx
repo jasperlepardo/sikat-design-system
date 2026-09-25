@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+import { expect, userEvent, within } from 'storybook/test';
 import { MultiSelect, type MultiSelectOption } from './MultiSelect';
 import { FormField } from '../Field/Field';
 import {
@@ -82,5 +83,41 @@ export const InFormField: Story = {
         </FormField>
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByLabelText('Frameworks');
+    const chips = () =>
+      canvas
+        .queryAllByRole('button', { name: /^Remove / })
+        .map((b) => b.getAttribute('aria-label'));
+    await expect(chips()).toEqual(['Remove React']);
+
+    // Filter + Enter toggles an option on; the menu stays open and the query clears.
+    await userEvent.click(input);
+    await userEvent.type(input, 'sv');
+    await expect(canvas.getAllByRole('option')).toHaveLength(1);
+    await userEvent.keyboard('{Enter}');
+    await expect(chips()).toEqual(['Remove React', 'Remove Svelte']);
+    await expect(input).toHaveValue('');
+    await expect(input).toHaveAttribute('aria-expanded', 'true');
+
+    // Clicking toggles; disabled options are ignored.
+    await userEvent.click(canvas.getByRole('option', { name: 'Vue' }));
+    await userEvent.click(canvas.getByRole('option', { name: 'Qwik' }));
+    await expect(chips()).toEqual(['Remove React', 'Remove Svelte', 'Remove Vue']);
+    await expect(canvas.getByRole('option', { name: 'Vue' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+
+    // Backspace on an empty query removes the last chip; the chip button removes its value.
+    await userEvent.keyboard('{Backspace}');
+    await expect(chips()).toEqual(['Remove React', 'Remove Svelte']);
+    await userEvent.click(canvas.getByRole('button', { name: 'Remove React' }));
+    await expect(chips()).toEqual(['Remove Svelte']);
+
+    await userEvent.keyboard('{Escape}');
+    await expect(input).toHaveAttribute('aria-expanded', 'false');
   },
 };
