@@ -11,7 +11,12 @@ import './badge.css';
 
 // The Figma "Badge Counter" shares the Badge intent × style matrix, so it reuses
 // the Badge manifest + the generated .sikat-badge[data-intent][data-style] rules.
-export { badgeIntents as badgeCounterIntents, badgeStyles as badgeCounterStyles };
+// Figma defines it for five intents (no White/Black); those still render, but the
+// documented set below mirrors Figma.
+export const badgeCounterIntents = badgeIntents.filter(
+  (i): i is Exclude<BadgeIntent, 'white' | 'black'> => i !== 'white' && i !== 'black',
+);
+export { badgeStyles as badgeCounterStyles };
 export type { BadgeIntent as BadgeCounterIntent, BadgeStyle as BadgeCounterStyle };
 
 export interface BadgeCounterProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'style'> {
@@ -50,7 +55,7 @@ export function BadgeCounter({
       data-style={variant}
       {...rest}
     >
-      {content}
+      <span className="sikat-badge__label">{content}</span>
     </span>
   );
 }
