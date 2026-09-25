@@ -24,9 +24,9 @@ export interface BadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'style
   size?: BadgeSize;
   /** Show the leading status dot (tinted by the intent's icon color). */
   dot?: boolean;
-  /** Leading icon slot — typically an `<Icon>…</Icon>` (20px). */
+  /** Leading icon slot — typically an `<Icon size={16}>…</Icon>`. */
   leadingIcon?: ReactNode;
-  /** Trailing icon slot — typically an `<Icon>…</Icon>` (20px). */
+  /** Trailing icon slot — typically an `<Icon size={16}>…</Icon>`. */
   trailingIcon?: ReactNode;
   /** When provided, renders a dismiss (×) button. */
   onDismiss?: () => void;

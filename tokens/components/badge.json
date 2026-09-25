@@ -56,14 +56,14 @@
         "bg": "--color-bg-primary-subtle",
         "icon": "--color-fg-primary",
         "text": "--color-text-heading",
-        "border": "--color-border-primary"
+        "border": "--color-border-primary-subtle"
       }
     },
     "primary/ghost": {
       "rest": {
         "bg": "--color-bg-primary-subtle",
         "icon": "--color-fg-primary",
-        "text": "--color-text-heading",
+        "text": "--color-text-primary",
         "border": "--color-border-transparent"
       }
     },
@@ -80,7 +80,7 @@
         "bg": "--color-bg-success-subtle",
         "icon": "--color-fg-success",
         "text": "--color-text-heading",
-        "border": "--color-border-success"
+        "border": "--color-border-success-subtle"
       }
     },
     "success/ghost": {
@@ -104,7 +104,7 @@
         "bg": "--color-bg-warning-subtle",
         "icon": "--color-fg-warning",
         "text": "--color-text-heading",
-        "border": "--color-border-warning"
+        "border": "--color-border-warning-subtle"
       }
     },
     "warning/ghost": {
@@ -128,7 +128,7 @@
         "bg": "--color-bg-danger-subtle",
         "icon": "--color-fg-danger",
         "text": "--color-text-heading",
-        "border": "--color-border-danger"
+        "border": "--color-border-danger-subtle"
       }
     },
     "danger/ghost": {
@@ -190,24 +190,24 @@
   },
   "sizing": {
     "extra-small": {
-      "pad-x": "--spacing-0_5",
-      "pad-y": "--spacing-1"
+      "pad-x": "--spacing-1",
+      "pad-y": "--spacing-0_5"
     },
     "small": {
-      "pad-x": "--spacing-1",
-      "pad-y": "--spacing-2"
+      "pad-x": "--spacing-2",
+      "pad-y": "--spacing-1"
     },
     "medium": {
-      "pad-x": "--spacing-2",
-      "pad-y": "--spacing-3"
+      "pad-x": "--spacing-3",
+      "pad-y": "--spacing-1_5"
     },
     "large": {
-      "pad-x": "--spacing-3",
-      "pad-y": "--spacing-4"
+      "pad-x": "--spacing-4",
+      "pad-y": "--spacing-2"
     },
     "extra-large": {
-      "pad-x": "--spacing-4",
-      "pad-y": "--spacing-6"
+      "pad-x": "--spacing-5",
+      "pad-y": "--spacing-2_5"
     }
   }
 }
