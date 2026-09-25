@@ -1,0 +1,173 @@
+/* SideNav structure. Mirrors the Figma Side Navigation Bar + Button-Navigation
+   (Nav Item) + Submenu (Components file, Nav page; bar node 17425:17800). */
+.sikat-sidenav {
+  box-sizing: border-box;
+  width: 260px;
+  height: 100%;
+  background-color: var(--color-bg-tertiary); /* Figma color/bg/tertiary */
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+}
+.sikat-sidenav[data-orientation='compact'] {
+  width: 120px;
+}
+.sikat-sidenav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Navigation: 24px top/bottom, 16px sides, 24px between sections / divider;
+   a section stacks its header and items 8px apart. */
+.sikat-sidenav__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  padding: var(--spacing-6) var(--spacing-4);
+}
+.sikat-sidenav__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+.sikat-sidenav__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+/* Figma divider asset (1px #E6E6E6 line). */
+.sikat-sidenav__divider {
+  display: block;
+  width: 100%;
+  height: 1px;
+}
+/* Section header ("Operations"): Figma Urbanist Medium 12, 4% tracking, #6d6e71
+   (a text style outside the token set — kept as in Figma). */
+.sikat-sidenav__title {
+  margin: 0;
+  padding: var(--spacing-2);
+  font-family: var(--p-font-family-heading), system-ui, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: var(--text-medium);
+  letter-spacing: 0.48px;
+  color: #6d6e71;
+}
+
+/* Nav Item (Figma Button-Navigation, Nest 0/Root): 36px row, 8px side padding,
+   12px radius, 20px icon + 4px-inset 14/20 Medium label, trailing chevron. */
+.sikat-sidenav__item {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  padding: var(--spacing-2);
+  border: 0;
+  border-radius: var(--rounded-xl);
+  background-color: transparent;
+  color: var(--color-text-caption);
+  font: inherit;
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  letter-spacing: var(--text-body-sm-letter-spacing);
+  font-weight: var(--text-medium);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+  --sidenav-icon: var(--color-fg-quarternary-solid);
+}
+.sikat-sidenav__item:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: -2px;
+}
+.sikat-sidenav__icon,
+.sikat-sidenav__chevron {
+  display: flex;
+  flex: none;
+  color: var(--sidenav-icon);
+}
+.sikat-sidenav__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0 var(--spacing-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Hover (Figma State=Hover). */
+.sikat-sidenav__item:hover {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-body);
+  --sidenav-icon: var(--color-fg-tertiary-solid);
+}
+/* Active (Figma State=Active): primary on primary-subtle. */
+.sikat-sidenav__item[data-active] {
+  background-color: var(--color-bg-primary-subtle);
+  color: var(--color-text-primary);
+  --sidenav-icon: var(--color-fg-primary);
+}
+
+/* Open module = Figma Submenu: a white, bordered card; the header is primary. */
+.sikat-sidenav__submenu {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--rounded-xl);
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-default);
+  background-color: var(--color-bg-white);
+}
+.sikat-sidenav__item[data-open] {
+  color: var(--color-text-primary);
+  --sidenav-icon: var(--color-fg-primary);
+}
+.sikat-sidenav__item[data-open]:hover {
+  background-color: transparent;
+}
+.sikat-sidenav__subitems {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-1);
+}
+/* Nest Level 1: 16px left inset + a 19px connector slot (└ when active). */
+.sikat-sidenav__item--sub {
+  padding: 0 var(--spacing-2) 0 var(--spacing-4);
+}
+.sikat-sidenav__item--sub .sikat-sidenav__label {
+  padding-block: var(--spacing-2);
+}
+.sikat-sidenav__connector {
+  display: flex;
+  flex: none;
+  width: 19px;
+  height: 36px;
+}
+
+/* Compact (Figma Orientation=Compact): icon over a 10/12 label, 6px/8px padding. */
+.sikat-sidenav[data-orientation='compact'] .sikat-sidenav__item {
+  flex-direction: column;
+  justify-content: center;
+  gap: 0;
+  padding: var(--spacing-1_5) var(--spacing-2);
+  font-size: var(--text-body-2xs-font-size);
+  line-height: var(--text-body-2xs-line-height);
+  text-align: center;
+}
+/* Compact labels hug and aren't truncated (Figma: "Configurations" is wider than
+   the 88px column and overflows it, centered). */
+.sikat-sidenav[data-orientation='compact'] .sikat-sidenav__label {
+  flex: none;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.sikat-sidenav__glyph {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
