@@ -28,8 +28,8 @@ export interface UseListboxResult {
 /**
  * Keyboard model for a custom (div-based) listbox combobox, per the WAI-ARIA APG
  * select-only pattern: Arrow/Home/End movement (skipping disabled), Enter/Space
- * to activate, type-ahead, active-item-on-open, and scroll-into-view. Escape is
- * left to `useDropdown`. Works whether the trigger is a `<button>` or a
+ * to activate (Space types normally in a text input), type-ahead,
+ * active-item-on-open, and scroll-into-view. Escape is left to `useDropdown`. Works whether the trigger is a `<button>` or a
  * `<div role="combobox">` — it `preventDefault`s the keys it handles so a
  * button's native activation doesn't double-fire.
  */
@@ -54,12 +54,15 @@ export function useListbox({
   };
 
   // Highlight the selected item (or the first enabled one) on open; clear on close.
+  // Keep an index set in the same update that opened it (type-ahead while closed).
   useEffect(() => {
-    setActiveIndex(
+    setActiveIndex((prev) =>
       open
-        ? selectedIndex != null && enabled(selectedIndex)
-          ? selectedIndex
-          : firstEnabled(0, 1)
+        ? prev >= 0
+          ? prev
+          : selectedIndex != null && enabled(selectedIndex)
+            ? selectedIndex
+            : firstEnabled(0, 1)
         : -1,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,6 +133,8 @@ export function useListbox({
         break;
       case 'Enter':
       case ' ':
+        // In a text input (editable combobox) Space types a space, not activate.
+        if (e.key === ' ' && e.currentTarget instanceof HTMLInputElement) break;
         e.preventDefault();
         if (!open) setOpen(true);
         else if (activeIndex >= 0) {
