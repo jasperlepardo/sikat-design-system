@@ -108,6 +108,15 @@ export {
 } from './components/PageHeader/PageHeader';
 export type { PageHeaderProps, PageHeaderType } from './components/PageHeader/PageHeader';
 
+export { Table } from './components/Table/Table';
+export type {
+  TableProps,
+  TableColumn,
+  TableSort,
+  TableSortDirection,
+  TablePagination,
+} from './components/Table/Table';
+
 export { Page } from './components/Page/Page';
 export type { PageProps } from './components/Page/Page';
 
