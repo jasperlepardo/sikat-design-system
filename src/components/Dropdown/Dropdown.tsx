@@ -39,13 +39,13 @@ export function Dropdown({
 
 export interface DropdownItemProps {
   id?: string;
-  /** Leading icon / media (24px, fg/primary) — Figma "Show Leading". */
+  /** Leading icon / media (20px, fg/primary) — Figma "Show Leading". */
   leadingIcon?: ReactNode;
   /** Text before the label (text/muted) — Figma "Prefix". */
   prefix?: ReactNode;
   /** Text after the label (text/muted) — Figma "Suffix". */
   suffix?: ReactNode;
-  /** Trailing icon / media (24px, fg/primary) — Figma "Show Trailing". */
+  /** Trailing icon / media (20px, fg/primary) — Figma "Show Trailing". */
   trailingIcon?: ReactNode;
   selected?: boolean;
   /** Keyboard-highlighted (drives `aria-activedescendant` styling). */
