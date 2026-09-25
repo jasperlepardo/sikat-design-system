@@ -1,0 +1,255 @@
+/* Table structure. Mirrors the Figma Table (Components file, Table section
+   17239:6201: Table 17239:6506, Table Header Cell, Table Cell, Table Row,
+   Scroll Indicator). */
+.sikat-table {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-0_5);
+  box-sizing: border-box;
+  padding: var(--spacing-1);
+  border-radius: var(--rounded-2xl);
+  background-color: var(--color-bg-secondary);
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-default);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+}
+.sikat-table__scroller {
+  overflow-x: auto;
+  scrollbar-width: none; /* the Figma Scroll Indicator replaces the scrollbar */
+}
+.sikat-table__scroller::-webkit-scrollbar {
+  display: none;
+}
+.sikat-table__table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.sikat-table__caption,
+.sikat-table__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Table Header Cell: 36px, 8px radius; Content = 10px / 8px padding, Body/xs/
+   Semibold caption; Hover = bg/tertiary, text/body, sort control shown. */
+.sikat-table__th {
+  height: 36px;
+  box-sizing: border-box;
+  padding: var(--spacing-2_5) var(--spacing-2);
+  /* 2px gap between the header and the body (Figma Table gap). */
+  border-bottom: var(--spacing-0_5) solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--rounded-lg);
+  color: var(--color-text-caption);
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  letter-spacing: var(--text-body-xs-letter-spacing);
+  font-weight: var(--text-semibold);
+  text-align: start;
+  white-space: nowrap;
+}
+.sikat-table__th:hover {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-body);
+}
+.sikat-table__th-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+/* Checkbox / Column / Spacer header cells: 36px squares, 8px padding. */
+.sikat-table__th--check,
+.sikat-table__th--end,
+.sikat-table__td--check,
+.sikat-table__td--end {
+  width: 36px;
+  padding: var(--spacing-2);
+}
+.sikat-table__th--check,
+.sikat-table__th--end {
+  --table-check: var(--color-fg-quarternary);
+}
+.sikat-table__th--check:hover {
+  --table-check: var(--color-fg-primary);
+}
+/* The sort control appears on hover (and stays while sorted or focused). Hidden
+   with opacity, so it stays in the accessibility tree and keyboard order. */
+.sikat-table__sort {
+  opacity: 0;
+}
+.sikat-table__th:hover .sikat-table__sort,
+.sikat-table__sort[data-active],
+.sikat-table__sort:focus-visible {
+  opacity: 1;
+}
+
+/* Table Body: white, 12px-rounded; Table Cell = 8px padding, 6px gap, bottom
+   border/default, Body/sm/Medium text/body. */
+.sikat-table__td {
+  box-sizing: border-box;
+  height: 36px;
+  padding: var(--spacing-2);
+  background-color: var(--color-bg-default-alt);
+  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
+  color: var(--color-text-body);
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  letter-spacing: var(--text-body-sm-letter-spacing);
+  font-weight: var(--text-medium);
+  white-space: nowrap;
+  --table-check: var(--color-fg-quarternary);
+}
+.sikat-table__row:first-child > .sikat-table__td:first-child {
+  border-top-left-radius: var(--rounded-xl);
+}
+.sikat-table__row:first-child > .sikat-table__td:last-child {
+  border-top-right-radius: var(--rounded-xl);
+}
+.sikat-table__row:last-child > .sikat-table__td:first-child {
+  border-bottom-left-radius: var(--rounded-xl);
+}
+.sikat-table__row:last-child > .sikat-table__td:last-child {
+  border-bottom-right-radius: var(--rounded-xl);
+}
+/* Table Cell State=Hover: the rule turns border/primary-subtle, checkbox darkens. */
+.sikat-table__row:hover > .sikat-table__td {
+  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-primary-subtle);
+  --table-check: var(--color-fg-default-solid);
+}
+/* Table Row Variant2 (selected): bg/primary-subtle. */
+.sikat-table__row[data-selected] > .sikat-table__td {
+  background-color: var(--color-bg-primary-subtle);
+}
+.sikat-table__td--end > .sikat-table__icon-btn {
+  margin-inline-start: auto;
+}
+
+/* Checkbox: the Figma 20px outline asset in --table-check; checked uses the
+   library's primary checkbox (Figma defines no checked state). */
+.sikat-table__check {
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  appearance: none;
+  background-color: var(--table-check);
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  cursor: pointer;
+}
+.sikat-table__check:is(:checked, :indeterminate) {
+  appearance: auto;
+  background: none;
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+  accent-color: var(--color-bg-primary);
+}
+.sikat-table__check:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+}
+
+/* Icon Buttons inside cells (sort, tune, "…"): bare glyphs. Block-level flex, so
+   no line box / strut adds height to the 36px cells. */
+.sikat-table__icon-btn {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-fg-default-solid);
+  cursor: pointer;
+}
+.sikat-table__icon-btn:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 1px;
+  border-radius: var(--rounded-sm);
+}
+.sikat-table__glyph {
+  display: block;
+  flex: none;
+  background-color: currentColor;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
+
+/* Scroll Indicator: the Figma 4px #E7E5E4 thumb over an invisible track. */
+.sikat-table__scroll {
+  position: relative;
+  height: 4px;
+  margin-inline: var(--spacing-1);
+}
+.sikat-table__scroll-thumb {
+  position: absolute;
+  top: 0;
+  height: 4px;
+  max-width: none;
+}
+
+/* Bottom Action › Pagination Container — Figma uses legacy styles here
+   (Urbanist 14, #f0f0f0 / #e6e6e6 / #e9e9e9 / #414141 / #6d6e71, no tokens). */
+.sikat-table__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-6);
+}
+.sikat-table__page-info {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--p-font-family-heading), system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: var(--text-medium);
+  letter-spacing: 0.14px;
+}
+.sikat-table__page-size {
+  padding: 8px 32px 8px 8px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+  color: #414141;
+  font: inherit;
+  appearance: none;
+  background-image: var(--table-chevron);
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+.sikat-table__page-total {
+  color: #6d6e71;
+}
+.sikat-table__page-nav {
+  display: flex;
+  gap: 8px;
+}
+.sikat-table__page-btn {
+  display: inline-flex;
+  padding: 8px;
+  border: 0;
+  border-radius: 12px;
+  background-color: #e9e9e9;
+  color: #414141;
+  cursor: pointer;
+}
+.sikat-table__page-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+.sikat-table__page-btn:focus-visible,
+.sikat-table__page-size:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 1px;
+}
