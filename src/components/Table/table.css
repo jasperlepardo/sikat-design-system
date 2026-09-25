@@ -118,7 +118,7 @@
 /* Table Cell State=Hover: the rule turns border/primary-subtle, checkbox darkens. */
 .sikat-table__row:hover > .sikat-table__td {
   box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-primary-subtle);
-  --table-check: var(--color-fg-default-solid);
+  --table-check: var(--color-fg-quarternary-solid); /* Figma cell hover #44403B */
 }
 /* Table Row Variant2 (selected): bg/primary-subtle. */
 .sikat-table__row[data-selected] > .sikat-table__td {
@@ -252,4 +252,107 @@
 .sikat-table__page-size:focus-visible {
   outline: 2px solid var(--color-border-primary);
   outline-offset: 1px;
+}
+
+/* ── Table Cell types (Figma 17239:6211) ─────────────────────────────────── */
+.sikat-table-cell__row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1_5); /* Table Cell gap: 6px */
+}
+.sikat-table-cell__stack {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/* Subcopy: Body/xs/Medium, text/muted. */
+.sikat-table-cell__subcopy {
+  color: var(--color-text-muted);
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  letter-spacing: var(--text-body-xs-letter-spacing);
+}
+/* Link/ID: Body/sm Semibold, underlined, text/body. */
+.sikat-table-cell__link {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-text-body);
+  font: inherit;
+  font-weight: var(--text-semibold);
+  text-decoration: underline;
+  text-underline-position: from-font;
+  cursor: pointer;
+}
+.sikat-table-cell__link:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+}
+/* Media: 24px image. */
+.sikat-table-cell__media {
+  display: block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  max-width: none;
+  object-fit: cover;
+}
+/* User: 12px vertical padding (8px cell + 4px) → 60px; 32px avatar with
+   Body/xs Semibold text/primary initials on bg/primary-subtle. */
+.sikat-table-cell__user {
+  margin-block: var(--spacing-1);
+}
+.sikat-table-cell__avatar {
+  display: flex;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--rounded-full);
+  background-color: var(--color-bg-primary-subtle);
+  color: var(--color-text-primary);
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  font-weight: var(--text-semibold);
+}
+.sikat-table-cell__avatar > img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+/* Amount: 4px gap; the value in Body/sm Bold. */
+.sikat-table-cell__amount {
+  gap: var(--spacing-1);
+}
+.sikat-table-cell__amount-value {
+  font-weight: var(--text-bold);
+}
+/* Action CTA: buttons split by the Figma 20px divider (2px, round caps). */
+.sikat-table-cell__actions {
+  gap: var(--spacing-1_5);
+}
+.sikat-table-cell__divider {
+  display: flex;
+  flex: none;
+  width: 2px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+}
+.sikat-table-cell__divider > img {
+  flex: none;
+  width: 20px;
+  max-width: none;
+  height: 2px;
+  transform: rotate(90deg);
+}
+/* Item: drag handle — fg/quarternary, fg/quarternary-solid on row hover. */
+.sikat-table-cell__drag {
+  display: flex;
+  color: var(--table-check);
+  cursor: grab;
 }

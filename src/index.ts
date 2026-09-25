@@ -109,6 +109,17 @@ export {
 export type { PageHeaderProps, PageHeaderType } from './components/PageHeader/PageHeader';
 
 export { Table } from './components/Table/Table';
+export {
+  TableLink,
+  TableMedia,
+  TableSubcontent,
+  TableUser,
+  TableStatus,
+  TableAmount,
+  TableActions,
+  TableDragHandle,
+  TableExpand,
+} from './components/Table/TableCells';
 export type {
   TableProps,
   TableColumn,
