@@ -1,0 +1,78 @@
+/* Tabs structure. Mirrors the Figma `tabs` + `tab-button` (Components file, Tabs
+   page: 17442:32716 / 17442:32665). */
+
+/* Tab Container: bg/tertiary track, 2px padding + gap, 12px radius, Shadow/inner. */
+.sikat-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-0_5);
+  padding: var(--spacing-0_5);
+  border-radius: var(--rounded-xl);
+  background-color: var(--color-bg-tertiary);
+  box-shadow: inset var(--shadow-inner-1-offset-x) var(--shadow-inner-1-offset-y)
+    var(--shadow-inner-1-blur) var(--shadow-inner-1-spread) var(--shadow-inner-1-color);
+}
+
+/* tab-button: 6px / 10px padding (32px with the 20px icon / badge), 10px radius,
+   4px gap, Body/sm/Medium label. State=Default: transparent, caption text,
+   fg/quarternary icon. */
+.sikat-tabs__tab {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: var(--spacing-1_5) var(--spacing-2_5);
+  border: 0;
+  border-radius: var(--rounded-lg-plus);
+  background-color: transparent;
+  color: var(--color-text-caption);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  letter-spacing: var(--text-body-sm-letter-spacing);
+  font-weight: var(--text-medium);
+  white-space: nowrap;
+  cursor: pointer;
+  --tabs-icon: var(--color-fg-quarternary);
+}
+.sikat-tabs__icon {
+  display: flex;
+  flex: none;
+  color: var(--tabs-icon);
+}
+.sikat-tabs__icon > svg {
+  width: 20px;
+  height: 20px;
+}
+.sikat-tabs__tab:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 1px;
+}
+/* State=Hover. */
+.sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
+  background-color: var(--color-bg-quarternary);
+}
+/* State=Active — lifted by Figma Shadow/Default (0 4 9 0, black 12%; no token). */
+.sikat-tabs__tab[aria-selected='true'] {
+  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+}
+/* Type=Primary: primary fill, white text + icon. */
+.sikat-tabs[data-variant='primary'] .sikat-tabs__tab[aria-selected='true'] {
+  background-color: var(--color-bg-primary);
+  color: var(--color-fg-white);
+  --tabs-icon: var(--color-fg-white);
+}
+/* Type=Secondary: white fill, body text + icon. */
+.sikat-tabs[data-variant='secondary'] .sikat-tabs__tab[aria-selected='true'] {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-body);
+  --tabs-icon: var(--color-fg-tertiary-solid);
+}
+/* State=Disabled: white fill (as in Figma), disabled text, fg/tertiary icon. */
+.sikat-tabs__tab:disabled {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+  --tabs-icon: var(--color-fg-tertiary);
+}
