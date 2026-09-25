@@ -46,8 +46,8 @@
     "primary/solid": {
       "rest": {
         "bg": "--color-bg-primary",
-        "icon": "--color-fg-default",
-        "text": "--color-text-heading_on-primary",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-heading",
         "border": "--color-border-transparent"
       }
     },
@@ -70,8 +70,8 @@
     "success/solid": {
       "rest": {
         "bg": "--color-bg-success",
-        "icon": "--color-fg-white",
-        "text": "--color-text-heading_on-primary",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-heading",
         "border": "--color-border-transparent"
       }
     },
@@ -94,8 +94,8 @@
     "warning/solid": {
       "rest": {
         "bg": "--color-bg-warning",
-        "icon": "--color-fg-white",
-        "text": "--color-text-heading_on-primary",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-heading",
         "border": "--color-border-transparent"
       }
     },
@@ -118,8 +118,8 @@
     "danger/solid": {
       "rest": {
         "bg": "--color-bg-danger",
-        "icon": "--color-fg-white",
-        "text": "--color-text-heading_on-primary",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-heading",
         "border": "--color-border-transparent"
       }
     },

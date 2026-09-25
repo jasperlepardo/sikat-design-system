@@ -47,14 +47,14 @@
       "rest": {
         "bg": "--color-bg-primary",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "hover": {
         "bg": "--color-bg-primary-hover",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "disabled": {
         "bg": "--color-bg-disabled",
@@ -67,14 +67,14 @@
       "rest": {
         "bg": "--color-bg-success",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "hover": {
         "bg": "--color-bg-success-hover",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "disabled": {
         "bg": "--color-bg-disabled",
@@ -87,14 +87,14 @@
       "rest": {
         "bg": "--color-bg-warning",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "hover": {
         "bg": "--color-bg-warning-hover",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "disabled": {
         "bg": "--color-bg-disabled",
@@ -107,14 +107,14 @@
       "rest": {
         "bg": "--color-bg-danger",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "hover": {
         "bg": "--color-bg-danger-hover",
         "border": "--color-border-transparent",
-        "text": "--color-text-white",
-        "icon": "--color-fg-white"
+        "text": "--color-text-heading",
+        "icon": "--color-fg-default-solid"
       },
       "disabled": {
         "bg": "--color-bg-disabled",
