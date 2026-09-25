@@ -1,14 +1,22 @@
 import {
+  Children,
+  isValidElement,
   useId,
+  useMemo,
+  useRef,
   useState,
   type InputHTMLAttributes,
   type ReactNode,
   type LabelHTMLAttributes,
   type TextareaHTMLAttributes,
-  type SelectHTMLAttributes,
+  type ReactElement,
+  type OptionHTMLAttributes,
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
+import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { useDropdown } from '../../lib/useDropdown';
+import { useListbox } from '../../lib/useListbox';
 import { fieldSizes, type FieldSize } from '../../tokens/generated/field.manifest';
 import '../../styles/components/field.css'; // generated colors + sizing vars
 import './field.css'; // structure
@@ -305,63 +313,188 @@ export function Textarea({
 
 /* ------------------------------------------------------------------- Select */
 
-export interface SelectProps
-  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size' | 'prefix'>, FieldAdornments {
+export interface SelectOption {
+  value: string;
+  label?: ReactNode;
+  /** Plain text for type-ahead + the closed display (when `label` is a node). */
+  text?: string;
+  disabled?: boolean;
+}
+
+export interface SelectProps extends FieldAdornments {
+  /** Options. Alternatively pass `<option>` children (as with a native select). */
+  options?: SelectOption[];
+  /** `<option>` children; an empty-valued option acts as the placeholder. */
+  children?: ReactNode;
+  /** Controlled value (`''` = none). */
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+  /** Shown when nothing is selected (defaults to an empty-valued option's text). */
+  placeholder?: string;
+  /** Submitted with forms via a hidden input. */
+  name?: string;
   size?: FieldSize;
   invalid?: boolean;
+  disabled?: boolean;
   /** Figma Select has no read-only state of its own; mirrors Text Field's. */
   readOnly?: boolean;
+  /** Applied to the trigger, so a `<label htmlFor>` / FormField labels it. */
+  id?: string;
+  className?: string;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: boolean | 'true' | 'false';
+  /** Story/docs hook: force the Figma "Hover" look. */
+  'data-state'?: string;
+}
+
+const optionText = (o: SelectOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
+
+/** `<option>` children → options (+ the empty-valued option's text as placeholder). */
+function parseOptionChildren(children: ReactNode) {
+  const options: SelectOption[] = [];
+  let placeholder: string | undefined;
+  for (const child of Children.toArray(children)) {
+    if (!isValidElement(child) || child.type !== 'option') continue;
+    const props = (child as ReactElement<OptionHTMLAttributes<HTMLOptionElement>>).props;
+    const text = Children.toArray(props.children).join('');
+    const value = props.value != null ? String(props.value) : text;
+    if (value === '') placeholder = text;
+    else options.push({ value, label: props.children, text, disabled: props.disabled });
+  }
+  return { options, placeholder };
 }
 
 /**
- * Select — a themed native select (Figma Select) with a trailing chevron. Pass
- * <option>s as children; an empty-valued first option acts as the placeholder.
- * Optional `leadingIcon` / `prefix` / `suffix` / `trailingIcon`. `className`
- * goes on the field box; the rest of the props go on the `<select>`.
+ * Select — the Figma Select field (shared field box, trailing chevron) opening the
+ * Figma Dropdown as its option list. Built on the Popover/Listbox foundation
+ * (useDropdown + useListbox + Dropdown): click / Enter / Space / ↑↓ to open,
+ * ↑↓ Home End + type-ahead to move, Enter / Space / click to choose, Escape or
+ * outside-click to close. Pass `options` or native-style `<option>` children.
+ * Optional `leadingIcon` / `prefix` / `suffix` / `trailingIcon`. `className` goes
+ * on the field box; `id` / `aria-*` go on the trigger (FormField-compatible).
  */
 export function Select({
-  size = 'md',
-  invalid,
-  readOnly,
-  className,
+  options: optionsProp,
   children,
   value,
   defaultValue,
-  onChange,
+  onValueChange,
+  placeholder: placeholderProp,
+  name,
+  size = 'md',
+  invalid,
+  disabled,
+  readOnly,
+  id: idProp,
+  className,
   leadingIcon,
   prefix,
   suffix,
   trailingIcon,
-  ...rest
+  'data-state': dataState,
+  ...aria
 }: SelectProps) {
-  const [filled, track] = useFilled(value, defaultValue);
-  const [dataState, selectProps] = takeDataState(rest);
+  const reactId = useId();
+  const id = idProp ?? reactId;
+  const listId = `${id}-listbox`;
+  const getItemId = (i: number) => `${id}-opt-${i}`;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  const parsed = useMemo(() => parseOptionChildren(children), [children]);
+  const options = optionsProp ?? parsed.options;
+  const placeholder = placeholderProp ?? parsed.placeholder;
+
+  const isControlled = value !== undefined;
+  // Like a native <select>: with no placeholder option and no default, the first
+  // enabled option starts selected.
+  const [internal, setInternal] = useState(
+    () =>
+      defaultValue ?? (placeholder == null ? (options.find((o) => !o.disabled)?.value ?? '') : ''),
+  );
+  const selected = isControlled ? value : internal;
+  const selectedIndex = options.findIndex((o) => o.value === selected);
+  const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : null;
+
+  const { open, setOpen, rootRef } = useDropdown<HTMLDivElement>();
+  const interactive = !disabled && !readOnly;
+
+  const selectAt = (i: number) => {
+    const o = options[i];
+    if (!o || o.disabled) return;
+    if (!isControlled) setInternal(o.value);
+    onValueChange?.(o.value);
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
+
+  const { activeIndex, onKeyDown, activeId } = useListbox({
+    itemCount: options.length,
+    open,
+    setOpen: (next) => interactive && setOpen(next),
+    onActivate: selectAt,
+    getItemId,
+    isDisabled: (i) => !!options[i]?.disabled,
+    getItemText: (i) => optionText(options[i]),
+    selectedIndex,
+  });
+
   return (
-    <FieldShell
-      className={cn('sikat-field--select', className)}
-      state={{ size, filled, disabled: selectProps.disabled, readOnly, invalid, dataState }}
-      adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
-      after={
-        <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
-          {ChevronDown}
-        </span>
-      }
-    >
-      <select
-        className="sikat-field__input"
-        aria-invalid={invalid || undefined}
-        aria-readonly={readOnly || undefined}
-        value={value}
-        defaultValue={defaultValue}
-        onChange={(e) => {
-          track(e.currentTarget.value);
-          onChange?.(e);
+    <div ref={rootRef} className="sikat-select">
+      <FieldShell
+        className={cn('sikat-field--select', className)}
+        state={{ size, filled: selectedOption != null, disabled, readOnly, invalid, dataState }}
+        adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+        after={
+          <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
+            {ChevronDown}
+          </span>
+        }
+        onClick={() => {
+          if (!interactive) return;
+          triggerRef.current?.focus();
+          setOpen(!open);
         }}
-        {...selectProps}
       >
-        {children}
-      </select>
-    </FieldShell>
+        <button
+          ref={triggerRef}
+          id={id}
+          type="button"
+          role="combobox"
+          className="sikat-field__input"
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={open ? listId : undefined}
+          aria-activedescendant={activeId}
+          aria-invalid={invalid || undefined}
+          aria-readonly={readOnly || undefined}
+          disabled={disabled}
+          onKeyDown={interactive ? onKeyDown : undefined}
+          {...aria}
+        >
+          {selectedOption ? (selectedOption.label ?? optionText(selectedOption)) : placeholder}
+        </button>
+      </FieldShell>
+      {name != null ? <input type="hidden" name={name} value={selected} /> : null}
+      {open ? (
+        <Dropdown id={listId}>
+          {options.map((o, i) => (
+            <DropdownItem
+              key={o.value}
+              id={getItemId(i)}
+              selected={o.value === selected}
+              active={i === activeIndex}
+              disabled={o.disabled}
+              onSelect={() => selectAt(i)}
+            >
+              {o.label ?? optionText(o)}
+            </DropdownItem>
+          ))}
+        </Dropdown>
+      ) : null}
+    </div>
   );
 }
 

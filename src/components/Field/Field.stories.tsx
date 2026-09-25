@@ -202,15 +202,52 @@ export const SelectPlayground: StoryObj<FigmaAdornmentArgs & { Type: 'select' }>
   parameters: figmaControls([...figmaAdornmentNames, 'Type']),
   render: (a) => (
     <div style={{ width: 480 }}>
-      <Select aria-label="Select" defaultValue="" {...adorn(a)}>
+      <Select aria-label="Select" name="choice" defaultValue="" {...adorn(a)}>
         <option value="" disabled>
           {a.content}
         </option>
         <option value="a">Option A</option>
         <option value="b">Option B</option>
+        <option value="c">Banana</option>
       </Select>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('combobox', { name: 'Select' });
+    const hidden = canvasElement.querySelector<HTMLInputElement>('input[name=choice]')!;
+    await expect(trigger).toHaveTextContent('Placeholder');
+    await expect(hidden.value).toBe('');
+
+    // Opens the Figma Dropdown; arrows + Enter choose and close, focus returns.
+    await userEvent.click(trigger);
+    await expect(canvas.getByRole('listbox')).toHaveClass('sikat-dropdown');
+    await expect(canvas.getAllByRole('option')).toHaveLength(3);
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    await expect(trigger).toHaveTextContent('Option B');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toHaveFocus();
+    await expect(hidden.value).toBe('b');
+
+    // Type-ahead on the closed trigger opens on the match; click an option.
+    await userEvent.keyboard('b');
+    await expect(canvas.getByRole('option', { name: 'Banana' })).toHaveAttribute(
+      'data-active',
+      'true',
+    );
+    await userEvent.click(canvas.getByRole('option', { name: 'Option A' }));
+    await expect(trigger).toHaveTextContent('Option A');
+
+    // Reopening marks the selection; Escape closes without changing it.
+    await userEvent.click(trigger);
+    await expect(canvas.getByRole('option', { name: 'Option A' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await userEvent.keyboard('{Escape}');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toHaveTextContent('Option A');
+  },
 };
 
 /** Controls mirror the Figma Textarea component properties 1:1. */
