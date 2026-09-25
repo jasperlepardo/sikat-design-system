@@ -86,13 +86,22 @@
   white-space: nowrap;
 }
 
-/* Select: the whole box opens the native picker; chevron-down trails. */
-.sikat-field--select {
+/* Select: the field box is the trigger (a combobox button) and opens the Figma
+   Dropdown underneath; chevron-down trails. `.sikat-select` is the positioned
+   root the Dropdown (top: 100%) anchors to. */
+.sikat-select {
   position: relative;
+  width: 100%;
+}
+.sikat-field--select {
   cursor: pointer;
 }
 .sikat-field--select .sikat-field__input {
   cursor: inherit;
+  text-align: start;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sikat-field--select:not([data-filled]) .sikat-field__input {
   color: var(--field-placeholder); /* empty-valued option = placeholder */
