@@ -63,7 +63,7 @@
           "type": "color"
         },
         "primary-hover": {
-          "value": "{primitive.color.primary.600}",
+          "value": "{primitive.color.primary.400}",
           "type": "color"
         },
         "primary-active": {
@@ -83,7 +83,7 @@
           "type": "color"
         },
         "success-hover": {
-          "value": "{primitive.color.success.600}",
+          "value": "{primitive.color.success.400}",
           "type": "color"
         },
         "success-active": {
@@ -103,7 +103,7 @@
           "type": "color"
         },
         "warning-hover": {
-          "value": "{primitive.color.warning.600}",
+          "value": "{primitive.color.warning.400}",
           "type": "color"
         },
         "warning-active": {
@@ -123,7 +123,7 @@
           "type": "color"
         },
         "danger-hover": {
-          "value": "{primitive.color.danger.600}",
+          "value": "{primitive.color.danger.400}",
           "type": "color"
         },
         "danger-active": {
@@ -395,7 +395,7 @@
           "type": "color"
         },
         "muted": {
-          "value": "{primitive.color.neutral.400}",
+          "value": "{primitive.color.neutral.500}",
           "type": "color"
         },
         "muted_on-primary": {
@@ -407,39 +407,39 @@
           "type": "color"
         },
         "placeholder": {
-          "value": "{primitive.color.neutral.400}",
+          "value": "{primitive.color.neutral.500}",
           "type": "color"
         },
         "primary": {
-          "value": "{primitive.color.primary.500}",
-          "type": "color"
-        },
-        "primary_hover": {
           "value": "{primitive.color.primary.700}",
           "type": "color"
         },
-        "success": {
-          "value": "{primitive.color.success.500}",
+        "primary_hover": {
+          "value": "{primitive.color.primary.800}",
           "type": "color"
         },
-        "success_hover": {
+        "success": {
           "value": "{primitive.color.success.700}",
           "type": "color"
         },
-        "warning": {
-          "value": "{primitive.color.warning.500}",
+        "success_hover": {
+          "value": "{primitive.color.success.800}",
           "type": "color"
         },
-        "warning_hover": {
+        "warning": {
           "value": "{primitive.color.warning.700}",
           "type": "color"
         },
+        "warning_hover": {
+          "value": "{primitive.color.warning.800}",
+          "type": "color"
+        },
         "danger": {
-          "value": "{primitive.color.danger.500}",
+          "value": "{primitive.color.danger.700}",
           "type": "color"
         },
         "danger_hover": {
-          "value": "{primitive.color.danger.700}",
+          "value": "{primitive.color.danger.800}",
           "type": "color"
         },
         "information": {
