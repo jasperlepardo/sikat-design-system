@@ -105,3 +105,28 @@ export const ControlPlane: StoryObj<typeof meta> = {
     await expect(canvas.queryByRole('searchbox')).toBeNull();
   },
 };
+
+/** Narrower than Figma's 1440px page: only the search shrinks; nothing overlaps. */
+export const Narrow: StoryObj<typeof meta> = {
+  args: { avatar: AppAvatar },
+  render: (args) => (
+    <div style={{ width: 1000 }}>
+      <Navbar {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const items = [
+      ...canvasElement.querySelectorAll(
+        '.sikat-navbar__logo, .sikat-navbar__app, nav button, .sikat-navbar__search, .sikat-navbar__avatar',
+      ),
+    ].filter((el) => !el.closest('.sikat-navbar__search') || el.matches('.sikat-navbar__search'));
+    const boxes = items.map((el) => el.getBoundingClientRect());
+    for (let i = 0; i < boxes.length; i++)
+      for (let j = i + 1; j < boxes.length; j++) {
+        const [a, b] = [boxes[i], boxes[j]];
+        await expect(a.right <= b.left + 0.5 || b.right <= a.left + 0.5).toBe(true);
+      }
+    const search = canvasElement.querySelector('.sikat-navbar__search')!.getBoundingClientRect();
+    await expect(search.width).toBeLessThan(520);
+  },
+};

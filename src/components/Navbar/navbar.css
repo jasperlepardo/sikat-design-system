@@ -20,11 +20,13 @@
 }
 
 /* Left: logo + app name (+ apps button). Header/Container/Logo/padding-y 8px
-   around the 48px logo sets the 64px bar height. */
+   around the 48px logo sets the 64px bar height. Left and right share the free
+   space equally (flex 1, basis 0 — keeps the search centered, as in Figma) but
+   never shrink below their content, so on narrow bars only the search gives. */
 .sikat-navbar__brand {
   display: flex;
   flex: 1 1 0;
-  min-width: 0;
+  min-width: max-content;
   align-items: center;
   gap: var(--spacing-2);
   padding-block: var(--spacing-2);
@@ -48,15 +50,19 @@
   white-space: nowrap;
 }
 
-/* Center (App): 520px search field + create button, 8px apart. */
+/* Center (App): 520px search field + create button, 8px apart. The search is
+   Figma's 520px when there's room and the only thing that shrinks when not. */
 .sikat-navbar__center {
   display: flex;
-  flex: none;
+  flex: 0 1 auto;
+  min-width: 0;
   align-items: center;
   gap: var(--spacing-2);
 }
 .sikat-navbar__search {
+  flex: 0 1 520px;
   width: 520px;
+  min-width: 0;
 }
 /* Figma "+" Icon Button fill — the brand gradient (no token exists for it). */
 .sikat-navbar__create {
@@ -73,7 +79,7 @@
 .sikat-navbar__end {
   display: flex;
   flex: 1 1 0;
-  min-width: 0;
+  min-width: max-content;
   align-items: center;
   justify-content: flex-end;
   gap: var(--spacing-3);
