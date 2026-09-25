@@ -221,32 +221,77 @@ export const ItemPlayground: StoryObj<DropdownItemPlaygroundArgs> = {
  * (Its other property, "Dropdown Item Group", is a slot — pass DropdownItems as
  * children.)
  */
+/** The Figma Dropdown panel, opened by a Button trigger (useDropdown: click to toggle,
+ * outside-click / Escape to close). */
+function ButtonDropdown({ showScrollbar }: { showScrollbar: boolean }) {
+  const { open, setOpen, toggle, rootRef } = useDropdown<HTMLDivElement>();
+  const listId = useId();
+  return (
+    // Outer box reserves room for the open panel; the positioned root wraps only the
+    // trigger so the panel (top: 100%) opens directly under the button.
+    <div style={{ width: 600, height: 340 }}>
+      <div ref={rootRef} style={{ position: 'relative' }}>
+        <Button
+          intent="default"
+          variant="outline"
+          trailingIcon={ChevronGlyph}
+          aria-haspopup="listbox"
+          aria-expanded={open}
+          aria-controls={open ? listId : undefined}
+          onClick={toggle}
+        >
+          Dropdown
+        </Button>
+        {open ? (
+          <Dropdown
+            id={listId}
+            aria-label="Dropdown"
+            tabIndex={showScrollbar ? 0 : undefined}
+            className={showScrollbar ? undefined : 'overflow-hidden'}
+          >
+            {Array.from({ length: 7 }, (_, i) => (
+              <DropdownItem
+                key={i}
+                prefix="Prefix"
+                suffix="Suffix"
+                leadingIcon={CircleIcon}
+                trailingIcon={CircleIcon}
+                onSelect={() => setOpen(false)}
+              >
+                Dropdown
+              </DropdownItem>
+            ))}
+          </Dropdown>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export const PanelPlayground: StoryObj<{ showScrollbar: boolean }> = {
   name: 'Dropdown',
   args: { showScrollbar: true },
   argTypes: { showScrollbar: { name: 'Show Scrollbar', control: 'boolean' } },
   parameters: figmaControls(['Show Scrollbar']),
-  render: ({ showScrollbar }) => (
-    <div style={{ position: 'relative', width: 600, height: 280 }}>
-      <Dropdown
-        aria-label="Dropdown"
-        tabIndex={showScrollbar ? 0 : undefined}
-        className={showScrollbar ? undefined : 'overflow-hidden'}
-      >
-        {['Dropdown', 'Dropdown', 'Dropdown', 'Dropdown', 'Dropdown', 'Dropdown', 'Dropdown'].map(
-          (l, i) => (
-            <DropdownItem
-              key={i}
-              prefix="Prefix"
-              suffix="Suffix"
-              leadingIcon={CircleIcon}
-              trailingIcon={CircleIcon}
-            >
-              {l}
-            </DropdownItem>
-          ),
-        )}
-      </Dropdown>
-    </div>
-  ),
+  render: ({ showScrollbar }) => <ButtonDropdown showScrollbar={showScrollbar} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Dropdown' });
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(canvas.queryByRole('listbox')).toBeNull();
+
+    // Button opens the panel; picking an item closes it.
+    await userEvent.click(trigger);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getAllByRole('option')).toHaveLength(7);
+    await userEvent.click(canvas.getAllByRole('option')[2]);
+    await expect(canvas.queryByRole('listbox')).toBeNull();
+
+    // Escape closes too; leave it open for the docs.
+    await userEvent.click(trigger);
+    await userEvent.keyboard('{Escape}');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(trigger);
+    await expect(canvas.getByRole('listbox')).toBeVisible();
+  },
 };
