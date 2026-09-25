@@ -10,7 +10,7 @@ React + TypeScript component library. Tokens are the source of truth: Tailwind p
 | `npm run storybook` | Start Storybook dev server on :6006 |
 | `npm run build` | Typecheck + build dist |
 | `npm run lint` | ESLint |
-| `npm test` | Vitest unit tests (jsdom) |
+| `npm test` | Run all Vitest projects (currently only `storybook`) |
 | `npx vitest --project storybook` | Run Storybook component tests (Playwright browser mode) |
 | `npm run release:patch/minor/major` | Bump version + tag |
 
@@ -59,8 +59,8 @@ src/
 
 ## Testing
 
-- **Unit tests**: `src/**/*.test.{ts,tsx}`, run with `npm test` (jsdom)
-- **Component tests**: all `.stories.tsx` files, run with `npx vitest --project storybook` (Playwright, Chromium headless)
+- **Component tests**: all `.stories.tsx` files, run with `npm test` or `npx vitest --project storybook` (Playwright, Chromium headless). This is the only Vitest project.
+- **Unit tests**: none yet. There is no jsdom project in `vitest.config.ts`, so `*.test.{ts,tsx}` files would not be picked up without adding one.
 - vitest.config.ts must have `resolve.conditions: ['browser','import','module','default']` and `optimizeDeps.include: ['react/jsx-dev-runtime','react/jsx-runtime']` — without these, cold-cache runs fail (see memory for details)
 
 ## Git / PR flow
