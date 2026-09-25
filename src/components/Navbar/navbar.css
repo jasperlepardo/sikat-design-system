@@ -126,3 +126,32 @@
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
 }
+
+/* Menus (apps, org switcher, account): the Figma Dropdown opens under its
+   trigger, at least 240px wide — right-aligned, or left for the apps menu. */
+.sikat-navbar__menu {
+  position: relative;
+  display: flex;
+  flex: none;
+}
+.sikat-navbar__menu > .sikat-dropdown {
+  left: auto;
+  right: 0;
+  width: max-content;
+  min-width: 240px;
+}
+.sikat-navbar__menu[data-align='start'] > .sikat-dropdown {
+  left: 0;
+  right: auto;
+}
+/* The avatar as a menu trigger: no button chrome, a focus ring. */
+.sikat-navbar__avatar-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.sikat-navbar__avatar-btn:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+}
