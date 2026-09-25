@@ -80,14 +80,17 @@
 
 /* Badge Counter — a fixed 20px circular count pill (e.g. unread notifications).
    Reuses the Badge color matrix via the shared .sikat-badge[data-intent][data-style]
-   rules; this modifier just overrides the box to a 20px circle that grows for
-   multi-digit counts. */
+   rules; this modifier overrides the box to the Figma Badge Counter: a 20×20
+   circle with a 16px-wide centered 12/16 semibold label (Body/xs/Semibold), which
+   grows into a pill for longer counts. */
 .sikat-badge--counter {
   min-width: 20px;
   height: 20px;
-  padding: var(--spacing-0) var(--spacing-1);
+  padding: var(--spacing-0) var(--spacing-0_5);
   gap: var(--spacing-0);
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
+  font-weight: var(--text-semibold);
   text-align: center;
+}
+.sikat-badge--counter > .sikat-badge__label {
+  min-width: 16px;
 }
