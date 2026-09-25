@@ -1,0 +1,122 @@
+/* Navbar structure. Mirrors the Figma Navbar (Components file, node 10259:10958).
+   The bar is rendered in the Dark theme (`data-theme="dark"` on the <nav>), as the
+   Figma component is, so every semantic token and nested component (Button,
+   IconButton, TextField) resolves to its dark value. */
+.sikat-navbar {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--color-bg-default-alt); /* Figma color/bg/default-alt */
+  color: var(--color-text-heading);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+}
+
+/* Header/Container/Content: 16px side padding, 16px gap between regions. */
+.sikat-navbar__content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-0) var(--spacing-4);
+}
+
+/* Left: logo + app name (+ apps button). Header/Container/Logo/padding-y 8px
+   around the 48px logo sets the 64px bar height. */
+.sikat-navbar__brand {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding-block: var(--spacing-2);
+}
+.sikat-navbar__logo {
+  display: flex;
+  flex: none;
+}
+.sikat-navbar__logo > :is(img, svg) {
+  display: block;
+  height: 48px;
+  width: auto;
+}
+/* Body/xl/Semibold, text/heading. */
+.sikat-navbar__app {
+  font-family: var(--text-body-xl-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-xl-font-size);
+  line-height: var(--text-body-xl-line-height);
+  letter-spacing: var(--text-body-xl-letter-spacing);
+  font-weight: var(--text-semibold);
+  white-space: nowrap;
+}
+
+/* Center (App): 520px search field + create button, 8px apart. */
+.sikat-navbar__center {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+.sikat-navbar__search {
+  width: 520px;
+}
+/* Figma "+" Icon Button fill — the brand gradient (no token exists for it). */
+.sikat-navbar__create {
+  background-image: linear-gradient(
+    215.14deg,
+    #ffeea4 1.0857%,
+    #efaa33 31.115%,
+    #fd4d4f 110.16%,
+    #ed8c76 110.17%
+  );
+}
+
+/* Right: org switcher | divider | notifications, settings, avatar. */
+.sikat-navbar__end {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-3);
+}
+.sikat-navbar__divider {
+  flex: none;
+  width: var(--border-width-1);
+  height: 20px;
+  background-color: var(--color-border-default);
+}
+.sikat-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+/* Avatar: 32px circle in App, 40px in Control Plane. */
+.sikat-navbar__avatar {
+  display: flex;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: var(--rounded-full);
+}
+.sikat-navbar[data-type='control-plane'] .sikat-navbar__avatar {
+  width: 40px;
+  height: 40px;
+}
+.sikat-navbar__avatar > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A Figma icon asset drawn in currentColor (mask), 20px like every Figma icon. */
+.sikat-navbar__glyph {
+  display: block;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}

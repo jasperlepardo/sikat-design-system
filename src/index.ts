@@ -86,6 +86,9 @@ export type {
   FormLabelProps,
 } from './components/Field/Field';
 
+export { Navbar, navbarTypes } from './components/Navbar/Navbar';
+export type { NavbarProps, NavbarType } from './components/Navbar/Navbar';
+
 export { Page } from './components/Page/Page';
 export type { PageProps } from './components/Page/Page';
 
