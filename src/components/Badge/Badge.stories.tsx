@@ -4,7 +4,7 @@ import { Badge, badgeIntents, badgeStyles, badgeSizes } from './Badge';
 import { Icon } from '../Icon/Icon';
 
 const CheckGlyph = (
-  <Icon size={20}>
+  <Icon size={16}>
     <path d="M20 6 9 17l-5-5" />
   </Icon>
 );
@@ -71,4 +71,43 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
+};
+
+const CircleGlyph = (
+  <Icon size={16}>
+    <circle cx="12" cy="12" r="9" />
+  </Icon>
+);
+
+/** Every slot on, as in the Figma Badge component set (all sizes 16px icons, 12/16 label). */
+export const Anatomy: Story = {
+  render: () => (
+    <div className="flex items-center gap-3">
+      {badgeSizes.map((size) => (
+        <Badge
+          key={size}
+          size={size}
+          dot
+          leadingIcon={CircleGlyph}
+          trailingIcon={CircleGlyph}
+          onDismiss={() => {}}
+          data-testid={`badge-${size}`}
+        >
+          Badge
+        </Badge>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const heights = { 'extra-small': 20, small: 24, medium: 28, large: 32, 'extra-large': 36 };
+    for (const size of badgeSizes) {
+      const badge = canvas.getByTestId(`badge-${size}`);
+      await expect(badge.getBoundingClientRect().height).toBe(heights[size]);
+      const label = getComputedStyle(badge);
+      await expect(label.fontSize).toBe('12px');
+      await expect(label.lineHeight).toBe('16px');
+      await expect(label.fontWeight).toBe('500');
+    }
+  },
 };
