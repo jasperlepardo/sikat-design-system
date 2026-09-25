@@ -29,6 +29,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run tokens
+      - name: Run unit tests
+        run: npx vitest run --project unit --reporter=verbose
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
       - name: Start Storybook
