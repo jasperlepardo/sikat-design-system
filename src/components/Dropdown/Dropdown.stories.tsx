@@ -5,9 +5,16 @@ import { Dropdown, DropdownItem } from './Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { Button } from '../Button/Button';
+import { Icon } from '../Icon/Icon';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 
 const OPTIONS = ['Apple', 'Banana', 'Cherry', 'Dragonfruit', 'Elderberry'];
+
+const ChevronGlyph = (
+  <Icon size={20}>
+    <path d="m6 9 6 6 6-6" />
+  </Icon>
+);
 
 /** A select-only combobox composed from the foundation: useDropdown + useListbox + Dropdown. */
 function SelectMenu() {
@@ -33,7 +40,7 @@ function SelectMenu() {
       <Button
         intent="default"
         variant="outline"
-        className="w-full justify-between"
+        trailingIcon={ChevronGlyph}
         role="combobox"
         aria-label="Fruit"
         aria-expanded={open}
