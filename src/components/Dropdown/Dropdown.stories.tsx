@@ -35,6 +35,7 @@ function SelectMenu() {
         variant="outline"
         className="w-full justify-between"
         role="combobox"
+        aria-label="Fruit"
         aria-expanded={open}
         aria-controls={listId}
         aria-activedescendant={activeId}
@@ -220,7 +221,11 @@ export const PanelPlayground: StoryObj<{ showScrollbar: boolean }> = {
   parameters: figmaControls(['Show Scrollbar']),
   render: ({ showScrollbar }) => (
     <div style={{ position: 'relative', width: 600, height: 280 }}>
-      <Dropdown className={showScrollbar ? undefined : 'overflow-hidden'}>
+      <Dropdown
+        aria-label="Dropdown"
+        tabIndex={showScrollbar ? 0 : undefined}
+        className={showScrollbar ? undefined : 'overflow-hidden'}
+      >
         {['Dropdown', 'Dropdown', 'Dropdown', 'Dropdown', 'Dropdown', 'Dropdown', 'Dropdown'].map(
           (l, i) => (
             <DropdownItem

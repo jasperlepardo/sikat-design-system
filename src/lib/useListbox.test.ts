@@ -113,6 +113,20 @@ describe('useListbox', () => {
     expect(result.current.activeIndex).toBe(2);
   });
 
+  it('drops aria-activedescendant when the list shrinks below the active index', () => {
+    let count = ITEMS.length;
+    const { result, rerender, press } = setup({
+      get itemCount() {
+        return count;
+      },
+    });
+    press('ArrowDown');
+    expect(result.current.activeId).toBe('opt-0');
+    count = 0;
+    rerender();
+    expect(result.current.activeId).toBeUndefined();
+  });
+
   it('ignores type-ahead with no match', () => {
     const { result, press } = setup();
     const e = press('z');
