@@ -185,6 +185,16 @@ export const ItemPlayground: StoryObj<DropdownItemPlaygroundArgs> = {
       </DropdownItem>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const item = within(canvasElement).getByRole('option');
+    await expect(item.getBoundingClientRect().height).toBe(36);
+    const style = getComputedStyle(item);
+    await expect(style.fontSize).toBe('14px');
+    await expect(style.lineHeight).toBe('20px');
+    for (const svg of item.querySelectorAll('.sikat-dropdown__icon > svg')) {
+      await expect(svg.getBoundingClientRect().width).toBe(20);
+    }
+  },
 };
 
 /**
