@@ -87,7 +87,7 @@ export type {
 } from './components/Field/Field';
 
 export { Navbar, navbarTypes } from './components/Navbar/Navbar';
-export type { NavbarProps, NavbarType } from './components/Navbar/Navbar';
+export type { NavbarProps, NavbarType, NavbarMenuItem } from './components/Navbar/Navbar';
 
 export { SideNav, SideNavIcon, sideNavOrientations } from './components/SideNav/SideNav';
 export type {
