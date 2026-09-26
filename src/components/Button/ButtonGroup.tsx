@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import './button-group.css';
+import './button.css';
 
 export const buttonGroupOrientations = ['horizontal', 'stacked'] as const;
 export type ButtonGroupOrientation = (typeof buttonGroupOrientations)[number];

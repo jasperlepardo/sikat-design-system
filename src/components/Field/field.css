@@ -51,6 +51,14 @@
   cursor: default;
 }
 
+/* Chevron rotates when the associated control is expanded. */
+.sikat-field__chevron {
+  transition: transform 150ms ease;
+}
+.sikat-field:has([aria-expanded='true']) .sikat-field__chevron {
+  transform: rotate(180deg);
+}
+
 /* ── Shell: [leading icon][prefix] control [suffix][trailing icon][chevron|edit] ── */
 .sikat-field--shell {
   display: flex;

@@ -9,7 +9,7 @@ import {
   type IconButtonSize,
 } from '../../tokens/generated/icon-button.manifest';
 import '../../styles/components/icon-button.css'; // generated colors + sizing vars
-import './icon-button.css'; // structure
+import './button.css'; // structure
 
 export { iconButtonIntents, iconButtonStyles, iconButtonSizes };
 export type { IconButtonIntent, IconButtonStyle, IconButtonSize };

@@ -1,7 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { expect, userEvent, within } from 'storybook/test';
 import { FormField, TextField, Textarea, Select, Checkbox, Radio, fieldSizes } from './Field';
-import { MultiSelect } from '../MultiSelect/MultiSelect';
+import { MultiSelect } from './MultiSelect';
+import { Combobox } from './Combobox';
+import { Autocomplete } from './Autocomplete';
+import { DatePicker } from './DatePicker';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import {
   figmaAdornmentArgTypes,
@@ -372,6 +376,81 @@ export const Controls: Story = {
           Enterprise (soon)
         </Radio>
       </fieldset>
+    </div>
+  ),
+};
+
+const FRUITS = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Cherry', 'Mango'];
+const COUNTRIES = [
+  { value: 'ph', label: 'Philippines' },
+  { value: 'sg', label: 'Singapore' },
+  { value: 'jp', label: 'Japan' },
+  { value: 'us', label: 'United States' },
+];
+
+/** Combobox — searchable single-select, constrained to options. */
+export const ComboboxField: Story = {
+  name: 'Combobox',
+  render: () => (
+    <div style={{ maxWidth: 360 }}>
+      <FormField label="Country">
+        {(props) => (
+          <Combobox {...props} options={COUNTRIES} placeholder="Search country…" />
+        )}
+      </FormField>
+    </div>
+  ),
+};
+
+/** Autocomplete — free-text with suggestions. */
+export const AutocompleteField: Story = {
+  name: 'Autocomplete',
+  render: () => {
+    const [value, setValue] = useState('');
+    return (
+      <div style={{ maxWidth: 360 }}>
+        <FormField label="Fruit" hint="Free text — suggestions assist.">
+          {(props) => (
+            <Autocomplete
+              {...props}
+              suggestions={FRUITS}
+              value={value}
+              onValueChange={setValue}
+              placeholder="Type a fruit…"
+            />
+          )}
+        </FormField>
+      </div>
+    );
+  },
+};
+
+/** MultiSelect — searchable multi-value. */
+export const MultiSelectField: Story = {
+  name: 'Multi Select',
+  render: () => (
+    <div style={{ maxWidth: 360 }}>
+      <FormField label="Countries">
+        {(props) => (
+          <MultiSelect
+            {...props}
+            options={COUNTRIES}
+            placeholder="Select countries…"
+          />
+        )}
+      </FormField>
+    </div>
+  ),
+};
+
+/** DatePicker — calendar date input. */
+export const DatePickerField: Story = {
+  name: 'Date Picker',
+  render: () => (
+    <div style={{ maxWidth: 360 }}>
+      <FormField label="Date" hint="Select a date from the calendar.">
+        {(props) => <DatePicker {...props} />}
+      </FormField>
     </div>
   ),
 };

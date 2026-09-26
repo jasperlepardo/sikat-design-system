@@ -6,7 +6,7 @@ import {
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import { Link } from '../Link/Link';
+import { Link } from '../Button/Link';
 import './alert.css'; // structure
 import '../../styles/components/alert.css'; // generated colors (--alert-* per intent/style)
 

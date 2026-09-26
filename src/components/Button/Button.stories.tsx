@@ -15,7 +15,7 @@ import { Icon } from '../Icon/Icon';
 const ArrowRight = <Icon size={20}>arrow_forward</Icon>;
 
 const meta = {
-  title: 'Components/Button',
+  title: 'Components/Button/Button',
   component: Button,
   tags: ['autodocs'],
   args: { children: 'Button', intent: 'primary', variant: 'solid', size: 'medium', onClick: fn() },

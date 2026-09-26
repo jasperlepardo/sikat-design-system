@@ -1,12 +1,11 @@
-/* Button structure. Colors + sizing come from the generated component CSS
-   (src/styles/components/button.css → --btn-* per [data-intent][data-style] and
-   [data-size], from tokens/components/button.json). Mirrors the Figma Button
-   (Components file, node 72:3820): padding-based sizing (40/36/32/28/24/20px),
-   per-size radius, medium 14/20 label, 20px icons, a 2px inside stroke, and a
-   content wrapper (4px label inset) between the optional leading/trailing icons. */
+/* Button family — Button, IconButton, ButtonGroup, Link.
+   Token-generated colors/sizing live in src/styles/components/button.css and
+   icon-button.css; this file owns only the structural rules. */
+
+/* ------------------------------------------------------------------ Button */
+
 .sikat-btn {
   display: inline-flex;
-  /* Figma "Hug": never squeezed below its content inside a flex row. */
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
@@ -14,22 +13,18 @@
   gap: var(--btn-gap);
   padding: var(--btn-padding);
   border: none;
-  /* 2px stroke drawn inside the box (Figma stroke align: inside), so it adds no size. */
   box-shadow: inset 0 0 0 var(--border-width-2) var(--btn-border);
   border-radius: var(--btn-radius);
   background-color: var(--btn-bg);
   color: var(--btn-text);
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
   font-weight: var(--text-medium);
-  font-size: var(--text-body-sm-font-size); /* 14px */
-  line-height: var(--text-body-sm-line-height); /* 20px */
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
-  transition:
-    background-color 120ms ease,
-    box-shadow 120ms ease,
-    color 120ms ease;
+  transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
 }
 .sikat-btn:focus-visible {
   outline: 2px solid var(--color-border-primary);
@@ -50,7 +45,90 @@
   flex: none;
   color: var(--btn-icon);
 }
-/* Figma icons are 20px at every size. */
 .sikat-btn__icon .sikat-icon {
   font-size: 20px;
 }
+
+/* --------------------------------------------------------------- IconButton */
+
+.sikat-icon-btn {
+  flex-shrink: 0;
+}
+.sikat-icon-btn .sikat-icon {
+  font-size: 20px;
+}
+
+/* --------------------------------------------------------------- ButtonGroup */
+
+.sikat-button-group {
+  display: flex;
+  gap: var(--spacing-4);
+}
+.sikat-button-group[data-orientation='horizontal'] {
+  flex-direction: row;
+  align-items: center;
+}
+.sikat-button-group[data-orientation='stacked'] {
+  flex-direction: column;
+  align-items: stretch;
+}
+.sikat-button-group[data-orientation='horizontal']:not([data-fill])[data-align='start'] {
+  justify-content: flex-start;
+}
+.sikat-button-group[data-orientation='horizontal']:not([data-fill])[data-align='center'] {
+  justify-content: center;
+}
+.sikat-button-group[data-orientation='horizontal']:not([data-fill])[data-align='end'] {
+  justify-content: flex-end;
+}
+.sikat-button-group[data-orientation='horizontal']:not([data-fill])[data-align='between'] {
+  justify-content: space-between;
+}
+.sikat-button-group[data-fill] > * {
+  flex: 1 1 0%;
+}
+.sikat-button-group[data-orientation='stacked'] > * {
+  width: 100%;
+}
+
+/* -------------------------------------------------------------------- Link */
+
+.sikat-link {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  gap: var(--spacing-1);
+  color: var(--link-text);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-weight: var(--text-medium);
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  text-decoration: none;
+  cursor: pointer;
+}
+.sikat-link__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--link-icon, var(--link-text));
+}
+.sikat-link__icon .sikat-icon {
+  font-size: 20px;
+}
+.sikat-link:hover:not([data-state='disabled']) .sikat-link__label,
+.sikat-link:focus-visible:not([data-state='disabled']) .sikat-link__label {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sikat-link:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+  border-radius: var(--rounded-sm);
+}
+.sikat-link[data-intent='default']  { --link-text: var(--color-text-heading);  --link-icon: var(--color-fg-secondary-solid); }
+.sikat-link[data-intent='primary']  { --link-text: var(--color-text-primary);  --link-icon: var(--color-fg-primary); }
+.sikat-link[data-intent='success']  { --link-text: var(--color-text-success);  --link-icon: var(--color-fg-success); }
+.sikat-link[data-intent='warning']  { --link-text: var(--color-text-warning);  --link-icon: var(--color-fg-warning); }
+.sikat-link[data-intent='danger']   { --link-text: var(--color-text-danger);   --link-icon: var(--color-fg-danger); }
+.sikat-link[data-intent='white']    { --link-text: var(--color-text-white);    --link-icon: var(--color-fg-white); }
+.sikat-link[data-intent='black']    { --link-text: var(--color-text-black);    --link-icon: var(--color-fg-black); }
+.sikat-link[data-state='disabled']  { --link-text: var(--color-text-disabled); --link-icon: var(--color-fg-disabled); cursor: not-allowed; }

@@ -1,7 +1,7 @@
 import { useId, useMemo, useState, type ReactNode } from 'react';
-import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { FieldShell, type FieldSize } from './Field';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 
@@ -20,30 +20,31 @@ export interface ComboboxProps {
   defaultValue?: string | null;
   onValueChange?: (value: string | null) => void;
   placeholder?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: FieldSize;
   invalid?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
   /** Applied to the input, so a `<label htmlFor>` focuses it. */
   id?: string;
   className?: string;
   'aria-describedby'?: string;
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  'aria-invalid'?: boolean;
 }
-
-const SIZE: Record<NonNullable<ComboboxProps['size']>, string> = {
-  sm: 'h-8 text-sm',
-  md: 'h-10 text-base',
-  lg: 'h-12 text-lg',
-};
 
 const optText = (o: ComboboxOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
 
+const ChevronIcon = (
+  <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
+    <Icon size={16}>expand_more</Icon>
+  </span>
+);
+
 /**
  * Combobox — a searchable, single-select combobox built on the Popover/Listbox
- * foundation (useDropdown + useListbox + Dropdown). Type to filter; ↑/↓ + Enter
- * to choose; Escape / outside-click to close. Control-only and
- * FormField-compatible (the input takes the `id`; `aria-*` pass through).
+ * foundation (useDropdown + useListbox + Dropdown). Uses the Field shell for
+ * consistent styling. Type to filter; ↑/↓ + Enter to choose; Escape to close.
  */
 export function Combobox({
   options,
@@ -54,6 +55,7 @@ export function Combobox({
   size = 'md',
   invalid,
   disabled,
+  readOnly,
   id: idProp,
   className,
   ...aria
@@ -101,54 +103,51 @@ export function Combobox({
   });
 
   return (
-    <div ref={rootRef} className={cn('relative', className)}>
-      <input
-        id={id}
-        type="text"
-        role="combobox"
-        aria-expanded={open}
-        aria-controls={listId}
-        aria-autocomplete="list"
-        aria-activedescendant={activeId}
-        aria-invalid={invalid || undefined}
-        autoComplete="off"
-        disabled={disabled}
-        placeholder={placeholder}
-        value={display}
-        className={cn(
-          'block w-full rounded-md border bg-default pr-9 pl-3 text-body placeholder:text-muted',
-          'outline-none transition-colors',
-          'focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-[var(--color-border-primary)]/40',
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          invalid ? 'border-danger' : 'border-default',
-          SIZE[size],
-        )}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          if (!open) setOpen(true);
-        }}
-        onFocus={() => {
-          if (!disabled) {
-            setQuery('');
-            setOpen(true);
-          }
-        }}
-        onClick={() => {
-          if (!disabled) setOpen(true);
-        }}
-        onKeyDown={onKeyDown}
-        {...aria}
-      />
-      <span
-        className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted"
-        aria-hidden="true"
+    <div ref={rootRef} style={{ position: 'relative' }}>
+      <FieldShell
+        className={className}
+        state={{ size, filled: selectedOption != null, disabled, readOnly, invalid }}
+        adornments={{}}
+        after={ChevronIcon}
       >
-        <Icon size={16}>expand_more</Icon>
-      </span>
+        <input
+          id={id}
+          type="text"
+          role="combobox"
+          className="sikat-field__input"
+          aria-expanded={open}
+          aria-controls={listId}
+          aria-autocomplete="list"
+          aria-activedescendant={activeId}
+          aria-invalid={invalid || undefined}
+          autoComplete="off"
+          disabled={disabled}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          value={display}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            if (!open) setOpen(true);
+          }}
+          onFocus={() => {
+            if (!disabled) {
+              setQuery('');
+              setOpen(true);
+            }
+          }}
+          onClick={() => {
+            if (!disabled) setOpen(true);
+          }}
+          onKeyDown={onKeyDown}
+          {...aria}
+        />
+      </FieldShell>
       {open ? (
         <Dropdown id={listId}>
           {filtered.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-muted">No results</div>
+            <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
+              No results
+            </div>
           ) : (
             filtered.map((o, i) => (
               <DropdownItem

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { PanelHeader, panelHeaderIcons, panelHeaderTypes } from './PanelHeader';
 import { Button } from '../Button/Button';
-import { IconButton } from '../IconButton/IconButton';
+import { IconButton } from '../Button/IconButton';
 import { Tabs } from '../Tabs/Tabs';
 import { Icon } from '../Icon/Icon';
 import { decorativeIconVariants } from '../DecorativeIcon/DecorativeIcon';

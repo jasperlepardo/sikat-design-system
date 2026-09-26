@@ -4,7 +4,7 @@ import { PanelHeader, panelHeaderIcons } from './PanelHeader';
 import { Card } from '../Card/Card';
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
-import { IconButton } from '../IconButton/IconButton';
+import { IconButton } from '../Button/IconButton';
 import { Tabs } from '../Tabs/Tabs';
 
 const meta = {

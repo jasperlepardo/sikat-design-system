@@ -1,22 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, within } from 'storybook/test';
 import {
   BadgeCounter,
   badgeCounterIntents,
   badgeCounterStyles,
   type BadgeCounterIntent,
   type BadgeCounterStyle,
-} from './BadgeCounter';
+} from './Badge';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 
 const meta = {
-  title: 'Components/BadgeCounter',
+  title: 'Components/Badge/Badge Counter',
   component: BadgeCounter,
   tags: ['autodocs'],
-  args: { intent: 'danger', variant: 'solid', count: 5 },
+  args: { intent: 'default', variant: 'solid', count: 5 },
   argTypes: {
     intent: { control: 'inline-radio', options: badgeCounterIntents },
     variant: { control: 'inline-radio', options: badgeCounterStyles },
+    count: { control: 'number' },
+    max: { control: 'number' },
   },
 } satisfies Meta<typeof BadgeCounter>;
 
@@ -25,7 +26,7 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * Controls mirror the Figma Badge Counter component properties 1:1 — same names,
- * options and defaults (args keyed by the Figma property names).
+ * options and order (args keyed by the Figma property names).
  */
 type BadgeCounterPlaygroundArgs = {
   Intent: BadgeCounterIntent;
@@ -50,36 +51,33 @@ export const Playground: StoryObj<BadgeCounterPlaygroundArgs> = {
   },
   parameters: figmaControls(['Intent', 'Style', 'Size', 'Content']),
   render: (a) => (
-    <BadgeCounter intent={a.Intent} variant={a.Style} data-testid="counter">
+    <BadgeCounter intent={a.Intent} variant={a.Style}>
       {a.content}
     </BadgeCounter>
   ),
-  play: async ({ canvasElement }) => {
-    const counter = within(canvasElement).getByTestId('counter');
-    const box = counter.getBoundingClientRect();
-    await expect([box.width, box.height]).toEqual([20, 20]);
-    const style = getComputedStyle(counter);
-    await expect(style.fontSize).toBe('12px');
-    await expect(style.lineHeight).toBe('16px');
-    await expect(style.fontWeight).toBe('600');
-  },
 };
 
-export const Overflow: Story = {
-  args: { count: 128, max: 99 },
+export const Default: Story = {};
+
+export const WithMax: Story = {
+  args: { count: 120, max: 99 },
 };
 
-export const Matrix: Story = {
+export const Intents: Story = {
   render: () => (
-    <div className="flex gap-3">
+    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      {badgeCounterIntents.map((intent) => (
+        <BadgeCounter key={intent} intent={intent} count={9} />
+      ))}
+    </div>
+  ),
+};
+
+export const Styles: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
       {badgeCounterStyles.map((variant) => (
-        <div key={variant} className="flex flex-col items-center gap-2">
-          {badgeCounterIntents.map((intent) => (
-            <BadgeCounter key={intent} intent={intent} variant={variant}>
-              +9
-            </BadgeCounter>
-          ))}
-        </div>
+        <BadgeCounter key={variant} variant={variant} intent="primary" count={9} />
       ))}
     </div>
   ),

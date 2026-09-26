@@ -15,7 +15,7 @@ import { Icon } from '../Icon/Icon';
 const CloseGlyph = <Icon>close</Icon>;
 
 const meta = {
-  title: 'Components/IconButton',
+  title: 'Components/Button/Icon Button',
   component: IconButton,
   tags: ['autodocs'],
   args: {

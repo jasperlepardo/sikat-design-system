@@ -15,6 +15,50 @@ import './badge.css'; // structure
 export { badgeIntents, badgeStyles, badgeSizes };
 export type { BadgeIntent, BadgeStyle, BadgeSize };
 
+/* --------------------------------------------------------- BadgeCounter ---- */
+
+export const badgeCounterIntents = badgeIntents.filter(
+  (i): i is Exclude<BadgeIntent, 'white' | 'black'> => i !== 'white' && i !== 'black',
+);
+export { badgeStyles as badgeCounterStyles };
+export type { BadgeIntent as BadgeCounterIntent, BadgeStyle as BadgeCounterStyle };
+
+export interface BadgeCounterProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'style'> {
+  intent?: BadgeIntent;
+  variant?: BadgeStyle;
+  /** Numeric count; clamped to `${max}+` when it exceeds `max`. */
+  count?: number;
+  /** Cap before showing `${max}+` (e.g. 99 → "99+"). */
+  max?: number;
+  children?: ReactNode;
+}
+
+/**
+ * BadgeCounter — a fixed 20px circular count pill (e.g. unread notifications).
+ * Shares the Badge color matrix; grows to a pill for multi-digit counts.
+ */
+export function BadgeCounter({
+  intent = 'default',
+  variant = 'solid',
+  count,
+  max,
+  className,
+  children,
+  ...rest
+}: BadgeCounterProps) {
+  const content = children ?? (count != null && max != null && count > max ? `${max}+` : count);
+  return (
+    <span
+      className={cn('sikat-badge', 'sikat-badge--counter', className)}
+      data-intent={intent}
+      data-style={variant}
+      {...rest}
+    >
+      <span className="sikat-badge__label">{content}</span>
+    </span>
+  );
+}
+
 export interface BadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'style'> {
   /** Color intent (maps to the Figma Badge intent). */
   intent?: BadgeIntent;

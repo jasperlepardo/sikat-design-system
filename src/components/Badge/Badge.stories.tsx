@@ -18,7 +18,7 @@ const CircleGlyph = <Icon size={16}>radio_button_unchecked</Icon>;
 const CheckGlyph = <Icon size={16}>check</Icon>;
 
 const meta = {
-  title: 'Components/Badge',
+  title: 'Components/Badge/Badge',
   component: Badge,
   tags: ['autodocs'],
   args: { children: 'Badge', intent: 'default', variant: 'solid', size: 'medium' },

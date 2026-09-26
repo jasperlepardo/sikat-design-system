@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import { cn } from '../../lib/cn';
-import { BadgeCounter } from '../Badge/BadgeCounter';
+import { BadgeCounter } from '../Badge/Badge';
 import './tabs.css';
 
 export const tabsVariants = ['primary', 'secondary'] as const;

@@ -8,7 +8,7 @@ const ArrowLeft = <Icon size={20}>arrow_back</Icon>;
 const ExternalLink = <Icon size={20}>open_in_new</Icon>;
 
 const meta = {
-  title: 'Components/Link',
+  title: 'Components/Button/Link',
   component: Link,
   tags: ['autodocs'],
   args: { children: 'Read the docs', href: '#', intent: 'primary' },

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
+import { FieldShell, type FieldSize } from './Field';
 import { useDropdown } from '../../lib/useDropdown';
 import {
   WEEKDAYS,
@@ -17,7 +18,7 @@ export interface DatePickerProps {
   defaultValue?: string | null;
   onValueChange?: (value: string) => void;
   placeholder?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: FieldSize;
   invalid?: boolean;
   disabled?: boolean;
   /** Applied to the trigger input, so a `<label htmlFor>` focuses it. */
@@ -28,20 +29,20 @@ export interface DatePickerProps {
   'aria-labelledby'?: string;
 }
 
-const SIZE: Record<NonNullable<DatePickerProps['size']>, string> = {
-  sm: 'h-8 text-sm',
-  md: 'h-10 text-base',
-  lg: 'h-12 text-lg',
-};
+const CalendarIcon = (
+  <span className="sikat-field__icon" aria-hidden="true">
+    <Icon size={16}>calendar_today</Icon>
+  </span>
+);
 
 const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 const addMonths = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth() + n, d.getDate());
 
 /**
  * DatePicker — a date input with a keyboard-navigable calendar popover, built on
- * useDropdown. Arrow keys move by day/week, PageUp/Down by month, Enter/Space
- * selects, Escape closes. Value is local-time ISO (YYYY-MM-DD). Control-only and
- * FormField-compatible (the trigger input takes the `id`).
+ * useDropdown. Uses the Field shell for consistent styling. Arrow keys move by
+ * day/week, PageUp/Down by month, Enter/Space selects, Escape closes.
+ * Value is local-time ISO (YYYY-MM-DD). Control-only and FormField-compatible.
  */
 export function DatePicker({
   value,
@@ -68,7 +69,6 @@ export function DatePicker({
   const [focus, setFocus] = useState<Date>(initial);
   const [view, setView] = useState({ year: initial.getFullYear(), month: initial.getMonth() });
 
-  // On open, snap focus + view to the selected date (or today).
   useEffect(() => {
     if (!open) return;
     const base = fromISODate(selectedIso) ?? today;
@@ -77,7 +77,6 @@ export function DatePicker({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  // Move DOM focus to the focused day while the popover is open.
   useEffect(() => {
     if (!open) return;
     const iso = toISODate(focus);
@@ -122,43 +121,38 @@ export function DatePicker({
   const todayIso = toISODate(today);
 
   return (
-    <div ref={rootRef} className={cn('relative', className)}>
-      <input
-        ref={inputRef}
-        id={idProp}
-        type="text"
-        role="combobox"
-        readOnly
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-invalid={invalid || undefined}
-        disabled={disabled}
-        placeholder={placeholder}
-        value={formatDisplayDate(selectedIso)}
-        className={cn(
-          'block w-full cursor-pointer rounded-md border bg-default pr-9 pl-3 text-body placeholder:text-muted',
-          'outline-none transition-colors',
-          'focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-[var(--color-border-primary)]/40',
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          invalid ? 'border-danger' : 'border-default',
-          SIZE[size],
-        )}
+    <div ref={rootRef} style={{ position: 'relative' }}>
+      <FieldShell
+        className={className}
+        state={{ size, filled: selectedIso !== '', disabled, readOnly: true, invalid }}
+        adornments={{}}
+        after={CalendarIcon}
         onClick={() => !disabled && toggle()}
-        onKeyDown={(e) => {
-          if (disabled) return;
-          if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            setOpen(true);
-          }
-        }}
-        {...aria}
-      />
-      <span
-        className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted"
-        aria-hidden="true"
       >
-        <Icon size={16}>calendar_today</Icon>
-      </span>
+        <input
+          ref={inputRef}
+          id={idProp}
+          type="text"
+          role="combobox"
+          className="sikat-field__input"
+          style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
+          readOnly
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          aria-invalid={invalid || undefined}
+          disabled={disabled}
+          placeholder={placeholder}
+          value={formatDisplayDate(selectedIso)}
+          onKeyDown={(e) => {
+            if (disabled) return;
+            if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpen(true);
+            }
+          }}
+          {...aria}
+        />
+      </FieldShell>
       {open ? (
         <div
           role="dialog"
@@ -233,7 +227,6 @@ export function DatePicker({
   );
 }
 
-/** Shift a {year,month} view by `n` months (handles year rollover). */
 function addMonthView({ year, month }: { year: number; month: number }, n: number) {
   const m = month + n;
   return { year: year + Math.floor(m / 12), month: ((m % 12) + 12) % 12 };

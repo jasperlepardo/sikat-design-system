@@ -4,8 +4,8 @@ import { Icon } from '../Icon/Icon';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
-import type { ComboboxOption } from '../Combobox/Combobox';
-import { FieldShell, ChevronDown, type FieldAdornments } from '../Field/Field';
+import type { ComboboxOption } from './Combobox';
+import { FieldShell, ChevronDown, type FieldAdornments } from './Field';
 
 export type MultiSelectOption = ComboboxOption;
 
@@ -175,7 +175,7 @@ export function MultiSelect({
       {open ? (
         <Dropdown id={listId} multiselectable>
           {filtered.length === 0 ? (
-            <div className="px-3 py-2 text-sm text-muted">No results</div>
+            <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>No results</div>
           ) : (
             filtered.map((o, i) => (
               <DropdownItem

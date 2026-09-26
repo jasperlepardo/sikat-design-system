@@ -7,7 +7,7 @@ import { PanelHeader, panelHeaderIcons } from '../Panel/PanelHeader';
 import { Section } from '../Section/Section';
 import { Alert } from '../Alert/Alert';
 import { Card } from '../Card/Card';
-import { IconButton } from '../IconButton/IconButton';
+import { IconButton } from '../Button/IconButton';
 import { Button } from '../Button/Button';
 import { Tabs } from '../Tabs/Tabs';
 import { Icon } from '../Icon/Icon';

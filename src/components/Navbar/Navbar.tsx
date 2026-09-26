@@ -4,7 +4,7 @@ import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { Button } from '../Button/Button';
-import { IconButton } from '../IconButton/IconButton';
+import { IconButton } from '../Button/IconButton';
 import { TextField } from '../Field/Field';
 import sikatLogo from './assets/sikat-logo.svg';
 import appsGlyph from './assets/apps.svg';

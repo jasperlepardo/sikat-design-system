@@ -1,6 +1,6 @@
 import { useId, useMemo, useState, type ReactNode } from 'react';
-import { cn } from '../../lib/cn';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { FieldShell, type FieldSize } from './Field';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 
@@ -24,22 +24,18 @@ export interface AutocompleteProps {
   /** Filter suggestions by the current text (default). Off = caller pre-filters. */
   filter?: boolean;
   placeholder?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: FieldSize;
   invalid?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
   /** Applied to the input, so a `<label htmlFor>` focuses it. */
   id?: string;
   className?: string;
   'aria-describedby'?: string;
   'aria-label'?: string;
   'aria-labelledby'?: string;
+  'aria-invalid'?: boolean;
 }
-
-const SIZE: Record<NonNullable<AutocompleteProps['size']>, string> = {
-  sm: 'h-8 text-sm',
-  md: 'h-10 text-base',
-  lg: 'h-12 text-lg',
-};
 
 const norm = (s: AutocompleteSuggestion | string): AutocompleteSuggestion =>
   typeof s === 'string' ? { value: s } : s;
@@ -48,9 +44,8 @@ const sugText = (s: AutocompleteSuggestion) =>
 
 /**
  * Autocomplete — a free-text input with a suggestion list, built on the
- * Popover/Listbox foundation. The value is whatever the user types; suggestions
- * assist (↑/↓ + Enter or click fills the field). Unlike Combobox, the value is
- * not constrained to the suggestions. Control-only and FormField-compatible.
+ * Popover/Listbox foundation. Uses the Field shell for consistent styling.
+ * Unlike Combobox the value is not constrained to the suggestions.
  */
 export function Autocomplete({
   suggestions,
@@ -63,6 +58,7 @@ export function Autocomplete({
   size = 'md',
   invalid,
   disabled,
+  readOnly,
   id: idProp,
   className,
   ...aria
@@ -108,38 +104,38 @@ export function Autocomplete({
   });
 
   return (
-    <div ref={rootRef} className={cn('relative', className)}>
-      <input
-        id={id}
-        type="text"
-        role="combobox"
-        aria-expanded={showList}
-        aria-controls={showList ? listId : undefined}
-        aria-autocomplete="list"
-        aria-activedescendant={activeId}
-        aria-invalid={invalid || undefined}
-        autoComplete="off"
-        disabled={disabled}
-        placeholder={placeholder}
-        value={text}
-        className={cn(
-          'block w-full rounded-md border bg-default px-3 text-body placeholder:text-muted',
-          'outline-none transition-colors',
-          'focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-[var(--color-border-primary)]/40',
-          'disabled:cursor-not-allowed disabled:opacity-50',
-          invalid ? 'border-danger' : 'border-default',
-          SIZE[size],
-        )}
-        onChange={(e) => {
-          setText(e.target.value);
-          setOpen(true);
-        }}
-        onFocus={() => {
-          if (!disabled) setOpen(true);
-        }}
-        onKeyDown={onKeyDown}
-        {...aria}
-      />
+    <div ref={rootRef} style={{ position: 'relative' }}>
+      <FieldShell
+        className={className}
+        state={{ size, filled: text !== '', disabled, readOnly, invalid }}
+        adornments={{}}
+      >
+        <input
+          id={id}
+          type="text"
+          role="combobox"
+          className="sikat-field__input"
+          aria-expanded={showList}
+          aria-controls={showList ? listId : undefined}
+          aria-autocomplete="list"
+          aria-activedescendant={activeId}
+          aria-invalid={invalid || undefined}
+          autoComplete="off"
+          disabled={disabled}
+          readOnly={readOnly}
+          placeholder={placeholder}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+            setOpen(true);
+          }}
+          onFocus={() => {
+            if (!disabled) setOpen(true);
+          }}
+          onKeyDown={onKeyDown}
+          {...aria}
+        />
+      </FieldShell>
       {showList ? (
         <Dropdown id={listId}>
           {filtered.map((s, i) => (

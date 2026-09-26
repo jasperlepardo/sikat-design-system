@@ -4,7 +4,7 @@ import { Button } from '../Button/Button';
 import { Form } from '../Form/Form';
 import { FormField, TextField } from '../Field/Field';
 import { Icon } from '../Icon/Icon';
-import { IconButton } from '../IconButton/IconButton';
+import { IconButton } from '../Button/IconButton';
 
 const meta = {
   title: 'Components/Card',

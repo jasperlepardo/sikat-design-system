@@ -1,6 +1,6 @@
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import './link.css';
+import './button.css';
 
 // Mirrors the Figma "Link Button" › Type axis (node 8919:1847).
 export const linkIntents = [

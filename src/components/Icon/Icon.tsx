@@ -37,8 +37,13 @@ export function Icon({
       aria-hidden={label ? undefined : true}
       style={{
         fontSize: size,
+        width: size,
+        height: size,
         lineHeight: 1,
-        display: 'inline-block',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
         userSelect: 'none',
         fontVariationSettings: `'FILL' ${fill}, 'wght' ${weight}, 'GRAD' 0, 'opsz' ${size}`,
         ...style,

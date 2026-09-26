@@ -19,13 +19,13 @@ export type { IconProps } from './components/Icon/Icon';
 export { DecorativeIcon, decorativeIconVariants } from './components/DecorativeIcon/DecorativeIcon';
 export type { DecorativeIconProps, DecorativeIconVariant } from './components/DecorativeIcon/DecorativeIcon';
 
-export { Link, linkIntents } from './components/Link/Link';
-export type { LinkProps, LinkIntent } from './components/Link/Link';
+export { Link, linkIntents } from './components/Button/Link';
+export type { LinkProps, LinkIntent } from './components/Button/Link';
 
 export { Badge, badgeIntents, badgeStyles, badgeSizes } from './components/Badge/Badge';
 export type { BadgeProps, BadgeIntent, BadgeStyle, BadgeSize } from './components/Badge/Badge';
-export { BadgeCounter } from './components/Badge/BadgeCounter';
-export type { BadgeCounterProps } from './components/Badge/BadgeCounter';
+export { BadgeCounter, badgeCounterIntents, badgeCounterStyles } from './components/Badge/Badge';
+export type { BadgeCounterProps, BadgeCounterIntent, BadgeCounterStyle } from './components/Badge/Badge';
 
 export { Card } from './components/Card/Card';
 export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Card/Card';
@@ -51,13 +51,13 @@ export {
   iconButtonIntents,
   iconButtonStyles,
   iconButtonSizes,
-} from './components/IconButton/IconButton';
+} from './components/Button/IconButton';
 export type {
   IconButtonProps,
   IconButtonIntent,
   IconButtonStyle,
   IconButtonSize,
-} from './components/IconButton/IconButton';
+} from './components/Button/IconButton';
 
 export { Divider } from './components/Divider/Divider';
 export type { DividerProps } from './components/Divider/Divider';
@@ -66,12 +66,12 @@ export {
   ButtonGroup,
   buttonGroupOrientations,
   buttonGroupAligns,
-} from './components/ButtonGroup/ButtonGroup';
+} from './components/Button/ButtonGroup';
 export type {
   ButtonGroupProps,
   ButtonGroupOrientation,
   ButtonGroupAlign,
-} from './components/ButtonGroup/ButtonGroup';
+} from './components/Button/ButtonGroup';
 
 export {
   TextField,
@@ -172,20 +172,20 @@ export type { OTPProps } from './components/OTP/OTP';
 export { Dropdown, DropdownItem } from './components/Dropdown/Dropdown';
 export type { DropdownProps, DropdownItemProps } from './components/Dropdown/Dropdown';
 
-export { Combobox } from './components/Combobox/Combobox';
-export type { ComboboxProps, ComboboxOption } from './components/Combobox/Combobox';
+export { Combobox } from './components/Field/Combobox';
+export type { ComboboxProps, ComboboxOption } from './components/Field/Combobox';
 
-export { MultiSelect } from './components/MultiSelect/MultiSelect';
-export type { MultiSelectProps, MultiSelectOption } from './components/MultiSelect/MultiSelect';
+export { MultiSelect } from './components/Field/MultiSelect';
+export type { MultiSelectProps, MultiSelectOption } from './components/Field/MultiSelect';
 
-export { Autocomplete } from './components/Autocomplete/Autocomplete';
+export { Autocomplete } from './components/Field/Autocomplete';
 export type {
   AutocompleteProps,
   AutocompleteSuggestion,
-} from './components/Autocomplete/Autocomplete';
+} from './components/Field/Autocomplete';
 
-export { DatePicker } from './components/DatePicker/DatePicker';
-export type { DatePickerProps } from './components/DatePicker/DatePicker';
+export { DatePicker } from './components/Field/DatePicker';
+export type { DatePickerProps } from './components/Field/DatePicker';
 
 export { Footer } from './components/Footer/Footer';
 export type { FooterProps, FooterContainerProps } from './components/Footer/Footer';

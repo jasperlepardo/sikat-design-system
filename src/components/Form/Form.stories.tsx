@@ -3,7 +3,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import { Form } from './Form';
 import { TextField, Select, FormField } from '../Field/Field';
 import { Divider } from '../Divider/Divider';
-import { ButtonGroup } from '../ButtonGroup/ButtonGroup';
+import { ButtonGroup } from '../Button/ButtonGroup';
 import { Button } from '../Button/Button';
 
 const meta = {
