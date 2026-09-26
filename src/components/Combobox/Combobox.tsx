@@ -143,9 +143,7 @@ export function Combobox({
         className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted"
         aria-hidden="true"
       >
-        <Icon size={16}>
-          <path d="m6 9 6 6 6-6" />
-        </Icon>
+        <Icon size={16}>expand_more</Icon>
       </span>
       {open ? (
         <Dropdown id={listId}>

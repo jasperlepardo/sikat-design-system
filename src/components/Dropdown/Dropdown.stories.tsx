@@ -10,11 +10,7 @@ import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 
 const OPTIONS = ['Apple', 'Banana', 'Cherry', 'Dragonfruit', 'Elderberry'];
 
-const ChevronGlyph = (
-  <Icon size={20}>
-    <path d="m6 9 6 6 6-6" />
-  </Icon>
-);
+const ChevronGlyph = <Icon size={20}>expand_more</Icon>;
 
 /** A select-only combobox composed from the foundation: useDropdown + useListbox + Dropdown. */
 function SelectMenu() {
@@ -122,11 +118,7 @@ export const SelectMenuExample: Story = {
   },
 };
 
-const CircleIcon = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="9" />
-  </svg>
-);
+const CircleIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 
 /**
  * Controls mirror the Figma Dropdown Item component properties 1:1 — same names,

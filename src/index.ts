@@ -16,6 +16,9 @@ export type { TextProps, TextVariant, TextWeight, TextTone } from './components/
 export { Icon } from './components/Icon/Icon';
 export type { IconProps } from './components/Icon/Icon';
 
+export { DecorativeIcon, decorativeIconVariants } from './components/DecorativeIcon/DecorativeIcon';
+export type { DecorativeIconProps, DecorativeIconVariant } from './components/DecorativeIcon/DecorativeIcon';
+
 export { Link, linkIntents } from './components/Link/Link';
 export type { LinkProps, LinkIntent } from './components/Link/Link';
 
@@ -25,7 +28,11 @@ export { BadgeCounter } from './components/Badge/BadgeCounter';
 export type { BadgeCounterProps } from './components/Badge/BadgeCounter';
 
 export { Card } from './components/Card/Card';
-export type { CardProps, CardSlotProps } from './components/Card/Card';
+export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Card/Card';
+
+export { Panel } from './components/Panel/Panel';
+export type { PanelProps, PanelSlotProps } from './components/Panel/Panel';
+
 
 export { Alert, alertIntents, alertStyles } from './components/Alert/Alert';
 export type {
@@ -101,12 +108,11 @@ export { Tabs, tabsVariants } from './components/Tabs/Tabs';
 export type { TabsProps, TabItem, TabsVariant } from './components/Tabs/Tabs';
 
 export {
-  PageHeader,
-  PageHeaderIcon,
-  pageHeaderIcons,
-  pageHeaderTypes,
-} from './components/PageHeader/PageHeader';
-export type { PageHeaderProps, PageHeaderType } from './components/PageHeader/PageHeader';
+  PanelHeader,
+  panelHeaderIcons,
+  panelHeaderTypes,
+} from './components/Panel/PanelHeader';
+export type { PanelHeaderProps, PanelHeaderType } from './components/Panel/PanelHeader';
 
 export { Table } from './components/Table/Table';
 export {

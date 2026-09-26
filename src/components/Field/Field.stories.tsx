@@ -11,12 +11,9 @@ import {
   figmaSelect,
   type FigmaAdornmentArgs,
 } from '../../docs/figma-controls';
+import { Icon } from '../Icon/Icon';
 
-const CircleIcon = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="9" />
-  </svg>
-);
+const CircleIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 const adorn = (a: FigmaAdornmentArgs) => ({
   leadingIcon: a.showLeadingIcon ? CircleIcon : undefined,
   prefix: a.showPrefix ? a.prefixText : undefined,

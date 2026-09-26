@@ -12,11 +12,7 @@ import {
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 import { Icon } from '../Icon/Icon';
 
-const ArrowRight = (
-  <Icon size={20}>
-    <path d="M5 12h14M13 6l6 6-6 6" />
-  </Icon>
-);
+const ArrowRight = <Icon size={20}>arrow_forward</Icon>;
 
 const meta = {
   title: 'Components/Button',
@@ -34,11 +30,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const PlaceholderIcon = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="9" />
-  </svg>
-);
+const PlaceholderIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 
 /**
  * Controls mirror the Figma Button component properties 1:1 — same names, same

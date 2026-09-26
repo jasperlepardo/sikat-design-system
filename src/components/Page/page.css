@@ -6,6 +6,7 @@
   min-height: 100vh;
   flex-direction: column;
   isolation: isolate;
+  background-color: var(--color-bg-tertiary);
 }
 .sikat-page > nav {
   position: sticky;

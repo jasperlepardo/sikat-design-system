@@ -1,23 +1,19 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import './card.css';
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  /** raised adds a shadow; outline is flat with a border (default). */
-  variant?: 'outline' | 'raised';
   children?: ReactNode;
 }
 
-/** Card — a themed surface container. Compose with Card.Header/Body/Footer. */
-export function Card({ variant = 'outline', className, children, ...rest }: CardProps) {
+/**
+ * Card — section container (Figma node 18266:140530). A `bg-tertiary` outer
+ * shell (2px padding, rounded-lg-plus) around a `bg-default` white content box.
+ * Compose with `Card.Header` (icon + title) and `Card.Content` (white inner area).
+ */
+export function Card({ className, children, ...rest }: CardProps) {
   return (
-    <div
-      className={cn(
-        'bg-default text-body rounded-lg border border-default overflow-hidden',
-        variant === 'raised' && 'shadow-md',
-        className,
-      )}
-      {...rest}
-    >
+    <div className={cn('sikat-card', className)} {...rest}>
       {children}
     </div>
   );
@@ -27,42 +23,37 @@ export interface CardSlotProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
-function CardHeader({ className, children, ...rest }: CardSlotProps) {
+export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
+  /** Leading icon (e.g. `<Icon size={24}>…</Icon>`). */
+  icon?: ReactNode;
+  /** Trailing slot — e.g. an action button. */
+  actions?: ReactNode;
+  children?: ReactNode;
+}
+
+/** Header row: icon + semibold title on the left, optional actions on the right. */
+function CardHeader({ icon, actions, className, children, ...rest }: CardHeaderProps) {
   return (
-    <div className={cn('px-5 pt-5 pb-3', className)} {...rest}>
-      {children}
+    <div className={cn('sikat-card__header', className)} {...rest}>
+      <div className="sikat-card__header-leading">
+        {icon != null ? <span className="sikat-card__header-icon">{icon}</span> : null}
+        <span className="sikat-card__header-title">{children}</span>
+      </div>
+      {actions != null ? (
+        <div className="sikat-card__header-actions">{actions}</div>
+      ) : null}
     </div>
   );
 }
 
-function CardBody({ className, children, ...rest }: CardSlotProps) {
+/** White inner content area: 14px padding, 24px gap between children. */
+function CardContent({ className, children, ...rest }: CardSlotProps) {
   return (
-    <div className={cn('px-5 py-3', className)} {...rest}>
+    <div className={cn('sikat-card__content', className)} {...rest}>
       {children}
     </div>
-  );
-}
-
-function CardFooter({ className, children, ...rest }: CardSlotProps) {
-  return (
-    <div
-      className={cn('px-5 pt-3 pb-5 flex items-center gap-2 border-t border-default', className)}
-      {...rest}
-    >
-      {children}
-    </div>
-  );
-}
-
-function CardTitle({ className, children, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h3 className={cn('text-lg/[28px] font-semibold text-heading', className)} {...rest}>
-      {children}
-    </h3>
   );
 }
 
 Card.Header = CardHeader;
-Card.Body = CardBody;
-Card.Footer = CardFooter;
-Card.Title = CardTitle;
+Card.Content = CardContent;

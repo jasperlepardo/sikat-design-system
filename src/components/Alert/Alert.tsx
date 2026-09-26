@@ -21,12 +21,7 @@ export type AlertStyle = (typeof alertStyles)[number];
 
 // Default leading glyph — Figma uses info-circle (20px) for every intent;
 // override per alert with `icon` / <Alert.Icon>.
-const DEFAULT_ICON = (
-  <Icon size={20}>
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 16v-4M12 8h.01" />
-  </Icon>
-);
+const DEFAULT_ICON = <Icon size={20}>info</Icon>;
 
 /* --------------------------------------------------------------- Alert.Root */
 
@@ -162,9 +157,7 @@ function AlertClose({ onClick, label = 'Dismiss', className }: AlertCloseProps) 
       onClick={onClick}
       className={cn('sikat-alert__close', className)}
     >
-      <Icon size={20}>
-        <path d="M18 6 6 18M6 6l12 12" />
-      </Icon>
+      <Icon size={20}>close</Icon>
     </button>
   );
 }

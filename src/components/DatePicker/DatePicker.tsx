@@ -157,10 +157,7 @@ export function DatePicker({
         className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted"
         aria-hidden="true"
       >
-        <Icon size={16}>
-          <rect x="3" y="4" width="18" height="18" rx="2" />
-          <path d="M16 2v4M8 2v4M3 10h18" />
-        </Icon>
+        <Icon size={16}>calendar_today</Icon>
       </span>
       {open ? (
         <div
@@ -175,9 +172,7 @@ export function DatePicker({
               className="flex size-8 items-center justify-center rounded-md text-body hover:bg-secondary"
               onClick={() => setView((v) => ({ ...addMonthView(v, -1) }))}
             >
-              <Icon size={16}>
-                <path d="m15 18-6-6 6-6" />
-              </Icon>
+              <Icon size={16}>chevron_left</Icon>
             </button>
             <span className="text-sm font-semibold text-heading">
               {MONTH_NAMES[view.month]} {view.year}
@@ -188,9 +183,7 @@ export function DatePicker({
               className="flex size-8 items-center justify-center rounded-md text-body hover:bg-secondary"
               onClick={() => setView((v) => ({ ...addMonthView(v, 1) }))}
             >
-              <Icon size={16}>
-                <path d="m9 18 6-6-6-6" />
-              </Icon>
+              <Icon size={16}>chevron_right</Icon>
             </button>
           </div>
 

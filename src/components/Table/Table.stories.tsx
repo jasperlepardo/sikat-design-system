@@ -15,6 +15,7 @@ import {
 } from './TableCells';
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
+import { Card } from '../Card/Card';
 
 type Row = { id: string; a: string; b: string; c: string; d: string };
 
@@ -51,7 +52,7 @@ function FigmaTable(args: TablePlaygroundArgs) {
   const [selected, setSelected] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   return (
-    <div style={{ width: 918 }}>
+    <Card style={{ width: 918 }}>
       <Table
         caption="Example"
         columns={FIGMA_COLUMNS}
@@ -72,7 +73,7 @@ function FigmaTable(args: TablePlaygroundArgs) {
           },
         }}
       />
-    </div>
+    </Card>
   );
 }
 
@@ -204,14 +205,9 @@ export const Scroll: StoryObj<typeof meta> = {
 };
 
 /** Figma's placeholder icon (circle) for the Action CTA buttons. */
-const Circle = (
-  <Icon size={20}>
-    <circle cx="12" cy="12" r="9" />
-  </Icon>
-);
-/** Story-only placeholder image for Media cells (Figma shows a placeholder). */
-const PLACEHOLDER =
-  "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><rect width='24' height='24' fill='%23e7e5e4'/></svg>";
+const Circle = <Icon size={20}>radio_button_unchecked</Icon>;
+/** Story-only placeholder for Media cells. */
+const MediaIcon = <Icon size={24}>image</Icon>;
 
 type Order = {
   id: string;
@@ -286,7 +282,7 @@ export const CellTypes: StoryObj<typeof meta> = {
           {
             key: 'product',
             header: 'Product',
-            cell: (r) => <TableMedia src={PLACEHOLDER}>{r.product}</TableMedia>,
+            cell: (r) => <TableMedia media={MediaIcon}>{r.product}</TableMedia>,
           },
           {
             key: 'customer',
@@ -371,4 +367,55 @@ export const CellTypes: StoryObj<typeof meta> = {
     await expect(within(rows[0]).getByText('PHP')).toBeInTheDocument();
     await expect(within(rows[0]).getAllByRole('img', { name: 'Drag to reorder' })).toHaveLength(1);
   },
+};
+
+// --- InPanel ----------------------------------------------------------------
+
+import { Panel } from '../Panel/Panel';
+import { PanelHeader } from '../Panel/PanelHeader';
+
+/** Table inside a Panel with PanelHeader — typical production layout. */
+export const InPanel: StoryObj<TablePlaygroundArgs> = {
+  render: (args) => {
+    const [selected, setSelected] = useState<string[]>([]);
+    const [page, setPage] = useState(1);
+    return (
+      <div style={{ padding: 8, background: 'var(--color-bg-secondary)' }}>
+      <Panel>
+        <PanelHeader
+          icon="table_rows"
+          iconVariant="solid"
+          title="Orders"
+          subcopy="Manage your sales orders"
+          actions={
+            <Button intent="primary" variant="solid" size="extra-large">
+              New Order
+            </Button>
+          }
+        />
+        <Panel.Body>
+          <Card>
+            <Table
+              columns={FIGMA_COLUMNS}
+              rows={figmaRows(8)}
+              getRowId={(r) => r.id}
+              selectable
+              selectedIds={selected}
+              onSelectionChange={setSelected}
+              onRowAction={args.onRowAction}
+              onColumnSettings={args.onColumnSettings}
+              pagination={{
+                page,
+                pageSize: 8,
+                total: 89,
+                onPageChange: (p) => { setPage(p); args.onPageChange(p); },
+              }}
+            />
+          </Card>
+        </Panel.Body>
+      </Panel>
+      </div>
+    );
+  },
+  args: { onRowAction: fn(), onColumnSettings: fn(), onPageChange: fn() },
 };

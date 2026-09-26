@@ -1,0 +1,30 @@
+/* DecorativeIcon structure — mirrors Figma DecorativeIcons (node 10716:174).
+   80px circle in three variants: solid (primary-hover fill + white icon),
+   subtle (primary-subtle fill + primary icon), outline (primary-subtle border
+   + primary icon). Icon is centered; recommended child size is 48px. */
+
+.sikat-decorative-icon {
+  --decorative-icon-size: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--rounded-full);
+  flex: none;
+  width: var(--decorative-icon-size);
+  height: var(--decorative-icon-size);
+}
+
+.sikat-decorative-icon[data-variant="solid"] {
+  background-color: var(--color-bg-primary-hover);
+  color: var(--color-text-white);
+}
+
+.sikat-decorative-icon[data-variant="subtle"] {
+  background-color: var(--color-bg-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.sikat-decorative-icon[data-variant="outline"] {
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-primary-subtle);
+  color: var(--color-text-primary);
+}

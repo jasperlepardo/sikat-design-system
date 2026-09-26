@@ -2,7 +2,6 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import { Badge } from '../Badge/Badge';
 import dragIndicator from './assets/drag-indicator.svg';
 import chevronRight from './assets/chevron-right.svg';
-import dividerLine from '../PageHeader/assets/divider-line.svg';
 
 /*
  * Cell content for the Figma Table Cell types (Components › Table, 17239:6211).
@@ -33,19 +32,21 @@ export function TableLink({
   );
 }
 
-/** Type=Media: a 24px image + content. */
+/** Type=Media: a 24px image/icon + content. Pass `src` for an image or `media` for any ReactNode. */
 export function TableMedia({
   src,
+  media,
   alt = '',
   children,
 }: {
-  src: string;
+  src?: string;
+  media?: ReactNode;
   alt?: string;
   children: ReactNode;
 }) {
   return (
     <span className="sikat-table-cell__row">
-      <img className="sikat-table-cell__media" src={src} alt={alt} width={24} height={24} />
+      {media ?? <img className="sikat-table-cell__media" src={src} alt={alt} width={24} height={24} />}
       <span>{children}</span>
     </span>
   );
@@ -127,9 +128,7 @@ export function TableActions({ children }: { children: ReactNode[] }) {
       {children.map((child, i) => (
         <span key={i} className="sikat-table-cell__row">
           {i > 0 ? (
-            <span className="sikat-table-cell__divider" aria-hidden="true">
-              <img src={dividerLine} alt="" width={20} height={2} />
-            </span>
+            <span className="sikat-table-cell__divider" aria-hidden="true" />
           ) : null}
           {child}
         </span>

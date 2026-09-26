@@ -74,3 +74,49 @@ export const Composed: Story = {
     await expect(args.onSubmit).toHaveBeenCalledOnce();
   },
 };
+
+// --- InPanel ----------------------------------------------------------------
+
+import { Panel } from '../Panel/Panel';
+import { PanelHeader } from '../Panel/PanelHeader';
+
+/** Form inside a Panel with PanelHeader — typical settings/record layout. */
+export const InPanel: StoryObj<typeof meta> = {
+  render: (args) => (
+    <Panel style={{ maxWidth: 560 }}>
+      <PanelHeader
+        icon="person"
+        iconVariant="solid"
+        title="Your Details"
+        subcopy="How we'll reach you"
+      />
+      <Panel.Body>
+        <Form
+          onSubmit={(e) => {
+            e.preventDefault();
+            args.onSubmit?.(e);
+          }}
+        >
+          <Form.Section>
+            <Form.Group>
+              <FormField label="First name">
+                {(p) => <TextField {...p} placeholder="Jane" />}
+              </FormField>
+              <FormField label="Last name">
+                {(p) => <TextField {...p} placeholder="Smith" />}
+              </FormField>
+              <FormField label="Email">
+                {(p) => <TextField {...p} type="email" placeholder="jane@example.com" />}
+              </FormField>
+            </Form.Group>
+          </Form.Section>
+          <Divider />
+          <ButtonGroup>
+            <Button type="submit" intent="primary" variant="solid" size="large">Save</Button>
+            <Button type="button" intent="default" variant="solid" size="large">Cancel</Button>
+          </ButtonGroup>
+        </Form>
+      </Panel.Body>
+    </Panel>
+  ),
+};

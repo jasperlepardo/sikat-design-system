@@ -51,7 +51,6 @@
   color: var(--btn-icon);
 }
 /* Figma icons are 20px at every size. */
-.sikat-btn__icon > svg {
-  width: 20px;
-  height: 20px;
+.sikat-btn__icon .sikat-icon {
+  font-size: 20px;
 }

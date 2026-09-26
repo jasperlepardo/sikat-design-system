@@ -13,17 +13,9 @@ import { Icon } from '../Icon/Icon';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 
 /** Figma's placeholder icon for the leading/trailing slots. */
-const CircleGlyph = (
-  <Icon size={16}>
-    <circle cx="12" cy="12" r="9" />
-  </Icon>
-);
+const CircleGlyph = <Icon size={16}>radio_button_unchecked</Icon>;
 
-const CheckGlyph = (
-  <Icon size={16}>
-    <path d="M20 6 9 17l-5-5" />
-  </Icon>
-);
+const CheckGlyph = <Icon size={16}>check</Icon>;
 
 const meta = {
   title: 'Components/Badge',

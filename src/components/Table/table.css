@@ -6,12 +6,9 @@
   flex-direction: column;
   gap: var(--spacing-0_5);
   box-sizing: border-box;
-  padding: var(--spacing-1);
-  border-radius: var(--rounded-2xl);
-  background-color: var(--color-bg-secondary);
-  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-default);
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
 }
+
 .sikat-table__scroller {
   overflow-x: auto;
   scrollbar-width: none; /* the Figma Scroll Indicator replaces the scrollbar */
@@ -22,7 +19,17 @@
 .sikat-table__table {
   width: 100%;
   border-collapse: separate;
-  border-spacing: 0;
+  border-spacing: 0 var(--spacing-0_5); /* 2px row gap */
+}
+
+/* Row radius: 8px on the leading and trailing cells of every row. */
+.sikat-table__th:first-child,
+.sikat-table__td:first-child {
+  border-radius: var(--rounded-lg) 0 0 var(--rounded-lg);
+}
+.sikat-table__th:last-child,
+.sikat-table__td:last-child {
+  border-radius: 0 var(--rounded-lg) var(--rounded-lg) 0;
 }
 .sikat-table__caption,
 .sikat-table__visually-hidden {
@@ -40,10 +47,6 @@
   height: 36px;
   box-sizing: border-box;
   padding: var(--spacing-2_5) var(--spacing-2);
-  /* 2px gap between the header and the body (Figma Table gap). */
-  border-bottom: var(--spacing-0_5) solid transparent;
-  background-clip: padding-box;
-  border-radius: var(--rounded-lg);
   color: var(--color-text-caption);
   font-size: var(--text-body-xs-font-size);
   line-height: var(--text-body-xs-line-height);
@@ -53,7 +56,6 @@
   white-space: nowrap;
 }
 .sikat-table__th:hover {
-  background-color: var(--color-bg-tertiary);
   color: var(--color-text-body);
 }
 .sikat-table__th-inner {
@@ -94,7 +96,6 @@
   height: 36px;
   padding: var(--spacing-2);
   background-color: var(--color-bg-default-alt);
-  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
   color: var(--color-text-body);
   font-size: var(--text-body-sm-font-size);
   line-height: var(--text-body-sm-line-height);
@@ -102,18 +103,6 @@
   font-weight: var(--text-medium);
   white-space: nowrap;
   --table-check: var(--color-fg-quarternary);
-}
-.sikat-table__row:first-child > .sikat-table__td:first-child {
-  border-top-left-radius: var(--rounded-xl);
-}
-.sikat-table__row:first-child > .sikat-table__td:last-child {
-  border-top-right-radius: var(--rounded-xl);
-}
-.sikat-table__row:last-child > .sikat-table__td:first-child {
-  border-bottom-left-radius: var(--rounded-xl);
-}
-.sikat-table__row:last-child > .sikat-table__td:last-child {
-  border-bottom-right-radius: var(--rounded-xl);
 }
 /* Table Cell State=Hover: the rule turns border/primary-subtle, checkbox darkens. */
 .sikat-table__row:hover > .sikat-table__td {
@@ -336,19 +325,11 @@
   gap: var(--spacing-1_5);
 }
 .sikat-table-cell__divider {
-  display: flex;
   flex: none;
   width: 2px;
   height: 20px;
-  align-items: center;
-  justify-content: center;
-}
-.sikat-table-cell__divider > img {
-  flex: none;
-  width: 20px;
-  max-width: none;
-  height: 2px;
-  transform: rotate(90deg);
+  border-radius: 1px;
+  background-color: var(--color-border-default);
 }
 /* Item: drag handle — fg/quarternary, fg/quarternary-solid on row hover. */
 .sikat-table-cell__drag {

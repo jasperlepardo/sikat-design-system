@@ -1,46 +1,51 @@
-import type { ReactNode, SVGProps } from 'react';
+import type { HTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
-export interface IconProps extends Omit<SVGProps<SVGSVGElement>, 'children'> {
-  /** SVG inner content (paths). Drawn on a 0 0 24 24 viewBox by default. */
-  children: ReactNode;
-  /** Square pixel size. Default 24. */
+export interface IconProps extends HTMLAttributes<HTMLSpanElement> {
+  /** Material Symbols icon name, e.g. "home", "close", "info". */
+  children: string;
+  /** Square pixel size — sets font-size and opsz axis. Default 24. */
   size?: number;
-  /** Accessible label. When omitted the icon is hidden from a11y tree. */
+  /** Fill axis: 0 = outlined (default), 1 = filled. */
+  fill?: 0 | 1;
+  /** Weight axis: 100–700. Default 400. */
+  weight?: number;
+  /** Accessible label. When omitted the icon is hidden from the a11y tree. */
   label?: string;
-  /** viewBox, if your paths aren't on a 24×24 grid. */
-  viewBox?: string;
 }
 
 /**
- * Icon — inline SVG sized by `size`, colored with `currentColor` so it follows
- * text color (and `--btn-text` inside buttons). Supply paths as children.
+ * Icon — Material Symbols Outlined glyph. Pass the symbol name as children
+ * (e.g. "home", "close"). Colored with `currentColor`; sized via `size` (px).
+ * Requires the Material Symbols Outlined web font to be loaded.
  */
 export function Icon({
   children,
   size = 24,
+  fill = 0,
+  weight = 400,
   label,
-  viewBox = '0 0 24 24',
   className,
+  style,
   ...rest
 }: IconProps) {
   return (
-    <svg
-      className={cn('sikat-icon', className)}
-      width={size}
-      height={size}
-      viewBox={viewBox}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      strokeLinecap="round"
-      strokeLinejoin="round"
+    <span
+      className={cn('material-symbols-outlined sikat-icon', className)}
       role={label ? 'img' : undefined}
       aria-label={label}
       aria-hidden={label ? undefined : true}
+      style={{
+        fontSize: size,
+        lineHeight: 1,
+        display: 'inline-block',
+        userSelect: 'none',
+        fontVariationSettings: `'FILL' ${fill}, 'wght' ${weight}, 'GRAD' 0, 'opsz' ${size}`,
+        ...style,
+      }}
       {...rest}
     >
       {children}
-    </svg>
+    </span>
   );
 }

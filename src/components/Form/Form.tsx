@@ -1,25 +1,13 @@
 import type { FormHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-
-// Form composition layer — a pure layout primitive (like Section/Page): it adds
-// no field behavior, only the vertical structure that assembles field primitives
-// (TextField, Select, …) and Dividers. Spacing uses the semantic space scale via
-// Tailwind gap utilities. Compound API:
-//   <Form onSubmit={…}>
-//     <Form.Section>
-//       <Form.Header heading="…" subHeading="…" />
-//       <Form.Group><TextField /></Form.Group>
-//     </Form.Section>
-//   </Form>
-
-/* -------------------------------------------------------------------- Form */
+import './form.css';
 
 export type FormProps = FormHTMLAttributes<HTMLFormElement>;
 
 /** Form — a semantic `<form>` that stacks `Form.Section`s (and `Divider`s). */
 export function Form({ className, children, ...rest }: FormProps) {
   return (
-    <form className={cn('flex flex-col gap-10', className)} {...rest}>
+    <form className={cn('sikat-form', className)} {...rest}>
       {children}
     </form>
   );
@@ -32,7 +20,7 @@ export type FormSectionProps = HTMLAttributes<HTMLElement>;
 /** A titled group within a Form — a `Form.Header` over a `Form.Group`. */
 function FormSection({ className, children, ...rest }: FormSectionProps) {
   return (
-    <section className={cn('flex flex-col gap-6', className)} {...rest}>
+    <section className={cn('sikat-form__section', className)} {...rest}>
       {children}
     </section>
   );
@@ -48,7 +36,7 @@ export type FormFieldsetProps = HTMLAttributes<HTMLFieldSetElement>;
  */
 function FormFieldset({ className, children, ...rest }: FormFieldsetProps) {
   return (
-    <fieldset className={cn('flex min-w-0 flex-col gap-6 border-0 p-0', className)} {...rest}>
+    <fieldset className={cn('sikat-form__fieldset', className)} {...rest}>
       {children}
     </fieldset>
   );
@@ -77,11 +65,13 @@ function FormHeader({
   ...rest
 }: FormHeaderProps) {
   return (
-    <div className={cn('flex flex-col gap-1', className)} {...rest}>
+    <div className={cn('sikat-form__header', className)} {...rest}>
       {heading != null ? (
-        <Heading className="text-lg font-semibold text-heading">{heading}</Heading>
+        <Heading className="sikat-form__heading">{heading}</Heading>
       ) : null}
-      {subHeading != null ? <p className="text-sm text-muted">{subHeading}</p> : null}
+      {subHeading != null ? (
+        <p className="sikat-form__subheading">{subHeading}</p>
+      ) : null}
       {children}
     </div>
   );
@@ -91,10 +81,10 @@ function FormHeader({
 
 export type FormGroupProps = HTMLAttributes<HTMLDivElement>;
 
-/** Field Group — a vertical stack of fields (16px gap). */
+/** Field group — vertical stack with -8px inline offset so labels align flush with the container. */
 function FormGroup({ className, children, ...rest }: FormGroupProps) {
   return (
-    <div className={cn('flex flex-col gap-4', className)} {...rest}>
+    <div className={cn('sikat-form__group', className)} {...rest}>
       {children}
     </div>
   );

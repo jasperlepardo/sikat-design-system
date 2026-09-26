@@ -1,0 +1,57 @@
+/* Card structure — mirrors the Figma "Customer Details" section card (node 18266:140530).
+   bg-tertiary outer shell (2px padding, rounded-lg-plus) wrapping a bg-default white
+   content area (14px padding, 24px gap, rounded-lg). */
+
+.sikat-card {
+  background-color: var(--color-bg-tertiary);
+  border-radius: var(--rounded-lg-plus);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-0_5); /* 2px between header and content */
+  padding: var(--spacing-0_5); /* 2px */
+  width: 100%;
+}
+
+/* Header: icon + semibold title on the left, optional actions on the right. */
+.sikat-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-1) var(--spacing-3_5); /* 4px 14px */
+}
+
+.sikat-card__header-leading {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1); /* 4px */
+  color: var(--color-text-caption);
+}
+
+.sikat-card__header-icon {
+  display: flex;
+  flex: none;
+}
+
+.sikat-card__header-title {
+  font-size: var(--text-body-sm-font-size); /* 14px */
+  font-weight: var(--text-semibold);
+  line-height: var(--text-body-sm-line-height); /* 20px */
+  white-space: nowrap;
+}
+
+.sikat-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1); /* 4px */
+}
+
+/* Content: white inner area — 14px padding, 24px gap between children. */
+.sikat-card__content {
+  background-color: var(--color-bg-default);
+  border-radius: var(--rounded-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6); /* 24px */
+  padding: var(--spacing-3_5); /* 14px */
+  width: 100%;
+}

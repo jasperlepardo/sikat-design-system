@@ -21,10 +21,9 @@
   flex: none;
   color: var(--link-icon, var(--link-text));
 }
-/* Figma icons are 20px. */
-.sikat-link__icon > svg {
-  width: 20px;
-  height: 20px;
+/* Figma icons are 20px — enforce regardless of Icon size prop. */
+.sikat-link__icon .sikat-icon {
+  font-size: 20px;
 }
 
 /* Underline the label (not the icons) on hover + keyboard focus — a code

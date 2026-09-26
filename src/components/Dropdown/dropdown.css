@@ -60,9 +60,8 @@
   flex: none;
   color: var(--color-fg-primary);
 }
-.sikat-dropdown__icon > svg {
-  width: 20px;
-  height: 20px;
+.sikat-dropdown__icon .sikat-icon {
+  font-size: 20px;
 }
 /* Disabled = Figma Dropdown Item variables, States mode "Disabled":
    background bg/disabled, label + affixes text/disabled, icon bg/disabled.

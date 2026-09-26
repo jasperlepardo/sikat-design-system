@@ -34,6 +34,7 @@
 .sikat-field::placeholder,
 .sikat-field__input::placeholder {
   color: var(--field-placeholder);
+  font-style: italic;
 }
 /* Focus ring — code addition (Figma has no focus state); the border switches to
    primary via the generated focus state. */
@@ -75,10 +76,9 @@
   flex: none;
   color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
 }
-.sikat-field__icon > svg,
-.sikat-field__edit > svg {
-  width: 20px;
-  height: 20px;
+.sikat-field__icon .sikat-icon,
+.sikat-field__edit .sikat-icon {
+  font-size: 20px;
 }
 .sikat-field__affix {
   flex: none;
@@ -110,13 +110,13 @@
   pointer-events: none;
 }
 
-/* Filled + hover: Figma's trailing edit (pencil) icon. */
+/* Show the trailing edit icon on hover — both empty and filled. */
 .sikat-field__edit {
   display: none;
   flex: none;
-  color: var(--color-fg-tertiary-solid);
+  color: var(--color-fg-quarternary);
 }
-.sikat-field[data-filled]:is(:hover, [data-state='hover']):not(:focus-within):not(
+.sikat-field:is(:hover, [data-state='hover']):not(:focus-within):not(
     :is([data-disabled], [data-readonly], [data-invalid])
   )
   > .sikat-field__edit {
@@ -173,22 +173,21 @@
   color: var(--color-fg-secondary-solid);
   cursor: pointer;
 }
-.sikat-field__chip-remove > svg {
-  width: 12px;
-  height: 12px;
+.sikat-field__chip-remove .sikat-icon {
+  font-size: 12px;
 }
 
 /* ── Composed field: _Form Label + Fieldset (control + Helper) ── */
 .sikat-field-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-1); /* label ↔ fieldset: 4px */
 }
 .sikat-field__fieldset {
   display: flex;
   min-width: 0;
   flex: 1 1 auto;
   flex-direction: column;
+  align-items: flex-start;
   gap: var(--spacing-1); /* control ↔ helper: 4px */
 }
 /* Figma Orientation=Vertical: label in a fixed 200px column beside the field,
@@ -207,6 +206,7 @@
 }
 
 .sikat-field__label {
+  padding-inline: var(--spacing-2); /* 8px */
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
   font-size: var(--text-body-sm-font-size); /* 14px */
   line-height: var(--text-body-sm-line-height); /* 20px */
@@ -229,6 +229,7 @@
 }
 .sikat-field__hint,
 .sikat-field__error {
+  padding-inline: var(--spacing-2); /* 8px — matches label */
   font-size: var(--text-body-xs-font-size); /* 12px */
   line-height: var(--text-body-xs-line-height); /* 16px */
   font-weight: var(--text-regular);

@@ -112,18 +112,9 @@ function takeDataState<T extends object>(rest: T) {
   return [dataState, others as T] as const;
 }
 
-const EditIcon = (
-  <Icon size={20}>
-    <path d="M12 20h9" />
-    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-  </Icon>
-);
+const EditIcon = <Icon size={20}>edit</Icon>;
 
-export const ChevronDown = (
-  <Icon size={20}>
-    <path d="m6 9 6 6 6-6" />
-  </Icon>
-);
+export const ChevronDown = <Icon size={20}>expand_more</Icon>;
 
 /* ---------------------------------------------------------------- TextField */
 
@@ -218,13 +209,18 @@ export interface FormFieldProps {
   error?: ReactNode;
   required?: boolean;
   className?: string;
-  /** Render-prop receiving the wired a11y props for the control. */
-  children: (controlProps: {
-    id: string;
-    'aria-describedby'?: string;
-    'aria-invalid'?: boolean;
-    invalid?: boolean;
-  }) => ReactNode;
+  /**
+   * Render-prop receiving the wired a11y props for the control — or plain
+   * ReactNode for controls that don't need them (e.g. a Button).
+   */
+  children:
+    | ((controlProps: {
+        id: string;
+        'aria-describedby'?: string;
+        'aria-invalid'?: boolean;
+        invalid?: boolean;
+      }) => ReactNode)
+    | ReactNode;
 }
 
 /**
@@ -253,12 +249,14 @@ export function FormField({
         </FormLabel>
       ) : null}
       <div className="sikat-field__fieldset">
-        {children({
-          id,
-          'aria-describedby': describedBy,
-          'aria-invalid': error ? true : undefined,
-          invalid: !!error,
-        })}
+        {typeof children === 'function'
+          ? children({
+              id,
+              'aria-describedby': describedBy,
+              'aria-invalid': error ? true : undefined,
+              invalid: !!error,
+            })
+          : children}
         {error ? (
           <p id={errorId} className="sikat-field__error">
             {error}

@@ -1,0 +1,53 @@
+/* Form layout — pure vertical structure for assembling field primitives. */
+
+.sikat-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-10); /* 40px between sections */
+}
+
+/* Form.Section / Form.Fieldset — a titled group of fields. */
+.sikat-form__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6); /* 24px between header and group */
+}
+
+.sikat-form__fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+  min-width: 0;
+  border: 0;
+  padding: 0;
+}
+
+/* Form.Header — section heading + optional sub-heading. */
+.sikat-form__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1); /* 4px */
+}
+
+.sikat-form__heading {
+  font-size: var(--text-body-lg-font-size);
+  font-weight: var(--text-semibold);
+  color: var(--color-text-heading);
+  margin: 0;
+}
+
+.sikat-form__subheading {
+  font-size: var(--text-body-sm-font-size);
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Form.Group — vertical field stack with -8px inline offset so labels align flush. */
+.sikat-form__group {
+  display: flex;
+  flex-direction: column;
+  align-self: stretch;
+  gap: var(--spacing-4); /* 16px between fields */
+  margin-left: calc(var(--spacing-2) * -1); /* -8px to offset label padding */
+  margin-right: calc(var(--spacing-2) * -1);
+}

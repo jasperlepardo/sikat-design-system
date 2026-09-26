@@ -4,16 +4,8 @@ import { Link, linkIntents, type LinkIntent } from './Link';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 import { Icon } from '../Icon/Icon';
 
-const ArrowLeft = (
-  <Icon size={24}>
-    <path d="M19 12H5M12 19l-7-7 7-7" />
-  </Icon>
-);
-const ExternalLink = (
-  <Icon size={24}>
-    <path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-  </Icon>
-);
+const ArrowLeft = <Icon size={20}>arrow_back</Icon>;
+const ExternalLink = <Icon size={20}>open_in_new</Icon>;
 
 const meta = {
   title: 'Components/Link',
@@ -29,11 +21,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const PlaceholderIcon = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
-    <circle cx="12" cy="12" r="9" />
-  </svg>
-);
+const PlaceholderIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 
 /**
  * Controls mirror the Figma Link Button component properties 1:1 — same names,

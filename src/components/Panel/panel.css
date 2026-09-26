@@ -1,0 +1,35 @@
+/* Panel structure — mirrors the Figma full panel container (node 9474:6174).
+   White shadowed shell (bg-white, shadow-md, rounded-lg, 4px padding/gap)
+   with three layout slots: header (pass-through), body (flex-1, 8px padding),
+   and footer (action row, 0 4px 4px padding). */
+
+.sikat-panel {
+  background-color: var(--color-bg-white);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1); /* 4px between header / body / footer */
+  overflow: hidden;
+  padding: var(--spacing-1); /* 4px */
+}
+
+/* Header — pass-through slot; no extra spacing (PageHeader fills this). */
+.sikat-panel__header {
+  flex: none;
+}
+
+
+/* Body — grows to fill available height; 8px padding wraps its content. */
+.sikat-panel__body {
+  flex: 1;
+  padding: var(--spacing-2); /* 8px */
+}
+
+/* Footer — action row pinned to the bottom of the panel. */
+.sikat-panel__footer {
+  display: flex;
+  flex: none;
+  gap: var(--spacing-2); /* 8px between buttons */
+  padding: 0 var(--spacing-1) var(--spacing-1); /* 0 4px 4px */
+}

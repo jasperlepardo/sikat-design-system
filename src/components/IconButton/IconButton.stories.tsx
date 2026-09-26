@@ -12,11 +12,7 @@ import {
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 import { Icon } from '../Icon/Icon';
 
-const CloseGlyph = (
-  <Icon>
-    <path d="M18 6 6 18M6 6l12 12" />
-  </Icon>
-);
+const CloseGlyph = <Icon>close</Icon>;
 
 const meta = {
   title: 'Components/IconButton',

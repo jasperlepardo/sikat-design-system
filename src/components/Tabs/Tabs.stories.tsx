@@ -5,11 +5,7 @@ import { Icon } from '../Icon/Icon';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 
 /** Figma's placeholder "Tab Icon" (circle). */
-const CircleGlyph = (
-  <Icon size={20}>
-    <circle cx="12" cy="12" r="9" />
-  </Icon>
-);
+const CircleGlyph = <Icon size={20}>radio_button_unchecked</Icon>;
 
 const meta = {
   title: 'Components/Tabs',
