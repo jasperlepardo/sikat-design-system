@@ -131,6 +131,16 @@
   display: flex;
 }
 
+/* Readonly fields: show edit icon and a subtle background on hover so the user
+   knows the field can be interacted with (e.g. unlocked/edited). */
+.sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled])) {
+  --field-bg: var(--color-bg-secondary);
+}
+.sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled]))
+  > .sikat-field__edit {
+  display: flex;
+}
+
 /* Textarea (Figma Textarea): one line + 48px of room below by default. */
 .sikat-field--multiline {
   height: auto;
