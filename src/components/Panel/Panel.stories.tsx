@@ -90,6 +90,35 @@ export const HeaderOnly: Story = {
   ),
 };
 
+/** Summary block — entity identity at the top of Panel.Sidebar. */
+export const Summary: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
+      <Panel.Summary
+        icon="person"
+        iconVariant="outline"
+        iconSize={40}
+        name="Customer Name"
+        code="BP-00001"
+      />
+      <Panel.Summary
+        icon="inventory_2"
+        iconVariant="solid"
+        iconSize={40}
+        name="Sales Order"
+        code="SO-2024-00042"
+      />
+      <Panel.Summary
+        icon="receipt_long"
+        iconVariant="subtle"
+        iconSize={40}
+        name="A very long entity name that should truncate gracefully"
+        code="INV-00999"
+      />
+    </div>
+  ),
+};
+
 /** Panel with no footer. */
 export const NoFooter: Story = {
   render: () => (

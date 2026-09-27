@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { SidePanel } from './SidePanel';
+import { Panel } from '../Panel/Panel';
+import { PanelHeader } from '../Panel/PanelHeader';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { Icon } from '../Icon/Icon';
 import { Tabs } from '../Tabs/Tabs';
 import { Card } from '../Card/Card';
+import { Form } from '../Form/Form';
 import { FormField, TextField } from '../Field/Field';
 
 const meta = {
@@ -54,36 +57,27 @@ const SectionCard = ({ title }: { title: string }) => (
   </Card>
 );
 
-const TwoColFields = ({ labels }: { labels: [string, string][] }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-    {labels.map(([label, placeholder]) => (
-      <FormField key={label} label={label}>
-        <TextField placeholder={placeholder} />
-      </FormField>
-    ))}
-  </div>
-);
-
 /* ---------------------------------------------------------------- stories */
 
-/**
- * Single-column with overlay — tabs at the top, scrollable body, backdrop overlay.
- * Mirrors Figma node 18249:110237.
- */
+/** Single-column — overlay drawer with tabs and scrollable body. */
 export const Default: Story = {
   render: () => {
     const [open, setOpen] = useState(true);
     return (
-      <div style={{ height: '100vh', background: 'var(--color-bg-tertiary)', position: 'relative' }}>
+      <div style={{ height: '100vh', background: 'var(--color-bg-tertiary)' }}>
         <div style={{ margin: 16 }}>
           <Button intent="primary" variant="solid" size="small" onClick={() => setOpen(true)}>
             Open Panel
           </Button>
         </div>
         {open && (
-          <SidePanel overlay onOverlayClick={() => setOpen(false)}
-            style={{ '--sikat-side-panel-width': '560px' } as React.CSSProperties}>
-            <SidePanel.Header
+          <SidePanel
+            overlay
+            onOverlayClick={() => setOpen(false)}
+            style={{ '--sikat-side-panel-width': '560px' } as React.CSSProperties}
+          >
+            <PanelHeader
+              type="forms"
               leading={
                 <IconButton label="Back" intent="default" variant="outline" size="small">
                   <Icon size={20}>loyalty</Icon>
@@ -97,16 +91,16 @@ export const Default: Story = {
                 </>
               }
             />
-            <SidePanel.Tabs>
+            <Panel.Body>
               <Tabs items={emailTabs} variant="secondary" />
-            </SidePanel.Tabs>
-            <SidePanel.Body>
               <Card>
                 <Card.Content>
-                  <FormField label="From"><TextField placeholder="United State Dollar (USD)" /></FormField>
-                  <FormField label="Send to"><TextField placeholder="123 456 789 00000" /></FormField>
-                  <FormField label="CC:"><TextField placeholder="[shipping type]" /></FormField>
-                  <FormField label="Subject"><TextField placeholder="[shipping type]" /></FormField>
+                  <Form.Group>
+                    <FormField label="From"><TextField placeholder="United State Dollar (USD)" /></FormField>
+                    <FormField label="Send to"><TextField placeholder="123 456 789 00000" /></FormField>
+                    <FormField label="CC:"><TextField placeholder="[shipping type]" /></FormField>
+                    <FormField label="Subject"><TextField placeholder="[shipping type]" /></FormField>
+                  </Form.Group>
                 </Card.Content>
               </Card>
               <Card>
@@ -131,7 +125,7 @@ export const Default: Story = {
                   </p>
                 </Card.Content>
               </Card>
-            </SidePanel.Body>
+            </Panel.Body>
           </SidePanel>
         )}
       </div>
@@ -139,24 +133,25 @@ export const Default: Story = {
   },
 };
 
-/**
- * Two-column with overlay — sidebar + tabbed main, tabs at the top.
- * Mirrors Figma node 18249:110237 (Create Customer).
- */
+/** Two-column — sidebar (entity summary + sections) and tabbed main area. */
 export const TwoColumn: Story = {
   render: () => {
     const [open, setOpen] = useState(true);
     return (
-      <div style={{ height: '100vh', background: 'var(--color-bg-tertiary)', position: 'relative' }}>
+      <div style={{ height: '100vh', background: 'var(--color-bg-tertiary)' }}>
         <div style={{ margin: 16 }}>
           <Button intent="primary" variant="solid" size="small" onClick={() => setOpen(true)}>
             Open Panel
           </Button>
         </div>
         {open && (
-          <SidePanel overlay onOverlayClick={() => setOpen(false)}
-            style={{ '--sikat-side-panel-width': '900px' } as React.CSSProperties}>
-            <SidePanel.Header
+          <SidePanel
+            overlay
+            onOverlayClick={() => setOpen(false)}
+            style={{ '--sikat-side-panel-width': '900px' } as React.CSSProperties}
+          >
+            <PanelHeader
+              type="forms"
               leading={
                 <IconButton label="Back" intent="default" variant="outline" size="small">
                   <Icon size={20}>loyalty</Icon>
@@ -170,9 +165,9 @@ export const TwoColumn: Story = {
                 </>
               }
             />
-            <SidePanel.Body columns>
-              <SidePanel.Sidebar>
-                <SidePanel.Summary
+            <Panel.Body columns>
+              <Panel.Sidebar>
+                <Panel.Summary
                   icon="add"
                   iconVariant="outline"
                   iconSize={40}
@@ -183,75 +178,41 @@ export const TwoColumn: Story = {
                 <SectionCard title="Billing Address" />
                 <SectionCard title="Shipping Address" />
                 <SectionCard title="Remarks" />
-              </SidePanel.Sidebar>
-              <SidePanel.Main>
+              </Panel.Sidebar>
+              <Panel.Main>
                 <Tabs items={entityTabs} variant="secondary" defaultValue="general" />
                 <Card>
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>General Details</Card.Header>
                   <Card.Content>
-                    <TwoColFields labels={[
-                      ['Currency', 'United State Dollar (USD)'],
-                      ['Tax ID', '123 456 789 00000'],
-                      ['Website', '[shipping type]'],
-                      ['Shipping Type', '[shipping type]'],
-                      ['Industry', 'Technology Industry'],
-                      ['Type of Business', '[type of business]'],
-                      ['Sales Employee', '[sales employee]'],
-                      ['Technician', '[technician]'],
-                      ['Territory', '[territory]'],
-                    ]} />
+                    <Form.Group columns>
+                      <FormField label="Currency"><TextField placeholder="United State Dollar (USD)" /></FormField>
+                      <FormField label="Tax ID"><TextField placeholder="123 456 789 00000" /></FormField>
+                      <FormField label="Website"><TextField placeholder="[website]" /></FormField>
+                      <FormField label="Shipping Type"><TextField placeholder="[shipping type]" /></FormField>
+                      <FormField label="Industry"><TextField placeholder="Technology Industry" /></FormField>
+                      <FormField label="Type of Business"><TextField placeholder="[type of business]" /></FormField>
+                      <FormField label="Sales Employee"><TextField placeholder="[sales employee]" /></FormField>
+                      <FormField label="Technician"><TextField placeholder="[technician]" /></FormField>
+                      <FormField label="Territory"><TextField placeholder="[territory]" /></FormField>
+                    </Form.Group>
                   </Card.Content>
                 </Card>
                 <Card>
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>Banks</Card.Header>
                   <Card.Content>
-                    <TwoColFields labels={[
-                      ['Currency', 'United State Dollar (USD)'],
-                      ['Tax ID', '123 456 789 00000'],
-                      ['Website', '[shipping type]'],
-                      ['Shipping Type', '[shipping type]'],
-                    ]} />
+                    <Form.Group columns>
+                      <FormField label="Currency"><TextField placeholder="United State Dollar (USD)" /></FormField>
+                      <FormField label="Tax ID"><TextField placeholder="123 456 789 00000" /></FormField>
+                      <FormField label="Website"><TextField placeholder="[website]" /></FormField>
+                      <FormField label="Shipping Type"><TextField placeholder="[shipping type]" /></FormField>
+                    </Form.Group>
                   </Card.Content>
                 </Card>
-              </SidePanel.Main>
-            </SidePanel.Body>
+              </Panel.Main>
+            </Panel.Body>
           </SidePanel>
         )}
       </div>
     );
   },
-};
-
-/** Inline (no overlay) — fills its container. Useful for split-pane layouts. */
-export const Inline: Story = {
-  render: () => (
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <div style={{ flex: 1, background: 'var(--color-bg-tertiary)' }} />
-      <div style={{ width: 560, display: 'flex' }}>
-        <SidePanel>
-          <SidePanel.Header
-            leading={
-              <IconButton label="Close" intent="default" variant="outline" size="small">
-                <Icon size={20}>close</Icon>
-              </IconButton>
-            }
-            title="Details"
-            actions={
-              <Button intent="primary" variant="solid" size="small">Save</Button>
-            }
-          />
-          <SidePanel.Tabs>
-            <Tabs items={emailTabs} variant="secondary" />
-          </SidePanel.Tabs>
-          <SidePanel.Body>
-            <Card>
-              <Card.Content>
-                <p style={{ color: 'var(--color-text-body)' }}>Content slot.</p>
-              </Card.Content>
-            </Card>
-          </SidePanel.Body>
-        </SidePanel>
-      </div>
-    </div>
-  ),
 };

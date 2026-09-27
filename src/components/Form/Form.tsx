@@ -79,12 +79,22 @@ function FormHeader({
 
 /* -------------------------------------------------------------- Form.Group */
 
-export type FormGroupProps = HTMLAttributes<HTMLDivElement>;
+export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
+  /** Responsive grid layout: 1 col → 3 cols at md. */
+  columns?: boolean;
+}
 
-/** Field group — vertical stack with -8px inline offset so labels align flush with the container. */
-function FormGroup({ className, children, ...rest }: FormGroupProps) {
+/** Field group — vertical stack (or responsive grid when `columns`) inside a Card. */
+function FormGroup({ columns, className, children, ...rest }: FormGroupProps) {
   return (
-    <div className={cn('sikat-form__group', className)} {...rest}>
+    <div
+      className={cn(
+        'sikat-form__group',
+        columns && 'grid! gap-2 grid-cols-1 md:grid-cols-3',
+        className,
+      )}
+      {...rest}
+    >
       {children}
     </div>
   );

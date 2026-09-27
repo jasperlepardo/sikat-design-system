@@ -8,8 +8,10 @@
   border-radius: var(--rounded-lg);
   box-shadow: var(--shadow-md);
   display: flex;
+  flex: 1;
   flex-direction: column;
   gap: var(--spacing-1); /* 4px between header / body / footer */
+  min-height: 0;
   overflow: hidden;
   padding: var(--spacing-1); /* 4px */
 }
@@ -20,10 +22,88 @@
 }
 
 
-/* Body — grows to fill available height; 8px padding wraps its content. */
+/* Body — grows to fill available height; 8px padding, vertical scroll. */
 .sikat-panel__body {
+  display: flex;
   flex: 1;
-  padding: var(--spacing-2); /* 8px */
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--spacing-3_5);
+}
+
+/* Two-column variant — columns carry their own padding/scroll. */
+.sikat-panel__body--columns {
+  flex-direction: row;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Sidebar — fixed-width left column. */
+.sikat-panel__sidebar {
+  border-right: var(--border-width-1) solid var(--color-border-neutral-subtle);
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-3);
+  width: 300px;
+}
+
+/* Main — flex-1 right column. */
+.sikat-panel__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-3);
+}
+
+/* Summary — entity identity block (icon + name + code). */
+.sikat-panel__summary {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-1) 0;
+}
+
+.sikat-panel__summary-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-0_5);
+  min-width: 0;
+}
+
+.sikat-panel__summary-name {
+  color: var(--color-text-heading);
+  font-family: var(--text-body-lg-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-lg-font-size);
+  font-weight: var(--text-semibold);
+  line-height: var(--text-body-lg-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sikat-panel__summary-code {
+  color: var(--color-text-caption);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-medium);
+  line-height: var(--text-body-sm-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Footer — action row pinned to the bottom of the panel. */

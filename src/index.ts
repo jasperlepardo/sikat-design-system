@@ -31,16 +31,10 @@ export { Card } from './components/Card/Card';
 export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Card/Card';
 
 export { Panel } from './components/Panel/Panel';
-export type { PanelProps, PanelSlotProps } from './components/Panel/Panel';
+export type { PanelProps, PanelSlotProps, PanelBodyProps, PanelSummaryProps } from './components/Panel/Panel';
 
 export { SidePanel } from './components/SidePanel/SidePanel';
-export type {
-  SidePanelProps,
-  SidePanelHeaderProps,
-  SidePanelBodyProps,
-  SidePanelSlotProps,
-  SidePanelSummaryProps,
-} from './components/SidePanel/SidePanel';
+export type { SidePanelProps } from './components/SidePanel/SidePanel';
 
 
 export { Alert, alertIntents, alertStyles } from './components/Alert/Alert';
