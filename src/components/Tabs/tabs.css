@@ -3,7 +3,7 @@
 
 /* Tab Container: bg/tertiary track, 2px padding + gap, 12px radius, Shadow/inner. */
 .sikat-tabs {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--spacing-0_5);
   padding: var(--spacing-0_5);
