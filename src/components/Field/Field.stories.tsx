@@ -4,6 +4,12 @@ import { expect, userEvent, within } from 'storybook/test';
 import { FormField, TextField, Textarea, Select, Checkbox, Radio, fieldSizes } from './Field';
 import { MultiSelect } from './MultiSelect';
 import { Combobox } from './Combobox';
+import { Button } from '../Button/Button';
+import { SidePanel } from '../SidePanel/SidePanel';
+import { Panel } from '../Panel/Panel';
+import { PanelHeader } from '../Panel/PanelHeader';
+import { Card } from '../Card/Card';
+import { Form } from '../Form/Form';
 import { Autocomplete } from './Autocomplete';
 import { DatePicker } from './DatePicker';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
@@ -401,6 +407,101 @@ export const ComboboxField: Story = {
       </FormField>
     </div>
   ),
+};
+
+/** Combobox with emptyContent — type a query that matches nothing to see a custom "create" action. */
+export const ComboboxEmptyContent: Story = {
+  name: 'Combobox (emptyContent)',
+  render: () => {
+    const [options, setOptions] = useState(COUNTRIES);
+    const [value, setValue] = useState<string | null>(null);
+    const [query, setQuery] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+    const [draftName, setDraftName] = useState('');
+    return (
+      <div style={{ maxWidth: 360 }}>
+        <FormField label="Country">
+          {(props) => (
+            <Combobox
+              {...props}
+              options={options}
+              value={value}
+              onValueChange={setValue}
+              onQueryChange={setQuery}
+              placeholder="Search or create…"
+              emptyContent={(close) => (
+                <div style={{ padding: '6px 8px', display: 'flex', flexDirection: 'column' }}>
+                  <Button
+                    intent="default"
+                    variant="solid"
+                    size="small"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      close();
+                      setDraftName(query.trim());
+                      setModalOpen(true);
+                    }}
+                  >
+                    + Create "{query}"
+                  </Button>
+                </div>
+              )}
+            />
+          )}
+        </FormField>
+
+        {modalOpen && (
+          <SidePanel overlay onOverlayClick={() => setModalOpen(false)}>
+            <PanelHeader
+              type="forms"
+              title="Create country"
+              actions={
+                <>
+                  <Button intent="default" variant="solid" size="small" onClick={() => setModalOpen(false)}>
+                    Discard
+                  </Button>
+                  <Button
+                    intent="primary"
+                    variant="solid"
+                    size="small"
+                    disabled={!draftName.trim()}
+                    onClick={() => {
+                      const label = draftName.trim();
+                      const next = { value: label.toLowerCase().replace(/\s+/g, '-'), label };
+                      setOptions((prev) => [...prev, next]);
+                      setValue(next.value);
+                      setModalOpen(false);
+                    }}
+                  >
+                    Create
+                  </Button>
+                </>
+              }
+            />
+            <Panel.Body>
+              <Card>
+                <Card.Content>
+                  <Form.Group>
+                    <FormField label="Country name">
+                      {(props) => (
+                        <TextField
+                          {...props}
+                          autoFocus
+                          value={draftName}
+                          onChange={(e) => setDraftName(e.target.value)}
+                          placeholder="e.g. Narnia"
+                        />
+                      )}
+                    </FormField>
+                  </Form.Group>
+                </Card.Content>
+              </Card>
+            </Panel.Body>
+          </SidePanel>
+        )}
+      </div>
+    );
+  },
 };
 
 /** Autocomplete — free-text with suggestions. */

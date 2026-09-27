@@ -32,6 +32,14 @@ export interface ComboboxProps {
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'aria-invalid'?: boolean;
+  /** Replaces the default "No results" message when the filtered list is empty.
+   *  Pass a function to receive a `close` callback — use it to dismiss the dropdown
+   *  before opening a modal or navigating away. */
+  emptyContent?: ReactNode | ((close: () => void) => ReactNode);
+  /** Always rendered at the bottom of the open dropdown, regardless of results. */
+  footer?: ReactNode;
+  /** Called whenever the filter query changes (the raw text the user is typing). */
+  onQueryChange?: (query: string) => void;
 }
 
 const optText = (o: ComboboxOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
@@ -59,6 +67,9 @@ export function Combobox({
   readOnly,
   id: idProp,
   className,
+  emptyContent,
+  footer,
+  onQueryChange,
   ...aria
 }: ComboboxProps) {
   const reactId = useId();
@@ -127,6 +138,7 @@ export function Combobox({
           value={display}
           onChange={(e) => {
             setQuery(e.target.value);
+            onQueryChange?.(e.target.value);
             if (!open) setOpen(true);
           }}
           onFocus={() => {
@@ -144,24 +156,25 @@ export function Combobox({
       </FieldShell>
       {open && anchor ? (
         <Dropdown ref={panelRef} id={listId} anchor={anchor} side={side} hSide={hSide}>
-          {filtered.length === 0 ? (
-            <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
-              No results
-            </div>
-          ) : (
-            filtered.map((o, i) => (
-              <DropdownItem
-                key={o.value}
-                id={getItemId(i)}
-                selected={o.value === selected}
-                active={i === activeIndex}
-                disabled={o.disabled}
-                onSelect={() => selectAt(i)}
-              >
-                {o.label ?? optText(o)}
-              </DropdownItem>
-            ))
-          )}
+          {filtered.length === 0
+            ? ((typeof emptyContent === 'function' ? emptyContent(() => setOpen(false)) : emptyContent) ?? (
+                <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
+                  No results
+                </div>
+              ))
+            : filtered.map((o, i) => (
+                <DropdownItem
+                  key={o.value}
+                  id={getItemId(i)}
+                  selected={o.value === selected}
+                  active={i === activeIndex}
+                  disabled={o.disabled}
+                  onSelect={() => selectAt(i)}
+                >
+                  {o.label ?? optText(o)}
+                </DropdownItem>
+              ))}
+          {footer}
         </Dropdown>
       ) : null}
     </div>
