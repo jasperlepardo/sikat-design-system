@@ -123,9 +123,9 @@ export function DatePicker({
   const todayIso = toISODate(today);
 
   return (
-    <div ref={rootRef}>
+    <div ref={rootRef} className={cn('sikat-datepicker', className)}>
       <FieldShell
-        className={cn('sikat-datepicker__trigger', className)}
+        className="sikat-datepicker__trigger"
         state={{ size, filled: selectedIso !== '', disabled, invalid }}
         adornments={{}}
         after={CalendarIcon}

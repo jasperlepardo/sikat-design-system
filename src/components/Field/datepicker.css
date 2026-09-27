@@ -1,5 +1,9 @@
 /* DatePicker — trigger + calendar popup panel. */
 
+.sikat-datepicker {
+  width: 100%;
+}
+
 /* Trigger — same interactive cursor as Select, not the default/text cursor of
    a read-only field. The input is readOnly in HTML but the shell is a clickable trigger. */
 .sikat-datepicker__trigger {
