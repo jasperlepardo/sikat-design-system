@@ -6,8 +6,11 @@
 
 .sikat-side-panel__backdrop {
   background-color: rgb(0 0 0 / 0.4);
-  inset: 0;
+  bottom: 0;
+  left: 0;
   position: fixed;
+  right: 0;
+  top: var(--sikat-nav-height, 64px);
   z-index: 40;
 }
 
@@ -25,13 +28,13 @@
   width: 100%;
 }
 
-/* Overlay mode — fixed to the right edge of the viewport */
+/* Overlay mode — fixed to the right edge, below the top nav */
 .sikat-side-panel--overlay {
   bottom: 0;
-  height: 100dvh;
+  height: calc(100dvh - var(--sikat-nav-height, 64px));
   position: fixed;
   right: 0;
-  top: 0;
+  top: var(--sikat-nav-height, 64px);
   width: var(--sikat-side-panel-width, 640px);
   z-index: 50;
 }

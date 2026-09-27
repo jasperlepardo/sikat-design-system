@@ -1,5 +1,7 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { forwardRef, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import type { DropdownAnchor } from '../../lib/useDropdown';
 import './dropdown.css';
 
 export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
@@ -7,33 +9,76 @@ export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'rol
   role?: 'listbox' | 'menu';
   /** Sets `aria-multiselectable` (e.g. MultiSelect). */
   multiselectable?: boolean;
+  /**
+   * When provided, portals the panel to `document.body` using `position: fixed`.
+   * Pass `anchor` from `useDropdown` to fix clipping inside tables or
+   * `overflow: hidden` containers.
+   */
+  anchor?: DropdownAnchor | null;
+  /** Vertical side — `'bottom'` (default) or `'top'`. Pass `side` from `useDropdown`. */
+  side?: 'top' | 'bottom';
+  /** Horizontal alignment — `'left'` (default) or `'right'`. Pass `hSide` from `useDropdown`. */
+  hSide?: 'left' | 'right';
   children: ReactNode;
 }
 
 /**
  * Dropdown — the floating panel of a listbox/menu (the items container). Pair
  * with `useDropdown` (open/close, outside-click, Escape) and `useListbox`
- * (keyboard model). Render it inside a `position: relative` root that also holds
- * the trigger.
+ * (keyboard model).
+ *
+ * Default: renders absolutely inside a `position: relative` root.
+ * Portaled: pass `anchor` + `side` from `useDropdown` to escape clipping
+ * containers (tables, `overflow: hidden` wrappers).
  */
-export function Dropdown({
+export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({
   role = 'listbox',
   multiselectable,
+  anchor,
+  side = 'bottom',
+  hSide = 'left',
   className,
+  style,
   children,
   ...rest
-}: DropdownProps) {
-  return (
+}, ref) {
+  let fixedStyle: React.CSSProperties | undefined = style;
+  if (anchor) {
+    const w = typeof style?.width === 'number' ? style.width
+      : typeof style?.width === 'string' ? parseFloat(style.width)
+      : anchor.width;
+    fixedStyle = {
+      position: 'fixed',
+      width: w,
+      left: hSide === 'left' ? anchor.left : anchor.right - w,
+      right: 'auto',
+      ...(side === 'bottom'
+        ? { top: anchor.bottom + 4, bottom: 'auto' }
+        : { top: 'auto', bottom: window.innerHeight - anchor.top + 4 }),
+      maxHeight: Math.max(80, side === 'bottom'
+        ? window.innerHeight - anchor.bottom - 8
+        : anchor.top - 8),
+      ...style,
+    };
+  }
+
+  const panel = (
     <div
+      ref={ref}
       role={role}
       aria-multiselectable={multiselectable || undefined}
-      className={cn('sikat-dropdown', className)}
+      data-side={side}
+      className={cn('sikat-dropdown', anchor && 'sikat-dropdown--fixed', className)}
+      style={fixedStyle}
       {...rest}
     >
       {children}
     </div>
   );
-}
+
+  if (anchor) return createPortal(panel, document.body);
+  return panel;
+});
 
 export interface DropdownItemProps {
   id?: string;

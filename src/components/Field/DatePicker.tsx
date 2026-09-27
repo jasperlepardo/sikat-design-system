@@ -1,8 +1,10 @@
+import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { FieldShell, type FieldSize } from './Field';
 import { useDropdown } from '../../lib/useDropdown';
+import './datepicker.css';
 import {
   WEEKDAYS,
   MONTH_NAMES,
@@ -60,7 +62,7 @@ export function DatePicker({
   const [internal, setInternal] = useState<string>(defaultValue ?? '');
   const selectedIso = (isControlled ? (value ?? '') : internal) || '';
 
-  const { open, setOpen, toggle, rootRef, side } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, toggle, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
   const gridRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -121,10 +123,10 @@ export function DatePicker({
   const todayIso = toISODate(today);
 
   return (
-    <div ref={rootRef} style={{ position: 'relative' }}>
+    <div ref={rootRef}>
       <FieldShell
-        className={className}
-        state={{ size, filled: selectedIso !== '', disabled, readOnly: true, invalid }}
+        className={cn('sikat-datepicker__trigger', className)}
+        state={{ size, filled: selectedIso !== '', disabled, invalid }}
         adornments={{}}
         after={CalendarIcon}
         onClick={() => !disabled && toggle()}
@@ -153,44 +155,54 @@ export function DatePicker({
           {...aria}
         />
       </FieldShell>
-      {open ? (
+      {open && anchor ? createPortal(
         <div
+          ref={panelRef}
           role="dialog"
           aria-label="Choose date"
-          className={`absolute z-20 rounded-md border border-default bg-default p-3 shadow-lg ${side === 'top' ? 'bottom-full mb-1' : 'mt-1'}`}
+          className="sikat-datepicker__panel"
+          style={{
+            position: 'fixed',
+            zIndex: 1000,
+            left: hSide === 'left' ? anchor.left : anchor.right - 300,
+            right: 'auto',
+            ...(side === 'bottom'
+              ? { top: anchor.bottom + 4, maxHeight: window.innerHeight - anchor.bottom - 12 }
+              : { bottom: window.innerHeight - anchor.top + 4, maxHeight: anchor.top - 12 }),
+          }}
         >
-          <div className="mb-2 flex items-center justify-between gap-2">
+          <div className="sikat-datepicker__header">
             <button
               type="button"
               aria-label="Previous month"
-              className="flex size-8 items-center justify-center rounded-md text-body hover:bg-secondary"
+              className="sikat-datepicker__nav"
               onClick={() => setView((v) => ({ ...addMonthView(v, -1) }))}
             >
               <Icon size={16}>chevron_left</Icon>
             </button>
-            <span className="text-sm font-semibold text-heading">
+            <span className="sikat-datepicker__month-label">
               {MONTH_NAMES[view.month]} {view.year}
             </span>
             <button
               type="button"
               aria-label="Next month"
-              className="flex size-8 items-center justify-center rounded-md text-body hover:bg-secondary"
+              className="sikat-datepicker__nav"
               onClick={() => setView((v) => ({ ...addMonthView(v, 1) }))}
             >
               <Icon size={16}>chevron_right</Icon>
             </button>
           </div>
 
-          <div className="mb-1 grid grid-cols-7 gap-1 text-center text-xs text-muted">
+          <div className="sikat-datepicker__weekdays">
             {WEEKDAYS.map((w) => (
-              <span key={w}>{w}</span>
+              <span key={w} className="sikat-datepicker__weekday">{w}</span>
             ))}
           </div>
 
           <div
             ref={gridRef}
             role="grid"
-            className="grid grid-cols-7 gap-1"
+            className="sikat-datepicker__grid"
             onKeyDown={onGridKeyDown}
           >
             {days.map((d) => {
@@ -207,12 +219,9 @@ export function DatePicker({
                   aria-selected={isSelected || undefined}
                   aria-current={isToday ? 'date' : undefined}
                   className={cn(
-                    'flex size-9 items-center justify-center rounded-md text-sm outline-none',
-                    'focus-visible:ring-2 focus-visible:ring-[var(--color-border-primary)]/40',
-                    !d.inMonth && 'text-muted',
-                    isSelected
-                      ? 'bg-primary text-heading_on-primary'
-                      : cn(isToday && 'border border-default', 'hover:bg-secondary'),
+                    'sikat-datepicker__day',
+                    !d.inMonth && 'sikat-datepicker__day--outside',
+                    isToday && !isSelected && 'sikat-datepicker__day--today',
                   )}
                   onClick={() => commit(d.date)}
                 >
@@ -221,7 +230,8 @@ export function DatePicker({
               );
             })}
           </div>
-        </div>
+        </div>,
+        document.body,
       ) : null}
     </div>
   );

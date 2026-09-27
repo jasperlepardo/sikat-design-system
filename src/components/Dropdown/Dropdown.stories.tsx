@@ -5,7 +5,10 @@ import { Dropdown, DropdownItem } from './Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { Button } from '../Button/Button';
+import { IconButton } from '../Button/IconButton';
 import { Icon } from '../Icon/Icon';
+import { Select } from '../Field/Field';
+import { DatePicker } from '../Field/DatePicker';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 
 const OPTIONS = ['Apple', 'Banana', 'Cherry', 'Dragonfruit', 'Elderberry'];
@@ -259,6 +262,80 @@ function ButtonDropdown({ showScrollbar }: { showScrollbar: boolean }) {
     </div>
   );
 }
+
+/** Portaled dropdown inside a table — escapes overflow clipping. */
+function TableCellDropdown({ row }: { row: string }) {
+  const { open, toggle, rootRef, panelRef, anchor, side, hSide } = useDropdown<HTMLDivElement>();
+  const id = useId();
+  return (
+    <td style={{ padding: '8px 12px', textAlign: 'right' }}>
+      <div ref={rootRef} style={{ display: 'inline-flex' }}>
+        <IconButton label="Actions" intent="default" variant="ghost" size="small" onClick={toggle}
+          aria-haspopup="menu" aria-expanded={open} aria-controls={open ? id : undefined}>
+          <Icon size={20}>more_vert</Icon>
+        </IconButton>
+        {open && anchor ? (
+          <Dropdown ref={panelRef} id={id} role="menu" anchor={anchor} side={side} hSide={hSide} style={{ width: 160 }}>
+            <DropdownItem onSelect={() => alert(`Edit ${row}`)}>Edit</DropdownItem>
+            <DropdownItem onSelect={() => alert(`Duplicate ${row}`)}>Duplicate</DropdownItem>
+            <DropdownItem onSelect={() => alert(`Delete ${row}`)}>Delete</DropdownItem>
+          </Dropdown>
+        ) : null}
+      </div>
+    </td>
+  );
+}
+
+const STATUS_OPTIONS = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+  { value: 'pending', label: 'Pending' },
+];
+
+const ROWS = [
+  { name: 'Alpha Corp', status: 'active', date: '2026-01-15' },
+  { name: 'Beta Ltd', status: 'pending', date: '2026-03-22' },
+  { name: 'Gamma Inc', status: 'inactive', date: '2026-06-01' },
+];
+
+const th: React.CSSProperties = { padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: '#292524', fontSize: 13 };
+const td: React.CSSProperties = { padding: '8px 12px', verticalAlign: 'middle' };
+
+/** Portaled — Select, DatePicker, and action menu all escape the clipping table. */
+export const InTable: Story = {
+  render: () => (
+    <div style={{ overflow: 'hidden', border: '1px solid #e7e5e4', borderRadius: 8 }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
+        <thead>
+          <tr style={{ background: '#fafaf9', borderBottom: '1px solid #e7e5e4' }}>
+            <th style={th}>Name</th>
+            <th style={{ ...th, width: 180 }}>Status</th>
+            <th style={{ ...th, width: 200 }}>Date</th>
+            <th style={{ ...th, width: 48 }} />
+          </tr>
+        </thead>
+        <tbody>
+          {ROWS.map((row) => (
+            <tr key={row.name} style={{ borderBottom: '1px solid #e7e5e4' }}>
+              <td style={td}>{row.name}</td>
+              <td style={td}>
+                <Select
+                  size="md"
+                  defaultValue={row.status}
+                  options={STATUS_OPTIONS}
+                />
+              </td>
+              <td style={td}>
+                <DatePicker size="md" defaultValue={row.date} />
+              </td>
+              <TableCellDropdown row={row.name} />
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ),
+};
 
 export const PanelPlayground: StoryObj<{ showScrollbar: boolean }> = {
   name: 'Dropdown',

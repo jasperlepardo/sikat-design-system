@@ -72,7 +72,7 @@ export function Autocomplete({
   const [internal, setInternal] = useState(defaultValue);
   const text = isControlled ? value : internal;
 
-  const { open, setOpen, rootRef, side } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
 
   const items = useMemo(() => suggestions.map(norm), [suggestions]);
   const filtered = useMemo(() => {
@@ -104,7 +104,7 @@ export function Autocomplete({
   });
 
   return (
-    <div ref={rootRef} style={{ position: 'relative' }}>
+    <div ref={rootRef}>
       <FieldShell
         className={className}
         state={{ size, filled: text !== '', disabled, readOnly, invalid }}
@@ -136,8 +136,8 @@ export function Autocomplete({
           {...aria}
         />
       </FieldShell>
-      {showList ? (
-        <Dropdown id={listId} data-side={side}>
+      {showList && anchor ? (
+        <Dropdown ref={panelRef} id={listId} anchor={anchor} side={side} hSide={hSide}>
           {filtered.map((s, i) => (
             <DropdownItem
               key={s.value}

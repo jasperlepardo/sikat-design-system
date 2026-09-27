@@ -3,61 +3,91 @@ import { useEffect, useRef, useState, type RefObject } from 'react';
 /** Max-height of .sikat-dropdown in px — keep in sync with dropdown.css. */
 const DROPDOWN_MAX_HEIGHT = 256; // 16rem
 
+/** Viewport-relative position of the trigger element, captured at open time. */
+export interface DropdownAnchor {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  width: number;
+}
+
 /**
- * Open/close state for an in-flow dropdown/popover: closes on outside
- * pointer-down and on Escape. Attach `rootRef` to the element that wraps both
- * the trigger and the floating panel (so clicks inside either don't close it).
+ * Open/close state for a portaled dropdown/popover: closes on outside
+ * pointer-down and on Escape. Attach `rootRef` to the trigger container and
+ * `panelRef` to the portaled panel so outside-click detection works for both.
  *
- * Returns `side` — `"bottom"` (default) or `"top"` — computed at open time by
- * comparing viewport space above and below the trigger. Pass it as `data-side`
- * on the floating panel so CSS can flip the position.
+ * Returns `side` (`"bottom"` or `"top"`) and `hSide` (`"left"` or `"right"`) —
+ * both recomputed at open time and on scroll/resize so callers can portal-position
+ * the panel with `position: fixed`. Pass both to `<Dropdown anchor side hSide>`.
  */
 export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
   open: boolean;
   setOpen: (open: boolean) => void;
   toggle: () => void;
   rootRef: RefObject<T | null>;
+  panelRef: RefObject<HTMLDivElement | null>;
   side: 'top' | 'bottom';
+  hSide: 'left' | 'right';
+  anchor: DropdownAnchor | null;
 } {
   const [open, setOpenState] = useState(false);
   const [side, setSide] = useState<'top' | 'bottom'>('bottom');
+  const [hSide, setHSide] = useState<'left' | 'right'>('left');
+  const [anchor, setAnchor] = useState<DropdownAnchor | null>(null);
   const rootRef = useRef<T>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const openRef = useRef(false);
 
-  const computeSide = () => {
-    if (!rootRef.current) { setSide('bottom'); return; }
+  const computeAnchor = (): DropdownAnchor | null => {
+    if (!rootRef.current) { setSide('bottom'); setHSide('left'); return null; }
     const rect = rootRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     setSide(spaceBelow < DROPDOWN_MAX_HEIGHT && spaceAbove > spaceBelow ? 'top' : 'bottom');
+    setHSide(window.innerWidth - rect.right < rect.left ? 'right' : 'left');
+    return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width };
   };
 
   const setOpen = (value: boolean) => {
-    if (value) computeSide();
+    openRef.current = value;
+    setAnchor(value ? computeAnchor() : null);
     setOpenState(value);
   };
 
-  const toggle = () => {
-    setOpenState((prev) => {
-      if (!prev) computeSide();
-      return !prev;
-    });
-  };
+  const toggle = () => setOpen(!openRef.current);
 
   useEffect(() => {
     if (!open) return;
     const onPointerDown = (e: MouseEvent) => {
-      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpenState(false);
+      const target = e.target as Node;
+      const insideRoot = rootRef.current?.contains(target) ?? false;
+      const insidePanel = panelRef.current?.contains(target) ?? false;
+      if (!insideRoot && !insidePanel) setOpenState(false);
     };
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setOpenState(false);
     };
+    const onReposition = () => {
+      if (!rootRef.current) return;
+      const rect = rootRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const spaceAbove = rect.top;
+      setSide(spaceBelow < DROPDOWN_MAX_HEIGHT && spaceAbove > spaceBelow ? 'top' : 'bottom');
+      setHSide(window.innerWidth - rect.right < rect.left ? 'right' : 'left');
+      setAnchor({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width });
+    };
     document.addEventListener('mousedown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
+    window.addEventListener('scroll', onReposition, { passive: true, capture: true });
+    window.addEventListener('resize', onReposition, { passive: true });
     return () => {
       document.removeEventListener('mousedown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('scroll', onReposition, { capture: true });
+      window.removeEventListener('resize', onReposition);
     };
   }, [open]);
 
-  return { open, setOpen, toggle, rootRef, side };
+  return { open, setOpen, toggle, rootRef, panelRef, side, hSide, anchor };
 }

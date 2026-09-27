@@ -1,0 +1,127 @@
+/* DatePicker — trigger + calendar popup panel. */
+
+/* Trigger — same interactive cursor as Select, not the default/text cursor of
+   a read-only field. The input is readOnly in HTML but the shell is a clickable trigger. */
+.sikat-datepicker__trigger {
+  cursor: pointer;
+}
+.sikat-datepicker__trigger .sikat-field__input {
+  cursor: pointer;
+}
+
+.sikat-datepicker__panel {
+  background-color: var(--color-bg-default);
+  border: var(--border-width-1) solid var(--color-border-neutral-subtle);
+  border-radius: var(--rounded-lg);
+  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+  overflow-y: auto;
+  padding: var(--spacing-3);
+  width: fit-content;
+}
+
+/* ---------------------------------------------------------------- Header */
+
+.sikat-datepicker__header {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-2);
+  justify-content: space-between;
+  margin-bottom: var(--spacing-2);
+}
+
+.sikat-datepicker__nav {
+  align-items: center;
+  background: none;
+  border: none;
+  border-radius: var(--rounded-md);
+  color: var(--color-text-body);
+  cursor: pointer;
+  display: flex;
+  flex: none;
+  height: 32px;
+  justify-content: center;
+  padding: 0;
+  width: 32px;
+}
+
+.sikat-datepicker__nav:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.sikat-datepicker__month-label {
+  color: var(--color-text-heading);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-semibold);
+  line-height: var(--text-body-sm-line-height);
+}
+
+/* ---------------------------------------------------------------- Weekday row */
+
+.sikat-datepicker__weekdays {
+  display: grid;
+  gap: var(--spacing-1);
+  grid-template-columns: repeat(7, 36px);
+  margin-bottom: var(--spacing-1);
+  text-align: center;
+}
+
+.sikat-datepicker__weekday {
+  color: var(--color-text-muted);
+  font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-xs-font-size);
+  font-weight: var(--text-medium);
+  line-height: var(--text-body-xs-line-height);
+}
+
+/* ---------------------------------------------------------------- Day grid */
+
+.sikat-datepicker__grid {
+  display: grid;
+  gap: var(--spacing-1);
+  grid-template-columns: repeat(7, 36px);
+}
+
+.sikat-datepicker__day {
+  align-items: center;
+  background: none;
+  border: var(--border-width-1) solid transparent;
+  border-radius: var(--rounded-md);
+  color: var(--color-text-body);
+  cursor: pointer;
+  display: flex;
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-medium);
+  height: 36px;
+  justify-content: center;
+  line-height: var(--text-body-sm-line-height);
+  outline: none;
+  padding: 0;
+  width: 36px;
+}
+
+.sikat-datepicker__day:hover:not([aria-selected='true']) {
+  background-color: var(--color-bg-secondary);
+}
+
+.sikat-datepicker__day:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-border-primary);
+}
+
+/* Out-of-month days */
+.sikat-datepicker__day--outside {
+  color: var(--color-text-muted);
+}
+
+/* Today indicator */
+.sikat-datepicker__day--today:not([aria-selected='true']) {
+  border-color: var(--color-border-neutral-subtle);
+}
+
+/* Selected day */
+.sikat-datepicker__day[aria-selected='true'] {
+  background-color: var(--color-bg-primary);
+  color: var(--color-bg-white);
+  font-weight: var(--text-semibold);
+}

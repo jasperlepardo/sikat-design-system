@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { useEffect, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Panel } from '../Panel/Panel';
 import './side-panel.css';
@@ -8,8 +8,9 @@ import './side-panel.css';
 export interface SidePanelProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Renders a semi-transparent backdrop and fixes the panel to the right edge
-   * of the viewport. Use `onOverlayClick` to close on backdrop click.
-   * Control width via the `--sikat-side-panel-width` CSS custom property.
+   * of the viewport. Locks body scroll while open.
+   * Control width via `--sikat-side-panel-width` and nav offset via
+   * `--sikat-nav-height` (default: 64px).
    */
   overlay?: boolean;
   /** Called when the backdrop is clicked. */
@@ -19,8 +20,9 @@ export interface SidePanelProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * SidePanel — overlay/positioning wrapper for a right-edge drawer.
- * Handles backdrop and fixed positioning only; compose `Panel`, `PanelHeader`,
- * `Panel.Body`, `Panel.Sidebar`, `Panel.Main`, and `Panel.Summary` inside.
+ * Handles backdrop, scroll lock, and fixed positioning only; compose `Panel`,
+ * `PanelHeader`, `Panel.Body`, `Panel.Sidebar`, `Panel.Main`, and
+ * `Panel.Summary` inside.
  */
 export function SidePanel({
   overlay,
@@ -29,6 +31,13 @@ export function SidePanel({
   children,
   ...rest
 }: SidePanelProps) {
+  useEffect(() => {
+    if (!overlay) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [overlay]);
+
   return (
     <>
       {overlay ? (

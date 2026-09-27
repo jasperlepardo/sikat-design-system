@@ -29,6 +29,17 @@
   margin-bottom: var(--spacing-1);
 }
 
+/* Portaled (fixed) mode — coordinates set by inline style; clear absolute offsets. */
+.sikat-dropdown--fixed {
+  position: fixed;
+  left: unset;
+  top: unset;
+  bottom: unset;
+  margin-top: 0;
+  margin-bottom: 0;
+  z-index: 1000;
+}
+
 /* Dropdown Item: [icon][prefix] label [suffix][icon], 36px row. */
 .sikat-dropdown__item {
   display: flex;
