@@ -69,7 +69,7 @@ export function Combobox({
   const [internal, setInternal] = useState<string | null>(defaultValue);
   const selected = isControlled ? value : internal;
 
-  const { open, setOpen, rootRef } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, rootRef, side } = useDropdown<HTMLDivElement>();
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -143,7 +143,7 @@ export function Combobox({
         />
       </FieldShell>
       {open ? (
-        <Dropdown id={listId}>
+        <Dropdown id={listId} data-side={side}>
           {filtered.length === 0 ? (
             <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
               No results

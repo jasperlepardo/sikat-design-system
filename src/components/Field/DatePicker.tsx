@@ -60,7 +60,7 @@ export function DatePicker({
   const [internal, setInternal] = useState<string>(defaultValue ?? '');
   const selectedIso = (isControlled ? (value ?? '') : internal) || '';
 
-  const { open, setOpen, toggle, rootRef } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, toggle, rootRef, side } = useDropdown<HTMLDivElement>();
   const gridRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -157,7 +157,7 @@ export function DatePicker({
         <div
           role="dialog"
           aria-label="Choose date"
-          className="absolute z-20 mt-1 rounded-md border border-default bg-default p-3 shadow-lg"
+          className={`absolute z-20 rounded-md border border-default bg-default p-3 shadow-lg ${side === 'top' ? 'bottom-full mb-1' : 'mt-1'}`}
         >
           <div className="mb-2 flex items-center justify-between gap-2">
             <button

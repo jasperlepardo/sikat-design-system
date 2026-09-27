@@ -416,7 +416,7 @@ export function Select({
   const selectedIndex = options.findIndex((o) => o.value === selected);
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : null;
 
-  const { open, setOpen, rootRef } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, rootRef, side } = useDropdown<HTMLDivElement>();
   const interactive = !disabled && !readOnly;
 
   const selectAt = (i: number) => {
@@ -477,7 +477,7 @@ export function Select({
       </FieldShell>
       {name != null ? <input type="hidden" name={name} value={selected} /> : null}
       {open ? (
-        <Dropdown id={listId}>
+        <Dropdown id={listId} data-side={side}>
           {options.map((o, i) => (
             <DropdownItem
               key={o.value}

@@ -64,7 +64,7 @@ export function MultiSelect({
   const [internal, setInternal] = useState<string[]>(defaultValue);
   const selected = isControlled ? value : internal;
 
-  const { open, setOpen, rootRef } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, rootRef, side } = useDropdown<HTMLDivElement>();
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -173,7 +173,7 @@ export function MultiSelect({
         </span>
       </FieldShell>
       {open ? (
-        <Dropdown id={listId} multiselectable>
+        <Dropdown id={listId} multiselectable data-side={side}>
           {filtered.length === 0 ? (
             <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>No results</div>
           ) : (

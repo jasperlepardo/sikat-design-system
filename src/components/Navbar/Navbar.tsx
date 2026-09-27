@@ -117,7 +117,7 @@ function NavbarMenu({
   const baseId = useId();
   const listId = `${baseId}-menu`;
   const getItemId = (i: number) => `${baseId}-item-${i}`;
-  const { open, setOpen, toggle, rootRef } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, toggle, rootRef, side } = useDropdown<HTMLDivElement>();
   const choose = (i: number) => {
     const item = items[i];
     if (!item || item.disabled) return;
@@ -149,7 +149,7 @@ function NavbarMenu({
       })}
       {open ? (
         // The page's (light) theme, as the Figma Dropdown — not the navbar's dark.
-        <Dropdown id={listId} aria-label={label} data-theme="light">
+        <Dropdown id={listId} aria-label={label} data-theme="light" data-side={side}>
           {items.map((item, i) => (
             <DropdownItem
               key={item.id}
