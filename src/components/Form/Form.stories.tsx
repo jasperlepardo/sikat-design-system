@@ -58,12 +58,13 @@ export const Composed: Story = {
   ),
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    const body = within(document.body);
     await userEvent.type(canvas.getByLabelText('Full name'), 'Ada Lovelace');
     await userEvent.type(canvas.getByLabelText('Email'), 'ada@example.com');
     const country = canvas.getByLabelText('Country');
     await expect(country).toHaveTextContent('Philippines');
     await userEvent.click(country);
-    await userEvent.click(canvas.getByRole('option', { name: 'Singapore' }));
+    await userEvent.click(body.getByRole('option', { name: 'Singapore' }));
     await expect(country).toHaveTextContent('Singapore');
 
     // Cancel is type="button" and must not submit.

@@ -221,9 +221,10 @@ export const SelectPlayground: StoryObj<FigmaAdornmentArgs & { Type: 'select' }>
     await expect(hidden.value).toBe('');
 
     // Opens the Figma Dropdown; arrows + Enter choose and close, focus returns.
+    const body = within(document.body);
     await userEvent.click(trigger);
-    await expect(canvas.getByRole('listbox')).toHaveClass('sikat-dropdown');
-    await expect(canvas.getAllByRole('option')).toHaveLength(3);
+    await expect(body.getByRole('listbox')).toHaveClass('sikat-dropdown');
+    await expect(body.getAllByRole('option')).toHaveLength(3);
     await userEvent.keyboard('{ArrowDown}{Enter}');
     await expect(trigger).toHaveTextContent('Option B');
     await expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -232,16 +233,16 @@ export const SelectPlayground: StoryObj<FigmaAdornmentArgs & { Type: 'select' }>
 
     // Type-ahead on the closed trigger opens on the match; click an option.
     await userEvent.keyboard('b');
-    await expect(canvas.getByRole('option', { name: 'Banana' })).toHaveAttribute(
+    await expect(body.getByRole('option', { name: 'Banana' })).toHaveAttribute(
       'data-active',
       'true',
     );
-    await userEvent.click(canvas.getByRole('option', { name: 'Option A' }));
+    await userEvent.click(body.getByRole('option', { name: 'Option A' }));
     await expect(trigger).toHaveTextContent('Option A');
 
     // Reopening marks the selection; Escape closes without changing it.
     await userEvent.click(trigger);
-    await expect(canvas.getByRole('option', { name: 'Option A' })).toHaveAttribute(
+    await expect(body.getByRole('option', { name: 'Option A' })).toHaveAttribute(
       'aria-selected',
       'true',
     );

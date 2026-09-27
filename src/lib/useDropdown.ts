@@ -66,7 +66,7 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
       if (!insideRoot && !insidePanel) setOpenState(false);
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpenState(false);
+      if (e.key === 'Escape') { openRef.current = false; setOpenState(false); }
     };
     const onReposition = () => {
       if (!rootRef.current) return;
