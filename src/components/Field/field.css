@@ -94,6 +94,10 @@
   white-space: nowrap;
 }
 
+/* Combobox: full-width wrapper (mirrors .sikat-select). */
+.sikat-combobox {
+  width: 100%;
+}
 /* Select: the field box is the trigger (a combobox button) and opens the Figma
    Dropdown underneath; chevron-down trails. `.sikat-select` is the positioned
    root the Dropdown (top: 100%) anchors to. */

@@ -1,4 +1,5 @@
 import { useId, useMemo, useState, type ReactNode } from 'react';
+import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { FieldShell, type FieldSize } from './Field';
@@ -103,9 +104,8 @@ export function Combobox({
   });
 
   return (
-    <div ref={rootRef}>
+    <div ref={rootRef} className={cn('sikat-combobox', className)}>
       <FieldShell
-        className={className}
         state={{ size, filled: selectedOption != null, disabled, readOnly, invalid }}
         adornments={{}}
         after={ChevronIcon}
