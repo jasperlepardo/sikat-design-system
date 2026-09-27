@@ -33,6 +33,15 @@ export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Car
 export { Panel } from './components/Panel/Panel';
 export type { PanelProps, PanelSlotProps } from './components/Panel/Panel';
 
+export { SidePanel } from './components/SidePanel/SidePanel';
+export type {
+  SidePanelProps,
+  SidePanelHeaderProps,
+  SidePanelBodyProps,
+  SidePanelSlotProps,
+  SidePanelSummaryProps,
+} from './components/SidePanel/SidePanel';
+
 
 export { Alert, alertIntents, alertStyles } from './components/Alert/Alert';
 export type {

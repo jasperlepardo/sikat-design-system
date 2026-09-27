@@ -1,0 +1,182 @@
+/* SidePanel — right-edge drawer (Figma nodes 18266:113403, 18259:112874).
+   White outer shell with left-only rounded corners (--rounded-2xl on TL + BL),
+   a neutral-subtle border, and a drop shadow. Inner container provides the white
+   bg, soft inner shadow, and hosts the flex-col layout.
+
+   Two body variants:
+   - default          → single scrollable column (header / body / tab-bar)
+   - [data-layout=columns] → sidebar + main side by side (header / sidebar|main / tab-bar) */
+
+/* ---------------------------------------------------------------- Root */
+
+.sikat-side-panel {
+  background-color: var(--color-bg-white);
+  border: var(--border-width-1) solid var(--color-border-neutral-subtle);
+  border-radius: var(--rounded-2xl) 0 0 var(--rounded-2xl);
+  box-shadow: 0 4px 4.5px 0 rgb(0 0 0 / 0.12);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: var(--spacing-1);
+  width: 100%;
+}
+
+.sikat-side-panel__inner {
+  background-color: var(--color-bg-default);
+  border-radius: var(--rounded-xl);
+  box-shadow: 0 0 9.5px 0 rgb(0 0 0 / 0.12);
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  padding: var(--spacing-1);
+}
+
+/* Header ------------------------------------------------------------------- */
+
+.sikat-side-panel__header {
+  background-color: var(--color-bg-secondary);
+  border-bottom: var(--border-width-1) solid var(--color-border-neutral-subtle);
+  border-radius: var(--rounded-lg);
+  flex: none;
+  padding: var(--spacing-3_5);
+  width: 100%;
+}
+
+.sikat-side-panel__header-bar {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-2_5);
+  justify-content: space-between;
+}
+
+.sikat-side-panel__header-start {
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.sikat-side-panel__header-leading {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: var(--spacing-3);
+}
+
+.sikat-side-panel__header-title {
+  color: var(--color-text-body);
+  font-family: var(--text-body-lg-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-lg-font-size);
+  font-weight: var(--text-medium);
+  letter-spacing: var(--text-body-lg-letter-spacing);
+  line-height: var(--text-body-lg-line-height);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.sikat-side-panel__header-actions {
+  align-items: center;
+  display: flex;
+  flex: none;
+  gap: var(--spacing-1);
+}
+
+/* Body — single-column (default) ------------------------------------------- */
+
+.sikat-side-panel__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-4);
+}
+
+/* Body — two-column variant ------------------------------------------------- */
+
+.sikat-side-panel__body[data-layout="columns"] {
+  flex-direction: row;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+/* Sidebar ------------------------------------------------------------------- */
+
+.sikat-side-panel__sidebar {
+  border-right: var(--border-width-1) solid var(--color-border-neutral-subtle);
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-3);
+  width: 340px;
+}
+
+/* Main ---------------------------------------------------------------------- */
+
+.sikat-side-panel__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-height: 0;
+  min-width: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-3);
+}
+
+/* Tab bar ------------------------------------------------------------------- */
+
+.sikat-side-panel__tab-bar {
+  flex: none;
+  width: 100%;
+}
+
+/* Summary ------------------------------------------------------------------- */
+
+.sikat-side-panel__summary {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-3);
+  padding: var(--spacing-1) 0;
+}
+
+.sikat-side-panel__summary-text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-0_5);
+  min-width: 0;
+}
+
+.sikat-side-panel__summary-name {
+  color: var(--color-text-heading);
+  font-family: var(--text-body-lg-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-lg-font-size);
+  font-weight: var(--text-semibold);
+  line-height: var(--text-body-lg-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sikat-side-panel__summary-code {
+  color: var(--color-text-caption);
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-medium);
+  line-height: var(--text-body-sm-line-height);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
