@@ -1,13 +1,21 @@
-/* SidePanel — right-edge drawer (Figma nodes 18266:113403, 18259:112874).
-   White outer shell with left-only rounded corners (--rounded-2xl on TL + BL),
-   a neutral-subtle border, and a drop shadow. Inner container provides the white
-   bg, soft inner shadow, and hosts the flex-col layout.
+/* SidePanel — right-edge drawer (Figma node 18249:110237).
+   Outer shell handles positioning and the optional backdrop overlay.
+   Inner container uses <Panel> for the white box, shadow, and flex-col layout.
 
-   Two body variants:
-   - default          → single scrollable column (header / body / tab-bar)
-   - [data-layout=columns] → sidebar + main side by side (header / sidebar|main / tab-bar) */
+   Body variants:
+   - default              → single scrollable column
+   - [data-layout=columns] → sidebar + main side by side */
 
-/* ---------------------------------------------------------------- Root */
+/* ---------------------------------------------------------------- Backdrop */
+
+.sikat-side-panel__backdrop {
+  background-color: rgb(0 0 0 / 0.4);
+  inset: 0;
+  position: fixed;
+  z-index: 40;
+}
+
+/* ---------------------------------------------------------------- Outer shell */
 
 .sikat-side-panel {
   background-color: var(--color-bg-white);
@@ -21,19 +29,29 @@
   width: 100%;
 }
 
-.sikat-side-panel__inner {
-  background-color: var(--color-bg-default);
-  border-radius: var(--rounded-xl);
-  box-shadow: 0 0 9.5px 0 rgb(0 0 0 / 0.12);
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-  padding: var(--spacing-1);
+/* Overlay mode — fixed to the right edge of the viewport */
+.sikat-side-panel--overlay {
+  bottom: 0;
+  height: 100dvh;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: var(--sikat-side-panel-width, 640px);
+  z-index: 50;
 }
 
-/* Header ------------------------------------------------------------------- */
+/* ---------------------------------------------------------------- Inner (Panel override) */
+
+/* Panel provides the white box. Override border-radius and shadow
+   to match the side-drawer context. */
+.sikat-side-panel .sikat-panel {
+  border-radius: var(--rounded-xl);
+  box-shadow: 0 0 9.5px 0 rgb(0 0 0 / 0.12);
+  flex: 1;
+  min-height: 0;
+}
+
+/* ---------------------------------------------------------------- Header */
 
 .sikat-side-panel__header {
   background-color: var(--color-bg-secondary);
@@ -84,20 +102,29 @@
   gap: var(--spacing-1);
 }
 
-/* Body — single-column (default) ------------------------------------------- */
+/* ---------------------------------------------------------------- Tab bar */
+
+/* Place <SidePanel.Tabs> between <SidePanel.Header> and <SidePanel.Body>
+   so it renders at the top of the panel content. */
+.sikat-side-panel__tab-bar {
+  flex: none;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------- Body — single column */
 
 .sikat-side-panel__body {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: var(--spacing-4);
+  gap: var(--spacing-3);
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
-  padding: var(--spacing-4);
+  padding: var(--spacing-3);
 }
 
-/* Body — two-column variant ------------------------------------------------- */
+/* ---------------------------------------------------------------- Body — two-column */
 
 .sikat-side-panel__body[data-layout="columns"] {
   flex-direction: row;
@@ -106,7 +133,7 @@
   padding: 0;
 }
 
-/* Sidebar ------------------------------------------------------------------- */
+/* ---------------------------------------------------------------- Sidebar */
 
 .sikat-side-panel__sidebar {
   border-right: var(--border-width-1) solid var(--color-border-neutral-subtle);
@@ -118,10 +145,10 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding: var(--spacing-3);
-  width: 340px;
+  width: 300px;
 }
 
-/* Main ---------------------------------------------------------------------- */
+/* ---------------------------------------------------------------- Main */
 
 .sikat-side-panel__main {
   display: flex;
@@ -135,14 +162,7 @@
   padding: var(--spacing-3);
 }
 
-/* Tab bar ------------------------------------------------------------------- */
-
-.sikat-side-panel__tab-bar {
-  flex: none;
-  width: 100%;
-}
-
-/* Summary ------------------------------------------------------------------- */
+/* ---------------------------------------------------------------- Summary */
 
 .sikat-side-panel__summary {
   align-items: center;

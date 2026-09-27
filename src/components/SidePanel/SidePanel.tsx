@@ -1,29 +1,59 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import { Panel } from '../Panel/Panel';
 import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/DecorativeIcon';
 import './side-panel.css';
 
 /* ---------------------------------------------------------------- SidePanel */
 
 export interface SidePanelProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * Renders a semi-transparent backdrop behind the panel and fixes the panel
+   * to the right edge of the viewport. Use `onOverlayClick` to close on click.
+   */
+  overlay?: boolean;
+  /** Called when the backdrop is clicked (typically closes the panel). */
+  onOverlayClick?: () => void;
   children?: ReactNode;
 }
 
 /**
- * SidePanel — right-edge drawer/modal (Figma nodes 18266:113403, 18259:112874).
- * White outer shell with left-only rounded corners, border, and drop shadow.
+ * SidePanel — right-edge drawer/modal (Figma node 18249:110237).
+ * The outer shell handles positioning and an optional backdrop overlay.
+ * The inner container uses `<Panel>` for the white box, shadow, and layout.
  *
- * Two layout variants via `SidePanel.Body`:
- * - **Single column** (default) — header / scrollable body / optional tab bar.
- * - **Two columns** (`<SidePanel.Body columns>`) — header / sidebar + main / optional tab bar.
+ * Two body layouts via `SidePanel.Body`:
+ * - **Single column** (default) — scrollable body with 16px padding.
+ * - **Two columns** (`<SidePanel.Body columns>`) — fixed sidebar + flex main.
  *
- * Compound slots: `Header` · `Body` · `Tabs` · `Sidebar` · `Main` · `Summary`
+ * Tab bar goes **above** the body — place `<SidePanel.Tabs>` between
+ * `<SidePanel.Header>` and `<SidePanel.Body>`.
+ *
+ * Compound slots: `Header` · `Tabs` · `Body` · `Sidebar` · `Main` · `Summary`
  */
-export function SidePanel({ className, children, ...rest }: SidePanelProps) {
+export function SidePanel({
+  overlay,
+  onOverlayClick,
+  className,
+  children,
+  ...rest
+}: SidePanelProps) {
   return (
-    <div className={cn('sikat-side-panel', className)} {...rest}>
-      <div className="sikat-side-panel__inner">{children}</div>
-    </div>
+    <>
+      {overlay ? (
+        <div
+          className="sikat-side-panel__backdrop"
+          onClick={onOverlayClick}
+          aria-hidden="true"
+        />
+      ) : null}
+      <div
+        className={cn('sikat-side-panel', overlay && 'sikat-side-panel--overlay', className)}
+        {...rest}
+      >
+        <Panel className="sikat-side-panel__panel">{children}</Panel>
+      </div>
+    </>
   );
 }
 
@@ -59,12 +89,30 @@ function SidePanelHeader({ leading, title, actions, className, ...rest }: SidePa
   );
 }
 
+/* --------------------------------------------------------- SidePanel.Tabs */
+
+export interface SidePanelSlotProps extends HTMLAttributes<HTMLDivElement> {
+  children?: ReactNode;
+}
+
+/**
+ * Tab bar slot — place this **between** `SidePanel.Header` and `SidePanel.Body`
+ * so tabs appear at the top of the panel content.
+ */
+function SidePanelTabs({ className, children, ...rest }: SidePanelSlotProps) {
+  return (
+    <div className={cn('sikat-side-panel__tab-bar', className)} {...rest}>
+      {children}
+    </div>
+  );
+}
+
 /* --------------------------------------------------------- SidePanel.Body */
 
 export interface SidePanelBodyProps extends HTMLAttributes<HTMLDivElement> {
   /**
-   * Two-column layout: places `SidePanel.Sidebar` and `SidePanel.Main` side by
-   * side instead of stacking content in a single scrollable column.
+   * Two-column layout: places `SidePanel.Sidebar` and `SidePanel.Main`
+   * side by side instead of a single scrollable column.
    */
   columns?: boolean;
   children?: ReactNode;
@@ -72,7 +120,7 @@ export interface SidePanelBodyProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * Scrollable content area. Default: single column with 16px padding and gap.
- * Pass `columns` to switch to a sidebar + main two-column layout.
+ * Pass `columns` for the sidebar + main two-column layout.
  */
 function SidePanelBody({ columns, className, children, ...rest }: SidePanelBodyProps) {
   return (
@@ -81,21 +129,6 @@ function SidePanelBody({ columns, className, children, ...rest }: SidePanelBodyP
       data-layout={columns ? 'columns' : undefined}
       {...rest}
     >
-      {children}
-    </div>
-  );
-}
-
-/* --------------------------------------------------------- SidePanel.Tabs */
-
-export interface SidePanelSlotProps extends HTMLAttributes<HTMLDivElement> {
-  children?: ReactNode;
-}
-
-/** Bottom tab bar — pinned below the body, never scrolls. */
-function SidePanelTabs({ className, children, ...rest }: SidePanelSlotProps) {
-  return (
-    <div className={cn('sikat-side-panel__tab-bar', className)} {...rest}>
       {children}
     </div>
   );
@@ -139,7 +172,7 @@ export interface SidePanelSummaryProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Entity identity block — typically the first child of `SidePanel.Sidebar`.
+ * Entity identity block for the top of `SidePanel.Sidebar`.
  * Shows a DecorativeIcon, the entity name, and a muted code/subtitle.
  */
 function SidePanelSummary({
@@ -169,8 +202,8 @@ function SidePanelSummary({
 /* ----------------------------------------------------------------- Attach */
 
 SidePanel.Header = SidePanelHeader;
-SidePanel.Body = SidePanelBody;
 SidePanel.Tabs = SidePanelTabs;
+SidePanel.Body = SidePanelBody;
 SidePanel.Sidebar = SidePanelSidebar;
 SidePanel.Main = SidePanelMain;
 SidePanel.Summary = SidePanelSummary;
