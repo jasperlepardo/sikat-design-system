@@ -62,6 +62,9 @@ export type {
   IconButtonSize,
 } from './components/Button/IconButton';
 
+export { Tooltip, tooltipPositions, tooltipAligns } from './components/Tooltip/Tooltip';
+export type { TooltipProps, TooltipPosition, TooltipAlign } from './components/Tooltip/Tooltip';
+
 export { Divider } from './components/Divider/Divider';
 export type { DividerProps } from './components/Divider/Divider';
 

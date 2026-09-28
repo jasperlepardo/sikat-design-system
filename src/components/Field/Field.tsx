@@ -14,6 +14,7 @@ import {
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
+import { Tooltip } from '../Tooltip/Tooltip';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
@@ -184,15 +185,37 @@ export function TextField({
 
 export interface FormLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
   required?: boolean;
+  /** Muted secondary text after the label (Figma "Sub Label"), e.g. "(optional)". */
+  subLabel?: ReactNode;
+  /** Info tooltip message (Figma "Show Tooltip") — adds an info-circle trigger after the label. */
+  tooltip?: ReactNode;
   children?: ReactNode;
 }
 
-export function FormLabel({ required, className, children, ...rest }: FormLabelProps) {
-  return (
+export function FormLabel({
+  required,
+  subLabel,
+  tooltip,
+  className,
+  children,
+  ...rest
+}: FormLabelProps) {
+  const label = (
     <label className={cn('sikat-field__label', className)} {...rest}>
       {children}
       {required ? <span className="sikat-field__required"> *</span> : null}
+      {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
     </label>
+  );
+  // The trigger sits beside the <label>, not inside it, so its name doesn't
+  // leak into the control's accessible name.
+  return tooltip != null ? (
+    <div className="sikat-field__label-row">
+      {label}
+      <Tooltip message={tooltip} />
+    </div>
+  ) : (
+    label
   );
 }
 
@@ -205,6 +228,10 @@ export interface FormFieldProps {
    */
   orientation?: 'horizontal' | 'vertical';
   label?: ReactNode;
+  /** Muted text after the label (Figma "Sub Label"), e.g. "(optional)". */
+  subLabel?: ReactNode;
+  /** Info tooltip message shown from an info-circle after the label. */
+  tooltip?: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
   required?: boolean;
@@ -230,6 +257,8 @@ export interface FormFieldProps {
 export function FormField({
   orientation = 'horizontal',
   label,
+  subLabel,
+  tooltip,
   hint,
   error,
   required,
@@ -244,7 +273,7 @@ export function FormField({
   return (
     <div className={cn('sikat-field-group', className)} data-orientation={orientation}>
       {label ? (
-        <FormLabel htmlFor={id} required={required}>
+        <FormLabel htmlFor={id} required={required} subLabel={subLabel} tooltip={tooltip}>
           {label}
         </FormLabel>
       ) : null}
