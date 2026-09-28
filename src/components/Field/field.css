@@ -219,7 +219,7 @@
   align-items: flex-start;
   gap: var(--spacing-4);
 }
-.sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
+.sikat-field-group[data-orientation='vertical'] > :is(.sikat-field__label, .sikat-field__label-row) {
   display: flex;
   flex: none;
   align-items: center;
@@ -248,6 +248,23 @@
 }
 .sikat-field__required {
   color: var(--color-text-danger);
+}
+/* Figma Form Label with Show Tooltip: label then info trigger, 4px apart. */
+.sikat-field__label-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.sikat-field__label-row > .sikat-field__label {
+  padding-inline-end: 0;
+}
+/* Figma Form Label › Sub Label: body/xs regular, muted, 4px after the label. */
+.sikat-field__sublabel {
+  margin-inline-start: var(--spacing-1);
+  font-size: var(--text-body-xs-font-size); /* 12px */
+  line-height: var(--text-body-xs-line-height); /* 16px */
+  font-weight: var(--text-regular);
+  color: var(--color-text-muted);
 }
 .sikat-field__hint,
 .sikat-field__error {

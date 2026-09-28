@@ -53,6 +53,10 @@ type FieldPlaygroundArgs = {
   showHelper: boolean;
   showLabel: boolean;
   helper: string;
+  showSubLabel: boolean;
+  subLabel: string;
+  showTooltip: boolean;
+  tooltip: string;
   Type: 'text-field' | 'textarea' | 'select' | 'multi-select';
   showDropdown: boolean;
   State: 'default' | 'hover' | 'error' | 'disabled' | 'read-only';
@@ -65,6 +69,10 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
     showHelper: true,
     showLabel: true,
     helper: 'Helper',
+    showSubLabel: false,
+    subLabel: 'Sub Label',
+    showTooltip: false,
+    tooltip: 'Message',
     Type: 'text-field',
     showDropdown: false,
     State: 'default',
@@ -75,6 +83,10 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
     showHelper: { name: 'Show Helper', control: 'boolean' },
     showLabel: { name: 'Show Label', control: 'boolean' },
     helper: { name: 'Helper', control: 'text' },
+    showSubLabel: { name: 'Show Sub Label', control: 'boolean' },
+    subLabel: { name: 'Sub Label', control: 'text', if: { arg: 'showSubLabel' } },
+    showTooltip: { name: 'Show Tooltip', control: 'boolean' },
+    tooltip: { name: 'Tooltip', control: 'text', if: { arg: 'showTooltip' } },
     Type: figmaSelect('Type', ['text-field', 'textarea', 'select', 'multi-select'] as const, [
       'Text Field',
       'Textarea',
@@ -99,6 +111,10 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
     'Show Helper',
     'Show Label',
     'Helper',
+    'Show Sub Label',
+    'Sub Label',
+    'Show Tooltip',
+    'Tooltip',
     'Type',
     'Show Dropdown',
     'State',
@@ -109,6 +125,10 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
     showHelper,
     showLabel,
     helper,
+    showSubLabel,
+    subLabel,
+    showTooltip,
+    tooltip,
     Type: type,
     showDropdown,
     State: state,
@@ -126,6 +146,8 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
         <FormField
           orientation={orientation}
           label={showLabel ? 'Label' : undefined}
+          subLabel={showSubLabel ? subLabel : undefined}
+          tooltip={showTooltip ? tooltip : undefined}
           hint={showHelper && state !== 'error' ? helper : undefined}
           error={showHelper && state === 'error' ? helper : undefined}
         >
@@ -302,6 +324,30 @@ export const WithLabelAndHint: Story = {
       </FormField>
     </div>
   ),
+};
+
+/** Figma Form Label with Show Sub Label + Show Tooltip. */
+export const WithSubLabel: Story = {
+  render: () => (
+    <div style={{ maxWidth: 360, paddingTop: 64 }}>
+      <FormField
+        label="Middle name"
+        subLabel="(optional)"
+        tooltip="As shown on your government ID."
+      >
+        {(props) => <TextField placeholder="Placeholder" {...props} />}
+      </FormField>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // The info trigger sits outside the <label>, so it doesn't leak into the input's name.
+    await expect(canvas.getByRole('textbox', { name: 'Middle name(optional)' })).toBeInTheDocument();
+    await expect(canvas.getByText('(optional)')).toBeVisible();
+
+    await userEvent.hover(canvas.getByRole('button', { name: 'More information' }));
+    await expect(canvas.getByRole('tooltip')).toHaveTextContent('As shown on your government ID.');
+  },
 };
 
 export const WithError: Story = {

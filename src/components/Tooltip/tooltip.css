@@ -1,0 +1,120 @@
+/* Tooltip — mirrors Figma Tooltip (node 10140:5533). A 16px Material Symbols
+   `info` trigger (fg-primary) and a 202px bg-secondary bubble (12px padding, rounded-sm,
+   body/xs medium heading text) with an 8px pointer centred on the trigger.
+   The bubble sits 8px off the trigger and overhangs its aligned edge by 8px. */
+
+.sikat-tooltip {
+  position: relative;
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.sikat-tooltip__trigger {
+  display: inline-flex;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rounded-full);
+  background: none;
+  color: var(--color-fg-primary);
+  cursor: pointer;
+}
+.sikat-tooltip__trigger:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+}
+
+.sikat-tooltip__bubble {
+  position: absolute;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 202px;
+  padding: var(--spacing-3); /* 12px */
+  border-radius: var(--rounded-sm);
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-heading);
+  font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-xs-font-size); /* 12px */
+  line-height: var(--text-body-xs-line-height); /* 16px */
+  letter-spacing: var(--text-body-xs-letter-spacing);
+  font-weight: var(--text-medium);
+  text-align: left;
+  white-space: normal;
+  /* Figma Shadow/Default (0 4 9 #0000001F) — no matching shadow token yet.
+     drop-shadow so the pointer is shadowed too. */
+  filter: drop-shadow(0 4px 4.5px rgb(0 0 0 / 0.12));
+}
+.sikat-tooltip__bubble[hidden] {
+  display: none;
+}
+
+/* Pointer: 16×8 triangle in the bubble's fill. */
+.sikat-tooltip__bubble::before {
+  content: '';
+  position: absolute;
+  background-color: inherit;
+}
+
+/* ── Position: top / bottom ── */
+.sikat-tooltip[data-position='top'] > .sikat-tooltip__bubble {
+  bottom: calc(100% + var(--spacing-2));
+}
+.sikat-tooltip[data-position='bottom'] > .sikat-tooltip__bubble {
+  top: calc(100% + var(--spacing-2));
+}
+.sikat-tooltip:is([data-position='top'], [data-position='bottom']) > .sikat-tooltip__bubble::before {
+  width: 16px;
+  height: var(--spacing-2);
+}
+.sikat-tooltip[data-position='top'] > .sikat-tooltip__bubble::before {
+  top: 100%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+.sikat-tooltip[data-position='bottom'] > .sikat-tooltip__bubble::before {
+  bottom: 100%;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='start'] > .sikat-tooltip__bubble {
+  left: calc(-1 * var(--spacing-2));
+}
+.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='start'] > .sikat-tooltip__bubble::before {
+  left: var(--spacing-2);
+}
+.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='end'] > .sikat-tooltip__bubble {
+  right: calc(-1 * var(--spacing-2));
+}
+.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='end'] > .sikat-tooltip__bubble::before {
+  right: var(--spacing-2);
+}
+
+/* ── Position: left / right ── */
+.sikat-tooltip[data-position='left'] > .sikat-tooltip__bubble {
+  right: calc(100% + var(--spacing-2));
+}
+.sikat-tooltip[data-position='right'] > .sikat-tooltip__bubble {
+  left: calc(100% + var(--spacing-2));
+}
+.sikat-tooltip:is([data-position='left'], [data-position='right']) > .sikat-tooltip__bubble::before {
+  width: var(--spacing-2);
+  height: 16px;
+}
+.sikat-tooltip[data-position='left'] > .sikat-tooltip__bubble::before {
+  left: 100%;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+.sikat-tooltip[data-position='right'] > .sikat-tooltip__bubble::before {
+  right: 100%;
+  clip-path: polygon(100% 0, 100% 100%, 0 50%);
+}
+.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='start'] > .sikat-tooltip__bubble {
+  top: calc(-1 * var(--spacing-2));
+}
+.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='start'] > .sikat-tooltip__bubble::before {
+  top: var(--spacing-2);
+}
+.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='end'] > .sikat-tooltip__bubble {
+  bottom: calc(-1 * var(--spacing-2));
+}
+.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='end'] > .sikat-tooltip__bubble::before {
+  bottom: var(--spacing-2);
+}
