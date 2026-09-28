@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import {
@@ -145,6 +146,27 @@ export const Matrix: Story = {
       ))}
     </div>
   ),
+};
+
+/** ToggleGroup — joined button set for mutually exclusive choices (e.g. Yes / No). */
+export const ToggleGroupStory: Story = {
+  name: 'Toggle Group',
+  render: () => {
+    const [value, setValue] = useState<string | null>('yes');
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <Button.ToggleGroup value={value} onValueChange={setValue}>
+          <Button.Toggle value="yes">Yes</Button.Toggle>
+          <Button.Toggle value="no">No</Button.Toggle>
+        </Button.ToggleGroup>
+        <Button.ToggleGroup defaultValue="monthly" intent="primary" size="small">
+          <Button.Toggle value="monthly">Monthly</Button.Toggle>
+          <Button.Toggle value="quarterly">Quarterly</Button.Toggle>
+          <Button.Toggle value="annually">Annually</Button.Toggle>
+        </Button.ToggleGroup>
+      </div>
+    );
+  },
 };
 
 /** Figma's six sizes (40/36/32/28/24/20px), with leading + trailing icons as in Figma. */

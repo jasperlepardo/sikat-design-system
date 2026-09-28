@@ -91,6 +91,30 @@
   width: 100%;
 }
 
+/* ------------------------------------------------------------ ToggleGroup */
+
+.sikat-toggle-group {
+  display: inline-flex;
+}
+.sikat-toggle {
+  border-radius: 0;
+  margin-inline-start: calc(var(--border-width-2) * -1);
+  position: relative;
+}
+.sikat-toggle:first-child {
+  border-radius: var(--btn-radius) 0 0 var(--btn-radius);
+  margin-inline-start: 0;
+}
+.sikat-toggle:last-child {
+  border-radius: 0 var(--btn-radius) var(--btn-radius) 0;
+}
+.sikat-toggle[aria-checked='true'] {
+  z-index: 1;
+}
+.sikat-toggle:focus-visible {
+  z-index: 2;
+}
+
 /* -------------------------------------------------------------------- Link */
 
 .sikat-link {

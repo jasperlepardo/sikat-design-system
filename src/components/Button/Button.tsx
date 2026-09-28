@@ -10,6 +10,7 @@ import {
 } from '../../tokens/generated/button.manifest';
 import '../../styles/components/button.css'; // generated colors + sizing vars
 import './button.css'; // structure
+import { ToggleGroup, Toggle } from './ButtonToggle';
 
 export { buttonIntents, buttonStyles, buttonSizes };
 export type { ButtonIntent, ButtonStyle, ButtonSize };
@@ -60,3 +61,6 @@ export function Button({
     </button>
   );
 }
+
+Button.ToggleGroup = ToggleGroup;
+Button.Toggle = Toggle;
