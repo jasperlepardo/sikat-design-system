@@ -62,7 +62,10 @@
 .sikat-dropdown__item[data-active='true'] {
   background-color: var(--color-bg-primary-subtle);
 }
-/* Selected = Figma isSelected=True: semibold label, no other change. */
+/* Selected = Figma isSelected=True: yellow-subtle bg + semibold label. */
+.sikat-dropdown__item[aria-selected='true'] {
+  background-color: var(--color-bg-primary-subtle);
+}
 .sikat-dropdown__item[aria-selected='true'] .sikat-dropdown__label {
   font-weight: var(--text-semibold);
 }

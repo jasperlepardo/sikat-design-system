@@ -157,8 +157,7 @@
 .sikat-field--wrap {
   height: auto;
   min-height: var(--field-h);
-  flex-wrap: wrap;
-  row-gap: var(--spacing-1);
+  align-items: flex-start;
   padding-block: var(--spacing-2); /* 8px */
 }
 .sikat-field__chips {

@@ -185,6 +185,7 @@ export function MultiSelect({
                 active={i === activeIndex}
                 disabled={o.disabled}
                 onSelect={() => toggleAt(i)}
+                trailingIcon={selected.includes(o.value) ? <Icon size={20}>check</Icon> : undefined}
               >
                 {o.label ?? optText(o)}
               </DropdownItem>
