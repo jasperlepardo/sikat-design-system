@@ -202,6 +202,8 @@ export type {
   ListProps,
   ListGroupProps,
   ListItemProps,
+  ListCardProps,
+  ListCardField,
   ListContentProps,
   ListSlotProps,
   ListSectionProps,

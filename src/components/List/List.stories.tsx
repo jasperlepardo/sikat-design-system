@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { List } from './List';
+import { expect, fn, userEvent, within } from 'storybook/test';
+import { List, type ListCardField } from './List';
 import { Badge } from '../Badge/Badge';
+import { Icon } from '../Icon/Icon';
+import { IconButton } from '../Button/IconButton';
+import pixGlyph from './assets/pix.svg';
 
 const meta = {
   title: 'Components/List',
@@ -44,4 +48,61 @@ export const Sectioned: Story = {
       </List>
     </div>
   ),
+};
+
+const addressFields: ListCardField[] = [
+  { label: 'Street', value: '8th Avenue, Unit 1204' },
+  { label: 'Building', value: 'Bonifacio One Technology Tower' },
+  { label: 'City', value: 'Taguig' },
+  { label: 'Region', value: ['Metro Manila', 'NCR'] },
+  { label: 'Postal', value: ['1634', 'Philippines'] },
+  { label: 'Country', value: ['Philippines', 'PH'] },
+];
+
+const onMore = fn();
+const onExpandedChange = fn();
+
+const cardProps = {
+  icon: <Icon size={16}>location_on</Icon>,
+  title: 'Manila HQ',
+  badge: <img src={pixGlyph} alt="" width={12} height={12} />,
+  fields: addressFields,
+  actions: (
+    <IconButton label="More actions" intent="default" variant="link" size="extra-small" onClick={onMore}>
+      <Icon size={20}>more_vert</Icon>
+    </IconButton>
+  ),
+};
+
+/** Figma "Table Card" (node 18214:56912) — expandable record cards. Click a card to expand/collapse. */
+export const Cards: Story = {
+  render: () => (
+    <div style={{ maxWidth: 433 }}>
+      <List.Group>
+        <List.Card {...cardProps} defaultExpanded onExpandedChange={onExpandedChange} />
+        <List.Card {...cardProps} />
+        <List.Card {...cardProps} />
+      </List.Group>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [first, second] = canvas.getAllByRole('button', { name: /Manila HQ/ });
+
+    await expect(first).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getAllByText('Street')).toHaveLength(1);
+
+    await userEvent.click(second);
+    await expect(second).toHaveAttribute('aria-expanded', 'true');
+    await expect(canvas.getAllByText('Street')).toHaveLength(2);
+
+    await userEvent.click(first);
+    await expect(first).toHaveAttribute('aria-expanded', 'false');
+    await expect(onExpandedChange).toHaveBeenLastCalledWith(false);
+
+    // Actions don't toggle the card.
+    await userEvent.click(canvas.getAllByRole('button', { name: 'More actions' })[1]);
+    await expect(onMore).toHaveBeenCalledOnce();
+    await expect(second).toHaveAttribute('aria-expanded', 'true');
+  },
 };

@@ -120,3 +120,149 @@
 .sikat-list__item[data-divider='false'] > .sikat-list__divider {
   display: none;
 }
+
+/* List.Card — expandable record row (Figma "Table Card", node 18214:56912).
+   bg-secondary card, 8px vertical padding; the left indicator darkens when
+   expanded. Collapsed cards tint to bg-tertiary on hover. The toggle's ::after
+   stretches over the whole card so the card is one click target, while
+   `actions` sit above it and stay independently clickable. */
+.sikat-list__card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  padding-block: var(--spacing-2);
+  border-radius: var(--rounded-lg);
+  background-color: var(--color-bg-secondary);
+  transition: background-color 120ms ease;
+}
+.sikat-list__card + .sikat-list__card {
+  margin-top: var(--spacing-2);
+}
+.sikat-list__card:not([data-expanded]):hover {
+  background-color: var(--color-bg-tertiary);
+}
+.sikat-list__card:has(.sikat-list__card-toggle:focus-visible) {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+}
+
+.sikat-list__card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+}
+.sikat-list__card-indicator {
+  flex: none;
+  align-self: stretch;
+  width: var(--spacing-2); /* 8px slot around a 4px bar */
+  background: linear-gradient(var(--color-fg-quarternary), var(--color-fg-quarternary)) left / var(--spacing-1) 100% no-repeat;
+  border-radius: 0 var(--rounded-full) var(--rounded-full) 0;
+}
+.sikat-list__card[data-expanded] .sikat-list__card-indicator {
+  background-image: linear-gradient(var(--color-fg-quarternary-solid), var(--color-fg-quarternary-solid));
+}
+
+.sikat-list__card-toggle {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sikat-list__card-toggle:focus-visible {
+  outline: none; /* ring drawn on the card */
+}
+.sikat-list__card-toggle::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.sikat-list__card-icon {
+  display: inline-flex;
+  flex: none;
+  padding: var(--spacing-1);
+  border: var(--border-width-1) solid var(--color-border-default);
+  border-radius: var(--rounded-md);
+  background-color: var(--color-bg-default);
+  color: var(--color-text-body);
+}
+.sikat-list__card-title {
+  overflow: hidden;
+  color: var(--color-text-body);
+  font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-semibold);
+  line-height: var(--text-body-sm-line-height);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sikat-list__card-badge {
+  display: inline-flex;
+  flex: none;
+  padding: var(--spacing-0_5);
+  border: var(--border-width-1) solid var(--color-border-white);
+  border-radius: var(--rounded-xl);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-white);
+}
+.sikat-list__card-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--spacing-1);
+  padding-right: var(--spacing-2);
+}
+
+/* Details: body/xs medium. Expanded = label/value rows; collapsed = inline muted values. */
+.sikat-list__card-fields,
+.sikat-list__card-summary {
+  margin: 0;
+  padding-inline: var(--spacing-2);
+  font-size: var(--text-body-xs-font-size);
+  font-weight: var(--text-medium);
+  line-height: var(--text-body-xs-line-height);
+}
+.sikat-list__card-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-0_5);
+}
+.sikat-list__card-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-3);
+}
+.sikat-list__card-label {
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+.sikat-list__card-fields .sikat-list__card-value {
+  margin: 0;
+  color: var(--color-text-body);
+  text-align: right;
+}
+.sikat-list__card-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-0_5);
+  color: var(--color-text-muted);
+}
+.sikat-list__card-value {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
