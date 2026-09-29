@@ -199,6 +199,30 @@
   font-size: 12px;
 }
 
+/* Clear (✕) for clearable Select / Combobox — sits before the chevron. */
+.sikat-field__clear {
+  display: flex;
+  flex: none;
+  width: 20px;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rounded-md);
+  background: none;
+  color: var(--color-fg-quarternary);
+  cursor: pointer;
+}
+.sikat-field__clear:hover {
+  color: var(--color-fg-secondary-solid);
+}
+.sikat-field__clear:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 1px;
+}
+
 /* ── Composed field: _Form Label + Fieldset (control + Helper) ── */
 .sikat-field-group {
   display: flex;

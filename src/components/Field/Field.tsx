@@ -117,6 +117,27 @@ const EditIcon = <Icon size={20}>edit</Icon>;
 
 export const ChevronDown = <Icon size={20}>expand_more</Icon>;
 
+/**
+ * FieldClear — the small ✕ that `clearable` Select / Combobox show while a value
+ * is set. Internal building block. Stops the click reaching the shell, so it
+ * clears without toggling the dropdown.
+ */
+export function FieldClear({ onClear, label = 'Clear selection' }: { onClear: () => void; label?: string }) {
+  return (
+    <button
+      type="button"
+      className="sikat-field__clear"
+      aria-label={label}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClear();
+      }}
+    >
+      <Icon size={16}>close</Icon>
+    </button>
+  );
+}
+
 /* ---------------------------------------------------------------- TextField */
 
 export interface TextFieldProps
@@ -359,6 +380,12 @@ export interface SelectProps extends FieldAdornments {
   onValueChange?: (value: string) => void;
   /** Shown when nothing is selected (defaults to an empty-valued option's text). */
   placeholder?: string;
+  /**
+   * Show a ✕ while a value is set; clicking it resets to none and calls
+   * `onValueChange('')`, so the `placeholder` shows again. Use for optional fields
+   * instead of a "None" option.
+   */
+  clearable?: boolean;
   /** Submitted with forms via a hidden input. */
   name?: string;
   size?: FieldSize;
@@ -410,6 +437,7 @@ export function Select({
   defaultValue,
   onValueChange,
   placeholder: placeholderProp,
+  clearable,
   name,
   size = 'md',
   invalid,
@@ -456,6 +484,12 @@ export function Select({
     setOpen(false);
     triggerRef.current?.focus();
   };
+  const clear = () => {
+    if (!isControlled) setInternal('');
+    onValueChange?.('');
+    setOpen(false);
+    triggerRef.current?.focus();
+  };
 
   const { activeIndex, onKeyDown, activeId } = useListbox({
     itemCount: options.length,
@@ -475,9 +509,12 @@ export function Select({
         state={{ size, filled: selectedOption != null, disabled, readOnly, invalid, dataState }}
         adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
         after={
-          <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
-            {ChevronDown}
-          </span>
+          <>
+            {clearable && interactive && selectedOption ? <FieldClear onClear={clear} /> : null}
+            <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
+              {ChevronDown}
+            </span>
+          </>
         }
         onClick={() => {
           if (!interactive) return;
