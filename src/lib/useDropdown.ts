@@ -77,14 +77,17 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
       setHSide(window.innerWidth - rect.right < rect.left ? 'right' : 'left');
       setAnchor({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width });
     };
-    const resizeObserver = new ResizeObserver(onReposition);
-    if (rootRef.current) resizeObserver.observe(rootRef.current);
+    // Guarded: ResizeObserver is missing in jsdom and some older/SSR environments;
+    // scroll + resize listeners still keep the panel positioned there.
+    const resizeObserver =
+      typeof ResizeObserver !== 'undefined' ? new ResizeObserver(onReposition) : undefined;
+    if (rootRef.current) resizeObserver?.observe(rootRef.current);
     document.addEventListener('mousedown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
     window.addEventListener('scroll', onReposition, { passive: true, capture: true });
     window.addEventListener('resize', onReposition, { passive: true });
     return () => {
-      resizeObserver.disconnect();
+      resizeObserver?.disconnect();
       document.removeEventListener('mousedown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
       window.removeEventListener('scroll', onReposition, { capture: true });

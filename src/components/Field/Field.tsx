@@ -540,7 +540,7 @@ export function Checkbox({ children, className, disabled, ...rest }: CheckboxPro
   return (
     <label
       className={cn(
-        'inline-flex items-center gap-2',
+        'inline-flex select-none items-center gap-2',
         disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         className,
       )}
@@ -563,7 +563,7 @@ export function Radio({ children, className, disabled, ...rest }: RadioProps) {
   return (
     <label
       className={cn(
-        'inline-flex items-center gap-2',
+        'inline-flex select-none items-center gap-2',
         disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
         className,
       )}
