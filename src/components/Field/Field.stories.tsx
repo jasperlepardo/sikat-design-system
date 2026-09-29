@@ -221,17 +221,20 @@ export const TextFieldPlayground: StoryObj<FigmaAdornmentArgs & { Type: 'text' }
 };
 
 /** Controls mirror the Figma Select component properties 1:1. */
-export const SelectPlayground: StoryObj<FigmaAdornmentArgs & { Type: 'select' }> = {
+export const SelectPlayground: StoryObj<
+  FigmaAdornmentArgs & { Type: 'select'; clearable: boolean }
+> = {
   name: 'Select',
-  args: { ...figmaAdornmentDefaults, Type: 'select' },
+  args: { ...figmaAdornmentDefaults, Type: 'select', clearable: false },
   argTypes: {
     ...figmaAdornmentArgTypes,
     Type: figmaSelect('Type', ['select'] as const, ['Select']),
+    clearable: { name: 'Clearable', control: 'boolean' },
   },
-  parameters: figmaControls([...figmaAdornmentNames, 'Type']),
-  render: (a) => (
+  parameters: figmaControls([...figmaAdornmentNames, 'Type', 'Clearable']),
+  render: ({ clearable, ...a }) => (
     <div style={{ width: 480 }}>
-      <Select aria-label="Select" name="choice" defaultValue="" {...adorn(a)}>
+      <Select aria-label="Select" name="choice" defaultValue="" clearable={clearable} {...adorn(a)}>
         <option value="" disabled>
           {a.content}
         </option>
@@ -453,6 +456,74 @@ export const ComboboxField: Story = {
       </FormField>
     </div>
   ),
+};
+
+/**
+ * `clearable` — for optional fields, instead of a "None" option. A ✕ shows while a
+ * value is set; clicking it resets to the placeholder (Select → `''`, Combobox → `null`).
+ */
+export const Clearable: Story = {
+  render: () => {
+    const [account, setAccount] = useState('');
+    const [country, setCountry] = useState<string | null>('ph');
+    return (
+      <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
+        <FormField label="Parent account" subLabel="(optional)">
+          {(props) => (
+            <Select
+              {...props}
+              clearable
+              placeholder="None"
+              value={account}
+              onValueChange={setAccount}
+              options={[
+                { value: '1000', label: '1000 · Assets' },
+                { value: '2000', label: '2000 · Liabilities' },
+              ]}
+            />
+          )}
+        </FormField>
+        <FormField label="Country" subLabel="(optional)">
+          {(props) => (
+            <Combobox
+              {...props}
+              clearable
+              options={COUNTRIES}
+              placeholder="Use the default country"
+              value={country}
+              onValueChange={setCountry}
+            />
+          )}
+        </FormField>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+
+    // Select: no ✕ while empty; pick → ✕ appears; ✕ → back to placeholder, list stays closed.
+    const select = canvas.getByRole('combobox', { name: /Parent account/ });
+    await expect(select).toHaveTextContent('None');
+    await expect(canvas.getAllByRole('button', { name: 'Clear selection' })).toHaveLength(1);
+    await userEvent.click(select);
+    await userEvent.click(body.getByRole('option', { name: '2000 · Liabilities' }));
+    await expect(select).toHaveTextContent('2000 · Liabilities');
+    const [clearSelect, clearCombobox] = canvas.getAllByRole('button', { name: 'Clear selection' });
+    await userEvent.click(clearSelect);
+    await expect(select).toHaveTextContent('None');
+    await expect(select).toHaveAttribute('aria-expanded', 'false');
+    await expect(select).toHaveFocus();
+
+    // Combobox: starts filled; ✕ clears to the placeholder.
+    const combobox = canvas.getByRole('combobox', { name: /Country/ });
+    await expect(combobox).not.toHaveValue('');
+    await userEvent.click(clearCombobox);
+    await userEvent.keyboard('{Escape}');
+    await expect(combobox).toHaveValue('');
+    await expect(combobox).toHaveAttribute('placeholder', 'Use the default country');
+    await expect(canvas.queryByRole('button', { name: 'Clear selection' })).not.toBeInTheDocument();
+  },
 };
 
 /** Combobox with emptyContent — type a query that matches nothing to see a custom "create" action. */

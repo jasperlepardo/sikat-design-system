@@ -1,8 +1,8 @@
-import { useId, useMemo, useState, type ReactNode } from 'react';
+import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
-import { FieldShell, type FieldSize } from './Field';
+import { FieldClear, FieldShell, type FieldSize } from './Field';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 
@@ -21,6 +21,12 @@ export interface ComboboxProps {
   defaultValue?: string | null;
   onValueChange?: (value: string | null) => void;
   placeholder?: string;
+  /**
+   * Show a ✕ while a value is set; clicking it resets to none and calls
+   * `onValueChange(null)`, so the `placeholder` shows again. Use for optional
+   * fields instead of a "None" option.
+   */
+  clearable?: boolean;
   size?: FieldSize;
   invalid?: boolean;
   disabled?: boolean;
@@ -61,6 +67,7 @@ export function Combobox({
   defaultValue = null,
   onValueChange,
   placeholder,
+  clearable,
   size = 'md',
   invalid,
   disabled,
@@ -76,6 +83,7 @@ export function Combobox({
   const id = idProp ?? reactId;
   const listId = `${id}-listbox`;
   const getItemId = (i: number) => `${id}-opt-${i}`;
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<string | null>(defaultValue);
@@ -103,6 +111,12 @@ export function Combobox({
     setQuery('');
     setOpen(false);
   };
+  const clear = () => {
+    commit(null);
+    setQuery('');
+    // Refocus so keyboard users stay in the field (focus opens the list to pick again).
+    inputRef.current?.focus();
+  };
 
   const { activeIndex, onKeyDown, activeId } = useListbox({
     itemCount: filtered.length,
@@ -119,9 +133,17 @@ export function Combobox({
       <FieldShell
         state={{ size, filled: selectedOption != null, disabled, readOnly, invalid }}
         adornments={{}}
-        after={ChevronIcon}
+        after={
+          <>
+            {clearable && !disabled && !readOnly && selectedOption ? (
+              <FieldClear onClear={clear} />
+            ) : null}
+            {ChevronIcon}
+          </>
+        }
       >
         <input
+          ref={inputRef}
           id={id}
           type="text"
           role="combobox"
