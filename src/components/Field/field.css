@@ -117,6 +117,7 @@
 }
 .sikat-field--select:not([data-filled]) .sikat-field__input {
   color: var(--field-placeholder); /* empty-valued option = placeholder */
+  font-style: italic; /* match native ::placeholder */
 }
 .sikat-field--select[data-readonly] .sikat-field__input {
   pointer-events: none;
