@@ -1,4 +1,14 @@
-import { useEffect, useId, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import {
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type HTMLAttributes,
+  type ReactNode,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import './tooltip.css';
@@ -33,11 +43,35 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'con
 
 /** Grace period so the pointer can cross the gap between trigger and bubble. */
 const CLOSE_DELAY = 100;
+/** Bubble offset from the trigger, and overhang past its aligned edge (8px). */
+const GAP = 8;
+
+/**
+ * Fixed-position anchor point for the bubble. The CSS translates the bubble
+ * from this point by position/alignment (e.g. `top` shifts it up by its own
+ * height), so the bubble's size never needs measuring.
+ */
+function anchorPoint(rect: DOMRect, position: TooltipPosition, align: TooltipAlign) {
+  const vertical = position === 'top' || position === 'bottom';
+  if (vertical) {
+    return {
+      x: align === 'start' ? rect.left - GAP : rect.right + GAP,
+      y: position === 'top' ? rect.top - GAP : rect.bottom + GAP,
+    };
+  }
+  return {
+    x: position === 'left' ? rect.left - GAP : rect.right + GAP,
+    y: align === 'start' ? rect.top - GAP : rect.bottom + GAP,
+  };
+}
 
 /**
  * Tooltip — 16px Material Symbols `info` trigger with a message bubble (Figma node
  * 10140:5533). Opens on hover and keyboard focus, closes on leave, blur, or
- * Escape. The bubble is `role="tooltip"` and describes the trigger.
+ * Escape. The bubble is `role="tooltip"` and describes the trigger. It is
+ * portaled to `document.body` with `position: fixed`, so `overflow: hidden`
+ * ancestors (panels, cards, scroll areas) can't clip it; it follows the
+ * trigger on scroll and resize while open.
  */
 export function Tooltip({
   message,
@@ -56,8 +90,31 @@ export function Tooltip({
   const open = openProp ?? uncontrolled;
   const id = useId();
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const rootRef = useRef<HTMLSpanElement>(null);
+  const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
+  // Portal target exists only after mount (keeps SSR output trigger-only).
+  const [mounted, setMounted] = useState(false);
 
-  useEffect(() => () => clearTimeout(closeTimer.current), []);
+  useEffect(() => {
+    setMounted(true);
+    return () => clearTimeout(closeTimer.current);
+  }, []);
+
+  // Track the trigger while open: scroll (any ancestor, via capture) and resize.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const update = () => {
+      const el = rootRef.current;
+      if (el) setAnchor(anchorPoint(el.getBoundingClientRect(), position, align));
+    };
+    update();
+    window.addEventListener('scroll', update, true);
+    window.addEventListener('resize', update);
+    return () => {
+      window.removeEventListener('scroll', update, true);
+      window.removeEventListener('resize', update);
+    };
+  }, [open, position, align]);
 
   const setOpen = (next: boolean) => {
     clearTimeout(closeTimer.current);
@@ -70,8 +127,33 @@ export function Tooltip({
     closeTimer.current = setTimeout(() => setOpen(false), CLOSE_DELAY);
   };
 
+  const bubble = (
+    <span
+      id={id}
+      role="tooltip"
+      className="sikat-tooltip__bubble"
+      data-position={position}
+      data-align={align}
+      hidden={!open}
+      style={
+        anchor
+          ? ({
+              '--sikat-tooltip-x': `${anchor.x}px`,
+              '--sikat-tooltip-y': `${anchor.y}px`,
+            } as CSSProperties)
+          : undefined
+      }
+      // The bubble lives outside the trigger's DOM; keep it open while hovered.
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={scheduleClose}
+    >
+      {message}
+    </span>
+  );
+
   return (
     <span
+      ref={rootRef}
       className={cn('sikat-tooltip', className)}
       data-position={position}
       data-align={align}
@@ -101,9 +183,7 @@ export function Tooltip({
       >
         <Icon size={16}>info</Icon>
       </button>
-      <span id={id} role="tooltip" className="sikat-tooltip__bubble" hidden={!open}>
-        {message}
-      </span>
+      {mounted ? createPortal(bubble, document.body) : null}
     </span>
   );
 }
