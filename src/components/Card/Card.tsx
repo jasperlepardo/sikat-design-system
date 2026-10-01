@@ -36,7 +36,10 @@ export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 /** Header row: icon + semibold title on the left, optional actions on the right. */
 function CardHeader({ icon, actions, sticky, className, children, ...rest }: CardHeaderProps) {
   return (
-    <div className={cn('sikat-card__header', sticky && 'sikat-card__header--sticky', className)} {...rest}>
+    <div
+      className={cn('sikat-card__header', sticky && 'sikat-card__header--sticky', className)}
+      {...rest}
+    >
       <div className="sikat-card__header-leading">
         {icon != null ? <span className="sikat-card__header-icon">{icon}</span> : null}
         <span className="sikat-card__header-title">{children}</span>

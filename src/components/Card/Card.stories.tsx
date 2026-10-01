@@ -63,7 +63,15 @@ export const Default: Story = {
 /** Card.Header with sticky=true pins the header while content scrolls in a column. */
 export const StickyHeader: Story = {
   render: () => (
-    <div style={{ height: 320, overflowY: 'auto', padding: 'var(--spacing-3)', background: 'var(--color-bg-secondary)', borderRadius: 'var(--rounded-lg)' }}>
+    <div
+      style={{
+        height: 320,
+        overflowY: 'auto',
+        padding: 'var(--spacing-3)',
+        background: 'var(--color-bg-secondary)',
+        borderRadius: 'var(--rounded-lg)',
+      }}
+    >
       <Card style={{ maxWidth: 600 }}>
         <Card.Header icon={ArtTrackIcon} sticky>
           Customer Details
@@ -74,7 +82,9 @@ export const StickyHeader: Story = {
               {(props) => <TextField {...props} placeholder="[Name of Customer]" />}
             </FormField>
             <FormField label="Contact Person">
-              {(props) => <TextField {...props} placeholder="Agatha Harkness" leadingIcon={AvatarIcon} />}
+              {(props) => (
+                <TextField {...props} placeholder="Agatha Harkness" leadingIcon={AvatarIcon} />
+              )}
             </FormField>
             <FormField label="Currency">
               {(props) => <TextField {...props} placeholder="United State Dollar (USD)" />}
