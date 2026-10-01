@@ -1,5 +1,5 @@
-/* PanelHeader structure. Mirrors the Figma Header (Components › Headers,
-   set 17447:35967: Page Type = Table | Forms). */
+/* PanelHeader structure. Mirrors the Figma Panel Header (set 17447:35967:
+   Page Type = Table | Forms | Details — the last is "Page Type3", 18725:323053). */
 .sikat-panel-header {
   display: flex;
   flex-direction: column;
@@ -13,14 +13,18 @@
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
 }
 
-/* Table: tabs sit on the bottom border — no bottom padding; the bar carries
-   16px below it instead. */
-.sikat-panel-header[data-type='table'] {
+/* Table + Details: tabs sit on the bottom border — no bottom padding; the
+   bar carries 16px below it instead. */
+.sikat-panel-header:is([data-type='table'], [data-type='details']) {
   gap: 0;
   padding-bottom: 0;
 }
-.sikat-panel-header[data-type='table'] .sikat-panel-header__bar {
+.sikat-panel-header:is([data-type='table'], [data-type='details']) .sikat-panel-header__bar {
   padding-bottom: var(--spacing-4);
+}
+/* Details: title, status and icon sit 12px apart. */
+.sikat-panel-header[data-type='details'] .sikat-panel-header__title-row {
+  gap: var(--spacing-3);
 }
 
 /* Top Bar: title block left, button groups right. */

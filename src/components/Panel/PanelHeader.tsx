@@ -4,7 +4,7 @@ import { Icon } from '../Icon/Icon';
 import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/DecorativeIcon';
 import './panel-header.css';
 
-export const panelHeaderTypes = ['table', 'forms'] as const;
+export const panelHeaderTypes = ['table', 'forms', 'details'] as const;
 export type PanelHeaderType = (typeof panelHeaderTypes)[number];
 
 export const panelHeaderIcons = {
@@ -15,11 +15,14 @@ export const panelHeaderIcons = {
 };
 
 export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
-  /** Visual layout: table (title + subcopy + tabs) or forms (single row). */
+  /**
+   * Visual layout: `table` (icon, title + subcopy, tabs), `forms` (single row:
+   * prev/next, title + status + icon), or `details` (forms' row plus subcopy and tabs).
+   */
   type?: PanelHeaderType;
   /** Page title. */
   title?: ReactNode;
-  /** Subcopy below the title (table type only). */
+  /** Subcopy below the title (table and details). */
   subcopy?: ReactNode;
   /** Material Symbol name for the leading DecorativeIcon. */
   icon?: string;
@@ -29,15 +32,15 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   iconSize?: number;
   /** Custom leading slot — overrides `icon` when provided. */
   leading?: ReactNode;
-  /** Status badge (forms type only). */
+  /** Status badge (forms and details). */
   status?: ReactNode;
-  /** Icon after the title (forms type only). */
+  /** Icon after the title / status (forms and details). */
   titleIcon?: ReactNode;
   /** Operation icon buttons. */
   operations?: ReactNode;
   /** Core action buttons. */
   actions?: ReactNode;
-  /** Tabs below the bar (table type only). */
+  /** Tabs below the bar (table and details). */
   tabs?: ReactNode;
 }
 
@@ -62,7 +65,11 @@ export function PanelHeader({
   className,
   ...rest
 }: PanelHeaderProps) {
-  const isTable = type === 'table';
+  const isForms = type === 'forms';
+  const isDetails = type === 'details';
+  const showStatusRow = isForms || isDetails;
+  const showSubcopy = !isForms;
+  const showTabs = !isForms;
   const leadingContent = leading ?? (icon
     ? <DecorativeIcon variant={iconVariant} icon={icon} size={iconSize} />
     : null);
@@ -77,13 +84,16 @@ export function PanelHeader({
           <div className="sikat-panel-header__titles">
             <div className="sikat-panel-header__title-row">
               {title != null ? <h1 className="sikat-panel-header__title">{title}</h1> : null}
-              {!isTable && status != null ? status : null}
+              {showStatusRow && status != null ? status : null}
+              {isDetails && titleIcon != null ? (
+                <span className="sikat-panel-header__title-icon">{titleIcon}</span>
+              ) : null}
             </div>
-            {isTable && subcopy != null ? (
+            {showSubcopy && subcopy != null ? (
               <p className="sikat-panel-header__subcopy">{subcopy}</p>
             ) : null}
           </div>
-          {!isTable && titleIcon != null ? (
+          {isForms && titleIcon != null ? (
             <span className="sikat-panel-header__title-icon">{titleIcon}</span>
           ) : null}
         </div>
@@ -101,7 +111,7 @@ export function PanelHeader({
           </div>
         ) : null}
       </div>
-      {isTable && tabs != null ? (
+      {showTabs && tabs != null ? (
         <div className="sikat-panel-header__tabs">{tabs}</div>
       ) : null}
     </header>
