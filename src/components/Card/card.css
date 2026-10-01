@@ -47,7 +47,7 @@
 
 .sikat-card__header--sticky {
   position: sticky;
-  top: var(--spacing-3); /* matches Panel.Main / Panel.Sidebar padding (12px) */
+  top: var(--sikat-card-sticky-top, 0px);
   z-index: 1;
   background-color: var(--color-bg-tertiary);
   border-radius: var(--rounded-lg-plus) var(--rounded-lg-plus) 0 0;

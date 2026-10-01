@@ -24,6 +24,9 @@
 
 /* Body — grows to fill available height; 12px padding, 16px gap, vertical scroll. */
 .sikat-panel__body {
+  --sikat-card-sticky-top: calc(
+    -1 * var(--spacing-3)
+  ); /* offset sticky to border edge so content can't scroll into the padding gap above */
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -43,6 +46,7 @@
 
 /* Sidebar — fixed-width left column. */
 .sikat-panel__sidebar {
+  --sikat-card-sticky-top: calc(-1 * var(--spacing-3));
   border-right: var(--border-width-1) solid var(--color-border-neutral-subtle);
   display: flex;
   flex: none;
@@ -57,6 +61,7 @@
 
 /* Main — flex-1 right column. */
 .sikat-panel__main {
+  --sikat-card-sticky-top: calc(-1 * var(--spacing-3));
   display: flex;
   flex: 1;
   flex-direction: column;
