@@ -283,6 +283,60 @@ export const SelectPlayground: StoryObj<
   },
 };
 
+/**
+ * Textarea auto-grow: one line at rest — the same height as a regular field —
+ * then the height follows the content. `maxRows` caps it, after which it scrolls. A controlled `value` is
+ * fitted on mount and whenever it changes.
+ */
+export const TextareaAutoGrow: Story = {
+  render: () => {
+    const [notes, setNotes] = useState('Line 1\nLine 2\nLine 3\nLine 4');
+    return (
+      <div style={{ display: 'grid', gap: 16, width: 480 }}>
+        <TextField aria-label="Regular field" placeholder="Regular field" />
+        <Textarea aria-label="Grows" placeholder="Type a few lines…" />
+        <Textarea aria-label="Max 3 rows" maxRows={3} placeholder="Caps at 3 lines…" />
+        <Textarea
+          aria-label="Controlled"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+        />
+        <button type="button" onClick={() => setNotes('')}>
+          Clear controlled
+        </button>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const height = (el: HTMLElement) => Math.round(el.getBoundingClientRect().height);
+    const lh = (el: HTMLElement) => parseFloat(getComputedStyle(el).lineHeight);
+
+    // At rest: one line, the same height as a regular field.
+    const grows = canvas.getByRole('textbox', { name: 'Grows' });
+    const rest = height(grows);
+    await expect(rest).toBe(height(canvas.getByRole('textbox', { name: 'Regular field' })));
+
+    // Uncontrolled: +1 line of height per new line typed.
+    await userEvent.type(grows, 'one{Enter}two{Enter}three');
+    await expect(height(grows)).toBe(rest + 2 * lh(grows));
+    await userEvent.clear(grows);
+    await expect(height(grows)).toBe(rest);
+
+    // maxRows: stops at 3 lines, then scrolls.
+    const capped = canvas.getByRole('textbox', { name: 'Max 3 rows' });
+    await userEvent.type(capped, '1{Enter}2{Enter}3{Enter}4{Enter}5');
+    await expect(height(capped)).toBe(rest + 2 * lh(capped));
+    await expect(getComputedStyle(capped).overflowY).toBe('auto');
+
+    // Controlled: fitted to the initial 4 lines; shrinks when value is cleared.
+    const controlled = canvas.getByRole('textbox', { name: 'Controlled' });
+    await expect(height(controlled)).toBe(rest + 3 * lh(controlled));
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear controlled' }));
+    await expect(height(controlled)).toBe(rest);
+  },
+};
+
 /** Controls mirror the Figma Textarea component properties 1:1. */
 export const TextareaPlayground: StoryObj<{ content: string; Type: 'text' }> = {
   name: 'Textarea',
@@ -327,6 +381,79 @@ export const WithLabelAndHint: Story = {
       </FormField>
     </div>
   ),
+};
+
+/**
+ * Label-beside fields (`orientation="vertical"`) respond to the width of their
+ * container, not the viewport: below 28.5rem the label moves above the control,
+ * matching the stacked (`horizontal`) layout exactly.
+ */
+export const ResponsiveOrientation: Story = {
+  render: () => {
+    const fields = (prefix: string) => (
+      <>
+        <FormField orientation="vertical" label={`${prefix} name`}>
+          {(props) => <TextField placeholder="Placeholder" {...props} />}
+        </FormField>
+        <FormField
+          orientation="vertical"
+          label={`${prefix} email`}
+          subLabel="(optional)"
+          tooltip="We'll only use this for receipts."
+        >
+          {(props) => <TextField placeholder="Placeholder" {...props} />}
+        </FormField>
+      </>
+    );
+    return (
+      <div style={{ display: 'grid', gap: 32 }}>
+        <div data-testid="wide" style={{ display: 'grid', gap: 12, width: 560 }}>
+          {fields('Wide')}
+        </div>
+        <div data-testid="narrow" style={{ display: 'grid', gap: 12, width: 320 }}>
+          {fields('Narrow')}
+        </div>
+        <div data-testid="stacked" style={{ width: 320 }}>
+          <FormField label="Stacked name">
+            {(props) => <TextField placeholder="Placeholder" {...props} />}
+          </FormField>
+        </div>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const rect = (el: Element) => el.getBoundingClientRect();
+    const parts = (name: string) => {
+      // Measure the field box (.sikat-field), not the <input> inside its padding.
+      const input = canvas.getByRole('textbox', { name: new RegExp(name) });
+      const control = input.closest('.sikat-field') ?? input;
+      const group = control.closest('.sikat-field-group')!;
+      const label = group.querySelector(
+        ':scope > :is(.sikat-field__label, .sikat-field__label-row)',
+      )!;
+      return { control: rect(control), group: rect(group), label: rect(label) };
+    };
+
+    // Wide (560px): label in the 200px column beside the control, same row.
+    for (const name of ['Wide name', 'Wide email']) {
+      const { control, label } = parts(name);
+      await expect(Math.round(label.width)).toBe(200);
+      await expect(Math.round(control.left - label.right)).toBe(16);
+      await expect(Math.round(label.top)).toBe(Math.round(control.top));
+    }
+
+    // Narrow (320px): label above, control full width — same as the stacked layout.
+    const stacked = parts('Stacked name');
+    for (const name of ['Narrow name', 'Narrow email']) {
+      const { control, group, label } = parts(name);
+      await expect(label.bottom).toBeLessThanOrEqual(control.top);
+      await expect(Math.round(control.width)).toBe(Math.round(group.width));
+      await expect(Math.round(control.top - label.top)).toBe(
+        Math.round(stacked.control.top - stacked.label.top),
+      );
+    }
+  },
 };
 
 /** Figma Form Label with Show Sub Label + Show Tooltip. */
