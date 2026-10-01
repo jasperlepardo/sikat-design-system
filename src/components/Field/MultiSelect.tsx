@@ -109,7 +109,7 @@ export function MultiSelect({
     .filter((o): o is MultiSelectOption => o != null);
 
   return (
-    <div ref={rootRef} className={cn('relative', className)}>
+    <div ref={rootRef} className={cn('sikat-multiselect', className)}>
       <FieldShell
         className="sikat-field--wrap"
         state={{ size: 'md', filled: selectedOptions.length > 0, disabled, invalid }}

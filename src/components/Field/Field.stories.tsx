@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { FormField, TextField, Textarea, Select, Checkbox, Radio, fieldSizes } from './Field';
 import { MultiSelect } from './MultiSelect';
 import { Combobox } from './Combobox';
@@ -505,6 +505,17 @@ export const Clearable: Story = {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
 
+    // ✕ is hidden at rest (CSS :hover can't be simulated) and shown with focus.
+    const comboboxShell = canvas
+      .getByRole('combobox', { name: /Country/ })
+      .closest<HTMLElement>('.sikat-field')!;
+    const clearOpacity = () =>
+      getComputedStyle(comboboxShell.querySelector('.sikat-field__clear')!).opacity;
+    await waitFor(() => expect(clearOpacity()).toBe('0'));
+    canvas.getByRole('combobox', { name: /Country/ }).focus();
+    await waitFor(() => expect(clearOpacity()).toBe('1'));
+    await userEvent.keyboard('{Escape}');
+
     // Select: no ✕ while empty; pick → ✕ appears; ✕ → back to placeholder, list stays closed.
     const select = canvas.getByRole('combobox', { name: /Parent account/ });
     await expect(select).toHaveTextContent('None');
@@ -629,6 +640,15 @@ export const ComboboxEmptyContent: Story = {
   },
 };
 
+/** Asserts the control's field box spans the whole FormField row (regression: roots without a width shrank to content). */
+const expectFullWidth = async (canvasElement: HTMLElement) => {
+  const shell = canvasElement.querySelector<HTMLElement>('.sikat-field--shell')!;
+  const row = shell.closest<HTMLElement>('.sikat-field__fieldset')!;
+  await expect(Math.round(shell.getBoundingClientRect().width)).toBe(
+    Math.round(row.getBoundingClientRect().width),
+  );
+};
+
 /** Autocomplete — free-text with suggestions. */
 export const AutocompleteField: Story = {
   name: 'Autocomplete',
@@ -650,6 +670,7 @@ export const AutocompleteField: Story = {
       </div>
     );
   },
+  play: async ({ canvasElement }) => expectFullWidth(canvasElement),
 };
 
 /** MultiSelect — searchable multi-value. */
@@ -662,6 +683,20 @@ export const MultiSelectField: Story = {
       </FormField>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    await expectFullWidth(canvasElement);
+
+    // Chevron is hidden at rest and shown with keyboard focus / while open.
+    // (Hover is CSS :hover — synthetic userEvent.hover can't trigger it.)
+    const canvas = within(canvasElement);
+    const chevron = canvasElement.querySelector<HTMLElement>('.sikat-field__chevron')!;
+    const opacity = () => getComputedStyle(chevron).opacity;
+    await waitFor(() => expect(opacity()).toBe('0'));
+    await userEvent.tab();
+    await expect(canvas.getByRole('combobox')).toHaveFocus();
+    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'true');
+    await waitFor(() => expect(opacity()).toBe('1'));
+  },
 };
 
 /** DatePicker — calendar date input. */
