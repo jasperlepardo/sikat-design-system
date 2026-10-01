@@ -111,6 +111,21 @@ const passthrough = (group) => {
   return out;
 };
 
+// radius — brand scale (Figma 02 Primitives): raw stays Tailwind's scale, but
+// from xl up the brand names step down one notch — xl 10 (raw lg-plus), 2xl 12
+// (raw xl), 3xl 16 (raw 2xl), 5xl 24 (raw 3xl); 4xl stays 32 as in Figma.
+const RADIUS_REMAP = { xl: 'lg-plus', '2xl': 'xl', '3xl': '2xl', '4xl': '4xl', '5xl': '3xl' };
+const radius = {};
+for (const [k, leaf] of Object.entries(raw.radius)) {
+  if (k === 'full') continue;
+  if (!(k in RADIUS_REMAP)) radius[k] = { value: `{raw.radius.${k}}`, type: leaf.type };
+}
+for (const [k, from] of Object.entries(RADIUS_REMAP)) {
+  if (!raw.radius[from]) throw new Error(`radius.${k}: raw.radius.${from} is missing`);
+  radius[k] = { value: `{raw.radius.${from}}`, type: raw.radius[from].type };
+}
+radius.full = { value: '{raw.radius.full}', type: raw.radius.full.type };
+
 // layout — Screen/Column pass through raw 1:1; Grid maps each platform
 // (Web/iOS/Android) onto raw column widths + grid count/gutter, mirroring Figma's
 // primitive layout. (The text composite lives at the SEMANTIC tier, not here.)
@@ -135,7 +150,7 @@ const out = {
   primitive: {
     color,
     spacing: passthrough('spacing'),
-    radius: passthrough('radius'),
+    radius,
     'border-width': passthrough('border-width'),
     breakpoint: passthrough('breakpoint'),
     container: passthrough('container'),

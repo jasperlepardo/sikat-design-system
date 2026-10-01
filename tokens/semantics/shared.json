@@ -183,6 +183,10 @@
         "value": "{primitive.radius.4xl}",
         "type": "dimension"
       },
+      "5xl": {
+        "value": "{primitive.radius.5xl}",
+        "type": "dimension"
+      },
       "full": {
         "value": "{primitive.radius.full}",
         "type": "dimension"
