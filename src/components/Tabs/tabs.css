@@ -75,3 +75,45 @@
   cursor: not-allowed;
   --tabs-icon: var(--color-fg-tertiary);
 }
+
+/* Type=Outline — Figma Tab Item, Style=Outline (set 17251:5692). No track;
+   tabs are 4px 8px 0 around a 6px-padded content row, over a 4px accent bar
+   (top corners 2px). Selected = fg/primary bar; text stays caption. Disabled
+   greys the text, icon and bar. */
+.sikat-tabs[data-variant='outline'] {
+  gap: 0;
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+.sikat-tabs[data-variant='outline'] .sikat-tabs__tab {
+  position: relative;
+  padding: calc(var(--spacing-1) + var(--spacing-1_5)) var(--spacing-2);
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+  --tabs-icon: var(--color-fg-tertiary);
+  --tabs-accent: transparent;
+}
+.sikat-tabs[data-variant='outline'] .sikat-tabs__tab::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--spacing-1);
+  border-radius: var(--rounded-xs) var(--rounded-xs) 0 0;
+  background-color: var(--tabs-accent);
+}
+.sikat-tabs[data-variant='outline'] .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
+  background-color: transparent;
+  color: var(--color-text-body);
+}
+.sikat-tabs[data-variant='outline'] .sikat-tabs__tab[aria-selected='true'] {
+  --tabs-accent: var(--color-fg-primary);
+}
+.sikat-tabs[data-variant='outline'] .sikat-tabs__tab:disabled {
+  background-color: transparent;
+  color: var(--color-text-disabled);
+  --tabs-icon: var(--color-fg-disabled);
+  --tabs-accent: var(--color-fg-disabled);
+}

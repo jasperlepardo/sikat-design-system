@@ -1,12 +1,13 @@
-/* Panel structure — mirrors the Figma full panel container (node 9474:6174).
-   White shadowed shell (bg-white, shadow-md, rounded-lg, 4px padding/gap)
-   with three layout slots: header (pass-through), body (flex-1, 8px padding),
-   and footer (action row, 0 4px 4px padding). */
+/* Panel structure — mirrors the Figma Panel set (9474:6174 vertical,
+   9474:6501 horizontal). Shadowed shell (bg-default, rounded-2xl, 4px
+   padding/gap) with three slots: header (pass-through), body (flex-1, 12px
+   padding) and footer (action row). The footer sits 16px below the content:
+   body's 12px bottom padding + the shell's 4px gap. */
 
 .sikat-panel {
-  background-color: var(--color-bg-white);
-  border-radius: var(--rounded-lg);
-  box-shadow: var(--shadow-md);
+  background-color: var(--color-bg-default);
+  border-radius: var(--rounded-2xl);
+  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -22,15 +23,15 @@
 }
 
 
-/* Body — grows to fill available height; 8px padding, vertical scroll. */
+/* Body — grows to fill available height; 12px padding, 16px gap, vertical scroll. */
 .sikat-panel__body {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--spacing-2);
+  gap: var(--spacing-4);
   min-height: 0;
   overflow-y: auto;
-  padding: var(--spacing-3_5);
+  padding: var(--spacing-3);
 }
 
 /* Two-column variant — columns carry their own padding/scroll. */
@@ -106,10 +107,40 @@
   white-space: nowrap;
 }
 
-/* Footer — action row pinned to the bottom of the panel. */
+/* Footer — action row pinned to the bottom of the panel; buttons share the
+   width equally, 8px apart. */
 .sikat-panel__footer {
   display: flex;
   flex: none;
-  gap: var(--spacing-2); /* 8px between buttons */
-  padding: 0 var(--spacing-1) var(--spacing-1); /* 0 4px 4px */
+  gap: var(--spacing-2);
+  padding: 0 var(--spacing-3) var(--spacing-3);
+}
+.sikat-panel__footer > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Horizontal (Figma is Horizontal=True): content and footer side by side at
+   equal width; 24px padding/gap; footer buttons stack full-width. */
+.sikat-panel[data-horizontal] {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-6);
+  padding: var(--spacing-6);
+}
+.sikat-panel[data-horizontal] > .sikat-panel__body {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0;
+  overflow: visible;
+}
+.sikat-panel[data-horizontal] > .sikat-panel__footer {
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0;
+}
+.sikat-panel[data-horizontal] > .sikat-panel__footer > * {
+  flex: none;
+  width: 100%;
 }

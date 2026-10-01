@@ -45,7 +45,7 @@ export const Playground: StoryObj<TabsPlaygroundArgs> = {
     onValueChange: fn(),
   },
   argTypes: {
-    Type: figmaSelect('Type', tabsVariants, ['Primary', 'Secondary']),
+    Type: figmaSelect('Type', tabsVariants, ['Primary', 'Secondary', 'Outline']),
     tabTitles: { name: 'Tab Titles', control: 'text' },
     showLeadingIcon: { name: 'Show Leading Icon', control: 'boolean' },
     showBadge: { name: 'Show Badge', control: 'boolean' },
@@ -62,8 +62,9 @@ export const Playground: StoryObj<TabsPlaygroundArgs> = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const tabs = canvas.getAllByRole('tab');
+    const height = args.Type === 'outline' ? 40 : 32;
     await expect(tabs.map((t) => Math.round(t.getBoundingClientRect().height))).toEqual([
-      32, 32, 32,
+      height, height, height,
     ]);
     await expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
     await expect(tabs[1]).toHaveAttribute('tabindex', '-1');

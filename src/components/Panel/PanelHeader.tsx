@@ -25,7 +25,7 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   icon?: string;
   /** DecorativeIcon variant. Default: solid. */
   iconVariant?: DecorativeIconVariant;
-  /** DecorativeIcon size in px. Default: 48. */
+  /** DecorativeIcon size in px. Default: 40. */
   iconSize?: number;
   /** Custom leading slot — overrides `icon` when provided. */
   leading?: ReactNode;
@@ -52,7 +52,7 @@ export function PanelHeader({
   subcopy,
   icon,
   iconVariant = 'solid',
-  iconSize = 48,
+  iconSize = 40,
   leading,
   status,
   titleIcon,

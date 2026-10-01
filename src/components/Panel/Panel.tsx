@@ -5,17 +5,20 @@ import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/De
 import './panel.css';
 
 export interface PanelProps extends HTMLAttributes<HTMLDivElement> {
+  /** Lay content and footer out side by side (Figma `is Horizontal`). Omit the header. */
+  horizontal?: boolean;
   children?: ReactNode;
 }
 
 /**
- * Panel — full page-level container (Figma node 9474:6174). White shadowed shell
- * with three layout slots: `Panel.Header` (`<PanelHeader>`), `Panel.Body`
- * (grows to fill; holds section cards), and `Panel.Footer` (action buttons row).
+ * Panel — full page-level container (Figma Panel set: 9474:6174, 9474:6501).
+ * Shadowed shell with three layout slots: `Panel.Header` (`<PanelHeader>`),
+ * `Panel.Body` (grows to fill; holds section cards), and `Panel.Footer`
+ * (action buttons). `horizontal` puts body and footer side by side.
  */
-export function Panel({ className, children, ...rest }: PanelProps) {
+export function Panel({ horizontal, className, children, ...rest }: PanelProps) {
   return (
-    <div className={cn('sikat-panel', className)} {...rest}>
+    <div className={cn('sikat-panel', className)} data-horizontal={horizontal || undefined} {...rest}>
       {children}
     </div>
   );
@@ -30,7 +33,7 @@ export interface PanelBodyProps extends PanelSlotProps {
   columns?: boolean;
 }
 
-/** Content area — grows to fill available height; 8px inner padding. */
+/** Content area — grows to fill available height; 12px inner padding, 16px gap. */
 function PanelBody({ columns, className, children, ...rest }: PanelBodyProps) {
   return (
     <div className={cn('sikat-panel__body', columns && 'sikat-panel__body--columns', className)} {...rest}>
@@ -39,7 +42,7 @@ function PanelBody({ columns, className, children, ...rest }: PanelBodyProps) {
   );
 }
 
-/** Bottom action row — full-width buttons separated by 8px. */
+/** Action row — equal-width buttons 8px apart (stacked when the panel is `horizontal`). */
 function PanelFooter({ className, children, ...rest }: PanelSlotProps) {
   return (
     <div className={cn('sikat-panel__footer', className)} {...rest}>
