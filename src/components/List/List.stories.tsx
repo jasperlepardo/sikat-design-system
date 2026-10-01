@@ -174,7 +174,13 @@ const cardProps = {
   badge: <img src={pixGlyph} alt="" width={12} height={12} />,
   fields: addressFields,
   actions: (
-    <IconButton label="More actions" intent="default" variant="link" size="extra-small" onClick={onMore}>
+    <IconButton
+      label="More actions"
+      intent="default"
+      variant="link"
+      size="extra-small"
+      onClick={onMore}
+    >
       <Icon size={20}>more_vert</Icon>
     </IconButton>
   ),

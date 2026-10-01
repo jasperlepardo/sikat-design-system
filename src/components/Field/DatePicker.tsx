@@ -62,7 +62,8 @@ export function DatePicker({
   const [internal, setInternal] = useState<string>(defaultValue ?? '');
   const selectedIso = (isControlled ? (value ?? '') : internal) || '';
 
-  const { open, setOpen, toggle, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
+  const { open, setOpen, toggle, rootRef, panelRef, side, hSide, anchor } =
+    useDropdown<HTMLDivElement>();
   const gridRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -155,84 +156,88 @@ export function DatePicker({
           {...aria}
         />
       </FieldShell>
-      {open && anchor ? createPortal(
-        <div
-          ref={panelRef}
-          role="dialog"
-          aria-label="Choose date"
-          className="sikat-datepicker__panel"
-          style={{
-            position: 'fixed',
-            zIndex: 1000,
-            left: hSide === 'left' ? anchor.left : anchor.right - 300,
-            right: 'auto',
-            ...(side === 'bottom'
-              ? { top: anchor.bottom + 4, maxHeight: window.innerHeight - anchor.bottom - 12 }
-              : { bottom: window.innerHeight - anchor.top + 4, maxHeight: anchor.top - 12 }),
-          }}
-        >
-          <div className="sikat-datepicker__header">
-            <button
-              type="button"
-              aria-label="Previous month"
-              className="sikat-datepicker__nav"
-              onClick={() => setView((v) => ({ ...addMonthView(v, -1) }))}
+      {open && anchor
+        ? createPortal(
+            <div
+              ref={panelRef}
+              role="dialog"
+              aria-label="Choose date"
+              className="sikat-datepicker__panel"
+              style={{
+                position: 'fixed',
+                zIndex: 1000,
+                left: hSide === 'left' ? anchor.left : anchor.right - 300,
+                right: 'auto',
+                ...(side === 'bottom'
+                  ? { top: anchor.bottom + 4, maxHeight: window.innerHeight - anchor.bottom - 12 }
+                  : { bottom: window.innerHeight - anchor.top + 4, maxHeight: anchor.top - 12 }),
+              }}
             >
-              <Icon size={16}>chevron_left</Icon>
-            </button>
-            <span className="sikat-datepicker__month-label">
-              {MONTH_NAMES[view.month]} {view.year}
-            </span>
-            <button
-              type="button"
-              aria-label="Next month"
-              className="sikat-datepicker__nav"
-              onClick={() => setView((v) => ({ ...addMonthView(v, 1) }))}
-            >
-              <Icon size={16}>chevron_right</Icon>
-            </button>
-          </div>
-
-          <div className="sikat-datepicker__weekdays">
-            {WEEKDAYS.map((w) => (
-              <span key={w} className="sikat-datepicker__weekday">{w}</span>
-            ))}
-          </div>
-
-          <div
-            ref={gridRef}
-            role="grid"
-            className="sikat-datepicker__grid"
-            onKeyDown={onGridKeyDown}
-          >
-            {days.map((d) => {
-              const isSelected = d.iso === selectedIso;
-              const isToday = d.iso === todayIso;
-              const isFocus = d.iso === toISODate(focus);
-              return (
+              <div className="sikat-datepicker__header">
                 <button
-                  key={d.iso}
                   type="button"
-                  role="gridcell"
-                  data-iso={d.iso}
-                  tabIndex={isFocus ? 0 : -1}
-                  aria-selected={isSelected || undefined}
-                  aria-current={isToday ? 'date' : undefined}
-                  className={cn(
-                    'sikat-datepicker__day',
-                    !d.inMonth && 'sikat-datepicker__day--outside',
-                    isToday && !isSelected && 'sikat-datepicker__day--today',
-                  )}
-                  onClick={() => commit(d.date)}
+                  aria-label="Previous month"
+                  className="sikat-datepicker__nav"
+                  onClick={() => setView((v) => ({ ...addMonthView(v, -1) }))}
                 >
-                  {d.day}
+                  <Icon size={16}>chevron_left</Icon>
                 </button>
-              );
-            })}
-          </div>
-        </div>,
-        document.body,
-      ) : null}
+                <span className="sikat-datepicker__month-label">
+                  {MONTH_NAMES[view.month]} {view.year}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Next month"
+                  className="sikat-datepicker__nav"
+                  onClick={() => setView((v) => ({ ...addMonthView(v, 1) }))}
+                >
+                  <Icon size={16}>chevron_right</Icon>
+                </button>
+              </div>
+
+              <div className="sikat-datepicker__weekdays">
+                {WEEKDAYS.map((w) => (
+                  <span key={w} className="sikat-datepicker__weekday">
+                    {w}
+                  </span>
+                ))}
+              </div>
+
+              <div
+                ref={gridRef}
+                role="grid"
+                className="sikat-datepicker__grid"
+                onKeyDown={onGridKeyDown}
+              >
+                {days.map((d) => {
+                  const isSelected = d.iso === selectedIso;
+                  const isToday = d.iso === todayIso;
+                  const isFocus = d.iso === toISODate(focus);
+                  return (
+                    <button
+                      key={d.iso}
+                      type="button"
+                      role="gridcell"
+                      data-iso={d.iso}
+                      tabIndex={isFocus ? 0 : -1}
+                      aria-selected={isSelected || undefined}
+                      aria-current={isToday ? 'date' : undefined}
+                      className={cn(
+                        'sikat-datepicker__day',
+                        !d.inMonth && 'sikat-datepicker__day--outside',
+                        isToday && !isSelected && 'sikat-datepicker__day--today',
+                      )}
+                      onClick={() => commit(d.date)}
+                    >
+                      {d.day}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

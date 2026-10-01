@@ -40,13 +40,23 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
   const openRef = useRef(false);
 
   const computeAnchor = (): DropdownAnchor | null => {
-    if (!rootRef.current) { setSide('bottom'); setHSide('left'); return null; }
+    if (!rootRef.current) {
+      setSide('bottom');
+      setHSide('left');
+      return null;
+    }
     const rect = rootRef.current.getBoundingClientRect();
     const spaceBelow = window.innerHeight - rect.bottom;
     const spaceAbove = rect.top;
     setSide(spaceBelow < DROPDOWN_MAX_HEIGHT && spaceAbove > spaceBelow ? 'top' : 'bottom');
     setHSide(window.innerWidth - rect.right < rect.left ? 'right' : 'left');
-    return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width };
+    return {
+      left: rect.left,
+      right: rect.right,
+      top: rect.top,
+      bottom: rect.bottom,
+      width: rect.width,
+    };
   };
 
   const setOpen = (value: boolean) => {
@@ -66,7 +76,10 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
       if (!insideRoot && !insidePanel) setOpenState(false);
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { openRef.current = false; setOpenState(false); }
+      if (e.key === 'Escape') {
+        openRef.current = false;
+        setOpenState(false);
+      }
     };
     const onReposition = () => {
       if (!rootRef.current) return;
@@ -75,7 +88,13 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
       const spaceAbove = rect.top;
       setSide(spaceBelow < DROPDOWN_MAX_HEIGHT && spaceAbove > spaceBelow ? 'top' : 'bottom');
       setHSide(window.innerWidth - rect.right < rect.left ? 'right' : 'left');
-      setAnchor({ left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width });
+      setAnchor({
+        left: rect.left,
+        right: rect.right,
+        top: rect.top,
+        bottom: rect.bottom,
+        width: rect.width,
+      });
     };
     // Guarded: ResizeObserver is missing in jsdom and some older/SSR environments;
     // scroll + resize listeners still keep the panel positioned there.

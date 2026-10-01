@@ -4,14 +4,9 @@
     "className": "sikat-alert",
     "prefix": "alert",
     "element": "div",
-    "colorAxes": [
-      "intent",
-      "style"
-    ],
+    "colorAxes": ["intent", "style"],
     "sizeAxis": "size",
-    "states": [
-      "rest"
-    ],
+    "states": ["rest"],
     "slots": {},
     "base": {}
   },

@@ -4,16 +4,16 @@ React + TypeScript component library. Tokens are the source of truth: Tailwind p
 
 ## Key commands
 
-| Command | What it does |
-|---|---|
-| `npm run tokens` | Regenerate all token CSS + TS manifests (run after editing any `tokens/**/*.json`) |
-| `npm run storybook` | Start Storybook dev server on :6006 |
-| `npm run build` | Typecheck + build dist |
-| `npm run lint` | ESLint |
-| `npm test` | Run all Vitest projects (`unit` + `storybook`) |
-| `npx vitest --project unit` | Run unit tests only (jsdom) |
-| `npx vitest --project storybook` | Run Storybook component tests (Playwright browser mode) |
-| `npm run release:patch/minor/major` | Bump version + tag |
+| Command                             | What it does                                                                       |
+| ----------------------------------- | ---------------------------------------------------------------------------------- |
+| `npm run tokens`                    | Regenerate all token CSS + TS manifests (run after editing any `tokens/**/*.json`) |
+| `npm run storybook`                 | Start Storybook dev server on :6006                                                |
+| `npm run build`                     | Typecheck + build dist                                                             |
+| `npm run lint`                      | ESLint                                                                             |
+| `npm test`                          | Run all Vitest projects (`unit` + `storybook`)                                     |
+| `npx vitest --project unit`         | Run unit tests only (jsdom)                                                        |
+| `npx vitest --project storybook`    | Run Storybook component tests (Playwright browser mode)                            |
+| `npm run release:patch/minor/major` | Bump version + tag                                                                 |
 
 `prestorybook` / `prebuild` / `prebuild-storybook` all run `npm run tokens` automatically.
 

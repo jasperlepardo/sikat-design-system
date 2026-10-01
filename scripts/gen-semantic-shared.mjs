@@ -22,7 +22,10 @@ const prim = JSON.parse(readFileSync(join(root, 'tokens/primitives.json'), 'utf8
 // passthrough a primitive scale 1:1
 const pass = (group) =>
   Object.fromEntries(
-    Object.keys(prim[group]).map((k) => [k, { value: `{primitive.${group}.${k}}`, type: 'dimension' }]),
+    Object.keys(prim[group]).map((k) => [
+      k,
+      { value: `{primitive.${group}.${k}}`, type: 'dimension' },
+    ]),
   );
 
 // rounded ← primitive.radius (renamed group)
@@ -51,7 +54,8 @@ for (const w of Object.keys(prim['font-weight']))
 // layout — role names mapped onto the primitive layout values (Web/iOS/Android).
 const dim = (p) => ({ value: `{${p}}`, type: 'dimension' });
 const num = (p) => ({ value: `{${p}}`, type: 'number' });
-const cols = (vals) => Object.fromEntries(vals.map((v, i) => [i + 1, dim(`primitive.layout.Column.${v}`)]));
+const cols = (vals) =>
+  Object.fromEntries(vals.map((v, i) => [i + 1, dim(`primitive.layout.Column.${v}`)]));
 const grid = (plat) => ({
   count: num(`primitive.layout.Grid.${plat}.count`),
   width: dim(`primitive.layout.Grid.${plat}.width`),
@@ -64,9 +68,16 @@ const layout = {
     Android: cols([70, 156, 242, 328]),
   },
   Page: {
-    Web: { 'min-width': dim('primitive.layout.Screen.1440'), height: dim('primitive.layout.Screen.1024'), 'max-width': dim('primitive.layout.Screen.1920') },
+    Web: {
+      'min-width': dim('primitive.layout.Screen.1440'),
+      height: dim('primitive.layout.Screen.1024'),
+      'max-width': dim('primitive.layout.Screen.1920'),
+    },
     iOS: { width: dim('primitive.layout.Screen.375'), height: dim('primitive.layout.Screen.812') },
-    Android: { width: dim('primitive.layout.Screen.360'), height: dim('primitive.layout.Screen.800') },
+    Android: {
+      width: dim('primitive.layout.Screen.360'),
+      height: dim('primitive.layout.Screen.800'),
+    },
   },
   Grid: { Web: grid('Web'), iOS: grid('iOS'), Android: grid('Android') },
 };
@@ -87,4 +98,6 @@ const out = {
 
 writeFileSync(join(root, 'tokens/semantics/shared.json'), JSON.stringify(out, null, 2) + '\n');
 const n = (o) => Object.values(o).reduce((a, v) => a + (v.value ? 1 : n(v)), 0);
-console.log(`✓ shared.json — ${n(out.semantic)} tokens, groups: ${Object.keys(out.semantic).join(', ')}`);
+console.log(
+  `✓ shared.json — ${n(out.semantic)} tokens, groups: ${Object.keys(out.semantic).join(', ')}`,
+);

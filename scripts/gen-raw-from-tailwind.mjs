@@ -66,7 +66,8 @@ export async function run(ctx) {
     throw new Error('Parsed 0 colors from Tailwind theme.css — the format may have changed.');
   // Brand families from sikat.config `palette` (custom ramps Tailwind doesn't ship).
   // A value is either a ramp { 50…950 } or a group of ramps (e.g. brand/<name>).
-  const ramp = (shades) => Object.fromEntries(Object.entries(shades).map(([s, v]) => [s, node(v, 'color')]));
+  const ramp = (shades) =>
+    Object.fromEntries(Object.entries(shades).map(([s, v]) => [s, node(v, 'color')]));
   const isRamp = (o) => Object.values(o).every((v) => typeof v === 'string');
   for (const [fam, spec] of Object.entries(ctx?.palette ?? {})) {
     if (color[fam]) throw new Error(`palette.${fam} would overwrite Tailwind's ${fam} family`);
@@ -84,21 +85,66 @@ export async function run(ctx) {
      shades sorted 50…950. ---- */
   {
     const FAMILY_ORDER = [
-      'brand', 'white', 'black',
-      'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky',
-      'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose',
-      'slate', 'gray', 'zinc', 'neutral', 'stone',
-      'mauve', 'olive', 'mist', 'taupe',
+      'brand',
+      'white',
+      'black',
+      'red',
+      'orange',
+      'amber',
+      'yellow',
+      'lime',
+      'green',
+      'emerald',
+      'teal',
+      'cyan',
+      'sky',
+      'blue',
+      'indigo',
+      'violet',
+      'purple',
+      'fuchsia',
+      'pink',
+      'rose',
+      'slate',
+      'gray',
+      'zinc',
+      'neutral',
+      'stone',
+      'mauve',
+      'olive',
+      'mist',
+      'taupe',
     ];
     const SHADE_ORDER = [
-      '50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950',
-      'a050', 'a100', 'a150', 'a200', 'a300', 'a400', 'a500', 'a600', 'a700', 'a800', 'a900',
+      '50',
+      '100',
+      '200',
+      '300',
+      '400',
+      '500',
+      '600',
+      '700',
+      '800',
+      '900',
+      '950',
+      'a050',
+      'a100',
+      'a150',
+      'a200',
+      'a300',
+      'a400',
+      'a500',
+      'a600',
+      'a700',
+      'a800',
+      'a900',
       'transparent',
     ];
     const ordered = {};
     for (const fam of [...FAMILY_ORDER, ...Object.keys(color)]) {
       if (!color[fam] || ordered[fam]) continue;
-      const src = color[fam], dst = {};
+      const src = color[fam],
+        dst = {};
       for (const s of SHADE_ORDER) if (s in src) dst[s] = src[s];
       for (const s in src) if (!(s in dst)) dst[s] = src[s];
       ordered[fam] = dst;
@@ -164,8 +210,28 @@ export async function run(ctx) {
       ['360', '375', '800', '812', '1024', '1440', '1920'].map((v) => [v, dim(`${v}px`)]),
     ),
     Column: Object.fromEntries(
-      ['70', '74', '84', '156', '164', '192', '242', '253', '300', '328', '343', '408', '516',
-        '624', '732', '840', '948', '1056', '1164', '1272'].map((v) => [v, dim(`${v}px`)]),
+      [
+        '70',
+        '74',
+        '84',
+        '156',
+        '164',
+        '192',
+        '242',
+        '253',
+        '300',
+        '328',
+        '343',
+        '408',
+        '516',
+        '624',
+        '732',
+        '840',
+        '948',
+        '1056',
+        '1164',
+        '1272',
+      ].map((v) => [v, dim(`${v}px`)]),
     ),
     Grid: {
       count: { 4: node(4, 'number'), 12: node(12, 'number') },
@@ -184,11 +250,16 @@ export async function run(ctx) {
     const f = ctx?.fonts?.[k];
     if (typeof f === 'string') fontFamily[k] = node(f, 'fontFamily');
     else if (f)
-      fontFamily[k] = Object.fromEntries(Object.entries(f).map(([n, v]) => [n, node(v, 'fontFamily')]));
+      fontFamily[k] = Object.fromEntries(
+        Object.entries(f).map(([n, v]) => [n, node(v, 'fontFamily')]),
+      );
   }
   const fontWeight = Object.fromEntries(
     // Tailwind's `normal` (400) is named `regular`, as in the Figma file.
-    Object.entries(collect('font-weight', '[a-z]+')).map(([k, v]) => [k === 'normal' ? 'regular' : k, node(v, 'fontWeight')]),
+    Object.entries(collect('font-weight', '[a-z]+')).map(([k, v]) => [
+      k === 'normal' ? 'regular' : k,
+      node(v, 'fontWeight'),
+    ]),
   );
   let fontSize = Object.fromEntries(Object.entries(collect('text')).map(([k, v]) => [k, dim(v)]));
   let lineHeight = {};
@@ -205,9 +276,13 @@ export async function run(ctx) {
       if (k in fontSize) throw new Error(`text.${k} would overwrite Tailwind's ${k} size`);
       fontSize[k] = dim(size);
     }
-    const order = Object.keys(fontSize).sort((a, b) => toRem(fontSize[a].value) - toRem(fontSize[b].value));
+    const order = Object.keys(fontSize).sort(
+      (a, b) => toRem(fontSize[a].value) - toRem(fontSize[b].value),
+    );
     fontSize = Object.fromEntries(order.map((k) => [k, fontSize[k]]));
-    lineHeight = Object.fromEntries(order.filter((k) => k in lineHeight).map((k) => [k, lineHeight[k]]));
+    lineHeight = Object.fromEntries(
+      order.filter((k) => k in lineHeight).map((k) => [k, lineHeight[k]]),
+    );
   }
   const leading = Object.fromEntries(
     Object.entries(collect('leading', '[a-z]+')).map(([k, v]) => [k, dim(v)]),

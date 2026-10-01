@@ -381,39 +381,42 @@ export const InPanel: StoryObj<TablePlaygroundArgs> = {
     const [page, setPage] = useState(1);
     return (
       <div style={{ padding: 8, background: 'var(--color-bg-secondary)' }}>
-      <Panel>
-        <PanelHeader
-          icon="table_rows"
-          iconVariant="solid"
-          title="Orders"
-          subcopy="Manage your sales orders"
-          actions={
-            <Button intent="primary" variant="solid" size="extra-large">
-              New Order
-            </Button>
-          }
-        />
-        <Panel.Body>
-          <Card>
-            <Table
-              columns={FIGMA_COLUMNS}
-              rows={figmaRows(8)}
-              getRowId={(r) => r.id}
-              selectable
-              selectedIds={selected}
-              onSelectionChange={setSelected}
-              onRowAction={args.onRowAction}
-              onColumnSettings={args.onColumnSettings}
-              pagination={{
-                page,
-                pageSize: 8,
-                total: 89,
-                onPageChange: (p) => { setPage(p); args.onPageChange(p); },
-              }}
-            />
-          </Card>
-        </Panel.Body>
-      </Panel>
+        <Panel>
+          <PanelHeader
+            icon="table_rows"
+            iconVariant="solid"
+            title="Orders"
+            subcopy="Manage your sales orders"
+            actions={
+              <Button intent="primary" variant="solid" size="extra-large">
+                New Order
+              </Button>
+            }
+          />
+          <Panel.Body>
+            <Card>
+              <Table
+                columns={FIGMA_COLUMNS}
+                rows={figmaRows(8)}
+                getRowId={(r) => r.id}
+                selectable
+                selectedIds={selected}
+                onSelectionChange={setSelected}
+                onRowAction={args.onRowAction}
+                onColumnSettings={args.onColumnSettings}
+                pagination={{
+                  page,
+                  pageSize: 8,
+                  total: 89,
+                  onPageChange: (p) => {
+                    setPage(p);
+                    args.onPageChange(p);
+                  },
+                }}
+              />
+            </Card>
+          </Panel.Body>
+        </Panel>
       </div>
     );
   },

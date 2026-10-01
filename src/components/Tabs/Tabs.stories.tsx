@@ -64,7 +64,9 @@ export const Playground: StoryObj<TabsPlaygroundArgs> = {
     const tabs = canvas.getAllByRole('tab');
     const height = args.Type === 'outline' ? 40 : 32;
     await expect(tabs.map((t) => Math.round(t.getBoundingClientRect().height))).toEqual([
-      height, height, height,
+      height,
+      height,
+      height,
     ]);
     await expect(tabs[0]).toHaveAttribute('aria-selected', 'true');
     await expect(tabs[1]).toHaveAttribute('tabindex', '-1');

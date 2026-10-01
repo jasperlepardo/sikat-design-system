@@ -270,12 +270,28 @@ function TableCellDropdown({ row }: { row: string }) {
   return (
     <td style={{ padding: '8px 12px', textAlign: 'right' }}>
       <div ref={rootRef} style={{ display: 'inline-flex' }}>
-        <IconButton label="Actions" intent="default" variant="ghost" size="small" onClick={toggle}
-          aria-haspopup="menu" aria-expanded={open} aria-controls={open ? id : undefined}>
+        <IconButton
+          label="Actions"
+          intent="default"
+          variant="ghost"
+          size="small"
+          onClick={toggle}
+          aria-haspopup="menu"
+          aria-expanded={open}
+          aria-controls={open ? id : undefined}
+        >
           <Icon size={20}>more_vert</Icon>
         </IconButton>
         {open && anchor ? (
-          <Dropdown ref={panelRef} id={id} role="menu" anchor={anchor} side={side} hSide={hSide} style={{ width: 160 }}>
+          <Dropdown
+            ref={panelRef}
+            id={id}
+            role="menu"
+            anchor={anchor}
+            side={side}
+            hSide={hSide}
+            style={{ width: 160 }}
+          >
             <DropdownItem onSelect={() => alert(`Edit ${row}`)}>Edit</DropdownItem>
             <DropdownItem onSelect={() => alert(`Duplicate ${row}`)}>Duplicate</DropdownItem>
             <DropdownItem onSelect={() => alert(`Delete ${row}`)}>Delete</DropdownItem>
@@ -298,7 +314,13 @@ const ROWS = [
   { name: 'Gamma Inc', status: 'inactive', date: '2026-06-01' },
 ];
 
-const th: React.CSSProperties = { padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: '#292524', fontSize: 13 };
+const th: React.CSSProperties = {
+  padding: '8px 12px',
+  textAlign: 'left',
+  fontWeight: 600,
+  color: '#292524',
+  fontSize: 13,
+};
 const td: React.CSSProperties = { padding: '8px 12px', verticalAlign: 'middle' };
 
 /** Portaled — Select, DatePicker, and action menu all escape the clipping table. */
@@ -319,11 +341,7 @@ export const InTable: Story = {
             <tr key={row.name} style={{ borderBottom: '1px solid #e7e5e4' }}>
               <td style={td}>{row.name}</td>
               <td style={td}>
-                <Select
-                  size="md"
-                  defaultValue={row.status}
-                  options={STATUS_OPTIONS}
-                />
+                <Select size="md" defaultValue={row.status} options={STATUS_OPTIONS} />
               </td>
               <td style={td}>
                 <DatePicker size="md" defaultValue={row.date} />

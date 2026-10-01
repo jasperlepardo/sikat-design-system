@@ -52,7 +52,11 @@ function parseOklch(str) {
 
 function parseHex(str) {
   let h = str.trim().replace('#', '');
-  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  if (h.length === 3)
+    h = h
+      .split('')
+      .map((c) => c + c)
+      .join('');
   if (h.length !== 6 && h.length !== 8) return null;
   const n = (i) => parseInt(h.slice(i, i + 2), 16) / 255;
   return { r: n(0), g: n(2), b: n(4), a: h.length === 8 ? n(6) : 1 };
@@ -79,7 +83,7 @@ export function cssColorToFigma(str) {
   // Snap each channel to its exact 8-bit value (n/255) so Figma shows the same hex
   // a browser renders — rounding the float first (e.g. to 4 decimals) can tip a
   // channel sitting near .5 onto the next step (stone-300 → #d7d3d1, not #d6d3d1).
-  const q8 = (n) => Math.round(Math.round(n * 255) / 255 * 1e6) / 1e6;
+  const q8 = (n) => Math.round((Math.round(n * 255) / 255) * 1e6) / 1e6;
   const r4 = (n) => Math.round(n * 1e4) / 1e4;
   return { r: q8(c.r), g: q8(c.g), b: q8(c.b), a: r4(c.a) };
 }

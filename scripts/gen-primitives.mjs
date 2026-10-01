@@ -30,12 +30,28 @@ const ctx = await loadConfig();
 const SOLIDS = ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900', '950'];
 // Alpha ramp — derived here (raw holds solids only, as in the Figma file): each
 // level is the family's 500 solid at a clean opacity, so primary/a200 = primary-500 @ 20%.
-const ALPHA = { a050: 0.05, a100: 0.1, a150: 0.15, a200: 0.2, a300: 0.3, a400: 0.4, a500: 0.5, a600: 0.6, a700: 0.7, a800: 0.8, a900: 0.9 };
+const ALPHA = {
+  a050: 0.05,
+  a100: 0.1,
+  a150: 0.15,
+  a200: 0.2,
+  a300: 0.3,
+  a400: 0.4,
+  a500: 0.5,
+  a600: 0.6,
+  a700: 0.7,
+  a800: 0.8,
+  a900: 0.9,
+};
 const withAlpha = (val, a) => {
   const s = val.trim();
   if (s.startsWith('oklch(')) return s.replace(/\)\s*$/, ` / ${a})`);
   let h = s.replace('#', '');
-  if (h.length === 3) h = h.split('').map((c) => c + c).join('');
+  if (h.length === 3)
+    h = h
+      .split('')
+      .map((c) => c + c)
+      .join('');
   const ch = (i) => parseInt(h.slice(i, i + 2), 16);
   return `rgb(${ch(0)} ${ch(2)} ${ch(4)} / ${a})`;
 };
@@ -82,7 +98,10 @@ const color = {
 // font-family — roles picked from raw's named families (Figma: body/heading only).
 const FONT_ROLES = { body: 'sans.dm-sans', heading: 'sans.urbanist' };
 const fontFamily = Object.fromEntries(
-  Object.entries(FONT_ROLES).map(([role, path]) => [role, { value: `{raw.font-family.${path}}`, type: 'fontFamily' }]),
+  Object.entries(FONT_ROLES).map(([role, path]) => [
+    role,
+    { value: `{raw.font-family.${path}}`, type: 'fontFamily' },
+  ]),
 );
 
 // Exact unitless ratio of a Tailwind line-height (`calc(a / b)` or a number) —
@@ -99,7 +118,8 @@ for (const [k, size] of Object.entries(raw['font-size'])) {
   const lh = raw['line-height'][k]
     ? `${+(toRem(size.value) * ratio(raw['line-height'][k].value)).toFixed(4)}rem`
     : ctx.text?.[k]?.lineHeight;
-  if (!lh) throw new Error(`no line-height for font-size ${k} (add sikat.config text.${k}.lineHeight)`);
+  if (!lh)
+    throw new Error(`no line-height for font-size ${k} (add sikat.config text.${k}.lineHeight)`);
   lineHeight[k] = { value: lh, type: 'dimension' };
 }
 
@@ -131,7 +151,10 @@ radius.full = { value: '{raw.radius.full}', type: raw.radius.full.type };
 // primitive layout. (The text composite lives at the SEMANTIC tier, not here.)
 const passLayout = (sub) =>
   Object.fromEntries(
-    Object.keys(raw.layout[sub]).map((k) => [k, { value: `{raw.layout.${sub}.${k}}`, type: 'dimension' }]),
+    Object.keys(raw.layout[sub]).map((k) => [
+      k,
+      { value: `{raw.layout.${sub}.${k}}`, type: 'dimension' },
+    ]),
   );
 const gridCount = (k) => ({ value: `{raw.layout.Grid.count.${k}}`, type: 'number' });
 const gridWidth = (k) => ({ value: `{raw.layout.Column.${k}}`, type: 'dimension' });

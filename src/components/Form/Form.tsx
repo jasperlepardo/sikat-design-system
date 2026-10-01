@@ -66,12 +66,8 @@ function FormHeader({
 }: FormHeaderProps) {
   return (
     <div className={cn('sikat-form__header', className)} {...rest}>
-      {heading != null ? (
-        <Heading className="sikat-form__heading">{heading}</Heading>
-      ) : null}
-      {subHeading != null ? (
-        <p className="sikat-form__subheading">{subHeading}</p>
-      ) : null}
+      {heading != null ? <Heading className="sikat-form__heading">{heading}</Heading> : null}
+      {subHeading != null ? <p className="sikat-form__subheading">{subHeading}</p> : null}
       {children}
     </div>
   );

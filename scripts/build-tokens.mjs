@@ -64,7 +64,9 @@ StyleDictionary.registerFormat({
       `  path: string[];\n  value: string;\n  ref: string | null;\n};\n` +
       // Emitted in typed chunks: one array literal of ~1.3k objects trips TS2590
       // ("union type too complex") during inference.
-      chunks.map((c, i) => `const chunk${i}: DesignToken[] = ${JSON.stringify(c, null, 2)};\n`).join('') +
+      chunks
+        .map((c, i) => `const chunk${i}: DesignToken[] = ${JSON.stringify(c, null, 2)};\n`)
+        .join('') +
       `export const tokens: DesignToken[] = [${chunks.map((_, i) => `...chunk${i}`).join(', ')}];\n`
     );
   },

@@ -1,15 +1,7 @@
 import type { ElementType, HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
-export const textVariants = [
-  'display',
-  'h1',
-  'h2',
-  'h3',
-  'body',
-  'small',
-  'caption',
-] as const;
+export const textVariants = ['display', 'h1', 'h2', 'h3', 'body', 'small', 'caption'] as const;
 export type TextVariant = (typeof textVariants)[number];
 
 export type TextWeight = 'regular' | 'medium' | 'semibold' | 'bold';

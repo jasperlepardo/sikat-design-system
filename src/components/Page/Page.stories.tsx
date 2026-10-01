@@ -64,7 +64,14 @@ const NAV: SideNavSection[] = [
         id: 'sales',
         label: 'Sales',
         icon: <SideNavIcon src={discount} />,
-        items: sub('sales', ['Customers', 'Quotations', 'Sales Order', 'Invoices', 'Sales Receipt', 'Returns']),
+        items: sub('sales', [
+          'Customers',
+          'Quotations',
+          'Sales Order',
+          'Invoices',
+          'Sales Receipt',
+          'Returns',
+        ]),
       },
       {
         id: 'procurement',
@@ -122,7 +129,8 @@ const ACCOUNT: NavbarMenuItem[] = [
 ];
 
 const labelOf = (id: string) =>
-  NAV.flatMap((s) => s.items.flatMap((i) => [i, ...(i.items ?? [])])).find((i) => i.id === id)?.label;
+  NAV.flatMap((s) => s.items.flatMap((i) => [i, ...(i.items ?? [])])).find((i) => i.id === id)
+    ?.label;
 
 const CircleIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 const SectionIcon = <Icon size={24}>art_track</Icon>;
@@ -155,7 +163,13 @@ function AppShellDemo() {
           sections={NAV}
           activeId={page}
           onNavigate={setPage}
-          style={{ position: 'sticky', top: 64, height: 'calc(100vh - 64px)', flex: 'none', width: 280 }}
+          style={{
+            position: 'sticky',
+            top: 64,
+            height: 'calc(100vh - 64px)',
+            flex: 'none',
+            width: 280,
+          }}
         />
         <main style={{ flex: 1, minWidth: 0 }}>
           <Section>
@@ -184,7 +198,10 @@ export const AppShell: Story = {
     await userEvent.click(side.getByRole('button', { name: 'Sales' }));
     await userEvent.click(side.getByRole('button', { name: 'Customers' }));
     await expect(heading()).toHaveTextContent('Customers');
-    await expect(side.getByRole('button', { name: 'Customers' })).toHaveAttribute('aria-current', 'page');
+    await expect(side.getByRole('button', { name: 'Customers' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
     await userEvent.click(canvas.getByRole('combobox', { name: 'Apps' }));
     await userEvent.click(canvas.getByRole('option', { name: 'Payments' }));
     await expect(canvas.getByText('Payments')).toBeInTheDocument();
@@ -213,7 +230,13 @@ function useAppShell() {
       sections={NAV}
       activeId={page}
       onNavigate={setPage}
-      style={{ position: 'sticky', top: 64, height: 'calc(100vh - 64px)', flex: 'none', width: 280 }}
+      style={{
+        position: 'sticky',
+        top: 64,
+        height: 'calc(100vh - 64px)',
+        flex: 'none',
+        width: 280,
+      }}
     />
   );
   return { navbar, sidenav, page };
@@ -265,8 +288,15 @@ function AppShellWithAlertDemo() {
                 }
                 actions={
                   <>
-                    <Button intent="default" variant="solid" size="extra-large">Button</Button>
-                    <Button intent="primary" variant="solid" size="extra-large" trailingIcon={panelHeaderIcons.keyboardArrowDown}>
+                    <Button intent="default" variant="solid" size="extra-large">
+                      Button
+                    </Button>
+                    <Button
+                      intent="primary"
+                      variant="solid"
+                      size="extra-large"
+                      trailingIcon={panelHeaderIcons.keyboardArrowDown}
+                    >
                       Button
                     </Button>
                   </>
@@ -338,7 +368,12 @@ function AppShellWithAlertTwoPanelDemo() {
                   </>
                 }
                 actions={
-                  <Button intent="primary" variant="solid" size="extra-large" trailingIcon={panelHeaderIcons.keyboardArrowDown}>
+                  <Button
+                    intent="primary"
+                    variant="solid"
+                    size="extra-large"
+                    trailingIcon={panelHeaderIcons.keyboardArrowDown}
+                  >
                     Button
                   </Button>
                 }
@@ -354,7 +389,12 @@ function AppShellWithAlertTwoPanelDemo() {
               </Panel.Body>
             </Panel>
             <Panel style={{ flex: 1, minWidth: 0 }}>
-              <PanelHeader icon="info" iconVariant="subtle" title="Details" subcopy="Secondary panel" />
+              <PanelHeader
+                icon="info"
+                iconVariant="subtle"
+                title="Details"
+                subcopy="Secondary panel"
+              />
               <Panel.Body>
                 <Card>
                   <Card.Header icon={SectionIcon}>Details</Card.Header>

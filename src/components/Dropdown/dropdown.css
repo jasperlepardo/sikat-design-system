@@ -22,7 +22,7 @@
 }
 
 /* Flip to above the trigger when data-side="top". */
-.sikat-dropdown[data-side="top"] {
+.sikat-dropdown[data-side='top'] {
   top: auto;
   bottom: 100%;
   margin-top: 0;

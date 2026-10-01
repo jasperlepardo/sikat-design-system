@@ -15,26 +15,50 @@ one above, so a change at any level ripples down predictably:
 
 <table>
   <thead>
-    <tr><th>Tier</th><th>CSS var prefix</th><th>What it is</th></tr>
+    <tr>
+      <th>Tier</th>
+      <th>CSS var prefix</th>
+      <th>What it is</th>
+    </tr>
   </thead>
   <tbody>
     <tr>
-      <td><strong>Raw</strong></td>
-      <td><code>{'--raw-*'}</code></td>
-      <td>Tailwind&rsquo;s own theme (colors, spacing, radius, type, shadow), generated — not edited by hand.</td>
+      <td>
+        <strong>Raw</strong>
+      </td>
+      <td>
+        <code>{'--raw-*'}</code>
+      </td>
+      <td>
+        Tailwind&rsquo;s own theme (colors, spacing, radius, type, shadow), generated — not edited
+        by hand.
+      </td>
     </tr>
     <tr>
-      <td><strong>Primitive</strong></td>
-      <td><code>{'--p-*'}</code></td>
-      <td>The raw values renamed to brand-neutral primitives (e.g. <code>{'--p-color-primary-600'}</code>).</td>
+      <td>
+        <strong>Primitive</strong>
+      </td>
+      <td>
+        <code>{'--p-*'}</code>
+      </td>
+      <td>
+        The raw values renamed to brand-neutral primitives (e.g.{' '}
+        <code>{'--p-color-primary-600'}</code>).
+      </td>
     </tr>
     <tr>
-      <td><strong>Semantic</strong></td>
-      <td><code>{'--color-bg/fg/text/border-*, --spacing-*, --rounded-*, --text-*'}</code>, …</td>
+      <td>
+        <strong>Semantic</strong>
+      </td>
+      <td>
+        <code>{'--color-bg/fg/text/border-*, --spacing-*, --rounded-*, --text-*'}</code>, …
+      </td>
       <td>Role-based decisions you actually consume. The only tier that re-points per theme.</td>
     </tr>
     <tr>
-      <td><strong>Components</strong></td>
+      <td>
+        <strong>Components</strong>
+      </td>
       <td>component-scoped vars</td>
       <td>Per-component recipes composed from semantic tokens.</td>
     </tr>
@@ -50,7 +74,9 @@ Semantic tokens are the single theme switch. Set `data-theme="light"` (default) 
 work. Toggle the **theme** control in the Storybook toolbar to see it.
 
 ```html
-<html data-theme="dark"> … </html>
+<html data-theme="dark">
+  …
+</html>
 ```
 
 ## Utilities

@@ -28,8 +28,13 @@ function tree(mode) {
   return out;
 }
 
-for (const [file, mode] of [['light', 'l'], ['dark', 'd']]) {
+for (const [file, mode] of [
+  ['light', 'l'],
+  ['dark', 'd'],
+]) {
   const p = join(root, `tokens/semantics/${file}.json`);
   writeFileSync(p, JSON.stringify({ semantic: tree(mode) }, null, 2) + '\n');
 }
-console.log(`✓ rewrote light.json + dark.json semantic.color (${Object.keys(DATA).length} tokens × bg/fg/text/border)`);
+console.log(
+  `✓ rewrote light.json + dark.json semantic.color (${Object.keys(DATA).length} tokens × bg/fg/text/border)`,
+);

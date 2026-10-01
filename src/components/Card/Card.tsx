@@ -39,9 +39,7 @@ function CardHeader({ icon, actions, className, children, ...rest }: CardHeaderP
         {icon != null ? <span className="sikat-card__header-icon">{icon}</span> : null}
         <span className="sikat-card__header-title">{children}</span>
       </div>
-      {actions != null ? (
-        <div className="sikat-card__header-actions">{actions}</div>
-      ) : null}
+      {actions != null ? <div className="sikat-card__header-actions">{actions}</div> : null}
     </div>
   );
 }

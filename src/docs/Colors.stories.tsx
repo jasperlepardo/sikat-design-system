@@ -51,7 +51,10 @@ export const Semantic: Story = {
             <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted">
               {category}
             </h2>
-            <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+            <div
+              className="grid gap-2"
+              style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}
+            >
               {tokens.map((t) => (
                 <Swatch key={t.cssVar} token={t} />
               ))}

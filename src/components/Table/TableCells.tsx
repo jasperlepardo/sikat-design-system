@@ -46,7 +46,9 @@ export function TableMedia({
 }) {
   return (
     <span className="sikat-table-cell__row">
-      {media ?? <img className="sikat-table-cell__media" src={src} alt={alt} width={24} height={24} />}
+      {media ?? (
+        <img className="sikat-table-cell__media" src={src} alt={alt} width={24} height={24} />
+      )}
       <span>{children}</span>
     </span>
   );
@@ -127,9 +129,7 @@ export function TableActions({ children }: { children: ReactNode[] }) {
     <span className="sikat-table-cell__row sikat-table-cell__actions">
       {children.map((child, i) => (
         <span key={i} className="sikat-table-cell__row">
-          {i > 0 ? (
-            <span className="sikat-table-cell__divider" aria-hidden="true" />
-          ) : null}
+          {i > 0 ? <span className="sikat-table-cell__divider" aria-hidden="true" /> : null}
           {child}
         </span>
       ))}

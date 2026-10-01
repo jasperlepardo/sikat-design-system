@@ -23,7 +23,8 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const color = JSON.parse(readFileSync(join(root, 'tokens/semantics/light.json'), 'utf8')).semantic.color;
+const color = JSON.parse(readFileSync(join(root, 'tokens/semantics/light.json'), 'utf8')).semantic
+  .color;
 const prim = JSON.parse(readFileSync(join(root, 'tokens/primitives.json'), 'utf8')).primitive;
 
 /* ── colors: one @utility per semantic token, mapped to its CSS property ── */
@@ -43,12 +44,15 @@ utils += `@utility accent-primary {\n  accent-color: var(--color-bg-primary);\n}
 
 /* ── scales: route a Tailwind namespace through primitive vars ── */
 const route = (twNs, primGroup) =>
-  Object.keys(prim[primGroup]).map((k) => `  --${twNs}-${k}: var(--p-${primGroup}-${k});`).join('\n');
+  Object.keys(prim[primGroup])
+    .map((k) => `  --${twNs}-${k}: var(--p-${primGroup}-${k});`)
+    .join('\n');
 
 /* ── font-size: --text-<k> plus its paired --text-<k>--line-height ── */
 const fontSize = Object.keys(prim['font-size'])
   .map((k) => {
-    const lh = k in prim['line-height'] ? `\n  --text-${k}--line-height: var(--p-line-height-${k});` : '';
+    const lh =
+      k in prim['line-height'] ? `\n  --text-${k}--line-height: var(--p-line-height-${k});` : '';
     return `  --text-${k}: var(--p-font-size-${k});${lh}`;
   })
   .join('\n');
@@ -130,5 +134,7 @@ ${shadow}
 ${utils}`;
 
 writeFileSync(join(root, 'src/styles/theme.css'), css);
-console.log('✓ theme.css — defaults reset; scales+shadow routed through tokens; ' +
-  `${utils.match(/@utility/g).length} color utilities`);
+console.log(
+  '✓ theme.css — defaults reset; scales+shadow routed through tokens; ' +
+    `${utils.match(/@utility/g).length} color utilities`,
+);

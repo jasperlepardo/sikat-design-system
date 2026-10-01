@@ -48,8 +48,15 @@ export const Default: Story = {
         }
         actions={
           <>
-            <Button intent="default" variant="solid" size="extra-large">Button</Button>
-            <Button intent="primary" variant="solid" size="extra-large" trailingIcon={panelHeaderIcons.keyboardArrowDown}>
+            <Button intent="default" variant="solid" size="extra-large">
+              Button
+            </Button>
+            <Button
+              intent="primary"
+              variant="solid"
+              size="extra-large"
+              trailingIcon={panelHeaderIcons.keyboardArrowDown}
+            >
               Button
             </Button>
           </>
@@ -67,8 +74,12 @@ export const Default: Story = {
         </Card>
       </Panel.Body>
       <Panel.Footer>
-        <Button intent="default" variant="solid" size="extra-large">Button</Button>
-        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+        <Button intent="default" variant="solid" size="extra-large">
+          Button
+        </Button>
+        <Button intent="primary" variant="solid" size="extra-large">
+          Button
+        </Button>
       </Panel.Footer>
     </Panel>
   ),
@@ -115,8 +126,12 @@ export const Playground: StoryObj<PanelPlaygroundArgs> = {
           }
           actions={
             <>
-              <Button intent="default" variant="solid" size="extra-large">Button</Button>
-              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+              <Button intent="default" variant="solid" size="extra-large">
+                Button
+              </Button>
+              <Button intent="primary" variant="solid" size="extra-large">
+                Button
+              </Button>
             </>
           }
         />
@@ -126,13 +141,21 @@ export const Playground: StoryObj<PanelPlaygroundArgs> = {
         <Panel.Footer>
           {a.isHorizontal ? (
             <>
-              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
-              <Button intent="default" variant="solid" size="extra-large">Button</Button>
+              <Button intent="primary" variant="solid" size="extra-large">
+                Button
+              </Button>
+              <Button intent="default" variant="solid" size="extra-large">
+                Button
+              </Button>
             </>
           ) : (
             <>
-              <Button intent="default" variant="solid" size="extra-large">Button</Button>
-              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+              <Button intent="default" variant="solid" size="extra-large">
+                Button
+              </Button>
+              <Button intent="primary" variant="solid" size="extra-large">
+                Button
+              </Button>
             </>
           )}
         </Panel.Footer>
@@ -153,8 +176,12 @@ export const Horizontal: Story = {
     <Panel horizontal style={{ width: 1248 }}>
       <Panel.Body>{SlotContent}</Panel.Body>
       <Panel.Footer>
-        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
-        <Button intent="default" variant="solid" size="extra-large">Button</Button>
+        <Button intent="primary" variant="solid" size="extra-large">
+          Button
+        </Button>
+        <Button intent="default" variant="solid" size="extra-large">
+          Button
+        </Button>
       </Panel.Footer>
     </Panel>
   ),
