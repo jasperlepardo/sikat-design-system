@@ -185,11 +185,15 @@
   flex: none;
   align-self: stretch;
   width: var(--spacing-2); /* 8px slot around a 4px bar */
-  background: linear-gradient(var(--color-fg-quarternary), var(--color-fg-quarternary)) left / var(--spacing-1) 100% no-repeat;
+  background: linear-gradient(var(--color-fg-quarternary), var(--color-fg-quarternary)) left /
+    var(--spacing-1) 100% no-repeat;
   border-radius: 0 var(--rounded-full) var(--rounded-full) 0;
 }
 .sikat-list__card[data-expanded] .sikat-list__card-indicator {
-  background-image: linear-gradient(var(--color-fg-quarternary-solid), var(--color-fg-quarternary-solid));
+  background-image: linear-gradient(
+    var(--color-fg-quarternary-solid),
+    var(--color-fg-quarternary-solid)
+  );
 }
 
 .sikat-list__card-toggle {

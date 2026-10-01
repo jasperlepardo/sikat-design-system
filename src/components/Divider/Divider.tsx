@@ -9,5 +9,10 @@ export type DividerProps = HTMLAttributes<HTMLHRElement>;
  * `bg-[var(--color-border-default)]` utility, so it re-themes across light/dark.
  */
 export function Divider({ className, ...rest }: DividerProps) {
-  return <hr className={cn('h-px w-full border-0 bg-[var(--color-border-default)]', className)} {...rest} />;
+  return (
+    <hr
+      className={cn('h-px w-full border-0 bg-[var(--color-border-default)]', className)}
+      {...rest}
+    />
+  );
 }

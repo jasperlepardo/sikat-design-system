@@ -36,6 +36,7 @@
   --radius-2xl: var(--p-radius-2xl);
   --radius-3xl: var(--p-radius-3xl);
   --radius-4xl: var(--p-radius-4xl);
+  --radius-5xl: var(--p-radius-5xl);
   --radius-full: var(--p-radius-full);
 
   /* container → max-w-* / @container */

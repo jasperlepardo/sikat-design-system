@@ -24,7 +24,10 @@
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
-  transition: background-color 120ms ease, box-shadow 120ms ease, color 120ms ease;
+  transition:
+    background-color 120ms ease,
+    box-shadow 120ms ease,
+    color 120ms ease;
 }
 .sikat-btn:focus-visible {
   outline: 2px solid var(--color-border-primary);
@@ -148,11 +151,36 @@
   outline-offset: 2px;
   border-radius: var(--rounded-sm);
 }
-.sikat-link[data-intent='default']  { --link-text: var(--color-text-heading);  --link-icon: var(--color-fg-secondary-solid); }
-.sikat-link[data-intent='primary']  { --link-text: var(--color-text-primary);  --link-icon: var(--color-fg-primary); }
-.sikat-link[data-intent='success']  { --link-text: var(--color-text-success);  --link-icon: var(--color-fg-success); }
-.sikat-link[data-intent='warning']  { --link-text: var(--color-text-warning);  --link-icon: var(--color-fg-warning); }
-.sikat-link[data-intent='danger']   { --link-text: var(--color-text-danger);   --link-icon: var(--color-fg-danger); }
-.sikat-link[data-intent='white']    { --link-text: var(--color-text-white);    --link-icon: var(--color-fg-white); }
-.sikat-link[data-intent='black']    { --link-text: var(--color-text-black);    --link-icon: var(--color-fg-black); }
-.sikat-link[data-state='disabled']  { --link-text: var(--color-text-disabled); --link-icon: var(--color-fg-disabled); cursor: not-allowed; }
+.sikat-link[data-intent='default'] {
+  --link-text: var(--color-text-heading);
+  --link-icon: var(--color-fg-secondary-solid);
+}
+.sikat-link[data-intent='primary'] {
+  --link-text: var(--color-text-primary);
+  --link-icon: var(--color-fg-primary);
+}
+.sikat-link[data-intent='success'] {
+  --link-text: var(--color-text-success);
+  --link-icon: var(--color-fg-success);
+}
+.sikat-link[data-intent='warning'] {
+  --link-text: var(--color-text-warning);
+  --link-icon: var(--color-fg-warning);
+}
+.sikat-link[data-intent='danger'] {
+  --link-text: var(--color-text-danger);
+  --link-icon: var(--color-fg-danger);
+}
+.sikat-link[data-intent='white'] {
+  --link-text: var(--color-text-white);
+  --link-icon: var(--color-fg-white);
+}
+.sikat-link[data-intent='black'] {
+  --link-text: var(--color-text-black);
+  --link-icon: var(--color-fg-black);
+}
+.sikat-link[data-state='disabled'] {
+  --link-text: var(--color-text-disabled);
+  --link-icon: var(--color-fg-disabled);
+  cursor: not-allowed;
+}

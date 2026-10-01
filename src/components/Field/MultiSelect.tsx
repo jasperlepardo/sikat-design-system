@@ -173,9 +173,18 @@ export function MultiSelect({
         </span>
       </FieldShell>
       {open && anchor ? (
-        <Dropdown ref={panelRef} id={listId} multiselectable anchor={anchor} side={side} hSide={hSide}>
+        <Dropdown
+          ref={panelRef}
+          id={listId}
+          multiselectable
+          anchor={anchor}
+          side={side}
+          hSide={hSide}
+        >
           {filtered.length === 0 ? (
-            <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>No results</div>
+            <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
+              No results
+            </div>
           ) : (
             filtered.map((o, i) => (
               <DropdownItem

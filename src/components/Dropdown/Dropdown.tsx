@@ -31,22 +31,28 @@ export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'rol
  * Portaled: pass `anchor` + `side` from `useDropdown` to escape clipping
  * containers (tables, `overflow: hidden` wrappers).
  */
-export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown({
-  role = 'listbox',
-  multiselectable,
-  anchor,
-  side = 'bottom',
-  hSide = 'left',
-  className,
-  style,
-  children,
-  ...rest
-}, ref) {
+export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropdown(
+  {
+    role = 'listbox',
+    multiselectable,
+    anchor,
+    side = 'bottom',
+    hSide = 'left',
+    className,
+    style,
+    children,
+    ...rest
+  },
+  ref,
+) {
   let fixedStyle: React.CSSProperties | undefined = style;
   if (anchor) {
-    const w = typeof style?.width === 'number' ? style.width
-      : typeof style?.width === 'string' ? parseFloat(style.width)
-      : anchor.width;
+    const w =
+      typeof style?.width === 'number'
+        ? style.width
+        : typeof style?.width === 'string'
+          ? parseFloat(style.width)
+          : anchor.width;
     fixedStyle = {
       position: 'fixed',
       width: w,
@@ -55,9 +61,10 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
       ...(side === 'bottom'
         ? { top: anchor.bottom + 4, bottom: 'auto' }
         : { top: 'auto', bottom: window.innerHeight - anchor.top + 4 }),
-      maxHeight: Math.max(80, side === 'bottom'
-        ? window.innerHeight - anchor.bottom - 8
-        : anchor.top - 8),
+      maxHeight: Math.max(
+        80,
+        side === 'bottom' ? window.innerHeight - anchor.bottom - 8 : anchor.top - 8,
+      ),
       ...style,
     };
   }

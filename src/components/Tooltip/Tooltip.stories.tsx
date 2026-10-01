@@ -76,7 +76,10 @@ export const Placements: Story = {
         tooltipAligns.map((align) => (
           <div
             key={`${position}-${align}`}
-            style={{ display: 'flex', justifyContent: align === 'start' ? 'flex-start' : 'flex-end' }}
+            style={{
+              display: 'flex',
+              justifyContent: align === 'start' ? 'flex-start' : 'flex-end',
+            }}
           >
             <Tooltip {...args} position={position} align={align} open />
           </div>

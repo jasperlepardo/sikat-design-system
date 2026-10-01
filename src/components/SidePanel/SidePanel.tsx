@@ -35,17 +35,15 @@ export function SidePanel({
     if (!overlay) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
+    return () => {
+      document.body.style.overflow = prev;
+    };
   }, [overlay]);
 
   return (
     <>
       {overlay ? (
-        <div
-          className="sikat-side-panel__backdrop"
-          onClick={onOverlayClick}
-          aria-hidden="true"
-        />
+        <div className="sikat-side-panel__backdrop" onClick={onOverlayClick} aria-hidden="true" />
       ) : null}
       <div
         className={cn('sikat-side-panel', overlay && 'sikat-side-panel--overlay', className)}
@@ -56,4 +54,3 @@ export function SidePanel({
     </>
   );
 }
-

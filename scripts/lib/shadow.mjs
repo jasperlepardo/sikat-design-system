@@ -20,7 +20,10 @@ function parseLayer(layer) {
   const rgba = color.match(/rgba\(\s*[\d.]+\s*,\s*[\d.]+\s*,\s*[\d.]+\s*,\s*([\d.]+)/);
   if (slash) alpha = parseFloat(slash[1]);
   else if (rgba) alpha = parseFloat(rgba[1]);
-  const rest = layer.replace(colorMatch ? colorMatch[0] : '', '').replace(/\binset\b/, '').trim();
+  const rest = layer
+    .replace(colorMatch ? colorMatch[0] : '', '')
+    .replace(/\binset\b/, '')
+    .trim();
   const nums = rest.split(/\s+/).filter(Boolean);
   const [x = '0', y = '0', blur = '0', spread = '0'] = nums;
   return { inset, x, y, blur, spread, alpha };
@@ -30,12 +33,15 @@ function parseLayer(layer) {
 // except inside rgb(), so split on ',' not within parens)
 function splitLayers(composite) {
   const out = [];
-  let depth = 0, cur = '';
+  let depth = 0,
+    cur = '';
   for (const ch of composite) {
     if (ch === '(') depth++;
     if (ch === ')') depth--;
-    if (ch === ',' && depth === 0) { out.push(cur.trim()); cur = ''; }
-    else cur += ch;
+    if (ch === ',' && depth === 0) {
+      out.push(cur.trim());
+      cur = '';
+    } else cur += ch;
   }
   if (cur.trim()) out.push(cur.trim());
   return out;

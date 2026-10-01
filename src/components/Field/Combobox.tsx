@@ -179,8 +179,12 @@ export function Combobox({
       {open && anchor ? (
         <Dropdown ref={panelRef} id={listId} anchor={anchor} side={side} hSide={hSide}>
           {filtered.length === 0
-            ? ((typeof emptyContent === 'function' ? emptyContent(() => setOpen(false)) : emptyContent) ?? (
-                <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
+            ? ((typeof emptyContent === 'function'
+                ? emptyContent(() => setOpen(false))
+                : emptyContent) ?? (
+                <div
+                  style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}
+                >
                   No results
                 </div>
               ))

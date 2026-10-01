@@ -243,7 +243,8 @@
   align-items: flex-start;
   gap: var(--spacing-4);
 }
-.sikat-field-group[data-orientation='vertical'] > :is(.sikat-field__label, .sikat-field__label-row) {
+.sikat-field-group[data-orientation='vertical']
+  > :is(.sikat-field__label, .sikat-field__label-row) {
   display: flex;
   flex: none;
   align-items: center;

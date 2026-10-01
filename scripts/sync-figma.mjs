@@ -54,7 +54,12 @@ function literal(type, value, remRoot) {
   // Figma font variables hold ONE real family — use the first of the CSS stack
   // (quotes stripped), e.g. "'Inter', ui-sans-serif, …" → "Inter".
   if (type === 'fontFamily')
-    return { string: String(value).split(',')[0].trim().replace(/^['"]|['"]$/g, '') };
+    return {
+      string: String(value)
+        .split(',')[0]
+        .trim()
+        .replace(/^['"]|['"]$/g, ''),
+    };
   // dimension / fontWeight → px NUMBER (rem×remRoot); Figma has no rem.
   return { number: dimToPx(value, remRoot) };
 }

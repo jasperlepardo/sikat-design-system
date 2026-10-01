@@ -17,7 +17,10 @@ export { Icon } from './components/Icon/Icon';
 export type { IconProps } from './components/Icon/Icon';
 
 export { DecorativeIcon, decorativeIconVariants } from './components/DecorativeIcon/DecorativeIcon';
-export type { DecorativeIconProps, DecorativeIconVariant } from './components/DecorativeIcon/DecorativeIcon';
+export type {
+  DecorativeIconProps,
+  DecorativeIconVariant,
+} from './components/DecorativeIcon/DecorativeIcon';
 
 export { Link, linkIntents } from './components/Button/Link';
 export type { LinkProps, LinkIntent } from './components/Button/Link';
@@ -25,17 +28,25 @@ export type { LinkProps, LinkIntent } from './components/Button/Link';
 export { Badge, badgeIntents, badgeStyles, badgeSizes } from './components/Badge/Badge';
 export type { BadgeProps, BadgeIntent, BadgeStyle, BadgeSize } from './components/Badge/Badge';
 export { BadgeCounter, badgeCounterIntents, badgeCounterStyles } from './components/Badge/Badge';
-export type { BadgeCounterProps, BadgeCounterIntent, BadgeCounterStyle } from './components/Badge/Badge';
+export type {
+  BadgeCounterProps,
+  BadgeCounterIntent,
+  BadgeCounterStyle,
+} from './components/Badge/Badge';
 
 export { Card } from './components/Card/Card';
 export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Card/Card';
 
 export { Panel } from './components/Panel/Panel';
-export type { PanelProps, PanelSlotProps, PanelBodyProps, PanelSummaryProps } from './components/Panel/Panel';
+export type {
+  PanelProps,
+  PanelSlotProps,
+  PanelBodyProps,
+  PanelSummaryProps,
+} from './components/Panel/Panel';
 
 export { SidePanel } from './components/SidePanel/SidePanel';
 export type { SidePanelProps } from './components/SidePanel/SidePanel';
-
 
 export { Alert, alertIntents, alertStyles } from './components/Alert/Alert';
 export type {
@@ -113,11 +124,7 @@ export type {
 export { Tabs, tabsVariants } from './components/Tabs/Tabs';
 export type { TabsProps, TabItem, TabsVariant } from './components/Tabs/Tabs';
 
-export {
-  PanelHeader,
-  panelHeaderIcons,
-  panelHeaderTypes,
-} from './components/Panel/PanelHeader';
+export { PanelHeader, panelHeaderIcons, panelHeaderTypes } from './components/Panel/PanelHeader';
 export type { PanelHeaderProps, PanelHeaderType } from './components/Panel/PanelHeader';
 
 export { Table } from './components/Table/Table';
@@ -185,10 +192,7 @@ export { MultiSelect } from './components/Field/MultiSelect';
 export type { MultiSelectProps, MultiSelectOption } from './components/Field/MultiSelect';
 
 export { Autocomplete } from './components/Field/Autocomplete';
-export type {
-  AutocompleteProps,
-  AutocompleteSuggestion,
-} from './components/Field/Autocomplete';
+export type { AutocompleteProps, AutocompleteSuggestion } from './components/Field/Autocomplete';
 
 export { DatePicker } from './components/Field/DatePicker';
 export type { DatePickerProps } from './components/Field/DatePicker';

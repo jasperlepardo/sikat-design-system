@@ -18,8 +18,20 @@ export const Playground: Story = {};
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
 const SIZE_ORDER = [
-  '2xs', 'xs', 'sm', 'base', 'lg', 'xl',
-  '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl',
+  '2xs',
+  'xs',
+  'sm',
+  'base',
+  'lg',
+  'xl',
+  '2xl',
+  '3xl',
+  '4xl',
+  '5xl',
+  '6xl',
+  '7xl',
+  '8xl',
+  '9xl',
 ];
 
 function buildRamp(group: 'body' | 'heading') {

@@ -14,12 +14,30 @@ export default {
   palette: {
     brand: {
       'sikat-orange': {
-        50: '#fef8ec', 100: '#fcebc9', 200: '#f9d68e', 300: '#f5bb54', 400: '#f3a22c',
-        500: '#e07912', 600: '#d15d0e', 700: '#ae3f0f', 800: '#8d3213', 900: '#742a13', 950: '#421306',
+        50: '#fef8ec',
+        100: '#fcebc9',
+        200: '#f9d68e',
+        300: '#f5bb54',
+        400: '#f3a22c',
+        500: '#e07912',
+        600: '#d15d0e',
+        700: '#ae3f0f',
+        800: '#8d3213',
+        900: '#742a13',
+        950: '#421306',
       },
       'sikat-coral': {
-        50: '#fef2f2', 100: '#fee2e2', 200: '#fecacb', 300: '#fba6a7', 400: '#f66163',
-        500: '#ee4547', 600: '#db2729', 700: '#b81d1f', 800: '#981c1e', 900: '#7e1e1f', 950: '#450a0b',
+        50: '#fef2f2',
+        100: '#fee2e2',
+        200: '#fecacb',
+        300: '#fba6a7',
+        400: '#f66163',
+        500: '#ee4547',
+        600: '#db2729',
+        700: '#b81d1f',
+        800: '#981c1e',
+        900: '#7e1e1f',
+        950: '#450a0b',
       },
     },
   },
@@ -30,8 +48,10 @@ export default {
     // Named sans families (raw font-family/sans/*); primitives map body → dm-sans,
     // heading → urbanist in scripts/gen-primitives.mjs.
     sans: {
-      'dm-sans': "'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
-      inter: "'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+      'dm-sans':
+        "'DM Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
+      inter:
+        "'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
       urbanist: "'Urbanist', 'DM Sans', ui-sans-serif, system-ui, sans-serif",
     },
     serif: "'Georgia', ui-serif, Cambria, 'Times New Roman', Times, serif",

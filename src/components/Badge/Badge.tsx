@@ -127,7 +127,9 @@ export function Badge({
           onClick={onDismiss}
           aria-label={dismissLabel}
         >
-          <Icon size={16} aria-hidden>close</Icon>
+          <Icon size={16} aria-hidden>
+            close
+          </Icon>
         </button>
       ) : null}
     </span>

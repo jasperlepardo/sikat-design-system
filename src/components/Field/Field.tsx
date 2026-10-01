@@ -122,7 +122,13 @@ export const ChevronDown = <Icon size={20}>expand_more</Icon>;
  * is set. Internal building block. Stops the click reaching the shell, so it
  * clears without toggling the dropdown.
  */
-export function FieldClear({ onClear, label = 'Clear selection' }: { onClear: () => void; label?: string }) {
+export function FieldClear({
+  onClear,
+  label = 'Clear selection',
+}: {
+  onClear: () => void;
+  label?: string;
+}) {
   return (
     <button
       type="button"

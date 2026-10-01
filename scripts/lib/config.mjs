@@ -117,7 +117,19 @@ export async function loadConfig(opts = {}) {
   // steps to raw's Tailwind font-size/line-height scale (e.g. 2xs), slotted in by size.
   const text = config.text ?? {};
 
-  return { cwd, pkgRoot, config, overrides, paths, figmaFile, spacing, fonts, palette, radius, text };
+  return {
+    cwd,
+    pkgRoot,
+    config,
+    overrides,
+    paths,
+    figmaFile,
+    spacing,
+    fonts,
+    palette,
+    radius,
+    text,
+  };
 }
 
 /**

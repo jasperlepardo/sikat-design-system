@@ -86,8 +86,12 @@ export const Default: Story = {
               title="Send Email"
               actions={
                 <>
-                  <Button intent="default" variant="solid" size="small">Discard</Button>
-                  <Button intent="primary" variant="solid" size="small">Save</Button>
+                  <Button intent="default" variant="solid" size="small">
+                    Discard
+                  </Button>
+                  <Button intent="primary" variant="solid" size="small">
+                    Save
+                  </Button>
                 </>
               }
             />
@@ -96,10 +100,18 @@ export const Default: Story = {
               <Card>
                 <Card.Content>
                   <Form.Group>
-                    <FormField label="From"><TextField placeholder="United State Dollar (USD)" /></FormField>
-                    <FormField label="Send to"><TextField placeholder="123 456 789 00000" /></FormField>
-                    <FormField label="CC:"><TextField placeholder="[shipping type]" /></FormField>
-                    <FormField label="Subject"><TextField placeholder="[shipping type]" /></FormField>
+                    <FormField label="From">
+                      <TextField placeholder="United State Dollar (USD)" />
+                    </FormField>
+                    <FormField label="Send to">
+                      <TextField placeholder="123 456 789 00000" />
+                    </FormField>
+                    <FormField label="CC:">
+                      <TextField placeholder="[shipping type]" />
+                    </FormField>
+                    <FormField label="Subject">
+                      <TextField placeholder="[shipping type]" />
+                    </FormField>
                   </Form.Group>
                 </Card.Content>
               </Card>
@@ -160,8 +172,12 @@ export const TwoColumn: Story = {
               title="Create Customer"
               actions={
                 <>
-                  <Button intent="default" variant="solid" size="small">Discard</Button>
-                  <Button intent="primary" variant="solid" size="small">Save</Button>
+                  <Button intent="default" variant="solid" size="small">
+                    Discard
+                  </Button>
+                  <Button intent="primary" variant="solid" size="small">
+                    Save
+                  </Button>
                 </>
               }
             />
@@ -185,15 +201,33 @@ export const TwoColumn: Story = {
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>General Details</Card.Header>
                   <Card.Content>
                     <Form.Group columns>
-                      <FormField label="Currency"><TextField placeholder="United State Dollar (USD)" /></FormField>
-                      <FormField label="Tax ID"><TextField placeholder="123 456 789 00000" /></FormField>
-                      <FormField label="Website"><TextField placeholder="[website]" /></FormField>
-                      <FormField label="Shipping Type"><TextField placeholder="[shipping type]" /></FormField>
-                      <FormField label="Industry"><TextField placeholder="Technology Industry" /></FormField>
-                      <FormField label="Type of Business"><TextField placeholder="[type of business]" /></FormField>
-                      <FormField label="Sales Employee"><TextField placeholder="[sales employee]" /></FormField>
-                      <FormField label="Technician"><TextField placeholder="[technician]" /></FormField>
-                      <FormField label="Territory"><TextField placeholder="[territory]" /></FormField>
+                      <FormField label="Currency">
+                        <TextField placeholder="United State Dollar (USD)" />
+                      </FormField>
+                      <FormField label="Tax ID">
+                        <TextField placeholder="123 456 789 00000" />
+                      </FormField>
+                      <FormField label="Website">
+                        <TextField placeholder="[website]" />
+                      </FormField>
+                      <FormField label="Shipping Type">
+                        <TextField placeholder="[shipping type]" />
+                      </FormField>
+                      <FormField label="Industry">
+                        <TextField placeholder="Technology Industry" />
+                      </FormField>
+                      <FormField label="Type of Business">
+                        <TextField placeholder="[type of business]" />
+                      </FormField>
+                      <FormField label="Sales Employee">
+                        <TextField placeholder="[sales employee]" />
+                      </FormField>
+                      <FormField label="Technician">
+                        <TextField placeholder="[technician]" />
+                      </FormField>
+                      <FormField label="Territory">
+                        <TextField placeholder="[territory]" />
+                      </FormField>
                     </Form.Group>
                   </Card.Content>
                 </Card>
@@ -201,10 +235,18 @@ export const TwoColumn: Story = {
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>Banks</Card.Header>
                   <Card.Content>
                     <Form.Group columns>
-                      <FormField label="Currency"><TextField placeholder="United State Dollar (USD)" /></FormField>
-                      <FormField label="Tax ID"><TextField placeholder="123 456 789 00000" /></FormField>
-                      <FormField label="Website"><TextField placeholder="[website]" /></FormField>
-                      <FormField label="Shipping Type"><TextField placeholder="[shipping type]" /></FormField>
+                      <FormField label="Currency">
+                        <TextField placeholder="United State Dollar (USD)" />
+                      </FormField>
+                      <FormField label="Tax ID">
+                        <TextField placeholder="123 456 789 00000" />
+                      </FormField>
+                      <FormField label="Website">
+                        <TextField placeholder="[website]" />
+                      </FormField>
+                      <FormField label="Shipping Type">
+                        <TextField placeholder="[shipping type]" />
+                      </FormField>
                     </Form.Group>
                   </Card.Content>
                 </Card>

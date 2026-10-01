@@ -9,7 +9,22 @@ const meta = {
 export default meta;
 type Story = StoryObj;
 
-const SIZE_ORDER = ['2xs', 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', '6xl', '7xl', '8xl', '9xl'];
+const SIZE_ORDER = [
+  '2xs',
+  'xs',
+  'sm',
+  'base',
+  'lg',
+  'xl',
+  '2xl',
+  '3xl',
+  '4xl',
+  '5xl',
+  '6xl',
+  '7xl',
+  '8xl',
+  '9xl',
+];
 
 // Tokens have path: ["semantic", "text", "heading"|"body", <size>, <prop>]
 function buildRamp(group: 'body' | 'heading') {
@@ -69,8 +84,9 @@ export const Typography: Story = {
     <div className="bg-default p-6 text-body">
       <h1 className="mb-1 text-2xl font-semibold text-heading">Typography</h1>
       <p className="mb-8 text-sm text-muted">
-        The type ramp bundles font-size, line-height, font-family and letter-spacing into two semantic
-        groups — <code>heading</code> (Urbanist) and <code>body</code> (DM Sans) — across 14 sizes.
+        The type ramp bundles font-size, line-height, font-family and letter-spacing into two
+        semantic groups — <code>heading</code> (Urbanist) and <code>body</code> (DM Sans) — across
+        14 sizes.
       </p>
 
       <RampSection group="heading" />

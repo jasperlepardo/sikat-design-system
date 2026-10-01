@@ -43,13 +43,19 @@ export const Playground: StoryObj<ButtonGroupPlaygroundArgs> = {
         <Button intent="primary">Confirm</Button>
       ) : Type === '2 Button' ? (
         <>
-          <Button intent="default" variant="ghost">Cancel</Button>
+          <Button intent="default" variant="ghost">
+            Cancel
+          </Button>
           <Button intent="primary">Confirm</Button>
         </>
       ) : (
         <>
-          <Button intent="default" variant="ghost">Cancel</Button>
-          <Button intent="default" variant="outline">Save Draft</Button>
+          <Button intent="default" variant="ghost">
+            Cancel
+          </Button>
+          <Button intent="default" variant="outline">
+            Save Draft
+          </Button>
           <Button intent="primary">Confirm</Button>
         </>
       )}

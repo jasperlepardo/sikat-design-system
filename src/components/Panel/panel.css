@@ -22,7 +22,6 @@
   flex: none;
 }
 
-
 /* Body — grows to fill available height; 12px padding, 16px gap, vertical scroll. */
 .sikat-panel__body {
   display: flex;

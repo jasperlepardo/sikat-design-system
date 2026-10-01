@@ -113,8 +113,12 @@ export const InPanel: StoryObj<typeof meta> = {
           </Form.Section>
           <Divider />
           <ButtonGroup>
-            <Button type="submit" intent="primary" variant="solid" size="large">Save</Button>
-            <Button type="button" intent="default" variant="solid" size="large">Cancel</Button>
+            <Button type="submit" intent="primary" variant="solid" size="large">
+              Save
+            </Button>
+            <Button type="button" intent="default" variant="solid" size="large">
+              Cancel
+            </Button>
           </ButtonGroup>
         </Form>
       </Panel.Body>

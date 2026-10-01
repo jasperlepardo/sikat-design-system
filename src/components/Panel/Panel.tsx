@@ -18,7 +18,11 @@ export interface PanelProps extends HTMLAttributes<HTMLDivElement> {
  */
 export function Panel({ horizontal, className, children, ...rest }: PanelProps) {
   return (
-    <div className={cn('sikat-panel', className)} data-horizontal={horizontal || undefined} {...rest}>
+    <div
+      className={cn('sikat-panel', className)}
+      data-horizontal={horizontal || undefined}
+      {...rest}
+    >
       {children}
     </div>
   );
@@ -36,7 +40,10 @@ export interface PanelBodyProps extends PanelSlotProps {
 /** Content area — grows to fill available height; 12px inner padding, 16px gap. */
 function PanelBody({ columns, className, children, ...rest }: PanelBodyProps) {
   return (
-    <div className={cn('sikat-panel__body', columns && 'sikat-panel__body--columns', className)} {...rest}>
+    <div
+      className={cn('sikat-panel__body', columns && 'sikat-panel__body--columns', className)}
+      {...rest}
+    >
       {children}
     </div>
   );

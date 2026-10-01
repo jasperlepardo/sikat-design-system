@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, within } from 'storybook/test';
-import { PanelHeader, panelHeaderIcons, panelHeaderTypes, type PanelHeaderType } from './PanelHeader';
+import {
+  PanelHeader,
+  panelHeaderIcons,
+  panelHeaderTypes,
+  type PanelHeaderType,
+} from './PanelHeader';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { Tabs } from '../Tabs/Tabs';
@@ -55,8 +60,12 @@ const operations = (
 
 const actions = (
   <>
-    <Button intent="default" variant="solid" size="extra-large">Button</Button>
-    <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+    <Button intent="default" variant="solid" size="extra-large">
+      Button
+    </Button>
+    <Button intent="primary" variant="solid" size="extra-large">
+      Button
+    </Button>
   </>
 );
 
@@ -71,7 +80,11 @@ const prevNext = (
   </>
 );
 
-const statusBadge = <Badge intent="default" variant="outline" size="extra-small" dot>Status</Badge>;
+const statusBadge = (
+  <Badge intent="default" variant="outline" size="extra-small" dot>
+    Status
+  </Badge>
+);
 
 /**
  * Controls mirror the Figma Panel Header (set 17447:35967) properties 1:1 —
@@ -172,7 +185,11 @@ export const Forms: Story = {
           </IconButton>
         </>
       }
-      status={<Badge intent="default" variant="outline" size="extra-small" dot>Status</Badge>}
+      status={
+        <Badge intent="default" variant="outline" size="extra-small" dot>
+          Status
+        </Badge>
+      }
       titleIcon={panelHeaderIcons.rotateRight}
       operations={operations}
       actions={actions}
@@ -196,8 +213,15 @@ export const Default: Story = {
       }
       actions={
         <>
-          <Button intent="default" variant="solid" size="extra-large">Button</Button>
-          <Button intent="primary" variant="solid" size="extra-large" trailingIcon={panelHeaderIcons.keyboardArrowDown}>
+          <Button intent="default" variant="solid" size="extra-large">
+            Button
+          </Button>
+          <Button
+            intent="primary"
+            variant="solid"
+            size="extra-large"
+            trailingIcon={panelHeaderIcons.keyboardArrowDown}
+          >
             Button
           </Button>
         </>

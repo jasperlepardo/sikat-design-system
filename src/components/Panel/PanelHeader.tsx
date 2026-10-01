@@ -8,9 +8,9 @@ export const panelHeaderTypes = ['table', 'forms', 'details'] as const;
 export type PanelHeaderType = (typeof panelHeaderTypes)[number];
 
 export const panelHeaderIcons = {
-  arrowDownward:    <Icon size={20}>arrow_downward</Icon>,
-  arrowUpward:      <Icon size={20}>arrow_upward</Icon>,
-  rotateRight:      <Icon size={20}>rotate_right</Icon>,
+  arrowDownward: <Icon size={20}>arrow_downward</Icon>,
+  arrowUpward: <Icon size={20}>arrow_upward</Icon>,
+  rotateRight: <Icon size={20}>rotate_right</Icon>,
   keyboardArrowDown: <Icon size={20}>keyboard_arrow_down</Icon>,
 };
 
@@ -70,9 +70,8 @@ export function PanelHeader({
   const showStatusRow = isForms || isDetails;
   const showSubcopy = !isForms;
   const showTabs = !isForms;
-  const leadingContent = leading ?? (icon
-    ? <DecorativeIcon variant={iconVariant} icon={icon} size={iconSize} />
-    : null);
+  const leadingContent =
+    leading ?? (icon ? <DecorativeIcon variant={iconVariant} icon={icon} size={iconSize} /> : null);
 
   return (
     <header data-type={type} className={cn('sikat-panel-header', className)} {...rest}>
@@ -105,15 +104,11 @@ export function PanelHeader({
             {operations != null && actions != null ? (
               <span className="sikat-panel-header__divider" aria-hidden="true" />
             ) : null}
-            {actions != null ? (
-              <div className="sikat-panel-header__group">{actions}</div>
-            ) : null}
+            {actions != null ? <div className="sikat-panel-header__group">{actions}</div> : null}
           </div>
         ) : null}
       </div>
-      {showTabs && tabs != null ? (
-        <div className="sikat-panel-header__tabs">{tabs}</div>
-      ) : null}
+      {showTabs && tabs != null ? <div className="sikat-panel-header__tabs">{tabs}</div> : null}
     </header>
   );
 }

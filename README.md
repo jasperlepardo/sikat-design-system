@@ -17,12 +17,12 @@ tokens/components/button.json ──build-components──▶ src/styles/compone
 
 ## Token architecture
 
-| Tier          | File(s)                         | Role                                                                                                      |
-| ------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **Raw**       | `tokens/raw.json` (generated)   | All of Tailwind's theme: palette (oklch) plus spacing, radius, type, and shadows.                         |
-| **Primitive** | `tokens/primitives.json`        | Brand color families (`neutral`, `primary`, `success`, `warning`, `danger`, `white`, `black`) plus curated scales (spacing, radius, border-width, container, type, shadow, blur, …), all aliasing Raw. |
+| Tier          | File(s)                         | Role                                                                                                                                                                                                                    |
+| ------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Raw**       | `tokens/raw.json` (generated)   | All of Tailwind's theme: palette (oklch) plus spacing, radius, type, and shadows.                                                                                                                                       |
+| **Primitive** | `tokens/primitives.json`        | Brand color families (`neutral`, `primary`, `success`, `warning`, `danger`, `white`, `black`) plus curated scales (spacing, radius, border-width, container, type, shadow, blur, …), all aliasing Raw.                  |
 | **Semantic**  | `tokens/semantics/*.json`       | Purpose tokens split by property — `color/{bg,fg,text,border}/*` (themed per light/dark) plus `spacing`, `rounded`, `border-width`, `container`, `blur`, `layout`, the `text` ramp, and `shadow` — aliasing Primitives. |
-| **Component** | `tokens/components/button.json` | Per-component values keyed by `intent/style/size`, aliasing semantics.                                    |
+| **Component** | `tokens/components/button.json` | Per-component values keyed by `intent/style/size`, aliasing semantics.                                                                                                                                                  |
 
 `tokens/raw.json` is **generated** from the installed `tailwindcss` package by
 `scripts/gen-raw-from-tailwind.mjs` — so "raw" is literally Tailwind's own theme.
@@ -30,10 +30,10 @@ It is git-ignored and rebuilt by `npm run tokens`.
 
 ### CSS variable naming
 
-| Tier      | Prefix       | Example                              |
-| --------- | ------------ | ------------------------------------ |
-| Raw       | `--raw-*`    | `--raw-color-blue-500`               |
-| Primitive | `--p-*`      | `--p-color-primary-600`              |
+| Tier      | Prefix                   | Example                                             |
+| --------- | ------------------------ | --------------------------------------------------- |
+| Raw       | `--raw-*`                | `--raw-color-blue-500`                              |
+| Primitive | `--p-*`                  | `--p-color-primary-600`                             |
 | Semantic  | `--color-*` / unprefixed | `--color-bg-default`, `--spacing-4`, `--rounded-md` |
 
 Semantic vars are emitted with `outputReferences`, so they resolve as
@@ -259,7 +259,7 @@ a pull is a _proposed_ config edit you review via git diff.
 | `npm run build-storybook`               | Build the static Storybook site                            |
 | `npm run figma:sync`                    | Emit the Figma variable manifest                           |
 | `npm run figma:push`                    | Push variables via REST (Figma Enterprise)                 |
-| `npx sikat gen` / `pull figma`           | Consumer generate / Figma→config pull (see above)          |
+| `npx sikat gen` / `pull figma`          | Consumer generate / Figma→config pull (see above)          |
 | `npm run lint` / `typecheck` / `format` | Quality gates                                              |
 
 ## Publishing

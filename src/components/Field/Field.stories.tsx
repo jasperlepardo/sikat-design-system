@@ -345,7 +345,9 @@ export const WithSubLabel: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     // The info trigger sits outside the <label>, so it doesn't leak into the input's name.
-    await expect(canvas.getByRole('textbox', { name: 'Middle name(optional)' })).toBeInTheDocument();
+    await expect(
+      canvas.getByRole('textbox', { name: 'Middle name(optional)' }),
+    ).toBeInTheDocument();
     await expect(canvas.getByText('(optional)')).toBeVisible();
 
     await userEvent.hover(canvas.getByRole('button', { name: 'More information' }));
@@ -450,9 +452,7 @@ export const ComboboxField: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
       <FormField label="Country">
-        {(props) => (
-          <Combobox {...props} options={COUNTRIES} placeholder="Search country…" />
-        )}
+        {(props) => <Combobox {...props} options={COUNTRIES} placeholder="Search country…" />}
       </FormField>
     </div>
   ),
@@ -574,7 +574,12 @@ export const ComboboxEmptyContent: Story = {
               title="Create country"
               actions={
                 <>
-                  <Button intent="default" variant="solid" size="small" onClick={() => setModalOpen(false)}>
+                  <Button
+                    intent="default"
+                    variant="solid"
+                    size="small"
+                    onClick={() => setModalOpen(false)}
+                  >
                     Discard
                   </Button>
                   <Button
@@ -650,13 +655,7 @@ export const MultiSelectField: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
       <FormField label="Countries">
-        {(props) => (
-          <MultiSelect
-            {...props}
-            options={COUNTRIES}
-            placeholder="Select countries…"
-          />
-        )}
+        {(props) => <MultiSelect {...props} options={COUNTRIES} placeholder="Select countries…" />}
       </FormField>
     </div>
   ),
