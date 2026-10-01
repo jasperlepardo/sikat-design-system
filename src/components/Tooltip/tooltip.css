@@ -1,7 +1,10 @@
 /* Tooltip — mirrors Figma Tooltip (node 10140:5533). A 16px Material Symbols
    `info` trigger (fg-primary) and a 202px bg-secondary bubble (12px padding, rounded-sm,
    body/xs medium heading text) with an 8px pointer centred on the trigger.
-   The bubble sits 8px off the trigger and overhangs its aligned edge by 8px. */
+   The bubble sits 8px off the trigger and overhangs its aligned edge by 8px.
+   It is portaled to <body> with position: fixed; Tooltip.tsx sets the anchor
+   point (--sikat-tooltip-x/y) and the placement rules below translate the
+   bubble from it, so it is never clipped by overflow-hidden ancestors. */
 
 .sikat-tooltip {
   position: relative;
@@ -25,8 +28,10 @@
 }
 
 .sikat-tooltip__bubble {
-  position: absolute;
-  z-index: 10;
+  position: fixed;
+  top: var(--sikat-tooltip-y, 0);
+  left: var(--sikat-tooltip-x, 0);
+  z-index: 1000;
   box-sizing: border-box;
   width: 202px;
   padding: var(--spacing-3); /* 12px */
@@ -55,76 +60,74 @@
   background-color: inherit;
 }
 
-/* ── Position: top / bottom ── */
-.sikat-tooltip[data-position='top'] > .sikat-tooltip__bubble {
-  bottom: calc(100% + var(--spacing-2));
+/* ── Placement: translate from the anchor point ── */
+.sikat-tooltip__bubble[data-position='top'] {
+  translate: 0 -100%;
 }
-.sikat-tooltip[data-position='bottom'] > .sikat-tooltip__bubble {
-  top: calc(100% + var(--spacing-2));
+.sikat-tooltip__bubble[data-position='top'][data-align='end'] {
+  translate: -100% -100%;
 }
-.sikat-tooltip:is([data-position='top'], [data-position='bottom'])
-  > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble[data-position='bottom'][data-align='end'] {
+  translate: -100% 0;
+}
+.sikat-tooltip__bubble[data-position='left'] {
+  translate: -100% 0;
+}
+.sikat-tooltip__bubble[data-position='left'][data-align='end'] {
+  translate: -100% -100%;
+}
+.sikat-tooltip__bubble[data-position='right'][data-align='end'] {
+  translate: 0 -100%;
+}
+
+/* ── Pointer: top / bottom ── */
+.sikat-tooltip__bubble:is([data-position='top'], [data-position='bottom'])::before {
   width: 16px;
   height: var(--spacing-2);
 }
-.sikat-tooltip[data-position='top'] > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble[data-position='top']::before {
   top: 100%;
   clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
-.sikat-tooltip[data-position='bottom'] > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble[data-position='bottom']::before {
   bottom: 100%;
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
-.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='start']
-  > .sikat-tooltip__bubble {
-  left: calc(-1 * var(--spacing-2));
-}
-.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='start']
-  > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble:is(
+    [data-position='top'],
+    [data-position='bottom']
+  )[data-align='start']::before {
   left: var(--spacing-2);
 }
-.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='end']
-  > .sikat-tooltip__bubble {
-  right: calc(-1 * var(--spacing-2));
-}
-.sikat-tooltip:is([data-position='top'], [data-position='bottom'])[data-align='end']
-  > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble:is(
+    [data-position='top'],
+    [data-position='bottom']
+  )[data-align='end']::before {
   right: var(--spacing-2);
 }
 
-/* ── Position: left / right ── */
-.sikat-tooltip[data-position='left'] > .sikat-tooltip__bubble {
-  right: calc(100% + var(--spacing-2));
-}
-.sikat-tooltip[data-position='right'] > .sikat-tooltip__bubble {
-  left: calc(100% + var(--spacing-2));
-}
-.sikat-tooltip:is([data-position='left'], [data-position='right'])
-  > .sikat-tooltip__bubble::before {
+/* ── Pointer: left / right ── */
+.sikat-tooltip__bubble:is([data-position='left'], [data-position='right'])::before {
   width: var(--spacing-2);
   height: 16px;
 }
-.sikat-tooltip[data-position='left'] > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble[data-position='left']::before {
   left: 100%;
   clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
-.sikat-tooltip[data-position='right'] > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble[data-position='right']::before {
   right: 100%;
   clip-path: polygon(100% 0, 100% 100%, 0 50%);
 }
-.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='start']
-  > .sikat-tooltip__bubble {
-  top: calc(-1 * var(--spacing-2));
-}
-.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='start']
-  > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble:is(
+    [data-position='left'],
+    [data-position='right']
+  )[data-align='start']::before {
   top: var(--spacing-2);
 }
-.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='end']
-  > .sikat-tooltip__bubble {
-  bottom: calc(-1 * var(--spacing-2));
-}
-.sikat-tooltip:is([data-position='left'], [data-position='right'])[data-align='end']
-  > .sikat-tooltip__bubble::before {
+.sikat-tooltip__bubble:is(
+    [data-position='left'],
+    [data-position='right']
+  )[data-align='end']::before {
   bottom: var(--spacing-2);
 }

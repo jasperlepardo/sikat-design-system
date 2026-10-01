@@ -351,7 +351,10 @@ export const WithSubLabel: Story = {
     await expect(canvas.getByText('(optional)')).toBeVisible();
 
     await userEvent.hover(canvas.getByRole('button', { name: 'More information' }));
-    await expect(canvas.getByRole('tooltip')).toHaveTextContent('As shown on your government ID.');
+    // The tooltip bubble is portaled to <body>.
+    await expect(within(canvasElement.ownerDocument.body).getByRole('tooltip')).toHaveTextContent(
+      'As shown on your government ID.',
+    );
   },
 };
 
