@@ -51,9 +51,32 @@
   cursor: default;
 }
 
-/* Chevron rotates when the associated control is expanded. */
+/* Chevron and clear (✕) on Select / Combobox / MultiSelect: hidden until the
+   field is hovered, focused or open. Faded rather than removed, so their slots
+   stay reserved and the value/chips don't shift when they appear (the ✕ stays
+   focusable — tabbing to it focuses the field, which reveals it). Touch
+   devices (no hover) always show them. The chevron rotates when expanded. */
+.sikat-field__chevron,
+.sikat-field__clear {
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
 .sikat-field__chevron {
-  transition: transform 150ms ease;
+  transition:
+    opacity 120ms ease,
+    transform 150ms ease;
+}
+.sikat-field:is(:hover, [data-state='hover'], :focus-within, :has([aria-expanded='true'])):not(
+    [data-disabled]
+  )
+  :is(.sikat-field__chevron, .sikat-field__clear) {
+  opacity: 1;
+}
+@media (hover: none) {
+  .sikat-field__chevron,
+  .sikat-field__clear {
+    opacity: 1;
+  }
 }
 .sikat-field:has([aria-expanded='true']) .sikat-field__chevron {
   transform: rotate(180deg);
@@ -95,7 +118,11 @@
 }
 
 /* Combobox: full-width wrapper (mirrors .sikat-select). */
-.sikat-combobox {
+/* Control roots fill their slot — FormField's fieldset is a flex row, so a
+   root without a width shrinks to its content. */
+.sikat-combobox,
+.sikat-multiselect,
+.sikat-autocomplete {
   width: 100%;
 }
 /* Select: the field box is the trigger (a combobox button) and opens the Figma

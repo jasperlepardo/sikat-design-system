@@ -104,7 +104,7 @@ export function Autocomplete({
   });
 
   return (
-    <div ref={rootRef}>
+    <div ref={rootRef} className="sikat-autocomplete">
       <FieldShell
         className={className}
         state={{ size, filled: text !== '', disabled, readOnly, invalid }}
