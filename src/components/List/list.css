@@ -28,10 +28,12 @@
   color: var(--color-text-muted);
 }
 
-/* Group = the <ul> of rows. */
+/* Group = the <ul> of rows. Rows and dividers sit on a 16px rhythm
+   (Figma List Item, node 9504:12580: row → 16 → divider). */
 .sikat-list__group {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-4);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -39,6 +41,7 @@
 .sikat-list__item {
   display: flex;
   flex-direction: column;
+  gap: var(--spacing-4);
 }
 
 /* Row. Interactive rows (button/anchor) get hover + focus affordances. */
@@ -46,8 +49,8 @@
   display: flex;
   width: 100%;
   align-items: center;
-  gap: var(--spacing-3);
-  padding-block: var(--spacing-3);
+  gap: var(--spacing-4);
+  padding: 0;
   margin: 0;
   border: 0;
   background: none;
@@ -59,7 +62,7 @@
 .sikat-list__row[data-interactive] {
   cursor: pointer;
   border-radius: var(--rounded-md);
-  padding-inline: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
   transition: background-color 120ms ease;
 }
 .sikat-list__row[data-interactive]:hover {
@@ -81,12 +84,25 @@
   display: flex;
   min-width: 0;
   flex: 1 1 auto;
-  gap: var(--spacing-3);
+  gap: var(--spacing-4);
+  font-family: var(--text-body-sm-font-family);
+  font-size: var(--text-body-sm-font-size);
+  font-weight: var(--text-regular);
+  letter-spacing: var(--text-body-sm-letter-spacing);
+  line-height: var(--text-body-sm-line-height);
+  overflow-wrap: anywhere;
 }
+/* Inline: title and value split the row evenly; value is right-aligned. */
 .sikat-list__content[data-variant='inline'] {
   flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+}
+.sikat-list__content[data-variant='inline'] > * {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.sikat-list__content[data-variant='inline'] .sikat-list__value {
+  text-align: right;
 }
 .sikat-list__content[data-variant='stacked'],
 .sikat-list__content[data-variant='stacked-value'] {
@@ -99,12 +115,24 @@
 .sikat-list__value {
   color: var(--color-text-body);
 }
-.sikat-list__content[data-variant='inline'] .sikat-list__value,
-.sikat-list__content[data-variant='stacked-value'] .sikat-list__value {
-  font-weight: var(--text-medium);
+/* Value Only: a single bold line, left-aligned. */
+.sikat-list__content[data-variant='value-only'] {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2);
 }
+.sikat-list__content[data-variant='value-only'] .sikat-list__value {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Emphasis (Figma List Content › Type): Inline, Stacked Value and Value Only
+   bold the value; Stacked bolds the title. */
+.sikat-list__content[data-variant='inline'] .sikat-list__value,
+.sikat-list__content[data-variant='stacked-value'] .sikat-list__value,
+.sikat-list__content[data-variant='value-only'] .sikat-list__value,
 .sikat-list__content[data-variant='stacked'] .sikat-list__title {
-  font-weight: var(--text-medium);
+  font-weight: var(--text-semibold);
 }
 
 /* Per-item Divider (always rendered; shown only when the group/item asks). */
@@ -136,8 +164,8 @@
   background-color: var(--color-bg-secondary);
   transition: background-color 120ms ease;
 }
-.sikat-list__card + .sikat-list__card {
-  margin-top: var(--spacing-2);
+.sikat-list__group:has(> .sikat-list__card) {
+  gap: var(--spacing-2);
 }
 .sikat-list__card:not([data-expanded]):hover {
   background-color: var(--color-bg-tertiary);

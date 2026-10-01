@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { List, type ListCardField } from './List';
+import { List, listVariants, type ListCardField, type ListVariant } from './List';
 import { Badge } from '../Badge/Badge';
 import { Icon } from '../Icon/Icon';
 import { IconButton } from '../Button/IconButton';
+import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 import pixGlyph from './assets/pix.svg';
 
 const meta = {
@@ -22,6 +23,111 @@ export const Inline: Story = {
         <List.Item title="Account name" content="Jasper Lepardo" />
         <List.Item title="Account number" content="•••• 1234" />
         <List.Item title="Status" content={<Badge intent="success">Active</Badge>} />
+      </List.Group>
+    </div>
+  ),
+};
+
+/** Figma's placeholder icon for the leading/trailing media slots. */
+const CircleGlyph = <Icon>radio_button_unchecked</Icon>;
+
+/**
+ * Controls mirror the Figma List Item (node 9504:12580) and its nested List
+ * Content properties 1:1 — same names, options and defaults.
+ */
+type ListItemPlaygroundArgs = {
+  Type: ListVariant;
+  title: string;
+  content: string;
+  showLeading: boolean;
+  showTrailing: boolean;
+  showDivider: boolean;
+};
+
+export const Playground: StoryObj<ListItemPlaygroundArgs> = {
+  args: {
+    Type: 'inline',
+    title: 'Title',
+    content: 'Content',
+    showLeading: true,
+    showTrailing: true,
+    showDivider: true,
+  },
+  argTypes: {
+    Type: figmaSelect('Type', listVariants, ['Inline', 'Stacked', 'Stacked Value', 'Value Only']),
+    title: { name: 'Title', control: 'text' },
+    content: { name: 'Content', control: 'text' },
+    showLeading: { name: 'Show Leading', control: 'boolean' },
+    showTrailing: { name: 'Show Trailing', control: 'boolean' },
+    showDivider: { name: 'Show Divider', control: 'boolean' },
+  },
+  parameters: figmaControls([
+    'Type',
+    'Title',
+    'Content',
+    'Show Leading',
+    'Show Trailing',
+    'Show Divider',
+  ]),
+  render: (a) => (
+    <div style={{ maxWidth: 410 }}>
+      <List.Group>
+        <List.Item
+          variant={a.Type}
+          title={a.title}
+          content={a.content}
+          leading={a.showLeading ? CircleGlyph : undefined}
+          trailing={a.showTrailing ? CircleGlyph : undefined}
+          divider={a.showDivider}
+        />
+      </List.Group>
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Title is hidden in the Value Only layout.
+    if (args.Type !== 'value-only') await expect(canvas.getByText('Title')).toBeVisible();
+    await expect(canvas.getByText('Content')).toBeVisible();
+  },
+};
+
+/** Every Figma List Content Type: Inline, Stacked, Stacked Value, Value Only. */
+export const Types: Story = {
+  render: () => (
+    <div style={{ maxWidth: 410 }}>
+      <List.Group divider>
+        {listVariants.map((variant) => (
+          <List.Item
+            key={variant}
+            variant={variant}
+            title="Title"
+            content={variant}
+            leading={CircleGlyph}
+            trailing={CircleGlyph}
+          />
+        ))}
+      </List.Group>
+    </div>
+  ),
+};
+
+/** Figma "List Item" (node 9504:12580) — leading/trailing media around a title/content pair. */
+export const WithMedia: Story = {
+  render: () => (
+    <div style={{ maxWidth: 410 }}>
+      <List.Group divider>
+        <List.Item
+          leading={<Icon>circle</Icon>}
+          title="Title"
+          content="Content"
+          trailing={<Icon>circle</Icon>}
+        />
+        <List.Item
+          leading={<Icon>account_balance</Icon>}
+          title="Account number"
+          content="•••• 1234"
+          trailing={<Icon>chevron_right</Icon>}
+        />
       </List.Group>
     </div>
   ),
