@@ -28,13 +28,18 @@ export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
   icon?: ReactNode;
   /** Trailing slot — e.g. an action button. */
   actions?: ReactNode;
+  /** Pin the header to the top of the nearest scroll container while content scrolls past. */
+  sticky?: boolean;
   children?: ReactNode;
 }
 
 /** Header row: icon + semibold title on the left, optional actions on the right. */
-function CardHeader({ icon, actions, className, children, ...rest }: CardHeaderProps) {
+function CardHeader({ icon, actions, sticky, className, children, ...rest }: CardHeaderProps) {
   return (
-    <div className={cn('sikat-card__header', className)} {...rest}>
+    <div
+      className={cn('sikat-card__header', sticky && 'sikat-card__header--sticky', className)}
+      {...rest}
+    >
       <div className="sikat-card__header-leading">
         {icon != null ? <span className="sikat-card__header-icon">{icon}</span> : null}
         <span className="sikat-card__header-title">{children}</span>
