@@ -60,6 +60,19 @@ const actions = (
   </>
 );
 
+const prevNext = (
+  <>
+    <IconButton label="Next" intent="default" variant="solid" size="extra-large">
+      {panelHeaderIcons.arrowDownward}
+    </IconButton>
+    <IconButton label="Previous" intent="default" variant="solid" size="extra-large">
+      {panelHeaderIcons.arrowUpward}
+    </IconButton>
+  </>
+);
+
+const statusBadge = <Badge intent="default" variant="outline" size="extra-small" dot>Status</Badge>;
+
 /**
  * Controls mirror the Figma Panel Header (set 17447:35967) properties 1:1 —
  * same names, options and defaults.
@@ -79,7 +92,7 @@ export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
     showTabs: true,
   },
   argTypes: {
-    pageType: figmaSelect('Page Type', panelHeaderTypes, ['Table', 'Forms']),
+    pageType: figmaSelect('Page Type', panelHeaderTypes, ['Table', 'Forms', 'Details']),
     panelTitle: { name: 'Panel Title', control: 'text' },
     panelSubTitle: { name: 'Panel Sub Title', control: 'text' },
     showTabs: { name: 'Show Tabs', control: 'boolean' },
@@ -98,27 +111,47 @@ export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
       />
     ) : (
       <PanelHeader
-        type="forms"
-        leading={
-          <>
-            <IconButton label="Next" intent="default" variant="solid" size="extra-large">
-              {panelHeaderIcons.arrowDownward}
-            </IconButton>
-            <IconButton label="Previous" intent="default" variant="solid" size="extra-large">
-              {panelHeaderIcons.arrowUpward}
-            </IconButton>
-          </>
-        }
+        type={a.pageType}
+        leading={prevNext}
         title={a.panelTitle}
-        status={<Badge intent="default" variant="outline" size="extra-small" dot>Status</Badge>}
+        subcopy={a.panelSubTitle}
+        status={statusBadge}
         titleIcon={panelHeaderIcons.rotateRight}
         operations={operations}
         actions={actions}
+        tabs={a.showTabs ? <Tabs variant="outline" items={panelTabs} /> : undefined}
       />
     ),
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('heading', { name: args.panelTitle })).toBeVisible();
+  },
+};
+
+/**
+ * Details page header (Figma Page Type3, 18725:323053) — Forms' prev/next and
+ * title + status + refresh row, plus Table's subcopy and outline tabs.
+ */
+export const Details: Story = {
+  args: { type: 'details', title: 'Panel Title', subcopy: 'Panel Sub Title' },
+  render: (args) => (
+    <PanelHeader
+      {...args}
+      icon={undefined}
+      leading={prevNext}
+      status={statusBadge}
+      titleIcon={panelHeaderIcons.rotateRight}
+      operations={operations}
+      actions={actions}
+      tabs={<Tabs variant="outline" items={panelTabs} />}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('heading', { name: 'Panel Title' })).toBeVisible();
+    await expect(canvas.getByText('Panel Sub Title')).toBeVisible();
+    await expect(canvas.getByText('Status')).toBeVisible();
+    await expect(canvas.getByRole('tablist')).toBeVisible();
   },
 };
 
