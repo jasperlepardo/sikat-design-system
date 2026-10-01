@@ -10,8 +10,8 @@ import { cn } from '../../lib/cn';
 import { Divider } from '../Divider/Divider';
 import './list.css';
 
-/** List.Item title/value layouts (Figma List Item › Type). */
-export const listVariants = ['inline', 'stacked', 'stacked-value'] as const;
+/** List.Item title/value layouts (Figma List Content › Type: Inline, Stacked, Stacked Value, Value Only). */
+export const listVariants = ['inline', 'stacked', 'stacked-value', 'value-only'] as const;
 export type ListVariant = (typeof listVariants)[number];
 
 /* -------------------------------------------------------------------- List */
@@ -105,9 +105,9 @@ function ListValue({ className, children, ...rest }: ListSlotProps) {
 /* --------------------------------------------------------------- List.Item */
 
 export interface ListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'title' | 'content'> {
-  /** Title/content layout: `inline` (default), `stacked`, or `stacked-value`. */
+  /** Title/content layout: `inline` (default), `stacked`, `stacked-value`, or `value-only`. */
   variant?: ListVariant;
-  /** Primary text — left in `inline`, top when stacked. */
+  /** Primary text — left in `inline`, top when stacked. Not shown in `value-only`. */
   title?: ReactNode;
   /** Secondary text / value — right in `inline`, bottom when stacked. */
   content?: ReactNode;
@@ -164,7 +164,7 @@ export function ListItem({
             {leading != null ? <ListMedia>{leading}</ListMedia> : null}
             {title != null || content != null ? (
               <ListContent variant={variant}>
-                {title != null ? <ListTitle>{title}</ListTitle> : null}
+                {title != null && variant !== 'value-only' ? <ListTitle>{title}</ListTitle> : null}
                 {content != null ? <ListValue>{content}</ListValue> : null}
               </ListContent>
             ) : null}
