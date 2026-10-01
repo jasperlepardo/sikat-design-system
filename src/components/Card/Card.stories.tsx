@@ -60,6 +60,51 @@ export const Default: Story = {
   ),
 };
 
+/** Card.Header with sticky=true pins the header while content scrolls in a column. */
+export const StickyHeader: Story = {
+  render: () => (
+    <div style={{ height: 320, overflowY: 'auto', padding: 'var(--spacing-3)', background: 'var(--color-bg-secondary)', borderRadius: 'var(--rounded-lg)' }}>
+      <Card style={{ maxWidth: 600 }}>
+        <Card.Header icon={ArtTrackIcon} sticky>
+          Customer Details
+        </Card.Header>
+        <Card.Content>
+          <Form.Group className="grid grid-cols-2 gap-2">
+            <FormField label="Customer">
+              {(props) => <TextField {...props} placeholder="[Name of Customer]" />}
+            </FormField>
+            <FormField label="Contact Person">
+              {(props) => <TextField {...props} placeholder="Agatha Harkness" leadingIcon={AvatarIcon} />}
+            </FormField>
+            <FormField label="Currency">
+              {(props) => <TextField {...props} placeholder="United State Dollar (USD)" />}
+            </FormField>
+            <FormField label="Billing Address">
+              <Button intent="primary" variant="link" leadingIcon={AddCircleIcon}>
+                Add new address
+              </Button>
+            </FormField>
+            <FormField label="Shipping Address">
+              <Button intent="primary" variant="link" leadingIcon={AddCircleIcon}>
+                Add new address
+              </Button>
+            </FormField>
+            <FormField label="Payment Terms">
+              {(props) => <TextField {...props} placeholder="Net 30" />}
+            </FormField>
+            <FormField label="Tax ID">
+              {(props) => <TextField {...props} placeholder="123-456-789" />}
+            </FormField>
+            <FormField label="Notes">
+              {(props) => <TextField {...props} placeholder="Additional notes…" />}
+            </FormField>
+          </Form.Group>
+        </Card.Content>
+      </Card>
+    </div>
+  ),
+};
+
 /** Card with trailing actions in the header. */
 export const WithHeaderActions: Story = {
   render: () => (
