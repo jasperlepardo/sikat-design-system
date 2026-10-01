@@ -908,19 +908,23 @@
         "type": "dimension"
       },
       "xl": {
-        "value": "{raw.radius.xl}",
+        "value": "{raw.radius.lg-plus}",
         "type": "dimension"
       },
       "2xl": {
-        "value": "{raw.radius.2xl}",
+        "value": "{raw.radius.xl}",
         "type": "dimension"
       },
       "3xl": {
-        "value": "{raw.radius.3xl}",
+        "value": "{raw.radius.2xl}",
         "type": "dimension"
       },
       "4xl": {
         "value": "{raw.radius.4xl}",
+        "type": "dimension"
+      },
+      "5xl": {
+        "value": "{raw.radius.3xl}",
         "type": "dimension"
       },
       "full": {
