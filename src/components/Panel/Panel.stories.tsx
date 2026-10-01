@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect, within } from 'storybook/test';
 import { Panel } from './Panel';
 import { PanelHeader, panelHeaderIcons } from './PanelHeader';
 import { Card } from '../Card/Card';
@@ -6,6 +7,7 @@ import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
 import { IconButton } from '../Button/IconButton';
 import { Tabs } from '../Tabs/Tabs';
+import { figmaControls } from '../../docs/figma-controls';
 
 const meta = {
   title: 'Components/Panel',
@@ -52,7 +54,7 @@ export const Default: Story = {
             </Button>
           </>
         }
-        tabs={<Tabs items={panelTabs} />}
+        tabs={<Tabs variant="outline" items={panelTabs} />}
       />
       <Panel.Body>
         <Card>
@@ -65,8 +67,94 @@ export const Default: Story = {
         </Card>
       </Panel.Body>
       <Panel.Footer>
-        <Button intent="default" variant="solid" size="extra-large" className="flex-1">Button</Button>
-        <Button intent="primary" variant="solid" size="extra-large" className="flex-1">Button</Button>
+        <Button intent="default" variant="solid" size="extra-large">Button</Button>
+        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+      </Panel.Footer>
+    </Panel>
+  ),
+};
+
+/**
+ * Controls mirror the Figma Panel (set 9474:6173) properties 1:1 —
+ * is Horizontal and Show Footer.
+ */
+type PanelPlaygroundArgs = { isHorizontal: boolean; showFooter: boolean };
+
+const SlotContent = (
+  <Card>
+    <Card.Header icon={ArtTrackIcon}>Details</Card.Header>
+    <Card.Content>
+      <p style={{ color: 'var(--color-text-body)', minHeight: 80 }}>Content slot.</p>
+    </Card.Content>
+  </Card>
+);
+
+export const Playground: StoryObj<PanelPlaygroundArgs> = {
+  args: { isHorizontal: false, showFooter: true },
+  argTypes: {
+    isHorizontal: { name: 'is Horizontal', control: 'boolean' },
+    showFooter: { name: 'Show Footer', control: 'boolean' },
+  },
+  parameters: figmaControls(['is Horizontal', 'Show Footer']),
+  render: (a) => (
+    <Panel horizontal={a.isHorizontal} style={{ width: a.isHorizontal ? 1248 : 632 }}>
+      {a.isHorizontal ? null : (
+        <PanelHeader
+          icon="radio_button_unchecked"
+          title="Panel Title"
+          subcopy="Panel Sub Title"
+          operations={
+            <>
+              <IconButton label="Filter" intent="default" variant="solid" size="extra-large">
+                {CircleIcon}
+              </IconButton>
+              <IconButton label="Sort" intent="default" variant="solid" size="extra-large">
+                {CircleIcon}
+              </IconButton>
+            </>
+          }
+          actions={
+            <>
+              <Button intent="default" variant="solid" size="extra-large">Button</Button>
+              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+            </>
+          }
+        />
+      )}
+      <Panel.Body>{SlotContent}</Panel.Body>
+      {a.showFooter ? (
+        <Panel.Footer>
+          {a.isHorizontal ? (
+            <>
+              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+              <Button intent="default" variant="solid" size="extra-large">Button</Button>
+            </>
+          ) : (
+            <>
+              <Button intent="default" variant="solid" size="extra-large">Button</Button>
+              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+            </>
+          )}
+        </Panel.Footer>
+      ) : null}
+    </Panel>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.queryAllByRole('button', { name: 'Button' })).toHaveLength(
+      (args.showFooter ? 2 : 0) + (args.isHorizontal ? 0 : 2),
+    );
+  },
+};
+
+/** Figma is Horizontal=True (9474:6501) — content and stacked footer side by side. */
+export const Horizontal: Story = {
+  render: () => (
+    <Panel horizontal style={{ width: 1248 }}>
+      <Panel.Body>{SlotContent}</Panel.Body>
+      <Panel.Footer>
+        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+        <Button intent="default" variant="solid" size="extra-large">Button</Button>
       </Panel.Footer>
     </Panel>
   ),
@@ -83,7 +171,7 @@ export const HeaderOnly: Story = {
           iconVariant={variant}
           title="Page Title"
           subcopy={`iconVariant="${variant}"`}
-          tabs={<Tabs items={panelTabs} />}
+          tabs={<Tabs variant="outline" items={panelTabs} />}
         />
       ))}
     </div>

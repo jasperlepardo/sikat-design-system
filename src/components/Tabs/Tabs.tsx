@@ -10,7 +10,7 @@ import { cn } from '../../lib/cn';
 import { BadgeCounter } from '../Badge/Badge';
 import './tabs.css';
 
-export const tabsVariants = ['primary', 'secondary'] as const;
+export const tabsVariants = ['primary', 'secondary', 'outline'] as const;
 export type TabsVariant = (typeof tabsVariants)[number];
 
 export interface TabItem {
@@ -27,7 +27,10 @@ export interface TabItem {
 
 export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   items: TabItem[];
-  /** Figma "Type": Primary (filled primary active tab) or Secondary (white). */
+  /**
+   * Figma "Type": Primary (filled primary active tab), Secondary (white), or
+   * Outline (Tab Item Style=Outline: no track, 4px primary underline on the active tab).
+   */
   variant?: TabsVariant;
   /** Controlled selected value. */
   value?: string;
@@ -43,7 +46,8 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
  * tabs are transparent, Hover `bg/quarternary`, Disabled white with muted text;
  * the Active tab is primary with white text (`variant="primary"`) or white with
  * body text (`"secondary"`), lifted by Shadow/Default, and its badge turns
- * Primary / Ghost. WAI-ARIA tabs: `tablist` / `tab` with roving focus —
+ * Primary / Ghost. `"outline"` drops the track: 40px tabs whose active state
+ * is a 4px primary underline (Figma Tab Item, Style=Outline). WAI-ARIA tabs: `tablist` / `tab` with roving focus —
  * ←/→/Home/End move and select, skipping disabled tabs.
  */
 export function Tabs({

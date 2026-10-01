@@ -271,7 +271,7 @@ function AppShellWithAlertDemo() {
                     </Button>
                   </>
                 }
-                tabs={<Tabs items={panelTabs} />}
+                tabs={<Tabs variant="outline" items={panelTabs} />}
               />
               <Panel.Body>
                 <Card>
@@ -342,7 +342,7 @@ function AppShellWithAlertTwoPanelDemo() {
                     Button
                   </Button>
                 }
-                tabs={<Tabs items={panelTabs} />}
+                tabs={<Tabs variant="outline" items={panelTabs} />}
               />
               <Panel.Body>
                 <Card>
