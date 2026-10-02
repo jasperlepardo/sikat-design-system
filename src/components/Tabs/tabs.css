@@ -11,6 +11,11 @@
   background-color: var(--color-bg-tertiary);
   box-shadow: inset var(--shadow-inner-1-offset-x) var(--shadow-inner-1-offset-y)
     var(--shadow-inner-1-blur) var(--shadow-inner-1-spread) var(--shadow-inner-1-color);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sikat-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 /* tab-button: 6px / 10px padding (32px with the 20px icon / badge), 10px radius,
