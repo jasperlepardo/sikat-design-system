@@ -101,14 +101,14 @@ export function FieldShell({
   );
 }
 
-/** Tracks "has content" for a controlled or uncontrolled control. */
+/** Tracks the text (and so "has content") of a controlled or uncontrolled control. */
 function useFilled(value: unknown, defaultValue: unknown) {
-  const [hasText, setHasText] = useState(() => String(defaultValue ?? '') !== '');
-  const filled = value !== undefined ? String(value) !== '' : hasText;
+  const [uncontrolled, setUncontrolled] = useState(() => String(defaultValue ?? ''));
+  const text = value !== undefined ? String(value ?? '') : uncontrolled;
   const track = (next: string) => {
-    if (value === undefined) setHasText(next !== '');
+    if (value === undefined) setUncontrolled(next);
   };
-  return [filled, track] as const;
+  return [text !== '', track, text] as const;
 }
 
 /** Pulls the story-only `data-state` attribute off the rest props. */
@@ -161,24 +161,62 @@ export interface TextFieldProps
  * <FormField>. Optional `leadingIcon` / `prefix` / `suffix` / `trailingIcon`.
  * Tracks whether it has content (`data-filled`, controlled or not) for Figma's
  * "has Content" states: primary border at rest, and on hover a tertiary fill with
- * a trailing edit (pencil) icon. `className` goes on the field box; the rest of
- * the props go on the `<input>`.
+ * a trailing edit (pencil) icon. A `suffix` (e.g. a unit) sits right after the
+ * value — the input is as wide as its text — while trailing icons stay at the
+ * right edge. `className` goes on the field box; the rest of the props go on
+ * the `<input>`.
  */
-export function TextField({
-  size = 'md',
-  invalid,
-  className,
-  value,
-  defaultValue,
-  onChange,
-  leadingIcon,
-  prefix,
-  suffix,
-  trailingIcon,
-  ...rest
-}: TextFieldProps) {
-  const [filled, track] = useFilled(value, defaultValue);
+export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
+  {
+    size = 'md',
+    invalid,
+    className,
+    value,
+    defaultValue,
+    onChange,
+    leadingIcon,
+    prefix,
+    suffix,
+    trailingIcon,
+    ...rest
+  },
+  ref,
+) {
+  const [filled, track, text] = useFilled(value, defaultValue);
   const [dataState, inputProps] = takeDataState(rest);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  // A number input hides its text while it isn't a valid number yet ("-",
+  // "1e") — `value` reads "". Those states add a character or two to the last
+  // valid text, so size for that plus two digits instead of collapsing.
+  const [badInput, setBadInput] = useState(false);
+  const autosizeText = badInput ? `${text}00` : text || inputProps.placeholder || '';
+
+  const input = (
+    <input
+      ref={(node) => {
+        inputRef.current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+      }}
+      className="sikat-field__input"
+      aria-invalid={invalid || undefined}
+      value={value}
+      defaultValue={defaultValue}
+      onChange={(e) => {
+        // Keep the last valid text while the input is in a partial state.
+        if (!e.currentTarget.validity.badInput) track(e.currentTarget.value);
+        onChange?.(e);
+      }}
+      {...inputProps}
+      // onInput, not onChange: typing "-" into an empty number field leaves
+      // `value` at "", so React skips onChange — but the text did change.
+      onInput={(e) => {
+        setBadInput(e.currentTarget.validity.badInput);
+        inputProps.onInput?.(e);
+      }}
+    />
+  );
+
   return (
     <FieldShell
       className={className}
@@ -190,27 +228,36 @@ export function TextField({
         invalid,
         dataState,
       }}
-      adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+      // The suffix is placed inline with the value below, not by the shell.
+      adornments={{ leadingIcon, prefix, trailingIcon }}
+      onClick={
+        suffix != null
+          ? // The input no longer fills the box, so clicks on its empty part focus it.
+            () => {
+              if (document.activeElement !== inputRef.current) inputRef.current?.focus();
+            }
+          : undefined
+      }
       after={
         <span className="sikat-field__edit" aria-hidden="true">
           {EditIcon}
         </span>
       }
     >
-      <input
-        className="sikat-field__input"
-        aria-invalid={invalid || undefined}
-        value={value}
-        defaultValue={defaultValue}
-        onChange={(e) => {
-          track(e.currentTarget.value);
-          onChange?.(e);
-        }}
-        {...inputProps}
-      />
+      {suffix != null ? (
+        <span className="sikat-field__value">
+          {/* Hidden copy of the text (or placeholder) sizes the input to its content. */}
+          <span className="sikat-field__autosize" data-value={autosizeText}>
+            {input}
+          </span>
+          <span className="sikat-field__affix">{suffix}</span>
+        </span>
+      ) : (
+        input
+      )}
     </FieldShell>
   );
-}
+});
 
 /* ----------------------------------------------------------------- FormLabel */
 

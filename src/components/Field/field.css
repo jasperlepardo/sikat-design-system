@@ -117,6 +117,53 @@
   white-space: nowrap;
 }
 
+/* TextField with a suffix: the suffix (e.g. a unit) sits right after the value.
+   __value takes the free space, so trailing icons stay at the right edge.
+   __autosize is as wide as the text: its ::after is a hidden copy of the value
+   (or placeholder) that sets the width, and the input is laid over it
+   (absolute), so the input's own default width — which `size` can't shrink on
+   type="number" — never counts. Past the free space it caps at 100% and the
+   input scrolls; the suffix stays visible. */
+.sikat-field__value {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: var(--spacing-2); /* same as prefix ↔ value */
+  /* The hidden copy can't wrap, so without this a long value would become the
+     field's min-content width and stretch grid/flex columns around it. */
+  contain: inline-size;
+}
+.sikat-field__autosize {
+  position: relative;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  align-self: stretch;
+}
+.sikat-field__autosize::after {
+  content: attr(data-value) ' ';
+  display: block;
+  overflow: hidden;
+  height: 0;
+  visibility: hidden;
+  white-space: pre;
+}
+.sikat-field__autosize > .sikat-field__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+}
+/* Number spinners would add width the hidden copy doesn't account for. */
+.sikat-field__autosize > .sikat-field__input[type='number'] {
+  -moz-appearance: textfield;
+}
+.sikat-field__autosize > .sikat-field__input::-webkit-inner-spin-button,
+.sikat-field__autosize > .sikat-field__input::-webkit-outer-spin-button {
+  margin: 0;
+  -webkit-appearance: none;
+}
+
 /* Combobox: full-width wrapper (mirrors .sikat-select). */
 /* Control roots fill their slot — FormField's fieldset is a flex row, so a
    root without a width shrinks to its content. */

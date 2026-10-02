@@ -456,6 +456,108 @@ export const ResponsiveOrientation: Story = {
   },
 };
 
+/**
+ * Suffix right after the value (e.g. units): the input is as wide as its text,
+ * so "0 cm" reads as one value. Trailing icons and the hover edit icon stay at
+ * the right edge; a long value scrolls while the suffix stays visible.
+ */
+export const SuffixInline: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 24, width: 640 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px' }}>
+        <FormField label="Length">
+          {(props) => <TextField type="number" defaultValue="0" suffix="cm" {...props} />}
+        </FormField>
+        <FormField label="Width">
+          {(props) => <TextField type="number" defaultValue="0" suffix="cm" {...props} />}
+        </FormField>
+        <FormField label="Volume">
+          {(props) => <TextField type="number" defaultValue="0" suffix="cm³" {...props} />}
+        </FormField>
+        <FormField label="Net weight" tooltip="Weight of one piece, without packaging.">
+          {(props) => <TextField type="number" defaultValue="0.1" suffix="kg" {...props} />}
+        </FormField>
+      </div>
+      <div style={{ display: 'grid', gap: 12, width: 320 }}>
+        <TextField aria-label="Empty" placeholder="Placeholder" suffix="cm" />
+        <TextField
+          aria-label="With icon"
+          defaultValue="12.5"
+          suffix="kg"
+          trailingIcon={<Icon size={20}>info</Icon>}
+        />
+        <TextField
+          aria-label="Prefix and suffix"
+          defaultValue="1,250.00"
+          prefix="PHP"
+          suffix="/mo"
+        />
+        <TextField aria-label="Long" defaultValue={'1234567890'.repeat(6)} suffix="cm" />
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const parts = (name: string) => {
+      const input = canvas.getByRole(name === 'Length' ? 'spinbutton' : 'textbox', {
+        name,
+      }) as HTMLInputElement;
+      const field = input.closest<HTMLElement>('.sikat-field')!;
+      const suffix = field.querySelector('.sikat-field__value > .sikat-field__affix')!;
+      // Distance from the end of the visible text (value or placeholder) to the
+      // suffix — measured from the text, not the input box, so a too-wide input fails.
+      const gap = () => {
+        const ctx = document.createElement('canvas').getContext('2d')!;
+        const cs = getComputedStyle(input);
+        ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        const textWidth = ctx.measureText(input.value || input.placeholder).width;
+        return suffix.getBoundingClientRect().left - input.getBoundingClientRect().left - textWidth;
+      };
+      return { input, field, suffix, gap };
+    };
+    // 8px gap + the copy's trailing space (~4px), allowing for rounding.
+    const expectNextToValue = async (gap: number) => {
+      await expect(gap).toBeGreaterThanOrEqual(8);
+      await expect(gap).toBeLessThanOrEqual(14);
+    };
+
+    // The suffix sits right after the value — for a number, a placeholder, and as it grows.
+    const length = parts('Length');
+    await expectNextToValue(length.gap());
+    const empty = parts('Empty');
+    await expectNextToValue(empty.gap());
+    const before = empty.suffix.getBoundingClientRect().left;
+    await userEvent.type(empty.input, '12.5 kilograms, rounded up');
+    await expectNextToValue(empty.gap());
+    await expect(empty.suffix.getBoundingClientRect().left).toBeGreaterThan(before);
+
+    // Clicking the empty part of the box focuses the input.
+    await userEvent.click(length.field);
+    await expect(length.input).toHaveFocus();
+
+    // Trailing icon stays at the right edge (inside the 12px padding).
+    const icon = parts('With icon');
+    const iconEl = icon.field.querySelector('.sikat-field__icon')!;
+    const pad = parseFloat(getComputedStyle(icon.field).paddingRight);
+    await expect(Math.round(iconEl.getBoundingClientRect().right)).toBe(
+      Math.round(icon.field.getBoundingClientRect().right - pad),
+    );
+
+    // A long value never widens its column (the group is 320px).
+    for (const name of ['Empty', 'With icon', 'Long']) {
+      await expect(Math.round(parts(name).field.getBoundingClientRect().width)).toBe(320);
+    }
+
+    // A long value scrolls inside the input; the suffix stays inside the field.
+    const long = parts('Long');
+    await expect(long.input.scrollWidth).toBeGreaterThan(long.input.clientWidth);
+    await expect(long.suffix.getBoundingClientRect().right).toBeLessThanOrEqual(
+      long.field.getBoundingClientRect().right -
+        parseFloat(getComputedStyle(long.field).paddingRight),
+    );
+  },
+};
+
 /** Figma Form Label with Show Sub Label + Show Tooltip. */
 export const WithSubLabel: Story = {
   render: () => (
