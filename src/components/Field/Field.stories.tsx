@@ -515,10 +515,10 @@ export const SuffixInline: Story = {
       };
       return { input, field, suffix, gap };
     };
-    // 8px gap + the copy's trailing space (~4px), allowing for rounding.
+    // 4px from the end of the text to the suffix (±1px for text rounding).
     const expectNextToValue = async (gap: number) => {
-      await expect(gap).toBeGreaterThanOrEqual(8);
-      await expect(gap).toBeLessThanOrEqual(14);
+      await expect(gap).toBeGreaterThanOrEqual(3);
+      await expect(gap).toBeLessThanOrEqual(5);
     };
 
     // The suffix sits right after the value — for a number, a placeholder, and as it grows.
@@ -530,6 +530,14 @@ export const SuffixInline: Story = {
     await userEvent.type(empty.input, '12.5 kilograms, rounded up');
     await expectNextToValue(empty.gap());
     await expect(empty.suffix.getBoundingClientRect().left).toBeGreaterThan(before);
+
+    // Prefix sits 4px before the value.
+    const priced = parts('Prefix and suffix');
+    const prefix = priced.field.querySelector('.sikat-field__affix--prefix')!;
+    await expect(
+      Math.round(priced.input.getBoundingClientRect().left - prefix.getBoundingClientRect().right),
+    ).toBe(4);
+    await expectNextToValue(priced.gap());
 
     // Clicking the empty part of the box focuses the input.
     await userEvent.click(length.field);

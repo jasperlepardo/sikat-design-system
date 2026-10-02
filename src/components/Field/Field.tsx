@@ -91,10 +91,14 @@ export function FieldShell({
       onClick={onClick}
     >
       {leadingIcon ? <span className="sikat-field__icon">{leadingIcon}</span> : null}
-      {prefix != null ? <span className="sikat-field__affix">{prefix}</span> : null}
+      {prefix != null ? (
+        <span className="sikat-field__affix sikat-field__affix--prefix">{prefix}</span>
+      ) : null}
       {before}
       {children}
-      {suffix != null ? <span className="sikat-field__affix">{suffix}</span> : null}
+      {suffix != null ? (
+        <span className="sikat-field__affix sikat-field__affix--suffix">{suffix}</span>
+      ) : null}
       {trailingIcon ? <span className="sikat-field__icon">{trailingIcon}</span> : null}
       {after}
     </span>
@@ -250,7 +254,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
           <span className="sikat-field__autosize" data-value={autosizeText}>
             {input}
           </span>
-          <span className="sikat-field__affix">{suffix}</span>
+          <span className="sikat-field__affix sikat-field__affix--suffix">{suffix}</span>
         </span>
       ) : (
         input

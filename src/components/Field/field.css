@@ -116,6 +116,14 @@
   color: var(--color-text-caption); /* Figma Prefix / Suffix */
   white-space: nowrap;
 }
+/* Prefix / suffix sit 4px from the value (the shell's gap is 8px, which still
+   spaces the leading / trailing icons). */
+.sikat-field--shell > .sikat-field__affix--prefix {
+  margin-inline-end: calc(var(--spacing-1) - var(--spacing-2));
+}
+.sikat-field--shell > .sikat-field__affix--suffix {
+  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
+}
 
 /* TextField with a suffix: the suffix (e.g. a unit) sits right after the value.
    __value takes the free space, so trailing icons stay at the right edge.
@@ -129,7 +137,8 @@
   flex: 1 1 auto;
   min-width: 0;
   align-items: center;
-  gap: var(--spacing-2); /* same as prefix ↔ value */
+  /* 4px from the end of the text: 3px gap + the copy's 1px caret room. */
+  gap: calc(var(--spacing-1) - 1px);
   /* The hidden copy can't wrap, so without this a long value would become the
      field's min-content width and stretch grid/flex columns around it. */
   contain: inline-size;
@@ -142,7 +151,8 @@
   align-self: stretch;
 }
 .sikat-field__autosize::after {
-  content: attr(data-value) ' ';
+  content: attr(data-value);
+  padding-inline-end: 1px; /* room for the caret at the end of the text */
   display: block;
   overflow: hidden;
   height: 0;
