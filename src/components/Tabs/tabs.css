@@ -3,15 +3,15 @@
 
 /* Tab Container: bg/tertiary track, 2px padding + gap, 12px radius, Shadow/inner. */
 .sikat-tabs-scroll {
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.sikat-tabs-scroll::-webkit-scrollbar {
-  display: none;
+  width: 100%;
 }
 
 .sikat-tabs {
   display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  width: 100%;
   align-items: center;
   gap: var(--spacing-0_5);
   padding: var(--spacing-0_5);
@@ -19,6 +19,10 @@
   background-color: var(--color-bg-tertiary);
   box-shadow: inset var(--shadow-inner-1-offset-x) var(--shadow-inner-1-offset-y)
     var(--shadow-inner-1-blur) var(--shadow-inner-1-spread) var(--shadow-inner-1-color);
+}
+
+.sikat-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 /* tab-button: 6px / 10px padding (32px with the 20px icon / badge), 10px radius,
@@ -123,5 +127,5 @@
   background-color: transparent;
   color: var(--color-text-disabled);
   --tabs-icon: var(--color-fg-disabled);
-  --tabs-accent: var(--color-fg-disabled);
+  --tabs-accent: transparent;
 }
