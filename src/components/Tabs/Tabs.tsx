@@ -97,39 +97,41 @@ export function Tabs({
     : items.find((t) => !t.disabled)?.value;
 
   return (
-    <div role="tablist" data-variant={variant} className={cn('sikat-tabs', className)} {...rest}>
-      {items.map((tab, i) => {
-        const active = tab.value === selected;
-        return (
-          <button
-            key={tab.value}
-            ref={(el) => {
-              refs.current[i] = el;
-            }}
-            id={`${baseId}-tab-${i}`}
-            type="button"
-            role="tab"
-            className="sikat-tabs__tab"
-            aria-selected={active}
-            aria-controls={tab.controls}
-            disabled={tab.disabled}
-            tabIndex={tab.value === focusable ? 0 : -1}
-            onClick={() => select(tab.value)}
-            onKeyDown={(e) => onKeyDown(e, i)}
-          >
-            {tab.icon ? <span className="sikat-tabs__icon">{tab.icon}</span> : null}
-            <span className="sikat-tabs__label">{tab.label}</span>
-            {tab.badge != null ? (
-              <BadgeCounter
-                intent={active ? 'primary' : 'default'}
-                variant={active ? 'ghost' : 'solid'}
-              >
-                {tab.badge}
-              </BadgeCounter>
-            ) : null}
-          </button>
-        );
-      })}
+    <div className={cn('sikat-tabs-scroll', className)} {...rest}>
+      <div role="tablist" data-variant={variant} className="sikat-tabs">
+        {items.map((tab, i) => {
+          const active = tab.value === selected;
+          return (
+            <button
+              key={tab.value}
+              ref={(el) => {
+                refs.current[i] = el;
+              }}
+              id={`${baseId}-tab-${i}`}
+              type="button"
+              role="tab"
+              className="sikat-tabs__tab"
+              aria-selected={active}
+              aria-controls={tab.controls}
+              disabled={tab.disabled}
+              tabIndex={tab.value === focusable ? 0 : -1}
+              onClick={() => select(tab.value)}
+              onKeyDown={(e) => onKeyDown(e, i)}
+            >
+              {tab.icon ? <span className="sikat-tabs__icon">{tab.icon}</span> : null}
+              <span className="sikat-tabs__label">{tab.label}</span>
+              {tab.badge != null ? (
+                <BadgeCounter
+                  intent={active ? 'primary' : 'default'}
+                  variant={active ? 'ghost' : 'solid'}
+                >
+                  {tab.badge}
+                </BadgeCounter>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
