@@ -274,17 +274,18 @@ export interface ReadOnlyProps {
 
 /**
  * ReadOnly — a non-interactive field that displays a computed or locked value.
+ * Renders the same shell as a disabled TextField so the appearance is identical.
  * Use inside `<FormField disabled>` so the label carries the lock icon.
  */
 export function ReadOnly({ value, size = 'md', className }: ReadOnlyProps) {
   return (
-    <div
-      className={cn('sikat-field sikat-field--readonly', className)}
+    <span
+      className={cn('sikat-field sikat-field--shell', className)}
       data-size={size}
       data-disabled
     >
-      {value}
-    </div>
+      <span className="sikat-field__display">{value}</span>
+    </span>
   );
 }
 

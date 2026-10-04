@@ -1,7 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { FormField, TextField, Textarea, Select, Checkbox, Radio, fieldSizes } from './Field';
+import {
+  FormField,
+  ReadOnly,
+  TextField,
+  Textarea,
+  Select,
+  Checkbox,
+  Radio,
+  fieldSizes,
+} from './Field';
 import { MultiSelect } from './MultiSelect';
 import { Combobox } from './Combobox';
 import { Button } from '../Button/Button';
@@ -591,6 +600,23 @@ export const WithSubLabel: Story = {
       'As shown on your government ID.',
     );
   },
+};
+
+/** ReadOnly — static computed value displayed in the disabled field shell. */
+export const ReadOnlyField: Story = {
+  render: () => (
+    <div style={{ maxWidth: 480, display: 'grid', gap: 8 }}>
+      <FormField label="Average delay" disabled tooltip="Calculated from payment history.">
+        <ReadOnly value="5 days" />
+      </FormField>
+      <FormField label="Normal balance" disabled tooltip="Determined by the account drawer.">
+        <ReadOnly value="Debit" />
+      </FormField>
+      <FormField label="Inventory account" disabled tooltip="From the item group.">
+        <ReadOnly value="1300 Raw Materials Inventory" />
+      </FormField>
+    </div>
+  ),
 };
 
 export const WithError: Story = {
