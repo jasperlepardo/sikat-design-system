@@ -282,22 +282,16 @@ export function FormLabel({
   children,
   ...rest
 }: FormLabelProps) {
-  const label = (
+  return (
     <label className={cn('sikat-field__label', className)} {...rest}>
-      {children}
+      {tooltip != null ? (
+        <Tooltip message={tooltip}>{children}</Tooltip>
+      ) : (
+        children
+      )}
       {required ? <span className="sikat-field__required"> *</span> : null}
       {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
     </label>
-  );
-  // The trigger sits beside the <label>, not inside it, so its name doesn't
-  // leak into the control's accessible name.
-  return tooltip != null ? (
-    <div className="sikat-field__label-row">
-      {label}
-      <Tooltip message={tooltip} />
-    </div>
-  ) : (
-    label
   );
 }
 

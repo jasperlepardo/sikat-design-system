@@ -429,9 +429,7 @@ export const ResponsiveOrientation: Story = {
       const input = canvas.getByRole('textbox', { name: new RegExp(name) });
       const control = input.closest('.sikat-field') ?? input;
       const group = control.closest('.sikat-field-group')!;
-      const label = group.querySelector(
-        ':scope > :is(.sikat-field__label, .sikat-field__label-row)',
-      )!;
+      const label = group.querySelector(':scope > .sikat-field__label')!;
       return { control: rect(control), group: rect(group), label: rect(label) };
     };
 
@@ -581,13 +579,13 @@ export const WithSubLabel: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    // The info trigger sits outside the <label>, so it doesn't leak into the input's name.
     await expect(
       canvas.getByRole('textbox', { name: 'Middle name(optional)' }),
     ).toBeInTheDocument();
     await expect(canvas.getByText('(optional)')).toBeVisible();
 
-    await userEvent.hover(canvas.getByRole('button', { name: 'More information' }));
+    // Hover the underlined label text to reveal the tooltip bubble.
+    await userEvent.hover(canvas.getByText('Middle name'));
     // The tooltip bubble is portaled to <body>.
     await expect(within(canvasElement.ownerDocument.body).getByRole('tooltip')).toHaveTextContent(
       'As shown on your government ID.',

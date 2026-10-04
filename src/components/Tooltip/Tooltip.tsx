@@ -39,6 +39,11 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'con
   defaultOpen?: boolean;
   /** Called with the next open state. */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * When provided, renders children as an inline underlined trigger instead of
+   * the info icon — intended for use inside a `<label>`.
+   */
+  children?: ReactNode;
 }
 
 /** Grace period so the pointer can cross the gap between trigger and bubble. */
@@ -84,6 +89,7 @@ export function Tooltip({
   className,
   onMouseEnter,
   onMouseLeave,
+  children,
   ...rest
 }: TooltipProps) {
   const [uncontrolled, setUncontrolled] = useState(defaultOpen);
@@ -154,7 +160,7 @@ export function Tooltip({
   return (
     <span
       ref={rootRef}
-      className={cn('sikat-tooltip', className)}
+      className={cn('sikat-tooltip', children ? 'sikat-tooltip--label' : undefined, className)}
       data-position={position}
       data-align={align}
       onMouseEnter={(e) => {
@@ -167,22 +173,28 @@ export function Tooltip({
       }}
       {...rest}
     >
-      <button
-        type="button"
-        className="sikat-tooltip__trigger"
-        aria-label={label}
-        aria-describedby={id}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
-        onKeyDown={(e) => {
-          if (e.key === 'Escape' && open) {
-            e.stopPropagation();
-            setOpen(false);
-          }
-        }}
-      >
-        <Icon size={16}>info</Icon>
-      </button>
+      {children ? (
+        <span className="sikat-tooltip__trigger--label" aria-describedby={id}>
+          {children}
+        </span>
+      ) : (
+        <button
+          type="button"
+          className="sikat-tooltip__trigger"
+          aria-label={label}
+          aria-describedby={id}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape' && open) {
+              e.stopPropagation();
+              setOpen(false);
+            }
+          }}
+        >
+          <Icon size={16}>info</Icon>
+        </button>
+      )}
       {mounted ? createPortal(bubble, document.body) : null}
     </span>
   );
