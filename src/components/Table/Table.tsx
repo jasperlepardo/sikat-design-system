@@ -53,6 +53,8 @@ export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   onColumnSettings?: () => void;
   /** Figma "Bottom Action": page size, total and prev / next. */
   pagination?: TablePagination;
+  /** Give the table its own horizontal scroll container. Without this the page scrolls. */
+  scroll?: boolean;
   /** Accessible table name. */
   caption?: string;
 }
@@ -155,6 +157,7 @@ export function Table<T>({
   onRowAction,
   onColumnSettings,
   pagination,
+  scroll,
   caption,
   className,
   ...rest
@@ -181,7 +184,7 @@ export function Table<T>({
 
   return (
     <div className={cn('sikat-table', className)} {...rest}>
-      <div ref={setScroller} className="sikat-table__scroller">
+      <div ref={setScroller} className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}>
         <table className="sikat-table__table">
           {caption ? <caption className="sikat-table__caption">{caption}</caption> : null}
           <thead>

@@ -9,11 +9,11 @@
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
 }
 
-.sikat-table__scroller {
+.sikat-table__scroller--scroll {
   overflow-x: auto;
   scrollbar-width: none; /* the Figma Scroll Indicator replaces the scrollbar */
 }
-.sikat-table__scroller::-webkit-scrollbar {
+.sikat-table__scroller--scroll::-webkit-scrollbar {
   display: none;
 }
 .sikat-table__table {
