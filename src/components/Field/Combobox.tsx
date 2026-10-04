@@ -102,7 +102,7 @@ export function Combobox({
   }, [options, query]);
 
   const selectedOption = options.find((o) => o.value === selected) ?? null;
-  const display = open ? query : selectedOption ? optText(selectedOption) : '';
+  const display = open && query ? query : selectedOption ? optText(selectedOption) : '';
   const showMultiline =
     !open &&
     selectedOption != null &&
