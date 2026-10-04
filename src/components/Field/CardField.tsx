@@ -136,7 +136,7 @@ export function CardField({
   if (!labelEl) return content;
 
   return (
-    <div className="sikat-field-group" data-orientation="vertical">
+    <div className="sikat-field-group" data-orientation="horizontal" style={{ alignSelf: 'start' }}>
       {labelEl}
       {content}
     </div>
