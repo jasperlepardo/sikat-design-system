@@ -91,6 +91,7 @@ export type {
 } from './components/Button/ButtonGroup';
 
 export {
+  ReadOnly,
   TextField,
   Textarea,
   Select,
@@ -100,6 +101,7 @@ export {
   FormLabel,
 } from './components/Field/Field';
 export type {
+  ReadOnlyProps,
   TextFieldProps,
   TextareaProps,
   SelectProps,
