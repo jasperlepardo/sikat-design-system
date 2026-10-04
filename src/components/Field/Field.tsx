@@ -285,7 +285,6 @@ export function FormLabel({
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  const cancelClose = () => clearTimeout(closeTimer.current);
   const scheduleClose = () => {
     clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => setTooltipOpen(false), 100);
@@ -296,7 +295,6 @@ export function FormLabel({
       <label
         className={cn('sikat-field__label', className)}
         onMouseOver={() => {
-          cancelClose();
           if (!tooltipOpen) setTooltipOpen(true);
         }}
         onMouseLeave={scheduleClose}
@@ -305,7 +303,9 @@ export function FormLabel({
         <Tooltip
           message={tooltip}
           open={tooltipOpen}
-          onOpenChange={(next) => (next ? (cancelClose(), setTooltipOpen(true)) : scheduleClose())}
+          onOpenChange={(next) => {
+            if (!next) scheduleClose();
+          }}
         >
           {children}
         </Tooltip>
