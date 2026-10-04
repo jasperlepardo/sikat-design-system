@@ -11,10 +11,48 @@
 
 .sikat-table__scroller--scroll {
   overflow-x: auto;
+  overflow-y: clip; /* prevent overflow-x: auto from promoting overflow-y to auto */
   scrollbar-width: none; /* the Figma Scroll Indicator replaces the scrollbar */
 }
 .sikat-table__scroller--scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* layout="fill" — table expands to fill available flex space; rows scroll inside it. */
+.sikat-table--fill,
+.sikat-table--fill .sikat-table__scroller {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* layout="fill" and layout="scroll" — rows scroll inside a bounded area under a
+   sticky header. The native scrollbar is shown (thin vertical, no horizontal — the
+   Figma Scroll Indicator still handles horizontal). */
+.sikat-table--fill .sikat-table__scroller,
+.sikat-table--scroll .sikat-table__scroller {
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+.sikat-table--fill .sikat-table__scroller::-webkit-scrollbar,
+.sikat-table--scroll .sikat-table__scroller::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 0; /* the Figma Scroll Indicator replaces the horizontal scrollbar */
+}
+.sikat-table--fill .sikat-table__th,
+.sikat-table--scroll .sikat-table__th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: var(--color-bg-tertiary);
+  /* Fill the row gap above the header so scrolled rows don't peek through it. */
+  box-shadow: 0 calc(-1 * var(--spacing-0_5)) 0 var(--color-bg-tertiary);
+}
+
+/* layout="scroll" — height-capped; suits detail tabs. */
+.sikat-table--scroll .sikat-table__scroller {
+  max-height: min(60dvh, 36rem);
 }
 .sikat-table__table {
   width: 100%;

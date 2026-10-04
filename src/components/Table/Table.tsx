@@ -55,6 +55,17 @@ export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   pagination?: TablePagination;
   /** Give the table its own horizontal scroll container. Without this the page scrolls. */
   scroll?: boolean;
+  /**
+   * `"fill"` — table expands to fill remaining flex space in its container; rows
+   * scroll inside it under a sticky header. The parent card needs `flex: 0 1 auto`.
+   *
+   * `"scroll"` — table is height-capped (`min(60dvh, 36rem)`); rows scroll inside
+   * it. Suits detail tabs.
+   *
+   * Both layouts own their vertical scroll and show a thin native scrollbar.
+   * The `scroll` prop is redundant when `layout` is set.
+   */
+  layout?: 'fill' | 'scroll';
   /** Accessible table name. */
   caption?: string;
 }
@@ -158,6 +169,7 @@ export function Table<T>({
   onColumnSettings,
   pagination,
   scroll,
+  layout,
   caption,
   className,
   ...rest
@@ -183,7 +195,7 @@ export function Table<T>({
         : null;
 
   return (
-    <div className={cn('sikat-table', className)} {...rest}>
+    <div className={cn('sikat-table', layout && `sikat-table--${layout}`, className)} {...rest}>
       <div ref={setScroller} className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}>
         <table className="sikat-table__table">
           {caption ? <caption className="sikat-table__caption">{caption}</caption> : null}
