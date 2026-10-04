@@ -327,35 +327,40 @@
 /* Figma Orientation=Vertical: label in a fixed 200px column beside the field,
    vertically centered on the 36px control row.
 
-   Responsive: the group is a size container, so it reacts to the width it's
-   given (a Panel, SidePanel or column), not the viewport. Below 28.5rem — the
-   200px label + 16px gap + a 240px control — the label moves above the control,
-   exactly like Orientation=Horizontal. Width 100% keeps the container from
-   collapsing in a flex row (an inline-size container ignores its content). */
-.sikat-field-group[data-orientation='vertical'] {
-  container-type: inline-size;
+   Vertical: fixed side-label, never collapses.
+   Responsive: side-label when wide (≥ 28.5rem), stacks when narrow — reacts
+   to the width it's given (a Panel, SidePanel or column), not the viewport.
+   Width 100% keeps the container from collapsing in a flex row (an
+   inline-size container ignores its content). */
+.sikat-field-group[data-orientation='vertical'],
+.sikat-field-group[data-orientation='responsive'] {
   width: 100%;
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 0 var(--spacing-4);
 }
-.sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
+.sikat-field-group[data-orientation='vertical'] > .sikat-field__label,
+.sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
   display: flex;
   flex: none;
   align-items: center;
   width: 12.5rem;
   min-height: var(--field-h, var(--spacing-9));
 }
-.sikat-field-group[data-orientation='vertical'] > .sikat-field__fieldset {
+.sikat-field-group[data-orientation='vertical'] > .sikat-field__fieldset,
+.sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
   flex: 1 1 0;
 }
+.sikat-field-group[data-orientation='responsive'] {
+  container-type: inline-size;
+}
 @container (width < 28.5rem) {
-  .sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
+  .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
     width: 100%;
     min-height: 0;
   }
-  .sikat-field-group[data-orientation='vertical'] > .sikat-field__fieldset {
+  .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
     flex-basis: 100%;
   }
 }

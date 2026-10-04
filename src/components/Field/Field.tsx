@@ -298,7 +298,7 @@ export interface FormFieldProps {
    * Figma "Orientation": `horizontal` (default) stacks the label above the
    * control; `vertical` puts the label in a fixed 200px column beside it.
    */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: 'horizontal' | 'vertical' | 'responsive';
   label?: ReactNode;
   /** Muted text after the label (Figma "Sub Label"), e.g. "(optional)". */
   subLabel?: ReactNode;

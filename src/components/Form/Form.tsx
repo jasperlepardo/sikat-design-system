@@ -80,10 +80,10 @@ export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
   columns?: boolean;
   /**
    * Matches the `orientation` of the `FormField`s inside: `horizontal` (default,
-   * label above) uses a 4px gap; `vertical` (label beside) uses 16px, collapsing
-   * to 4px at the same breakpoint the fields do (< 28.5rem container width).
+   * label above) uses 16px; `vertical` (label beside, fixed) uses 4px;
+   * `responsive` (label beside when wide, stacked when narrow) uses 4px → 16px.
    */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: 'horizontal' | 'vertical' | 'responsive';
 }
 
 /** Field group — vertical stack (or responsive grid when `columns`) inside a Card. */
