@@ -282,9 +282,42 @@ export function FormLabel({
   children,
   ...rest
 }: FormLabelProps) {
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const cancelClose = () => clearTimeout(closeTimer.current);
+  const scheduleClose = () => {
+    clearTimeout(closeTimer.current);
+    closeTimer.current = setTimeout(() => setTooltipOpen(false), 100);
+  };
+
+  if (tooltip != null) {
+    return (
+      <label
+        className={cn('sikat-field__label', className)}
+        onMouseOver={() => {
+          cancelClose();
+          if (!tooltipOpen) setTooltipOpen(true);
+        }}
+        onMouseLeave={scheduleClose}
+        {...rest}
+      >
+        <Tooltip
+          message={tooltip}
+          open={tooltipOpen}
+          onOpenChange={(next) => (next ? (cancelClose(), setTooltipOpen(true)) : scheduleClose())}
+        >
+          {children}
+        </Tooltip>
+        {required ? <span className="sikat-field__required"> *</span> : null}
+        {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
+      </label>
+    );
+  }
+
   return (
     <label className={cn('sikat-field__label', className)} {...rest}>
-      {tooltip != null ? <Tooltip message={tooltip}>{children}</Tooltip> : children}
+      {children}
       {required ? <span className="sikat-field__required"> *</span> : null}
       {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
     </label>

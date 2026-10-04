@@ -392,11 +392,11 @@ export const ResponsiveOrientation: Story = {
   render: () => {
     const fields = (prefix: string) => (
       <>
-        <FormField orientation="vertical" label={`${prefix} name`}>
+        <FormField orientation="responsive" label={`${prefix} name`}>
           {(props) => <TextField placeholder="Placeholder" {...props} />}
         </FormField>
         <FormField
-          orientation="vertical"
+          orientation="responsive"
           label={`${prefix} email`}
           subLabel="(optional)"
           tooltip="We'll only use this for receipts."
