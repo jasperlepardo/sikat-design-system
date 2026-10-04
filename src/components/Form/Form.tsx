@@ -76,8 +76,11 @@ function FormHeader({
 /* -------------------------------------------------------------- Form.Group */
 
 export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
-  /** Responsive grid layout: 1 col → 3 cols at md. */
-  columns?: boolean;
+  /**
+   * Responsive grid layout: number of columns at md+ breakpoint (1 col on mobile always).
+   * `1` = single column, `2` = two columns, `3` = three columns.
+   */
+  columns?: 1 | 2 | 3;
   /**
    * Matches the `orientation` of the `FormField`s inside: `horizontal` (default,
    * label above) uses 16px; `vertical` (label beside, fixed) uses 4px;
@@ -86,15 +89,17 @@ export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical' | 'responsive';
 }
 
+const COLS_CLASS: Record<1 | 2 | 3, string> = {
+  1: 'grid! gap-2 grid-cols-1',
+  2: 'grid! gap-2 grid-cols-1 md:grid-cols-2',
+  3: 'grid! gap-2 grid-cols-1 md:grid-cols-3',
+};
+
 /** Field group — vertical stack (or responsive grid when `columns`) inside a Card. */
 function FormGroup({ columns, orientation, className, children, ...rest }: FormGroupProps) {
   return (
     <div
-      className={cn(
-        'sikat-form__group',
-        columns && 'grid! gap-2 grid-cols-1 md:grid-cols-3',
-        className,
-      )}
+      className={cn('sikat-form__group', columns != null && COLS_CLASS[columns], className)}
       data-orientation={orientation}
       {...rest}
     >
