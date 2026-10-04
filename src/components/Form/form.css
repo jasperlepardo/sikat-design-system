@@ -47,7 +47,7 @@
   display: flex;
   flex-direction: column;
   align-self: stretch;
-  gap: var(--spacing-1); /* 4px — horizontal fields (label above) */
+  gap: var(--spacing-4); /* 16px between fields */
   margin-left: calc(var(--spacing-2) * -1); /* -8px to offset label padding */
   margin-right: calc(var(--spacing-2) * -1);
 }
