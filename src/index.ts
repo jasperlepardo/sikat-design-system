@@ -178,7 +178,16 @@ export type {
   FormHeadingLevel,
 } from './components/Form/Form';
 
-export { bind, emptyState, ReadOnlyField } from './components/Form/fields';
+export {
+  bind,
+  emptyState,
+  ReadOnlyField,
+  FieldOrientationCtx,
+  CtxFormField,
+  Fields,
+  FieldStack,
+  Flags,
+} from './components/Form/fields';
 export type { FieldOptions, KeysOf, Option } from './components/Form/fields';
 
 export { Image, imageRatios } from './components/Image/Image';

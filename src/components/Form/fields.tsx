@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { createContext, useContext, type JSX, type ReactNode } from 'react';
 import {
   Checkbox,
   FormField,
@@ -7,8 +7,10 @@ import {
   Textarea,
   TextField,
 } from '../Field/Field';
+import type { FormFieldProps } from '../Field/Field';
 import { Combobox } from '../Field/Combobox';
 import { DatePicker } from '../Field/DatePicker';
+import { Form } from './Form';
 
 export interface FieldOptions {
   required?: boolean;
@@ -33,6 +35,26 @@ export interface FieldOptions {
 export type KeysOf<T, V> = { [K in keyof T]-?: NonNullable<T[K]> extends V ? K : never }[keyof T];
 
 export type Option = { value: string; label: string };
+
+type Orientation = 'horizontal' | 'vertical' | 'responsive';
+
+/**
+ * Set by Fields/FieldStack so that bind() fields and CtxFormField inherit the group orientation
+ * without needing to pass it on every field individually.
+ */
+export const FieldOrientationCtx = createContext<Orientation | null>(null);
+
+/** A FormField that inherits orientation from the enclosing Fields/FieldStack context. */
+export function CtxFormField(props: FormFieldProps) {
+  const ctxO = useContext(FieldOrientationCtx);
+  return <FormField {...props} orientation={props.orientation ?? ctxO ?? 'horizontal'} />;
+}
+
+function ApplyOrientation({ o, fn }: { o: FieldOptions; fn: (opts: FieldOptions) => JSX.Element }) {
+  const ctxO = useContext(FieldOrientationCtx);
+  const orientation: Orientation = o.orientation ?? ctxO ?? 'horizontal';
+  return fn({ orientation, ...o });
+}
 
 const NONE_LABEL = '— None —';
 const isNone = (v: string | null | undefined) => !v || v === NONE_LABEL;
@@ -68,6 +90,9 @@ export function emptyState(
  * Returns a `field` helper in addition to the named builders — use it to add
  * custom field types (e.g. a master-data lookup) that reuse the same lock/readOnly
  * logic: `f.field(key, label, o, (p) => <MyControl {...p} />)`.
+ *
+ * All fields inherit the orientation from the nearest Fields/FieldStack ancestor via
+ * FieldOrientationCtx; pass `orientation` in options to override per-field.
  */
 export function bind<T>(obj: T, update: (patch: Partial<T>) => void) {
   const patch = (key: keyof T, value: unknown) => update({ [key]: value } as Partial<T>);
@@ -77,22 +102,25 @@ export function bind<T>(obj: T, update: (patch: Partial<T>) => void) {
     label: ReactNode,
     o: FieldOptions,
     control: (p: object) => ReactNode,
-  ) => {
-    const showLock = o.lock ?? (!!o.disabled || !!o.readOnly);
-    return (
-      <FormField
-        key={String(key)}
-        orientation={o.orientation}
-        label={label}
-        required={o.required}
-        disabled={showLock}
-        error={o.error}
-        tooltip={o.hint}
-        className={o.className}
-      >
-        {(p) => control({ ...p, disabled: o.disabled })}
-      </FormField>
-    );
+  ): JSX.Element => {
+    const render = (opts: FieldOptions): JSX.Element => {
+      const showLock = opts.lock ?? (!!opts.disabled || !!opts.readOnly);
+      return (
+        <FormField
+          key={String(key)}
+          orientation={opts.orientation}
+          label={label}
+          required={opts.required}
+          disabled={showLock}
+          error={opts.error}
+          tooltip={opts.hint}
+          className={opts.className}
+        >
+          {(p) => control({ ...p, disabled: opts.disabled })}
+        </FormField>
+      );
+    };
+    return <ApplyOrientation o={o} fn={render} />;
   };
 
   return {
@@ -227,15 +255,50 @@ export function ReadOnlyField({
   value,
   hint,
   error,
+  subLabel,
+  subLabelPlacement,
+  description,
 }: {
   label: string;
   value: ReactNode;
   hint?: ReactNode;
   error?: string;
+  subLabel?: ReactNode;
+  subLabelPlacement?: 'top' | 'inline';
+  description?: ReactNode;
 }) {
+  const ctxO = useContext(FieldOrientationCtx);
   return (
-    <FormField label={label} disabled tooltip={hint} error={error}>
-      <DSReadOnly value={value} />
+    <FormField label={label} disabled tooltip={hint} error={error} orientation={ctxO ?? 'horizontal'}>
+      <DSReadOnly
+        value={value}
+        subLabel={subLabel}
+        subLabelPlacement={subLabelPlacement}
+        description={description}
+      />
     </FormField>
   );
+}
+
+/** Responsive field grid. Fields inside inherit `orientation="horizontal"`. */
+export function Fields({ children, cols = 2 }: { children: ReactNode; cols?: 1 | 2 | 3 }) {
+  return (
+    <FieldOrientationCtx.Provider value="horizontal">
+      <Form.Group columns={cols}>{children}</Form.Group>
+    </FieldOrientationCtx.Provider>
+  );
+}
+
+/** Side-label field column. Fields inside inherit `orientation="responsive"`. */
+export function FieldStack({ children }: { children: ReactNode }) {
+  return (
+    <FieldOrientationCtx.Provider value="responsive">
+      <Form.Group orientation="responsive">{children}</Form.Group>
+    </FieldOrientationCtx.Provider>
+  );
+}
+
+/** A flex row for checkboxes (flags) under a field grid. */
+export function Flags({ children }: { children: ReactNode }) {
+  return <div className="flex flex-wrap gap-x-6 gap-y-3">{children}</div>;
 }
