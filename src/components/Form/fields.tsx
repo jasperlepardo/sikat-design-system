@@ -1,5 +1,12 @@
 import type { ReactNode } from 'react';
-import { Checkbox, FormField, ReadOnly as DSReadOnly, Select, Textarea, TextField } from '../Field/Field';
+import {
+  Checkbox,
+  FormField,
+  ReadOnly as DSReadOnly,
+  Select,
+  Textarea,
+  TextField,
+} from '../Field/Field';
 import { Combobox } from '../Field/Combobox';
 import { DatePicker } from '../Field/DatePicker';
 
@@ -120,7 +127,12 @@ export function bind<T>(obj: T, update: (patch: Partial<T>) => void) {
         />
       )),
 
-    pick: (key: KeysOf<T, string>, label: ReactNode, values: readonly string[], o: FieldOptions = {}) => {
+    pick: (
+      key: KeysOf<T, string>,
+      label: ReactNode,
+      values: readonly string[],
+      o: FieldOptions = {},
+    ) => {
       const e = emptyState(toOptions(values), obj[key] as string | undefined, o, 'Select…');
       return field(key, label, o, (p) => (
         <Select
@@ -192,7 +204,11 @@ export function bind<T>(obj: T, update: (patch: Partial<T>) => void) {
         />
       )),
 
-    check: (key: KeysOf<T, boolean>, label: ReactNode, o: { disabled?: boolean; readOnly?: boolean } = {}) => (
+    check: (
+      key: KeysOf<T, boolean>,
+      label: ReactNode,
+      o: { disabled?: boolean; readOnly?: boolean } = {},
+    ) => (
       <Checkbox
         key={String(key)}
         checked={Boolean(obj[key])}
