@@ -78,10 +78,16 @@ function FormHeader({
 export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** Responsive grid layout: 1 col → 3 cols at md. */
   columns?: boolean;
+  /**
+   * Matches the `orientation` of the `FormField`s inside: `horizontal` (default,
+   * label above) uses a 4px gap; `vertical` (label beside) uses 16px, collapsing
+   * to 4px at the same breakpoint the fields do (< 28.5rem container width).
+   */
+  orientation?: 'horizontal' | 'vertical';
 }
 
 /** Field group — vertical stack (or responsive grid when `columns`) inside a Card. */
-function FormGroup({ columns, className, children, ...rest }: FormGroupProps) {
+function FormGroup({ columns, orientation, className, children, ...rest }: FormGroupProps) {
   return (
     <div
       className={cn(
@@ -89,6 +95,7 @@ function FormGroup({ columns, className, children, ...rest }: FormGroupProps) {
         columns && 'grid! gap-2 grid-cols-1 md:grid-cols-3',
         className,
       )}
+      data-orientation={orientation}
       {...rest}
     >
       {children}

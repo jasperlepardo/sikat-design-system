@@ -340,8 +340,7 @@
   align-items: flex-start;
   gap: 0 var(--spacing-4);
 }
-.sikat-field-group[data-orientation='vertical']
-  > :is(.sikat-field__label, .sikat-field__label-row) {
+.sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
   display: flex;
   flex: none;
   align-items: center;
@@ -352,8 +351,7 @@
   flex: 1 1 0;
 }
 @container (width < 28.5rem) {
-  .sikat-field-group[data-orientation='vertical']
-    > :is(.sikat-field__label, .sikat-field__label-row) {
+  .sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
     width: 100%;
     min-height: 0;
   }
@@ -368,13 +366,10 @@
   font-size: var(--text-body-sm-font-size); /* 14px */
   line-height: var(--text-body-sm-line-height); /* 20px */
   font-weight: var(--text-medium);
-  color: var(--color-text-body);
+  color: var(--color-text-caption);
 }
-/* Label follows the control's state (Figma: disabled → text/muted, read-only →
+/* Label follows the control's state (Figma: read-only →
    bg/quarternary-solid as bound in the Figma file). */
-.sikat-field-group:has(.sikat-field:is(:disabled, [data-disabled])) .sikat-field__label {
-  color: var(--color-text-muted);
-}
 .sikat-field-group:has(
     .sikat-field:is([readonly], [data-readonly]):not(:is(:disabled, [data-disabled]))
   )
@@ -383,15 +378,6 @@
 }
 .sikat-field__required {
   color: var(--color-text-danger);
-}
-/* Figma Form Label with Show Tooltip: label then info trigger, 4px apart. */
-.sikat-field__label-row {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-1);
-}
-.sikat-field__label-row > .sikat-field__label {
-  padding-inline-end: 0;
 }
 /* Figma Form Label › Sub Label: body/xs regular, muted, 4px after the label. */
 .sikat-field__sublabel {

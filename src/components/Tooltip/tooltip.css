@@ -27,6 +27,21 @@
   outline-offset: 2px;
 }
 
+/* Label-text variant — flows inline with text, no icon. */
+.sikat-tooltip--label {
+  display: inline;
+  vertical-align: baseline;
+}
+.sikat-tooltip__trigger--label {
+  display: inline;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 3px;
+  cursor: help;
+  color: inherit;
+  font: inherit;
+}
+
 .sikat-tooltip__bubble {
   position: fixed;
   top: var(--sikat-tooltip-y, 0);

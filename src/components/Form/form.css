@@ -47,7 +47,28 @@
   display: flex;
   flex-direction: column;
   align-self: stretch;
-  gap: var(--spacing-4); /* 16px between fields */
+  gap: var(--spacing-1); /* 4px — horizontal fields (label above) */
   margin-left: calc(var(--spacing-2) * -1); /* -8px to offset label padding */
   margin-right: calc(var(--spacing-2) * -1);
+}
+
+/* Vertical: label-beside fields need more breathing room between rows.
+   Container query matches the 28.5rem breakpoint in field.css so the gap
+   collapses in sync with when labels stack above the control. Gap on the
+   container itself can't be changed via @container, so margin-top on
+   children simulates it. */
+.sikat-form__group[data-orientation='vertical'] {
+  container-type: inline-size;
+  container-name: sikat-form-group;
+  gap: 0;
+}
+
+.sikat-form__group[data-orientation='vertical'] > * + * {
+  margin-top: var(--spacing-4); /* 16px */
+}
+
+@container sikat-form-group (width < 28.5rem) {
+  .sikat-form__group[data-orientation='vertical'] > * + * {
+    margin-top: var(--spacing-1); /* 4px — collapses with the label */
+  }
 }
