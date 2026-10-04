@@ -2,7 +2,7 @@ import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
-import { FieldClear, FieldShell, type FieldSize } from './Field';
+import { FieldClear, FieldShell, type FieldSize } from './FieldShell';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 

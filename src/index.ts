@@ -178,6 +178,9 @@ export type {
   FormHeadingLevel,
 } from './components/Form/Form';
 
+export { bind, emptyState, ReadOnlyField } from './components/Form/fields';
+export type { FieldOptions, KeysOf, Option } from './components/Form/fields';
+
 export { Image, imageRatios } from './components/Image/Image';
 export type { ImageProps, ImageRatio } from './components/Image/Image';
 

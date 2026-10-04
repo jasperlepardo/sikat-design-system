@@ -5,7 +5,7 @@ import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import type { ComboboxOption } from './Combobox';
-import { FieldShell, ChevronDown, type FieldAdornments } from './Field';
+import { FieldShell, ChevronDown, type FieldAdornments } from './FieldShell';
 
 export type MultiSelectOption = ComboboxOption;
 

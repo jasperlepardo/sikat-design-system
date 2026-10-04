@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import { FieldShell, type FieldSize } from './Field';
+import { FieldShell, type FieldSize } from './FieldShell';
 import { useDropdown } from '../../lib/useDropdown';
 import './datepicker.css';
 import {
@@ -23,6 +23,7 @@ export interface DatePickerProps {
   size?: FieldSize;
   invalid?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
   /** Applied to the trigger input, so a `<label htmlFor>` focuses it. */
   id?: string;
   className?: string;
@@ -54,6 +55,7 @@ export function DatePicker({
   size = 'md',
   invalid,
   disabled,
+  readOnly,
   id: idProp,
   className,
   ...aria
@@ -127,10 +129,10 @@ export function DatePicker({
     <div ref={rootRef} className={cn('sikat-datepicker', className)}>
       <FieldShell
         className="sikat-datepicker__trigger"
-        state={{ size, filled: selectedIso !== '', disabled, invalid }}
+        state={{ size, filled: selectedIso !== '', disabled, readOnly, invalid }}
         adornments={{}}
         after={CalendarIcon}
-        onClick={() => !disabled && toggle()}
+        onClick={() => !disabled && !readOnly && toggle()}
       >
         <input
           ref={inputRef}
@@ -138,7 +140,7 @@ export function DatePicker({
           type="text"
           role="combobox"
           className="sikat-field__input"
-          style={{ cursor: disabled ? 'not-allowed' : 'pointer' }}
+          style={{ cursor: disabled ? 'not-allowed' : readOnly ? 'default' : 'pointer' }}
           readOnly
           aria-haspopup="dialog"
           aria-expanded={open}
@@ -147,7 +149,7 @@ export function DatePicker({
           placeholder={placeholder}
           value={formatDisplayDate(selectedIso)}
           onKeyDown={(e) => {
-            if (disabled) return;
+            if (disabled || readOnly) return;
             if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               setOpen(true);
