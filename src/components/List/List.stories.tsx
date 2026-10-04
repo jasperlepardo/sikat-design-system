@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { List, listVariants, type ListCardField, type ListVariant } from './List';
 import { Badge } from '../Badge/Badge';
 import { Icon } from '../Icon/Icon';
@@ -166,7 +167,6 @@ const addressFields: ListCardField[] = [
 ];
 
 const onMore = fn();
-const onExpandedChange = fn();
 
 const cardProps = {
   icon: <Icon size={16}>location_on</Icon>,
@@ -186,12 +186,12 @@ const cardProps = {
   ),
 };
 
-/** Figma "Table Card" (node 18214:56912) — expandable record cards. Click a card to expand/collapse. */
+/** Figma "Table Card" (node 18214:56912) — record cards always showing their fields. */
 export const Cards: Story = {
   render: () => (
     <div style={{ maxWidth: 433 }}>
       <List.Group>
-        <List.Card {...cardProps} defaultExpanded onExpandedChange={onExpandedChange} />
+        <List.Card {...cardProps} />
         <List.Card {...cardProps} />
         <List.Card {...cardProps} />
       </List.Group>
@@ -199,22 +199,10 @@ export const Cards: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const [first, second] = canvas.getAllByRole('button', { name: /Manila HQ/ });
+    await expect(canvas.getAllByText('Street')).toHaveLength(3);
 
-    await expect(first).toHaveAttribute('aria-expanded', 'true');
-    await expect(canvas.getAllByText('Street')).toHaveLength(1);
-
-    await userEvent.click(second);
-    await expect(second).toHaveAttribute('aria-expanded', 'true');
-    await expect(canvas.getAllByText('Street')).toHaveLength(2);
-
-    await userEvent.click(first);
-    await expect(first).toHaveAttribute('aria-expanded', 'false');
-    await expect(onExpandedChange).toHaveBeenLastCalledWith(false);
-
-    // Actions don't toggle the card.
-    await userEvent.click(canvas.getAllByRole('button', { name: 'More actions' })[1]);
+    // Actions are independently clickable.
+    await userEvent.click(canvas.getAllByRole('button', { name: 'More actions' })[0]);
     await expect(onMore).toHaveBeenCalledOnce();
-    await expect(second).toHaveAttribute('aria-expanded', 'true');
   },
 };
