@@ -228,6 +228,10 @@
   > .sikat-field__edit {
   display: flex;
 }
+/* Keep edit icon visible while the picker/dropdown is open. */
+.sikat-field:has([aria-expanded='true']) > .sikat-field__edit {
+  display: flex;
+}
 
 /* Readonly fields: show edit icon and a subtle background on hover so the user
    knows the field can be interacted with (e.g. unlocked/edited). */
@@ -411,4 +415,30 @@
 }
 .sikat-field__error {
   color: var(--color-text-danger);
+}
+
+/* Textarea pencil-icon wrapper — positions the icon relative to the box. */
+.sikat-textarea {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+.sikat-textarea__edit {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+  display: flex;
+  pointer-events: none;
+  color: var(--color-fg-quarternary);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.sikat-textarea__edit .sikat-icon {
+  font-size: 20px;
+}
+.sikat-textarea:hover:not(
+    :has(.sikat-field:is(:disabled, [data-disabled], [readonly], [data-readonly]))
+  )
+  > .sikat-textarea__edit {
+  opacity: 1;
 }

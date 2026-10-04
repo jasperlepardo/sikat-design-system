@@ -33,8 +33,8 @@ export interface DatePickerProps {
 }
 
 const CalendarIcon = (
-  <span className="sikat-field__icon" aria-hidden="true">
-    <Icon size={16}>calendar_today</Icon>
+  <span className="sikat-field__edit" aria-hidden="true">
+    <Icon size={20}>calendar_today</Icon>
   </span>
 );
 

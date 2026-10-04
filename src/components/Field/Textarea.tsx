@@ -7,6 +7,7 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 import { cn } from '../../lib/cn';
+import { Icon } from '../Icon/Icon';
 import { useFilled } from './FieldShell';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -67,25 +68,30 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
   }, [resize]);
 
   return (
-    <textarea
-      ref={(node) => {
-        innerRef.current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-      }}
-      rows={rows}
-      className={cn('sikat-field sikat-field--multiline', className)}
-      data-size="md"
-      data-filled={filled || undefined}
-      aria-invalid={invalid || undefined}
-      value={value}
-      defaultValue={defaultValue}
-      onChange={(e) => {
-        track(e.currentTarget.value);
-        onChange?.(e);
-        resize();
-      }}
-      {...rest}
-    />
+    <div className="sikat-textarea">
+      <textarea
+        ref={(node) => {
+          innerRef.current = node;
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+        }}
+        rows={rows}
+        className={cn('sikat-field sikat-field--multiline', className)}
+        data-size="md"
+        data-filled={filled || undefined}
+        aria-invalid={invalid || undefined}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={(e) => {
+          track(e.currentTarget.value);
+          onChange?.(e);
+          resize();
+        }}
+        {...rest}
+      />
+      <span className="sikat-textarea__edit" aria-hidden="true">
+        <Icon size={20}>edit</Icon>
+      </span>
+    </div>
   );
 });
