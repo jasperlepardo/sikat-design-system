@@ -202,6 +202,9 @@ export type { AutocompleteProps, AutocompleteSuggestion } from './components/Fie
 export { DatePicker } from './components/Field/DatePicker';
 export type { DatePickerProps } from './components/Field/DatePicker';
 
+export { CardField } from './components/Field/CardField';
+export type { CardFieldProps, CardFieldOption } from './components/Field/CardField';
+
 export { Footer } from './components/Footer/Footer';
 export type { FooterProps, FooterContainerProps } from './components/Footer/Footer';
 

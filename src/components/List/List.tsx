@@ -1,6 +1,5 @@
 import {
   useId,
-  useState,
   type ElementType,
   type HTMLAttributes,
   type MouseEventHandler,
@@ -193,16 +192,10 @@ export interface ListCardProps extends Omit<HTMLAttributes<HTMLLIElement>, 'titl
   icon?: ReactNode;
   /** Small 12px glyph after the title (an `<Icon size={12}>` or white SVG), shown on a primary pill. */
   badge?: ReactNode;
-  /** Trailing actions (e.g. a `more_vert` `IconButton`). Sits outside the toggle, so it stays clickable. */
+  /** Trailing actions (e.g. a `more_vert` `IconButton`). Sits outside the header, so it stays clickable. */
   actions?: ReactNode;
-  /** Label/value rows. Expanded: one row per field. Collapsed: values flow inline. */
+  /** Label/value rows shown below the header. */
   fields?: ListCardField[];
-  /** Controlled expanded state. */
-  expanded?: boolean;
-  /** Initial expanded state when uncontrolled. Default: false (compact). */
-  defaultExpanded?: boolean;
-  /** Called with the next state when the card is toggled. */
-  onExpandedChange?: (expanded: boolean) => void;
 }
 
 function renderCardValue(value: ListCardField['value']) {
@@ -215,10 +208,9 @@ function renderCardValue(value: ListCardField['value']) {
 }
 
 /**
- * List.Card — expandable record row (Figma "Table Card", node 18214:56912). Use
- * inside a `List.Group`. Collapsed shows the header plus values flowing inline in
- * muted text; expanded shows one label/value row per field and a darker
- * selection indicator. The whole card toggles on click; `actions` stay separate.
+ * List.Card — a record row showing an icon, title, badge, optional actions,
+ * and labelled field rows. Use inside a `List.Group`. Fields are always visible;
+ * there is no collapse interaction.
  */
 function ListCard({
   title,
@@ -226,63 +218,34 @@ function ListCard({
   badge,
   actions,
   fields = [],
-  expanded: expandedProp,
-  defaultExpanded = false,
-  onExpandedChange,
   className,
   ...rest
 }: ListCardProps) {
-  const [uncontrolled, setUncontrolled] = useState(defaultExpanded);
-  const expanded = expandedProp ?? uncontrolled;
   const detailsId = useId();
-
-  const toggle = () => {
-    const next = !expanded;
-    if (expandedProp === undefined) setUncontrolled(next);
-    onExpandedChange?.(next);
-  };
 
   return (
     <li
       className={cn('sikat-list__card', className)}
-      data-expanded={expanded || undefined}
       {...rest}
     >
       <div className="sikat-list__card-header">
-        <span className="sikat-list__card-indicator" aria-hidden />
-        <button
-          type="button"
-          className="sikat-list__card-toggle"
-          aria-expanded={expanded}
-          aria-controls={fields.length ? detailsId : undefined}
-          onClick={toggle}
-        >
+        <div className="sikat-list__card-toggle">
           {icon != null ? <span className="sikat-list__card-icon">{icon}</span> : null}
           <span className="sikat-list__card-title">{title}</span>
           {badge != null ? <span className="sikat-list__card-badge">{badge}</span> : null}
-        </button>
+        </div>
         {actions != null ? <div className="sikat-list__card-actions">{actions}</div> : null}
       </div>
 
       {fields.length ? (
-        expanded ? (
-          <dl id={detailsId} className="sikat-list__card-fields">
-            {fields.map((field, i) => (
-              <div key={i} className="sikat-list__card-field">
-                <dt className="sikat-list__card-label">{field.label}</dt>
-                <dd className="sikat-list__card-value">{renderCardValue(field.value)}</dd>
-              </div>
-            ))}
-          </dl>
-        ) : (
-          <div id={detailsId} className="sikat-list__card-summary">
-            {fields.map((field, i) => (
-              <span key={i} className="sikat-list__card-value">
-                {renderCardValue(field.value)}
-              </span>
-            ))}
-          </div>
-        )
+        <dl id={detailsId} className="sikat-list__card-fields">
+          {fields.map((field, i) => (
+            <div key={i} className="sikat-list__card-field">
+              <dt className="sikat-list__card-label">{field.label}</dt>
+              <dd className="sikat-list__card-value">{renderCardValue(field.value)}</dd>
+            </div>
+          ))}
+        </dl>
       ) : null}
     </li>
   );
