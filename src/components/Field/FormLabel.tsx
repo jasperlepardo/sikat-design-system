@@ -1,4 +1,4 @@
-import { useRef, useState, type LabelHTMLAttributes, type ReactNode } from 'react';
+import { type LabelHTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { Tooltip } from '../Tooltip/Tooltip';
@@ -25,36 +25,15 @@ export function FormLabel({
   children,
   ...rest
 }: FormLabelProps) {
-  const [tooltipOpen, setTooltipOpen] = useState(false);
-  const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
-  const scheduleClose = () => {
-    clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setTooltipOpen(false), 100);
-  };
-
   const hasHoverTooltip = !disabled && tooltip != null;
 
   return (
     <label
       className={cn('sikat-field__label', className)}
-      onMouseOver={
-        hasHoverTooltip
-          ? () => {
-              if (!tooltipOpen) setTooltipOpen(true);
-            }
-          : undefined
-      }
-      onMouseLeave={hasHoverTooltip ? scheduleClose : undefined}
       {...rest}
     >
       {hasHoverTooltip ? (
-        <Tooltip
-          message={tooltip}
-          open={tooltipOpen}
-          onOpenChange={(next) => {
-            if (!next) scheduleClose();
-          }}
-        >
+        <Tooltip message={tooltip}>
           {children}
         </Tooltip>
       ) : (
