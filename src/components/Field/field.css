@@ -82,6 +82,15 @@
   transform: rotate(180deg);
 }
 
+/* ReadOnly: static display value — inherits disabled tokens (no border, body text). */
+.sikat-field--readonly {
+  height: auto;
+  min-height: var(--field-h);
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
 /* ── Shell: [leading icon][prefix] control [suffix][trailing icon][chevron|edit] ── */
 .sikat-field--shell {
   display: flex;
