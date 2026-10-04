@@ -1,6 +1,6 @@
 import { useId, useMemo, useState, type ReactNode } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
-import { FieldShell, type FieldSize } from './Field';
+import { FieldShell, type FieldSize } from './FieldShell';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 

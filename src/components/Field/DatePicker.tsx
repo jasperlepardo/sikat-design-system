@@ -2,7 +2,7 @@ import { createPortal } from 'react-dom';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import { FieldShell, type FieldSize } from './Field';
+import { FieldShell, type FieldSize } from './FieldShell';
 import { useDropdown } from '../../lib/useDropdown';
 import './datepicker.css';
 import {
