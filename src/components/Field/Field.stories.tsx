@@ -1019,8 +1019,11 @@ export const OptionWithDescription: Story = {
       <FormField label="Employee (Select — filled)">
         {(props) => <Select {...props} options={EMPLOYEES} defaultValue="EMP001" />}
       </FormField>
-      <FormField label="Employee (Combobox)">
+      <FormField label="Employee (Combobox — empty)">
         {(props) => <Combobox {...props} options={EMPLOYEES} placeholder="Search employee…" />}
+      </FormField>
+      <FormField label="Employee (Combobox — filled)">
+        {(props) => <Combobox {...props} options={EMPLOYEES} defaultValue="EMP002" />}
       </FormField>
       <FormField label="Employees (Multi Select)">
         {(props) => <MultiSelect {...props} options={EMPLOYEES} placeholder="Select employees…" />}

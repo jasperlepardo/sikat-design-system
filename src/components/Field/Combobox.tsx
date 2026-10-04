@@ -103,6 +103,10 @@ export function Combobox({
 
   const selectedOption = options.find((o) => o.value === selected) ?? null;
   const display = open ? query : selectedOption ? optText(selectedOption) : '';
+  const showMultiline =
+    !open &&
+    selectedOption != null &&
+    (selectedOption.subLabel != null || selectedOption.description != null);
 
   const commit = (next: string | null) => {
     if (!isControlled) setInternal(next);
@@ -146,6 +150,28 @@ export function Combobox({
           </>
         }
       >
+        {showMultiline ? (
+          <span
+            className="sikat-field__display"
+            onClick={() => !disabled && !readOnly && inputRef.current?.focus()}
+            style={{ cursor: disabled || readOnly ? 'default' : 'text' }}
+          >
+            <span className="sikat-field__multiline">
+              {selectedOption!.subLabel != null &&
+              (selectedOption!.subLabelPlacement ?? 'top') === 'top' ? (
+                <span className="sikat-field__sublabel">{selectedOption!.subLabel}</span>
+              ) : null}
+              <span>{selectedOption!.label ?? optText(selectedOption!)}</span>
+              {selectedOption!.subLabel != null &&
+              selectedOption!.subLabelPlacement === 'inline' ? (
+                <span className="sikat-field__sublabel">{selectedOption!.subLabel}</span>
+              ) : null}
+              {selectedOption!.description != null ? (
+                <span className="sikat-field__description">{selectedOption!.description}</span>
+              ) : null}
+            </span>
+          </span>
+        ) : null}
         <input
           ref={inputRef}
           id={id}
@@ -162,6 +188,11 @@ export function Combobox({
           readOnly={readOnly}
           placeholder={placeholder}
           value={display}
+          style={
+            showMultiline
+              ? { flex: '0 0 0', width: 0, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }
+              : undefined
+          }
           onChange={(e) => {
             setQuery(e.target.value);
             onQueryChange?.(e.target.value);
