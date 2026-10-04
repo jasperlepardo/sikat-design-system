@@ -62,8 +62,8 @@
       },
       "disabled": {
         "bg": "--color-bg-default",
-        "border": "--color-border-disabled",
-        "text": "--color-text-disabled"
+        "border": "--color-border-transparent",
+        "text": "--color-text-body"
       }
     }
   },

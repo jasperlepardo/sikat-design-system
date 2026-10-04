@@ -263,6 +263,32 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
   );
 });
 
+/* --------------------------------------------------------------- ReadOnly */
+
+export interface ReadOnlyProps {
+  /** Value to display. Accepts any ReactNode — text, formatted numbers, badges, etc. */
+  value: ReactNode;
+  size?: FieldSize;
+  className?: string;
+}
+
+/**
+ * ReadOnly — a non-interactive field that displays a computed or locked value.
+ * Renders the same shell as a disabled TextField so the appearance is identical.
+ * Use inside `<FormField disabled>` so the label carries the lock icon.
+ */
+export function ReadOnly({ value, size = 'md', className }: ReadOnlyProps) {
+  return (
+    <span
+      className={cn('sikat-field sikat-field--shell', className)}
+      data-size={size}
+      data-disabled
+    >
+      <span className="sikat-field__display">{value}</span>
+    </span>
+  );
+}
+
 /* ----------------------------------------------------------------- FormLabel */
 
 export interface FormLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
