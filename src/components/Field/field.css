@@ -440,7 +440,8 @@
   color: var(--color-text-danger);
 }
 /* Figma Form Label › Sub Label: body/xs regular, muted, 4px after the label. */
-.sikat-field__sublabel {
+.sikat-field__label .sikat-field__sublabel {
+  display: inline;
   margin-inline-start: var(--spacing-1);
   font-size: var(--text-body-xs-font-size); /* 12px */
   line-height: var(--text-body-xs-line-height); /* 16px */
@@ -484,4 +485,3 @@
   > .sikat-textarea__edit {
   opacity: 1;
 }
-

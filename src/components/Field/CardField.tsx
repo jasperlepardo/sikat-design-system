@@ -75,11 +75,16 @@ export function CardField({
   const selected = value ? (options.find((o) => o.value === value) ?? null) : null;
   const interactive = !disabled && !readOnly;
 
-  const labelEl = label != null ? (
-    <FormLabel htmlFor={selected ? undefined : comboboxId} required={required} disabled={disabled}>
-      {label}
-    </FormLabel>
-  ) : null;
+  const labelEl =
+    label != null ? (
+      <FormLabel
+        htmlFor={selected ? undefined : comboboxId}
+        required={required}
+        disabled={disabled}
+      >
+        {label}
+      </FormLabel>
+    ) : null;
 
   const content = selected ? (
     <List.Group>
@@ -89,32 +94,34 @@ export function CardField({
         badge={<Icon size={12}>check</Icon>}
         fields={selected.fields}
         data-selected
-        actions={interactive ? (
-          <div style={{ display: 'flex', gap: 'var(--spacing-1, 4px)' }}>
-            {onEdit ? (
+        actions={
+          interactive ? (
+            <div style={{ display: 'flex', gap: 'var(--spacing-1, 4px)' }}>
+              {onEdit ? (
+                <IconButton
+                  type="button"
+                  label="Edit for this PO"
+                  intent="default"
+                  variant="link"
+                  size="extra-small"
+                  onClick={onEdit}
+                >
+                  <Icon size={16}>edit</Icon>
+                </IconButton>
+              ) : null}
               <IconButton
                 type="button"
-                label="Edit for this PO"
+                label="Clear selection"
                 intent="default"
                 variant="link"
                 size="extra-small"
-                onClick={onEdit}
+                onClick={() => onValueChange?.('')}
               >
-                <Icon size={16}>edit</Icon>
+                <Icon size={16}>close</Icon>
               </IconButton>
-            ) : null}
-            <IconButton
-              type="button"
-              label="Clear selection"
-              intent="default"
-              variant="link"
-              size="extra-small"
-              onClick={() => onValueChange?.('')}
-            >
-              <Icon size={16}>close</Icon>
-            </IconButton>
-          </div>
-        ) : undefined}
+            </div>
+          ) : undefined
+        }
       />
     </List.Group>
   ) : (
@@ -125,7 +132,9 @@ export function CardField({
       aria-describedby={ariaDescribedby}
       options={options.map(toComboboxOption)}
       value={null}
-      onValueChange={(v) => { if (v) onValueChange?.(v); }}
+      onValueChange={(v) => {
+        if (v) onValueChange?.(v);
+      }}
       placeholder={placeholder}
       disabled={disabled}
       readOnly={readOnly}

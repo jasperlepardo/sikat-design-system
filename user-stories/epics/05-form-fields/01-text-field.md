@@ -8,11 +8,13 @@
 ## Basic Rendering
 
 ### User Story
+
 As a developer consuming Sikat,
 I want to render a text input field,
 so that users can enter free-form text in a form.
 
 ### Acceptance Criteria
+
 - [ ] TextField renders an `<input>` element with Sikat's visual style
 - [ ] `placeholder` text displays when the field is empty
 - [ ] `data-filled` attribute is applied when the field has a value
@@ -20,31 +22,34 @@ so that users can enter free-form text in a form.
 - [ ] Renders correctly inside a `FormField` wrapper
 
 ### Controls
-| Control | Type | Options | Default |
-|---------|------|---------|---------|
-| value | string \| number | — | — |
-| defaultValue | string \| number | — | — |
-| placeholder | string | — | — |
-| size | string | `md` \| `xl` | `md` |
-| disabled | boolean | `true` \| `false` | `false` |
-| readOnly | boolean | `true` \| `false` | `false` |
-| invalid | boolean | `true` \| `false` | `false` |
-| onChange | function | — | — |
-| leadingIcon | ReactNode | — | — |
-| trailingIcon | ReactNode | — | — |
-| prefix | ReactNode | — | — |
-| suffix | ReactNode | — | — |
+
+| Control      | Type             | Options           | Default |
+| ------------ | ---------------- | ----------------- | ------- |
+| value        | string \| number | —                 | —       |
+| defaultValue | string \| number | —                 | —       |
+| placeholder  | string           | —                 | —       |
+| size         | string           | `md` \| `xl`      | `md`    |
+| disabled     | boolean          | `true` \| `false` | `false` |
+| readOnly     | boolean          | `true` \| `false` | `false` |
+| invalid      | boolean          | `true` \| `false` | `false` |
+| onChange     | function         | —                 | —       |
+| leadingIcon  | ReactNode        | —                 | —       |
+| trailingIcon | ReactNode        | —                 | —       |
+| prefix       | ReactNode        | —                 | —       |
+| suffix       | ReactNode        | —                 | —       |
 
 ---
 
 ## States
 
 ### User Story
+
 As a developer consuming Sikat,
 I want the TextField to reflect disabled, readOnly, and invalid states,
 so that users understand when input is blocked or has an error.
 
 ### Acceptance Criteria
+
 - [ ] `disabled={true}` renders the field with reduced opacity and no pointer events
 - [ ] `readOnly={true}` renders the field with a non-editable style; a pencil icon appears on hover
 - [ ] `invalid={true}` renders the field with an error border color
@@ -57,11 +62,13 @@ so that users understand when input is blocked or has an error.
 ## Affixes & Icon Slots
 
 ### User Story
+
 As a developer consuming Sikat,
 I want to attach icons, prefixes, and suffixes to a TextField,
 so that I can provide unit labels, leading icons, or trailing actions inside the input.
 
 ### Acceptance Criteria
+
 - [ ] `leadingIcon` renders an icon inside the left edge of the input
 - [ ] `trailingIcon` renders an icon inside the right edge of the input
 - [ ] `prefix` renders a text label (e.g. `https://`) at the left inside the input border
@@ -72,6 +79,7 @@ so that I can provide unit labels, leading icons, or trailing actions inside the
 ---
 
 ## Notes
+
 - Extends all native `<input>` HTML attributes.
 - `invalid` controls the visual state only; pair with `FormField`'s `error` prop for the error message.
 - Related stories: `06-form-composition/01-form-field`, `02-textarea`.

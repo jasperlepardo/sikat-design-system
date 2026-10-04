@@ -212,22 +212,11 @@ function renderCardValue(value: ListCardField['value']) {
  * and labelled field rows. Use inside a `List.Group`. Fields are always visible;
  * there is no collapse interaction.
  */
-function ListCard({
-  title,
-  icon,
-  badge,
-  actions,
-  fields = [],
-  className,
-  ...rest
-}: ListCardProps) {
+function ListCard({ title, icon, badge, actions, fields = [], className, ...rest }: ListCardProps) {
   const detailsId = useId();
 
   return (
-    <li
-      className={cn('sikat-list__card', className)}
-      {...rest}
-    >
+    <li className={cn('sikat-list__card', className)} {...rest}>
       <div className="sikat-list__card-header">
         <div className="sikat-list__card-toggle">
           {icon != null ? <span className="sikat-list__card-icon">{icon}</span> : null}

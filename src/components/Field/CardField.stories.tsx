@@ -79,20 +79,50 @@ export const Default: Story = {
           label="Ship to"
           value={value}
           onValueChange={setValue}
-          onEdit={() => setEditText(options.find((o) => o.value === value)
-            ?.fields?.map((f) => String(f.value)).join('\n') ?? '')}
+          onEdit={() =>
+            setEditText(
+              options
+                .find((o) => o.value === value)
+                ?.fields?.map((f) => String(f.value))
+                .join('\n') ?? '',
+            )
+          }
         />
         {editText ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, padding: 12, background: 'var(--color-bg-secondary)', borderRadius: 8 }}>
-            <p style={{ margin: 0, fontSize: 13, fontWeight: 600 }}>Edit address (simulated side panel)</p>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 8,
+              padding: 12,
+              background: 'var(--color-bg-secondary)',
+              borderRadius: 8,
+            }}
+          >
+            <p style={{ margin: 0, fontSize: 13, fontWeight: 600 }}>
+              Edit address (simulated side panel)
+            </p>
             <textarea
               rows={5}
-              style={{ width: '100%', boxSizing: 'border-box', padding: 8, fontFamily: 'inherit', fontSize: 13 }}
+              style={{
+                width: '100%',
+                boxSizing: 'border-box',
+                padding: 8,
+                fontFamily: 'inherit',
+                fontSize: 13,
+              }}
               value={editText}
               onChange={(e) => setEditText(e.currentTarget.value)}
             />
             <div style={{ display: 'flex', gap: 8 }}>
-              <button onClick={() => { alert(`Saved: ${editText}`); setEditText(''); }}>Save</button>
+              <button
+                onClick={() => {
+                  alert(`Saved: ${editText}`);
+                  setEditText('');
+                }}
+              >
+                Save
+              </button>
               <button onClick={() => setEditText('')}>Cancel</button>
             </div>
           </div>
@@ -108,12 +138,7 @@ export const NoSelection: Story = {
     const [value, setValue] = useState('');
     return (
       <div style={{ maxWidth: 420 }}>
-        <CardField
-          {...args}
-          aria-label="Ship to"
-          value={value}
-          onValueChange={setValue}
-        />
+        <CardField {...args} aria-label="Ship to" value={value} onValueChange={setValue} />
       </div>
     );
   },
@@ -152,9 +177,7 @@ export const SideBySide: Story = {
     return (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 860 }}>
         <FormField label="Ship to">
-          {(p) => (
-            <CardField {...args} {...p} value={shipTo} onValueChange={setShipTo} />
-          )}
+          {(p) => <CardField {...args} {...p} value={shipTo} onValueChange={setShipTo} />}
         </FormField>
         <FormField label="Bill to">
           {(p) => (
