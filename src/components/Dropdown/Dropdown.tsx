@@ -97,6 +97,11 @@ export interface DropdownItemProps {
   suffix?: ReactNode;
   /** Trailing icon / media (20px, fg/primary) — Figma "Show Trailing". */
   trailingIcon?: ReactNode;
+  /** Short secondary text: `'top'` renders it above the label, `'inline'` renders it after (default `'top'`). */
+  subLabel?: ReactNode;
+  subLabelPlacement?: 'top' | 'inline';
+  /** Third line below the label (body/xs, muted). */
+  description?: ReactNode;
   selected?: boolean;
   /** Keyboard-highlighted (drives `aria-activedescendant` styling). */
   active?: boolean;
@@ -118,6 +123,9 @@ export function DropdownItem({
   prefix,
   suffix,
   trailingIcon,
+  subLabel,
+  subLabelPlacement = 'top',
+  description,
   selected,
   active,
   disabled,
@@ -140,7 +148,18 @@ export function DropdownItem({
     >
       {leadingIcon ? <span className="sikat-dropdown__icon">{leadingIcon}</span> : null}
       {prefix != null ? <span className="sikat-dropdown__affix">{prefix}</span> : null}
-      <span className="sikat-dropdown__label">{children}</span>
+      <span className="sikat-dropdown__label">
+        {subLabel != null && subLabelPlacement === 'top' ? (
+          <span className="sikat-dropdown__sublabel">{subLabel}</span>
+        ) : null}
+        {children}
+        {subLabel != null && subLabelPlacement === 'inline' ? (
+          <span className="sikat-dropdown__sublabel">{subLabel}</span>
+        ) : null}
+        {description != null ? (
+          <span className="sikat-dropdown__description">{description}</span>
+        ) : null}
+      </span>
       {suffix != null ? <span className="sikat-dropdown__affix">{suffix}</span> : null}
       {trailingIcon ? <span className="sikat-dropdown__icon">{trailingIcon}</span> : null}
     </div>

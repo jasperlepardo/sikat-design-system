@@ -9,6 +9,10 @@ export interface AutocompleteSuggestion {
   label?: ReactNode;
   /** Plain text for matching (when `label` is a node). Defaults to `value`. */
   text?: string;
+  subLabel?: ReactNode;
+  subLabelPlacement?: 'top' | 'inline';
+  /** Third line shown below the label in the dropdown (body/xs, muted). */
+  description?: ReactNode;
   disabled?: boolean;
 }
 
@@ -144,6 +148,9 @@ export function Autocomplete({
               id={getItemId(i)}
               active={i === activeIndex}
               disabled={s.disabled}
+              subLabel={s.subLabel}
+              subLabelPlacement={s.subLabelPlacement}
+              description={s.description}
               onSelect={() => selectAt(i)}
             >
               {s.label ?? sugText(s)}

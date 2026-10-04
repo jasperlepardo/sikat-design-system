@@ -17,6 +17,11 @@ export interface SelectOption {
   label?: ReactNode;
   /** Plain text for type-ahead + the closed display (when `label` is a node). */
   text?: string;
+  /** Short secondary text shown in the dropdown. */
+  subLabel?: ReactNode;
+  subLabelPlacement?: 'top' | 'inline';
+  /** Third line shown below the label in the dropdown (body/xs, muted). */
+  description?: ReactNode;
   disabled?: boolean;
 }
 
@@ -184,7 +189,28 @@ export function Select({
           onKeyDown={interactive ? onKeyDown : undefined}
           {...aria}
         >
-          {selectedOption ? (selectedOption.label ?? optionText(selectedOption)) : placeholder}
+          {selectedOption ? (
+            selectedOption.subLabel != null || selectedOption.description != null ? (
+              <span className="sikat-field__multiline">
+                {selectedOption.subLabel != null &&
+                (selectedOption.subLabelPlacement ?? 'top') === 'top' ? (
+                  <span className="sikat-field__sublabel">{selectedOption.subLabel}</span>
+                ) : null}
+                <span>{selectedOption.label ?? optionText(selectedOption)}</span>
+                {selectedOption.subLabel != null &&
+                selectedOption.subLabelPlacement === 'inline' ? (
+                  <span className="sikat-field__sublabel">{selectedOption.subLabel}</span>
+                ) : null}
+                {selectedOption.description != null ? (
+                  <span className="sikat-field__description">{selectedOption.description}</span>
+                ) : null}
+              </span>
+            ) : (
+              (selectedOption.label ?? optionText(selectedOption))
+            )
+          ) : (
+            placeholder
+          )}
         </button>
       </FieldShell>
       {name != null ? <input type="hidden" name={name} value={selected} /> : null}
@@ -197,6 +223,9 @@ export function Select({
               selected={o.value === selected}
               active={i === activeIndex}
               disabled={o.disabled}
+              subLabel={o.subLabel}
+              subLabelPlacement={o.subLabelPlacement}
+              description={o.description}
               onSelect={() => selectAt(i)}
             >
               {o.label ?? optionText(o)}
