@@ -193,6 +193,9 @@ export function MultiSelect({
                 selected={selected.includes(o.value)}
                 active={i === activeIndex}
                 disabled={o.disabled}
+                subLabel={o.subLabel}
+                subLabelPlacement={o.subLabelPlacement}
+                description={o.description}
                 onSelect={() => toggleAt(i)}
                 trailingIcon={selected.includes(o.value) ? <Icon size={20}>check</Icon> : undefined}
               >

@@ -619,6 +619,27 @@ export const ReadOnlyField: Story = {
   ),
 };
 
+/**
+ * `description` on `ReadOnly` — a secondary line below the value (body/xs, muted).
+ * The field height expands to fit both lines.
+ */
+export const ReadOnlyWithDescription: Story = {
+  name: 'ReadOnly — with Description',
+  render: () => (
+    <div style={{ maxWidth: 480, display: 'grid', gap: 8 }}>
+      <FormField label="Assigned employee" disabled>
+        <ReadOnly value="Juan dela Cruz" subLabel="EMP001" description="Engineering" />
+      </FormField>
+      <FormField label="Chart of account" disabled>
+        <ReadOnly value="Cash and Cash Equivalents" subLabel="1000" description="Assets" />
+      </FormField>
+      <FormField label="Vendor" disabled>
+        <ReadOnly value="Acme Supplies Co." subLabel="VND-0042" description="Active" />
+      </FormField>
+    </div>
+  ),
+};
+
 export const WithError: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
@@ -967,6 +988,42 @@ export const DatePickerField: Story = {
     <div style={{ maxWidth: 360 }}>
       <FormField label="Date" hint="Select a date from the calendar.">
         {(props) => <DatePicker {...props} />}
+      </FormField>
+    </div>
+  ),
+};
+
+const EMPLOYEES = [
+  { value: 'EMP001', label: 'Juan dela Cruz', subLabel: 'EMP001', description: 'Engineering' },
+  { value: 'EMP002', label: 'Maria Santos', subLabel: 'EMP002', description: 'Design' },
+  { value: 'EMP003', label: 'Pedro Reyes', subLabel: 'EMP003', description: 'Finance' },
+  { value: 'EMP004', label: 'Ana Gomez', subLabel: 'EMP004', description: 'Operations' },
+];
+
+/**
+ * Options with a `description` — a secondary line shown below the label in the
+ * dropdown (body/xs, muted). Supported by Select, Combobox, MultiSelect, and
+ * Autocomplete.
+ *
+ * **Select** also shows both lines in the closed/filled field. Combobox keeps a
+ * single line in the field (native `<input>` limitation) but shows two lines in
+ * the dropdown.
+ */
+export const OptionWithDescription: Story = {
+  name: 'Option — with Description',
+  render: () => (
+    <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
+      <FormField label="Employee (Select — empty)">
+        {(props) => <Select {...props} options={EMPLOYEES} placeholder="Select employee…" />}
+      </FormField>
+      <FormField label="Employee (Select — filled)">
+        {(props) => <Select {...props} options={EMPLOYEES} defaultValue="EMP001" />}
+      </FormField>
+      <FormField label="Employee (Combobox)">
+        {(props) => <Combobox {...props} options={EMPLOYEES} placeholder="Search employee…" />}
+      </FormField>
+      <FormField label="Employees (Multi Select)">
+        {(props) => <MultiSelect {...props} options={EMPLOYEES} placeholder="Select employees…" />}
       </FormField>
     </div>
   ),

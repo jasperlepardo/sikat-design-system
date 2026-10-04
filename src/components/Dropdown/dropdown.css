@@ -73,6 +73,37 @@
   flex: 1 1 auto;
   min-width: 0;
 }
+.sikat-dropdown__sublabel {
+  display: block;
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  font-weight: var(--text-regular);
+  color: var(--color-text-muted);
+}
+.sikat-dropdown__description {
+  display: block;
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  font-weight: var(--text-regular);
+  color: var(--color-text-muted);
+}
+.sikat-dropdown__item:has(.sikat-dropdown__description) {
+  align-items: flex-start;
+}
+/* Inline subLabel: label and code on the same row. */
+.sikat-dropdown__label:has(> .sikat-dropdown__sublabel:last-child) {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--spacing-2);
+}
+/* Stacked subLabel (top) or description: column. */
+.sikat-dropdown__label:has(.sikat-dropdown__description),
+.sikat-dropdown__label:has(> .sikat-dropdown__sublabel:first-child) {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 .sikat-dropdown__affix {
   flex: none;
   color: var(--color-text-muted);

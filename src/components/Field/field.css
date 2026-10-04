@@ -215,6 +215,48 @@
 .sikat-field--select[data-readonly] .sikat-field__input {
   pointer-events: none;
 }
+/* Multi-line selected value (label + description). */
+.sikat-field__multiline {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: start;
+}
+.sikat-field__sublabel {
+  display: block;
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  font-weight: var(--text-regular);
+  color: var(--color-text-muted);
+}
+.sikat-field__description {
+  display: block;
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  font-weight: var(--text-regular);
+  color: var(--color-text-muted);
+}
+.sikat-field__multiline .sikat-field__sublabel {
+  margin-inline-start: 0;
+}
+/* Inline subLabel: label and code on the same row. */
+.sikat-field__multiline:has(> .sikat-field__sublabel:last-child) {
+  flex-direction: row;
+  align-items: baseline;
+  gap: var(--spacing-2);
+}
+.sikat-field--shell:has(.sikat-field__multiline) {
+  height: auto;
+  min-height: var(--field-h);
+  padding-block: var(--spacing-2);
+  align-items: center;
+}
+.sikat-field--select:has(.sikat-field__multiline) .sikat-field__input {
+  height: auto;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
 
 /* Show the trailing edit icon on hover — both empty and filled. */
 .sikat-field__edit {

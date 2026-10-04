@@ -11,6 +11,10 @@ export interface ComboboxOption {
   label?: ReactNode;
   /** Plain text for filtering + the closed display (when `label` is a node). */
   text?: string;
+  subLabel?: ReactNode;
+  subLabelPlacement?: 'top' | 'inline';
+  /** Third line shown below the label in the dropdown (body/xs, muted). */
+  description?: ReactNode;
   disabled?: boolean;
 }
 
@@ -195,6 +199,9 @@ export function Combobox({
                   selected={o.value === selected}
                   active={i === activeIndex}
                   disabled={o.disabled}
+                  subLabel={o.subLabel}
+                  subLabelPlacement={o.subLabelPlacement}
+                  description={o.description}
                   onSelect={() => selectAt(i)}
                 >
                   {o.label ?? optText(o)}
