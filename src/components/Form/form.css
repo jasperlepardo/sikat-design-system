@@ -52,7 +52,23 @@
   margin-right: calc(var(--spacing-2) * -1);
 }
 
-/* Vertical: label-beside fields need more breathing room between rows. */
+/* Vertical: fixed 4px — side-label fields never collapse. */
 .sikat-form__group[data-orientation='vertical'] {
-  gap: var(--spacing-4); /* 16px */
+  gap: var(--spacing-1);
+}
+
+/* Responsive: 4px when wide (side-label), 16px when narrow (stacked).
+   Gap on a container can't change via @container, so simulate with margin-top. */
+.sikat-form__group[data-orientation='responsive'] {
+  container-type: inline-size;
+  container-name: sikat-form-group-responsive;
+  gap: 0;
+}
+.sikat-form__group[data-orientation='responsive'] > * + * {
+  margin-top: var(--spacing-1); /* 4px — wide, side-label */
+}
+@container sikat-form-group-responsive (width < 28.5rem) {
+  .sikat-form__group[data-orientation='responsive'] > * + * {
+    margin-top: var(--spacing-4); /* 16px — narrow, stacked */
+  }
 }
