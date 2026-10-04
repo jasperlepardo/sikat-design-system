@@ -269,8 +269,10 @@ export interface FormLabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
   required?: boolean;
   /** Muted secondary text after the label (Figma "Sub Label"), e.g. "(optional)". */
   subLabel?: ReactNode;
-  /** Info tooltip message (Figma "Show Tooltip") — adds an info-circle trigger after the label. */
+  /** Info tooltip / lock reason — underlined on the label text normally; shown on a lock icon when disabled. */
   tooltip?: ReactNode;
+  /** When true, shows a lock icon (with optional tooltip reason) and hides the required marker. */
+  disabled?: boolean;
   children?: ReactNode;
 }
 
@@ -278,6 +280,7 @@ export function FormLabel({
   required,
   subLabel,
   tooltip,
+  disabled,
   className,
   children,
   ...rest
@@ -290,6 +293,22 @@ export function FormLabel({
     closeTimer.current = setTimeout(() => setTooltipOpen(false), 100);
   };
 
+  // Disabled: lock icon (with optional tooltip reason). No underlined text, no required marker.
+  if (disabled) {
+    return (
+      <label className={cn('sikat-field__label', className)} {...rest}>
+        {children}
+        {tooltip != null ? (
+          <Tooltip message={tooltip} icon="lock" label="Why this field is locked" />
+        ) : (
+          <Icon size={12}>lock</Icon>
+        )}
+        {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
+      </label>
+    );
+  }
+
+  // Info tooltip: underlined label text, closes on mouse leave.
   if (tooltip != null) {
     return (
       <label
@@ -335,11 +354,13 @@ export interface FormFieldProps {
   label?: ReactNode;
   /** Muted text after the label (Figma "Sub Label"), e.g. "(optional)". */
   subLabel?: ReactNode;
-  /** Info tooltip message shown from an info-circle after the label. */
+  /** Info tooltip / lock reason — see FormLabel. */
   tooltip?: ReactNode;
   hint?: ReactNode;
   error?: ReactNode;
   required?: boolean;
+  /** Marks the field as disabled: shows a lock icon on the label and passes `disabled` to the control. */
+  disabled?: boolean;
   className?: string;
   /**
    * Render-prop receiving the wired a11y props for the control — or plain
@@ -351,6 +372,7 @@ export interface FormFieldProps {
         'aria-describedby'?: string;
         'aria-invalid'?: boolean;
         invalid?: boolean;
+        disabled?: boolean;
       }) => ReactNode)
     | ReactNode;
 }
@@ -367,6 +389,7 @@ export function FormField({
   hint,
   error,
   required,
+  disabled,
   className,
   children,
 }: FormFieldProps) {
@@ -378,7 +401,13 @@ export function FormField({
   return (
     <div className={cn('sikat-field-group', className)} data-orientation={orientation}>
       {label ? (
-        <FormLabel htmlFor={id} required={required} subLabel={subLabel} tooltip={tooltip}>
+        <FormLabel
+          htmlFor={id}
+          required={required}
+          subLabel={subLabel}
+          tooltip={tooltip}
+          disabled={disabled}
+        >
           {label}
         </FormLabel>
       ) : null}
@@ -389,6 +418,7 @@ export function FormField({
               'aria-describedby': describedBy,
               'aria-invalid': error ? true : undefined,
               invalid: !!error,
+              disabled,
             })
           : children}
         {error ? (

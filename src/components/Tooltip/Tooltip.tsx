@@ -33,6 +33,8 @@ export interface TooltipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'con
   align?: TooltipAlign;
   /** Accessible name of the info trigger. Default: "More information". */
   label?: string;
+  /** Material Symbol name for the icon trigger. Default: `'info'`. */
+  icon?: string;
   /** Controlled open state (Figma "Show Tooltip"). */
   open?: boolean;
   /** Initial open state when uncontrolled. */
@@ -83,6 +85,7 @@ export function Tooltip({
   position = 'top',
   align = 'start',
   label = 'More information',
+  icon = 'info',
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -192,7 +195,7 @@ export function Tooltip({
             }
           }}
         >
-          <Icon size={16}>info</Icon>
+          <Icon size={16}>{icon}</Icon>
         </button>
       )}
       {mounted ? createPortal(bubble, document.body) : null}
