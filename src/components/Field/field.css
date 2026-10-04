@@ -340,8 +340,7 @@
   align-items: flex-start;
   gap: 0 var(--spacing-4);
 }
-.sikat-field-group[data-orientation='vertical']
-  > .sikat-field__label {
+.sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
   display: flex;
   flex: none;
   align-items: center;
@@ -352,8 +351,7 @@
   flex: 1 1 0;
 }
 @container (width < 28.5rem) {
-  .sikat-field-group[data-orientation='vertical']
-    > .sikat-field__label {
+  .sikat-field-group[data-orientation='vertical'] > .sikat-field__label {
     width: 100%;
     min-height: 0;
   }

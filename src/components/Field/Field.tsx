@@ -284,11 +284,7 @@ export function FormLabel({
 }: FormLabelProps) {
   return (
     <label className={cn('sikat-field__label', className)} {...rest}>
-      {tooltip != null ? (
-        <Tooltip message={tooltip}>{children}</Tooltip>
-      ) : (
-        children
-      )}
+      {tooltip != null ? <Tooltip message={tooltip}>{children}</Tooltip> : children}
       {required ? <span className="sikat-field__required"> *</span> : null}
       {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
     </label>

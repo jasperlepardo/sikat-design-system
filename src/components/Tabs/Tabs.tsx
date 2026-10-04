@@ -57,6 +57,8 @@ export function Tabs({
   defaultValue,
   onValueChange,
   className,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
   ...rest
 }: TabsProps) {
   const baseId = useId();
@@ -98,7 +100,13 @@ export function Tabs({
 
   return (
     <div className={cn('sikat-tabs-scroll', className)} {...rest}>
-      <div role="tablist" data-variant={variant} className="sikat-tabs">
+      <div
+        role="tablist"
+        data-variant={variant}
+        className="sikat-tabs"
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledby}
+      >
         {items.map((tab, i) => {
           const active = tab.value === selected;
           return (
