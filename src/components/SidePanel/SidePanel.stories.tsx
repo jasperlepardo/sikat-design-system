@@ -200,7 +200,7 @@ export const TwoColumn: Story = {
                 <Card>
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>General Details</Card.Header>
                   <Card.Content>
-                    <Form.Group columns>
+                    <Form.Group columns={2}>
                       <FormField label="Currency">
                         <TextField placeholder="United State Dollar (USD)" />
                       </FormField>
@@ -234,7 +234,7 @@ export const TwoColumn: Story = {
                 <Card>
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>Banks</Card.Header>
                   <Card.Content>
-                    <Form.Group columns>
+                    <Form.Group columns={2}>
                       <FormField label="Currency">
                         <TextField placeholder="United State Dollar (USD)" />
                       </FormField>
