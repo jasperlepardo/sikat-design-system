@@ -28,17 +28,8 @@ export function FormLabel({
   const hasHoverTooltip = !disabled && tooltip != null;
 
   return (
-    <label
-      className={cn('sikat-field__label', className)}
-      {...rest}
-    >
-      {hasHoverTooltip ? (
-        <Tooltip message={tooltip}>
-          {children}
-        </Tooltip>
-      ) : (
-        children
-      )}
+    <label className={cn('sikat-field__label', className)} {...rest}>
+      {hasHoverTooltip ? <Tooltip message={tooltip}>{children}</Tooltip> : children}
       {disabled ? (
         tooltip != null ? (
           <Tooltip message={tooltip} icon="lock" label="Why this field is locked" />
