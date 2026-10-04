@@ -99,11 +99,7 @@ const COLS_CLASS: Record<1 | 2 | 3, string> = {
 function FormGroup({ columns, orientation, className, children, ...rest }: FormGroupProps) {
   return (
     <div
-      className={cn(
-        'sikat-form__group',
-        columns != null && COLS_CLASS[columns],
-        className,
-      )}
+      className={cn('sikat-form__group', columns != null && COLS_CLASS[columns], className)}
       data-orientation={orientation}
       {...rest}
     >
