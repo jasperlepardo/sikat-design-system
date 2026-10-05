@@ -16,6 +16,10 @@ import {
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
 import { Card } from '../Card/Card';
+/** A body row's height without the 2px row gap its cells' top border adds above it. */
+const visibleRowHeight = (row: HTMLElement) =>
+  row.getBoundingClientRect().height -
+  parseFloat(getComputedStyle(row.querySelector('td')!).borderTopWidth);
 
 type Row = { id: string; a: string; b: string; c: string; d: string };
 
@@ -84,11 +88,12 @@ export const Playground: StoryObj<TablePlaygroundArgs> = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const table = canvas.getByRole('table', { name: 'Example' });
-    // 36px header cells (+ the 2px header/body gap) and rows, as in Figma.
+    // 36px header cells and rows, as in Figma. Each body row also carries the 2px
+    // row gap above it (its cells' transparent top border), so measure the visible row.
     for (const th of within(table).getAllByRole('columnheader'))
       await expect(th.clientHeight).toBe(36);
     const rows = within(table).getAllByRole('row').slice(1);
-    for (const r of rows) await expect(r.getBoundingClientRect().height).toBe(36);
+    for (const r of rows) await expect(visibleRowHeight(r)).toBe(36);
 
     // Row selection → Figma Table Row Variant2 (selected); header shows mixed.
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select row 2' }));
@@ -180,6 +185,7 @@ export const Scroll: StoryObj<typeof meta> = {
         caption="Wide"
         getRowId={(r) => r.id}
         rows={figmaRows(3)}
+        scroll
         selectable
         columns={['a', 'b', 'c', 'd', 'a2', 'b2', 'c2'].map((key) => ({
           key,
@@ -354,7 +360,7 @@ export const CellTypes: StoryObj<typeof meta> = {
     const canvas = within(canvasElement);
     const rows = canvas.getAllByRole('row').slice(1);
     // User cells set the row height: 60px (12px padding around the 36px stack).
-    for (const r of rows) await expect(Math.round(r.getBoundingClientRect().height)).toBe(60);
+    for (const r of rows) await expect(Math.round(visibleRowHeight(r))).toBe(60);
     // Action CTA: 32px (medium) buttons, as in Figma.
     const cta = within(rows[0]).getAllByRole('button', { name: 'Button' });
     for (const b of cta) await expect(b.getBoundingClientRect().height).toBe(32);

@@ -269,7 +269,13 @@ export function ReadOnlyField({
 }) {
   const ctxO = useContext(FieldOrientationCtx);
   return (
-    <FormField label={label} disabled tooltip={hint} error={error} orientation={ctxO ?? 'horizontal'}>
+    <FormField
+      label={label}
+      disabled
+      tooltip={hint}
+      error={error}
+      orientation={ctxO ?? 'horizontal'}
+    >
       <DSReadOnly
         value={value}
         subLabel={subLabel}
