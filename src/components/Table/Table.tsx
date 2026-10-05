@@ -196,7 +196,10 @@ export function Table<T>({
 
   return (
     <div className={cn('sikat-table', layout && `sikat-table--${layout}`, className)} {...rest}>
-      <div ref={setScroller} className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}>
+      <div
+        ref={setScroller}
+        className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}
+      >
         <table className="sikat-table__table">
           {caption ? <caption className="sikat-table__caption">{caption}</caption> : null}
           <thead>
