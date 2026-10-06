@@ -207,20 +207,12 @@
 .sikat-list__card-badge {
   display: inline-flex;
   flex: none;
-  padding: var(--spacing-0_5);
-  border: var(--border-width-1) solid var(--color-border-white);
-  border-radius: var(--rounded-xl);
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-white);
 }
 .sikat-list__card-actions {
-  position: relative;
-  z-index: 1;
   display: flex;
   flex: none;
   align-items: center;
   gap: var(--spacing-1);
-  padding-right: var(--spacing-2);
 }
 
 /* Details: body/xs medium. Expanded = label/value rows; collapsed = inline muted values. */
