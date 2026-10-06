@@ -8,6 +8,8 @@ import { IconButton } from '../Button/IconButton';
 import { TextField } from '../Field/Field';
 import sikatLogo from './assets/sikat-logo.svg';
 import appsGlyph from './assets/apps.svg';
+import panelCloseGlyph from './assets/left-panel-close.svg';
+import panelOpenGlyph from './assets/left-panel-open.svg';
 import searchGlyph from './assets/search-lg.svg';
 import commandGlyph from './assets/keyboard-command-key.svg';
 import plusGlyph from './assets/plus.svg';
@@ -39,7 +41,15 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   logo?: ReactNode;
   /** Avatar / account slot at the far right (32px in App, 40px in Control Plane). */
   avatar?: ReactNode;
-  /** App: the apps (grid) button next to the app name. */
+  /** Shows a button at the far left that toggles the side nav (Left Panel Close / Open icon). */
+  onSideNavToggle?: () => void;
+  /** Whether the side nav is expanded (the toggle's `aria-expanded`). */
+  sideNavExpanded?: boolean;
+  /** `id` of the side nav element (the toggle's `aria-controls`). */
+  sideNavId?: string;
+  /** Pointer enters / leaves the side-nav toggle (e.g. to peek a collapsed side nav). */
+  onSideNavToggleHover?: (hovering: boolean) => void;
+  /** App: the apps (grid) button before the logo. */
   onAppsClick?: () => void;
   /** App: apps to switch between — turns the apps button into a dropdown. */
   apps?: NavbarMenuItem[];
@@ -171,9 +181,11 @@ function NavbarMenu({
 /**
  * Navbar — the Figma Navbar (Components › Navbar): a 64px dark app bar
  * (`bg/default-alt`, rendered in the Dark theme via `data-theme="dark"`) with the
- * brand mark + app name on the left. `type="app"` adds the apps button, a
- * centered search field with a gradient "+" create button, and on the right an
- * organization switcher, notifications / settings buttons and the avatar.
+ * brand mark + app name on the left, after an optional side-nav toggle
+ * (`onSideNavToggle`). `type="app"` puts the apps button before the logo and
+ * adds a centered search field with a gradient "+" create button, and on the
+ * right an organization switcher, notifications / settings buttons and the
+ * avatar.
  * `type="control-plane"` shows only the brand and the avatar. Renders a `<nav>`,
  * so inside `<Page>` it sticks to the top.
  */
@@ -182,6 +194,10 @@ export function Navbar({
   appName = '[App Name]',
   logo,
   avatar,
+  onSideNavToggle,
+  sideNavExpanded,
+  sideNavId,
+  onSideNavToggleHover,
   onAppsClick,
   apps,
   appId,
@@ -233,10 +249,21 @@ export function Navbar({
     >
       <div className="sikat-navbar__content">
         <div className="sikat-navbar__brand">
-          <span className="sikat-navbar__logo">
-            {logo ?? <img src={sikatLogo} alt="SIKAT" width={46.9795} height={48} />}
-          </span>
-          <span className="sikat-navbar__app">{appName}</span>
+          {onSideNavToggle ? (
+            <IconButton
+              label="Toggle side navigation"
+              intent="default"
+              variant="link"
+              size="medium"
+              aria-expanded={sideNavExpanded}
+              aria-controls={sideNavId}
+              onClick={onSideNavToggle}
+              onMouseEnter={() => onSideNavToggleHover?.(true)}
+              onMouseLeave={() => onSideNavToggleHover?.(false)}
+            >
+              <Glyph src={sideNavExpanded === false ? panelOpenGlyph : panelCloseGlyph} />
+            </IconButton>
+          ) : null}
           {isApp ? (
             apps?.length ? (
               <NavbarMenu
@@ -249,7 +276,7 @@ export function Navbar({
                   <IconButton
                     label="Apps"
                     intent="default"
-                    variant="solid"
+                    variant="link"
                     size="medium"
                     onClick={() => {
                       onAppsClick?.();
@@ -265,7 +292,7 @@ export function Navbar({
               <IconButton
                 label="Apps"
                 intent="default"
-                variant="solid"
+                variant="link"
                 size="medium"
                 onClick={onAppsClick}
               >
@@ -273,6 +300,10 @@ export function Navbar({
               </IconButton>
             )
           ) : null}
+          <span className="sikat-navbar__logo">
+            {logo ?? <img src={sikatLogo} alt="SIKAT" width={46.9795} height={48} />}
+          </span>
+          <span className="sikat-navbar__app">{appName}</span>
         </div>
 
         {isApp ? (
