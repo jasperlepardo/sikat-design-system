@@ -6,7 +6,6 @@ import { Badge } from '../Badge/Badge';
 import { Icon } from '../Icon/Icon';
 import { IconButton } from '../Button/IconButton';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
-import pixGlyph from './assets/pix.svg';
 
 const meta = {
   title: 'Components/List',
@@ -171,7 +170,7 @@ const onMore = fn();
 const cardProps = {
   icon: <Icon size={16}>location_on</Icon>,
   title: 'Manila HQ',
-  badge: <img src={pixGlyph} alt="" width={12} height={12} />,
+  badge: <Badge size="extra-small">Default</Badge>,
   fields: addressFields,
   actions: (
     <IconButton
