@@ -1,5 +1,13 @@
-import { useEffect, useState, type HTMLAttributes, type ReactNode } from 'react';
+import {
+  useEffect,
+  useRef,
+  useState,
+  type HTMLAttributes,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
 import { cn } from '../../lib/cn';
+import { TableExpand } from './TableCells';
 import checkboxGlyph from './assets/checkbox.svg';
 import tuneGlyph from './assets/tune.svg';
 import switchVerticalGlyph from './assets/switch-vertical-01.svg';
@@ -68,6 +76,54 @@ export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   layout?: 'fill' | 'scroll';
   /** Accessible table name. */
   caption?: string;
+  /**
+   * Child rows (same columns), nested to any depth. Turns the table into a tree
+   * grid: the first column indents per level and holds the expand chevron, and
+   * selection cascades (a parent is checked when all its descendants are).
+   */
+  getSubRows?: (row: T) => T[] | undefined;
+  /** Expanded row ids (controlled). Omit to let the Table manage expansion. */
+  expandedIds?: string[];
+  /** Initially expanded row ids (uncontrolled). */
+  defaultExpandedIds?: string[];
+  onExpandedChange?: (ids: string[]) => void;
+}
+
+interface TreeNode<T> {
+  row: T;
+  id: string;
+  depth: number;
+  parentId?: string;
+  children: TreeNode<T>[];
+}
+
+function buildTree<T>(
+  rows: T[],
+  getRowId: (row: T) => string,
+  getSubRows?: (row: T) => T[] | undefined,
+  depth = 0,
+  parentId?: string,
+): TreeNode<T>[] {
+  return rows.map((row) => {
+    const id = getRowId(row);
+    const sub = getSubRows?.(row) ?? [];
+    return {
+      row,
+      id,
+      depth,
+      parentId,
+      children: buildTree(sub, getRowId, getSubRows, depth + 1, id),
+    };
+  });
+}
+
+/** Every node, depth-first. */
+function walk<T>(nodes: TreeNode<T>[], out: TreeNode<T>[] = []): TreeNode<T>[] {
+  for (const n of nodes) {
+    out.push(n);
+    walk(n.children, out);
+  }
+  return out;
 }
 
 /** A Figma icon asset drawn in `currentColor` (mask). */
@@ -171,22 +227,94 @@ export function Table<T>({
   scroll,
   layout,
   caption,
+  getSubRows,
+  expandedIds,
+  defaultExpandedIds = [],
+  onExpandedChange,
   className,
   ...rest
 }: TableProps<T>) {
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
+  const bodyRef = useRef<HTMLTableSectionElement>(null);
+  const [ownExpanded, setOwnExpanded] = useState(defaultExpandedIds);
+  const expanded = new Set(expandedIds ?? ownExpanded);
+  const tree = !!getSubRows;
+  const roots = buildTree(rows, getRowId, getSubRows);
+  const nodes = walk(roots);
+  const byId = new Map(nodes.map((n) => [n.id, n]));
+  const ids = nodes.map((n) => n.id);
+  const leaves = nodes.filter((n) => n.children.length === 0);
+
   const selected = new Set(selectedIds);
-  const ids = rows.map(getRowId);
-  const allSelected = ids.length > 0 && ids.every((id) => selected.has(id));
-  const someSelected = ids.some((id) => selected.has(id));
+  /** A row is checked when all its leaves are selected; mixed when only some are. */
+  const rowState = (n: TreeNode<T>) => {
+    if (n.children.length === 0) return { checked: selected.has(n.id), mixed: false };
+    const own = walk(n.children).filter((c) => c.children.length === 0);
+    const count = own.filter((c) => selected.has(c.id)).length;
+    return { checked: count === own.length, mixed: count > 0 && count < own.length };
+  };
+  const allSelected = leaves.length > 0 && leaves.every((n) => selected.has(n.id));
+  const someSelected = leaves.some((n) => selected.has(n.id));
   const hasEnd = !!onRowAction || !!onColumnSettings;
 
+  /** Re-derive parent ids from their descendants (post-order), keeping ids outside this tree. */
+  const normalize = (next: Set<string>) => {
+    const visit = (n: TreeNode<T>): boolean => {
+      if (n.children.length === 0) return next.has(n.id);
+      const all = n.children.map(visit).every(Boolean);
+      if (all) next.add(n.id);
+      else next.delete(n.id);
+      return all;
+    };
+    roots.forEach(visit);
+    return [...next];
+  };
   const toggleAll = (on: boolean) =>
     onSelectionChange?.(
       on ? [...new Set([...selectedIds, ...ids])] : selectedIds.filter((id) => !ids.includes(id)),
     );
-  const toggleRow = (id: string, on: boolean) =>
-    onSelectionChange?.(on ? [...selectedIds, id] : selectedIds.filter((x) => x !== id));
+  const toggleRow = (id: string, on: boolean) => {
+    const next = new Set(selectedIds);
+    for (const n of walk([byId.get(id)!])) {
+      if (on) next.add(n.id);
+      else next.delete(n.id);
+    }
+    onSelectionChange?.(normalize(next));
+  };
+
+  const setExpanded = (id: string, open: boolean) => {
+    const next = open ? [...expanded, id] : [...expanded].filter((x) => x !== id);
+    if (expandedIds === undefined) setOwnExpanded(next);
+    onExpandedChange?.(next);
+  };
+  /** The visible rows: descend only into expanded nodes. */
+  const visible: { node: TreeNode<T>; pos: number; size: number }[] = [];
+  const collect = (list: TreeNode<T>[]) =>
+    list.forEach((node, i) => {
+      visible.push({ node, pos: i + 1, size: list.length });
+      if (expanded.has(node.id)) collect(node.children);
+    });
+  collect(roots);
+
+  const focusIn = (id: string | undefined, selector: string) =>
+    id &&
+    bodyRef.current
+      ?.querySelector<HTMLElement>(`tr[data-row-id="${CSS.escape(id)}"]`)
+      ?.querySelector<HTMLElement>(selector)
+      ?.focus();
+  /** Chevron keys: → expands (then moves into the first child), ← collapses (then moves to the parent). */
+  const onExpandKey = (n: TreeNode<T>, e: KeyboardEvent<HTMLButtonElement>) => {
+    const open = expanded.has(n.id);
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      if (!open) setExpanded(n.id, true);
+      else focusIn(n.children[0]?.id, 'button, input, a[href]');
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      if (open) setExpanded(n.id, false);
+      else focusIn(n.parentId, '.sikat-table-cell__expand');
+    }
+  };
   const nextSort = (key: string): TableSort | null =>
     sort?.key !== key
       ? { key, direction: 'asc' }
@@ -200,7 +328,7 @@ export function Table<T>({
         ref={setScroller}
         className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}
       >
-        <table className="sikat-table__table">
+        <table className="sikat-table__table" role={tree ? 'treegrid' : undefined}>
           {caption ? <caption className="sikat-table__caption">{caption}</caption> : null}
           <thead>
             <tr>
@@ -268,28 +396,64 @@ export function Table<T>({
               ) : null}
             </tr>
           </thead>
-          <tbody>
-            {rows.map((row) => {
-              const id = getRowId(row);
-              const isSelected = selected.has(id);
+          <tbody ref={bodyRef}>
+            {visible.map(({ node, pos, size }) => {
+              const { row, id, depth } = node;
+              const { checked: isSelected, mixed } = rowState(node);
+              const hasChildren = node.children.length > 0;
+              const isOpen = expanded.has(id);
               return (
-                <tr key={id} className="sikat-table__row" data-selected={isSelected || undefined}>
+                <tr
+                  key={id}
+                  className="sikat-table__row"
+                  data-row-id={id}
+                  data-selected={isSelected || undefined}
+                  {...(tree && {
+                    'aria-level': depth + 1,
+                    'aria-posinset': pos,
+                    'aria-setsize': size,
+                    'aria-expanded': hasChildren ? isOpen : undefined,
+                  })}
+                >
                   {selectable ? (
                     <td className="sikat-table__td sikat-table__td--check">
                       <Check
                         label={`Select row ${id}`}
                         checked={isSelected}
+                        indeterminate={mixed}
                         onChange={(on) => toggleRow(id, on)}
                       />
                     </td>
                   ) : null}
-                  {columns.map((col) => (
-                    <td key={col.key} className="sikat-table__td">
-                      {col.cell
-                        ? col.cell(row)
-                        : String((row as Record<string, unknown>)[col.key] ?? '')}
-                    </td>
-                  ))}
+                  {columns.map((col, i) => {
+                    const content = col.cell
+                      ? col.cell(row)
+                      : String((row as Record<string, unknown>)[col.key] ?? '');
+                    return (
+                      <td key={col.key} className="sikat-table__td">
+                        {tree && i === 0 ? (
+                          <span
+                            className="sikat-table__tree"
+                            style={{ ['--table-depth' as string]: depth }}
+                          >
+                            {hasChildren ? (
+                              <TableExpand
+                                expanded={isOpen}
+                                label={`${isOpen ? 'Collapse' : 'Expand'} row ${id}`}
+                                onToggle={() => setExpanded(id, !isOpen)}
+                                onKeyDown={(e) => onExpandKey(node, e)}
+                              />
+                            ) : (
+                              <span className="sikat-table__tree-spacer" aria-hidden="true" />
+                            )}
+                            {content}
+                          </span>
+                        ) : (
+                          content
+                        )}
+                      </td>
+                    );
+                  })}
                   {hasEnd ? (
                     <td className="sikat-table__td sikat-table__td--end">
                       {onRowAction ? (
