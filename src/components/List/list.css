@@ -215,15 +215,12 @@
   gap: var(--spacing-1);
 }
 
-/* Details: body/xs medium. Expanded = label/value rows; collapsed = inline muted values. */
-.sikat-list__card-fields,
-.sikat-list__card-summary {
+/* Details: body/xs medium label/value rows. */
+.sikat-list__card-fields {
   margin: 0;
   font-size: var(--text-body-xs-font-size);
   font-weight: var(--text-medium);
   line-height: var(--text-body-xs-line-height);
-}
-.sikat-list__card-fields {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-0_5);
@@ -241,19 +238,8 @@
 .sikat-list__card-label:not(:empty)::after {
   content: ':';
 }
-.sikat-list__card-fields .sikat-list__card-value {
+.sikat-list__card-value {
   margin: 0;
   color: var(--color-text-body);
   text-align: left;
-}
-.sikat-list__card-summary {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-0_5);
-  color: var(--color-text-muted);
-}
-.sikat-list__card-value {
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-1);
 }

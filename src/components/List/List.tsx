@@ -179,10 +179,10 @@ export function ListItem({
 /* --------------------------------------------------------------- List.Card */
 
 export interface ListCardField {
-  /** Label on the left in the expanded view (hidden when collapsed). */
+  /** Label on the left, followed by a colon. */
   label: ReactNode;
-  /** Value — pass an array to render parts with a small gap (e.g. `['Metro Manila', 'NCR']`). */
-  value: ReactNode | ReactNode[];
+  /** Value on the right. */
+  value: ReactNode;
 }
 
 export interface ListCardProps extends Omit<HTMLAttributes<HTMLLIElement>, 'title'> {
@@ -196,15 +196,6 @@ export interface ListCardProps extends Omit<HTMLAttributes<HTMLLIElement>, 'titl
   actions?: ReactNode;
   /** Label/value rows shown below the header. */
   fields?: ListCardField[];
-}
-
-function renderCardValue(value: ListCardField['value']) {
-  if (!Array.isArray(value)) return value;
-  return value.map((part, i) => (
-    <span key={i} className="sikat-list__card-part">
-      {part}
-    </span>
-  ));
 }
 
 /**
@@ -231,7 +222,7 @@ function ListCard({ title, icon, badge, actions, fields = [], className, ...rest
           {fields.map((field, i) => (
             <div key={i} className="sikat-list__card-field">
               <dt className="sikat-list__card-label">{field.label}</dt>
-              <dd className="sikat-list__card-value">{renderCardValue(field.value)}</dd>
+              <dd className="sikat-list__card-value">{field.value}</dd>
             </div>
           ))}
         </dl>
