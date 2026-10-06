@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 import { Badge } from '../Badge/Badge';
 import dragIndicator from './assets/drag-indicator.svg';
 import chevronRight from './assets/chevron-right.svg';
@@ -152,16 +152,17 @@ export function TableDragHandle({
   );
 }
 
-/** Type=Dropdown: the chevron-right expand button. */
+/** Type=Dropdown: the chevron-right expand button (turns down while expanded). */
 export function TableExpand({
   expanded,
   onToggle,
   label = 'Expand row',
+  ...rest
 }: {
   expanded?: boolean;
   onToggle?: () => void;
   label?: string;
-}) {
+} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'>) {
   return (
     <button
       type="button"
@@ -169,6 +170,7 @@ export function TableExpand({
       aria-label={label}
       aria-expanded={expanded}
       onClick={onToggle}
+      {...rest}
     >
       <span
         className="sikat-table__glyph"

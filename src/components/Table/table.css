@@ -382,6 +382,33 @@
   border-radius: 1px;
   background-color: var(--color-border-default);
 }
+/* Dropdown: the chevron turns down while expanded. */
+.sikat-table-cell__expand .sikat-table__glyph {
+  transition: transform 150ms ease;
+}
+.sikat-table-cell__expand[aria-expanded='true'] .sikat-table__glyph {
+  transform: rotate(90deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .sikat-table-cell__expand .sikat-table__glyph {
+    transition: none;
+  }
+}
+
+/* Tree rows (getSubRows): the first cell indents one chevron + gap per level, so a
+   child's chevron sits under its parent's content; leaves keep a chevron-wide spacer. */
+.sikat-table__tree {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1_5);
+  padding-inline-start: calc(var(--table-depth, 0) * (var(--spacing-5) + var(--spacing-1_5)));
+}
+.sikat-table__tree-spacer {
+  flex: none;
+  width: 20px;
+  height: 20px;
+}
+
 /* Item: drag handle — fg/quarternary, fg/quarternary-solid on row hover. */
 .sikat-table-cell__drag {
   display: flex;

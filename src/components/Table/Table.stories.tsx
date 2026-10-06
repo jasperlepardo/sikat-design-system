@@ -375,6 +375,121 @@ export const CellTypes: StoryObj<typeof meta> = {
   },
 };
 
+// --- TreeRows ---------------------------------------------------------------
+
+type Item = { id: string; name: string; qty: string; amount: string; children?: Item[] };
+const TREE: Item[] = [
+  {
+    id: 'SO-1042',
+    name: 'Sikat Tech',
+    qty: '3',
+    amount: '12,450.00',
+    children: [
+      {
+        id: 'SO-1042-1',
+        name: 'Steel bolts',
+        qty: '2',
+        amount: '8,000.00',
+        children: [
+          { id: 'LOT-A', name: 'Lot A', qty: '1', amount: '5,000.00' },
+          { id: 'LOT-B', name: 'Lot B', qty: '1', amount: '3,000.00' },
+        ],
+      },
+      { id: 'SO-1042-2', name: 'Hex nuts', qty: '1', amount: '4,450.00' },
+    ],
+  },
+  {
+    id: 'SO-1043',
+    name: 'Acme Corp',
+    qty: '1',
+    amount: '3,980.50',
+    children: [{ id: 'SO-1043-1', name: 'Copper wire', qty: '1', amount: '3,980.50' }],
+  },
+  { id: 'SO-1044', name: 'Globex', qty: '1', amount: '870.00' },
+];
+
+/** Multilevel collapsible rows: `getSubRows` nests rows of the same columns; the
+ *  first column indents per level and holds the chevron; selection cascades. */
+export const TreeRows: StoryObj<{ onRowAction: (row: Item) => void }> = {
+  args: { onRowAction: fn() },
+  render: (args) => {
+    const [selected, setSelected] = useState<string[]>([]);
+    return (
+      <Table
+        caption="Orders"
+        getRowId={(r) => r.id}
+        getSubRows={(r) => r.children}
+        defaultExpandedIds={['SO-1042', 'SO-1042-1']}
+        rows={TREE}
+        selectable
+        selectedIds={selected}
+        onSelectionChange={setSelected}
+        onRowAction={args.onRowAction}
+        columns={[
+          { key: 'id', header: 'Order' },
+          { key: 'name', header: 'Name' },
+          { key: 'qty', header: 'Qty' },
+          {
+            key: 'amount',
+            header: 'Amount',
+            cell: (r) => <TableAmount currency="PHP">{r.amount}</TableAmount>,
+          },
+        ]}
+      />
+    );
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const grid = canvas.getByRole('treegrid', { name: 'Orders' });
+    const bodyRows = () => within(grid).getAllByRole('row').slice(1);
+    const row = (id: string) => grid.querySelector<HTMLElement>(`tr[data-row-id="${id}"]`)!;
+
+    // SO-1042 and its first line item start open; SO-1043's child is hidden.
+    await expect(bodyRows()).toHaveLength(7);
+    await expect(row('LOT-A')).toHaveAttribute('aria-level', '3');
+    const indent = (id: string) =>
+      parseFloat(getComputedStyle(row(id).querySelector('.sikat-table__tree')!).paddingLeft);
+    await expect(indent('LOT-A')).toBeGreaterThan(indent('SO-1042'));
+
+    const expand = canvas.getByRole('button', { name: 'Expand row SO-1043' });
+    await userEvent.click(expand);
+    await expect(row('SO-1043')).toHaveAttribute('aria-expanded', 'true');
+    await expect(bodyRows()).toHaveLength(8);
+
+    // Keyboard: ← collapses, → expands, → again moves into the first child.
+    const chevron = canvas.getByRole('button', { name: 'Collapse row SO-1043' });
+    chevron.focus();
+    await userEvent.keyboard('{ArrowLeft}');
+    await expect(bodyRows()).toHaveLength(7);
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(bodyRows()).toHaveLength(8);
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(document.activeElement).toBe(
+      canvas.getByRole('checkbox', { name: 'Select row SO-1043-1' }),
+    );
+
+    // Cascading selection: a parent checks its descendants; one unchecked → mixed.
+    const check = (id: string) =>
+      canvas.getByRole('checkbox', { name: `Select row ${id}` }) as HTMLInputElement;
+    await userEvent.click(check('SO-1042'));
+    for (const id of ['SO-1042-1', 'LOT-A', 'LOT-B', 'SO-1042-2'])
+      await expect(check(id).checked).toBe(true);
+    await userEvent.click(check('LOT-B'));
+    await expect(check('SO-1042-1').indeterminate).toBe(true);
+    await expect(check('SO-1042').indeterminate).toBe(true);
+    const all = canvas.getByRole('checkbox', { name: 'Select all rows' }) as HTMLInputElement;
+    await expect(all.indeterminate).toBe(true);
+    await userEvent.click(check('LOT-B'));
+    await expect(check('SO-1042').checked).toBe(true);
+    await expect(row('SO-1042')).toHaveAttribute('data-selected', 'true');
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions for row LOT-A' }));
+    await expect(args.onRowAction).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: 'LOT-A' }),
+    );
+  },
+};
+
 // --- InPanel ----------------------------------------------------------------
 
 import { Panel } from '../Panel/Panel';
