@@ -5,144 +5,145 @@
    It is portaled to <body> with position: fixed; Tooltip.tsx sets the anchor
    point (--sikat-tooltip-x/y) and the placement rules below translate the
    bubble from it, so it is never clipped by overflow-hidden ancestors. */
+@layer components {
+  .sikat-tooltip {
+    position: relative;
+    display: inline-flex;
+    vertical-align: middle;
+  }
 
-.sikat-tooltip {
-  position: relative;
-  display: inline-flex;
-  vertical-align: middle;
-}
+  .sikat-tooltip__trigger {
+    display: inline-flex;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--rounded-full);
+    background: none;
+    color: var(--color-fg-primary);
+    cursor: pointer;
+  }
+  .sikat-tooltip__trigger:focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 2px;
+  }
 
-.sikat-tooltip__trigger {
-  display: inline-flex;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: var(--rounded-full);
-  background: none;
-  color: var(--color-fg-primary);
-  cursor: pointer;
-}
-.sikat-tooltip__trigger:focus-visible {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 2px;
-}
+  /* Label-text variant — flows inline with text, no icon. */
+  .sikat-tooltip--label {
+    display: inline;
+    vertical-align: baseline;
+  }
+  .sikat-tooltip__trigger--label {
+    display: inline;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 3px;
+    cursor: help;
+    color: inherit;
+    font: inherit;
+  }
 
-/* Label-text variant — flows inline with text, no icon. */
-.sikat-tooltip--label {
-  display: inline;
-  vertical-align: baseline;
-}
-.sikat-tooltip__trigger--label {
-  display: inline;
-  text-decoration-line: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 3px;
-  cursor: help;
-  color: inherit;
-  font: inherit;
-}
-
-.sikat-tooltip__bubble {
-  position: fixed;
-  top: var(--sikat-tooltip-y, 0);
-  left: var(--sikat-tooltip-x, 0);
-  z-index: 1000;
-  box-sizing: border-box;
-  width: 202px;
-  padding: var(--spacing-3); /* 12px */
-  border-radius: var(--rounded-sm);
-  background-color: var(--color-bg-secondary);
-  color: var(--color-text-heading);
-  font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
-  font-size: var(--text-body-xs-font-size); /* 12px */
-  line-height: var(--text-body-xs-line-height); /* 16px */
-  letter-spacing: var(--text-body-xs-letter-spacing);
-  font-weight: var(--text-medium);
-  text-align: left;
-  white-space: normal;
-  /* Figma Shadow/Default (0 4 9 #0000001F) — no matching shadow token yet.
+  .sikat-tooltip__bubble {
+    position: fixed;
+    top: var(--sikat-tooltip-y, 0);
+    left: var(--sikat-tooltip-x, 0);
+    z-index: 1000;
+    box-sizing: border-box;
+    width: 202px;
+    padding: var(--spacing-3); /* 12px */
+    border-radius: var(--rounded-sm);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-heading);
+    font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-xs-font-size); /* 12px */
+    line-height: var(--text-body-xs-line-height); /* 16px */
+    letter-spacing: var(--text-body-xs-letter-spacing);
+    font-weight: var(--text-medium);
+    text-align: left;
+    white-space: normal;
+    /* Figma Shadow/Default (0 4 9 #0000001F) — no matching shadow token yet.
      drop-shadow so the pointer is shadowed too. */
-  filter: drop-shadow(0 4px 4.5px rgb(0 0 0 / 0.12));
-}
-.sikat-tooltip__bubble[hidden] {
-  display: none;
-}
+    filter: drop-shadow(0 4px 4.5px rgb(0 0 0 / 0.12));
+  }
+  .sikat-tooltip__bubble[hidden] {
+    display: none;
+  }
 
-/* Pointer: 16×8 triangle in the bubble's fill. */
-.sikat-tooltip__bubble::before {
-  content: '';
-  position: absolute;
-  background-color: inherit;
-}
+  /* Pointer: 16×8 triangle in the bubble's fill. */
+  .sikat-tooltip__bubble::before {
+    content: '';
+    position: absolute;
+    background-color: inherit;
+  }
 
-/* ── Placement: translate from the anchor point ── */
-.sikat-tooltip__bubble[data-position='top'] {
-  translate: 0 -100%;
-}
-.sikat-tooltip__bubble[data-position='top'][data-align='end'] {
-  translate: -100% -100%;
-}
-.sikat-tooltip__bubble[data-position='bottom'][data-align='end'] {
-  translate: -100% 0;
-}
-.sikat-tooltip__bubble[data-position='left'] {
-  translate: -100% 0;
-}
-.sikat-tooltip__bubble[data-position='left'][data-align='end'] {
-  translate: -100% -100%;
-}
-.sikat-tooltip__bubble[data-position='right'][data-align='end'] {
-  translate: 0 -100%;
-}
+  /* ── Placement: translate from the anchor point ── */
+  .sikat-tooltip__bubble[data-position='top'] {
+    translate: 0 -100%;
+  }
+  .sikat-tooltip__bubble[data-position='top'][data-align='end'] {
+    translate: -100% -100%;
+  }
+  .sikat-tooltip__bubble[data-position='bottom'][data-align='end'] {
+    translate: -100% 0;
+  }
+  .sikat-tooltip__bubble[data-position='left'] {
+    translate: -100% 0;
+  }
+  .sikat-tooltip__bubble[data-position='left'][data-align='end'] {
+    translate: -100% -100%;
+  }
+  .sikat-tooltip__bubble[data-position='right'][data-align='end'] {
+    translate: 0 -100%;
+  }
 
-/* ── Pointer: top / bottom ── */
-.sikat-tooltip__bubble:is([data-position='top'], [data-position='bottom'])::before {
-  width: 16px;
-  height: var(--spacing-2);
-}
-.sikat-tooltip__bubble[data-position='top']::before {
-  top: 100%;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-}
-.sikat-tooltip__bubble[data-position='bottom']::before {
-  bottom: 100%;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-.sikat-tooltip__bubble:is(
-    [data-position='top'],
-    [data-position='bottom']
-  )[data-align='start']::before {
-  left: var(--spacing-2);
-}
-.sikat-tooltip__bubble:is(
-    [data-position='top'],
-    [data-position='bottom']
-  )[data-align='end']::before {
-  right: var(--spacing-2);
-}
+  /* ── Pointer: top / bottom ── */
+  .sikat-tooltip__bubble:is([data-position='top'], [data-position='bottom'])::before {
+    width: 16px;
+    height: var(--spacing-2);
+  }
+  .sikat-tooltip__bubble[data-position='top']::before {
+    top: 100%;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+  .sikat-tooltip__bubble[data-position='bottom']::before {
+    bottom: 100%;
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  }
+  .sikat-tooltip__bubble:is(
+      [data-position='top'],
+      [data-position='bottom']
+    )[data-align='start']::before {
+    left: var(--spacing-2);
+  }
+  .sikat-tooltip__bubble:is(
+      [data-position='top'],
+      [data-position='bottom']
+    )[data-align='end']::before {
+    right: var(--spacing-2);
+  }
 
-/* ── Pointer: left / right ── */
-.sikat-tooltip__bubble:is([data-position='left'], [data-position='right'])::before {
-  width: var(--spacing-2);
-  height: 16px;
-}
-.sikat-tooltip__bubble[data-position='left']::before {
-  left: 100%;
-  clip-path: polygon(0 0, 100% 50%, 0 100%);
-}
-.sikat-tooltip__bubble[data-position='right']::before {
-  right: 100%;
-  clip-path: polygon(100% 0, 100% 100%, 0 50%);
-}
-.sikat-tooltip__bubble:is(
-    [data-position='left'],
-    [data-position='right']
-  )[data-align='start']::before {
-  top: var(--spacing-2);
-}
-.sikat-tooltip__bubble:is(
-    [data-position='left'],
-    [data-position='right']
-  )[data-align='end']::before {
-  bottom: var(--spacing-2);
+  /* ── Pointer: left / right ── */
+  .sikat-tooltip__bubble:is([data-position='left'], [data-position='right'])::before {
+    width: var(--spacing-2);
+    height: 16px;
+  }
+  .sikat-tooltip__bubble[data-position='left']::before {
+    left: 100%;
+    clip-path: polygon(0 0, 100% 50%, 0 100%);
+  }
+  .sikat-tooltip__bubble[data-position='right']::before {
+    right: 100%;
+    clip-path: polygon(100% 0, 100% 100%, 0 50%);
+  }
+  .sikat-tooltip__bubble:is(
+      [data-position='left'],
+      [data-position='right']
+    )[data-align='start']::before {
+    top: var(--spacing-2);
+  }
+  .sikat-tooltip__bubble:is(
+      [data-position='left'],
+      [data-position='right']
+    )[data-align='end']::before {
+    bottom: var(--spacing-2);
+  }
 }

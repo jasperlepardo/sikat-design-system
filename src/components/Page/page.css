@@ -1,18 +1,21 @@
 /* Page — full-height app shell. A vertical flex column with an isolated stacking
    context so a child <nav> sticks to the top and a child <footer> pins to the
    bottom on short pages. */
-.sikat-page {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  isolation: isolate;
-  background-color: var(--color-bg-tertiary);
-}
-.sikat-page > nav {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-.sikat-page > footer {
-  margin-top: auto;
+
+@layer components {
+  .sikat-page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    isolation: isolate;
+    background-color: var(--color-bg-tertiary);
+  }
+  .sikat-page > nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .sikat-page > footer {
+    margin-top: auto;
+  }
 }

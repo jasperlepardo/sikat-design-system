@@ -6,91 +6,94 @@
    inset shadow (so solid/outline/ghost share the exact same box at every size),
    and the optional leading dot, leading/trailing icons, and dismiss button — all
    tinted by the intent's --badge-icon color. Badge has no hover/disabled state. */
-.sikat-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  gap: var(--spacing-0);
-  /* Badge/padding-x (horizontal) and Badge/padding-y (vertical), e.g. medium →
-     6px top/bottom, 12px left/right → 28px tall with 16px icons. */
-  padding: var(--badge-pad-y) var(--badge-pad-x);
-  box-shadow: inset 0 0 0 var(--border-width-1) var(--badge-border, transparent);
-  border-radius: var(--rounded-full);
-  background-color: var(--badge-bg);
-  color: var(--badge-text);
-  font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
-  font-weight: var(--text-medium);
-  font-size: var(--text-body-xs-font-size);
-  line-height: var(--text-body-xs-line-height);
-  letter-spacing: var(--text-body-xs-letter-spacing);
-  white-space: nowrap;
-}
-/* Content frame — groups the optional dot with the label. Mirrors the Figma
-   Badge > Content: 0 vertical padding, 4px horizontal padding, 2px gap. */
-.sikat-badge__content {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-0_5);
-  padding: var(--spacing-0) var(--spacing-1);
-}
-/* Dot sits in a small padded slot so an 8px circle reads as a status dot. */
-.sikat-badge__dot-wrap {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  padding: var(--spacing-1);
-}
-.sikat-badge__dot {
-  width: 8px;
-  height: 8px;
-  border-radius: var(--rounded-full);
-  background-color: var(--badge-icon, currentColor);
-}
-/* Leading/trailing icon + dismiss glyph all follow the intent's icon color. */
-.sikat-badge__icon {
-  flex: none;
-  display: inline-flex;
-  color: var(--badge-icon, currentColor);
-}
-.sikat-badge__label {
-  display: inline-block;
-}
-.sikat-badge__dismiss {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-0);
-  border: 0;
-  background: transparent;
-  color: var(--badge-icon, currentColor);
-  cursor: pointer;
-  border-radius: var(--rounded-md);
-  transition: opacity 0.15s ease;
-}
-.sikat-badge__dismiss:hover {
-  opacity: 0.7;
-}
-.sikat-badge__dismiss:focus-visible {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 1px;
-}
 
-/* Badge Counter — a fixed 20px circular count pill (e.g. unread notifications).
+@layer components {
+  .sikat-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    gap: var(--spacing-0);
+    /* Badge/padding-x (horizontal) and Badge/padding-y (vertical), e.g. medium →
+     6px top/bottom, 12px left/right → 28px tall with 16px icons. */
+    padding: var(--badge-pad-y) var(--badge-pad-x);
+    box-shadow: inset 0 0 0 var(--border-width-1) var(--badge-border, transparent);
+    border-radius: var(--rounded-full);
+    background-color: var(--badge-bg);
+    color: var(--badge-text);
+    font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
+    font-weight: var(--text-medium);
+    font-size: var(--text-body-xs-font-size);
+    line-height: var(--text-body-xs-line-height);
+    letter-spacing: var(--text-body-xs-letter-spacing);
+    white-space: nowrap;
+  }
+  /* Content frame — groups the optional dot with the label. Mirrors the Figma
+   Badge > Content: 0 vertical padding, 4px horizontal padding, 2px gap. */
+  .sikat-badge__content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-0_5);
+    padding: var(--spacing-0) var(--spacing-1);
+  }
+  /* Dot sits in a small padded slot so an 8px circle reads as a status dot. */
+  .sikat-badge__dot-wrap {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-1);
+  }
+  .sikat-badge__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--rounded-full);
+    background-color: var(--badge-icon, currentColor);
+  }
+  /* Leading/trailing icon + dismiss glyph all follow the intent's icon color. */
+  .sikat-badge__icon {
+    flex: none;
+    display: inline-flex;
+    color: var(--badge-icon, currentColor);
+  }
+  .sikat-badge__label {
+    display: inline-block;
+  }
+  .sikat-badge__dismiss {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-0);
+    border: 0;
+    background: transparent;
+    color: var(--badge-icon, currentColor);
+    cursor: pointer;
+    border-radius: var(--rounded-md);
+    transition: opacity 0.15s ease;
+  }
+  .sikat-badge__dismiss:hover {
+    opacity: 0.7;
+  }
+  .sikat-badge__dismiss:focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 1px;
+  }
+
+  /* Badge Counter — a fixed 20px circular count pill (e.g. unread notifications).
    Reuses the Badge color matrix via the shared .sikat-badge[data-intent][data-style]
    rules; this modifier overrides the box to the Figma Badge Counter: a 20×20
    circle with a 16px-wide centered 12/16 semibold label (Body/xs/Semibold), which
    grows into a pill for longer counts. */
-.sikat-badge--counter {
-  min-width: 20px;
-  height: 20px;
-  padding: var(--spacing-0) var(--spacing-0_5);
-  gap: var(--spacing-0);
-  font-weight: var(--text-semibold);
-  text-align: center;
-}
-.sikat-badge--counter > .sikat-badge__label {
-  min-width: 16px;
+  .sikat-badge--counter {
+    min-width: 20px;
+    height: 20px;
+    padding: var(--spacing-0) var(--spacing-0_5);
+    gap: var(--spacing-0);
+    font-weight: var(--text-semibold);
+    text-align: center;
+  }
+  .sikat-badge--counter > .sikat-badge__label {
+    min-width: 16px;
+  }
 }

@@ -1031,3 +1031,22 @@ export const OptionWithDescription: Story = {
     </div>
   ),
 };
+
+/**
+ * A width utility on the field wins over its default `width: 100%`, because all
+ * component CSS sits in `@layer components` (below Tailwind's `utilities`). In a
+ * shrink-to-fit parent the field keeps the utility width instead of collapsing to
+ * its suffix.
+ */
+export const UtilityWidth: Story = {
+  name: 'Width — utility class',
+  render: () => (
+    <span className="flex-none">
+      <TextField aria-label="Rate" type="number" suffix="%" className="w-24" defaultValue="0" />
+    </span>
+  ),
+  play: async ({ canvasElement }) => {
+    const shell = canvasElement.querySelector('.sikat-field') as HTMLElement;
+    await expect(shell.getBoundingClientRect().width).toBe(96);
+  },
+};

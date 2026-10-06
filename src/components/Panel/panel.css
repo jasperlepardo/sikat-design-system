@@ -3,143 +3,144 @@
    padding/gap) with three slots: header (pass-through), body (flex-1, 12px
    padding) and footer (action row). The footer sits 16px below the content:
    body's 12px bottom padding + the shell's 4px gap. */
+@layer components {
+  .sikat-panel {
+    background-color: var(--color-bg-default);
+    border-radius: var(--rounded-2xl);
+    box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-1); /* 4px between header / body / footer */
+    min-height: 0;
+    overflow: hidden;
+    padding: var(--spacing-1); /* 4px */
+  }
 
-.sikat-panel {
-  background-color: var(--color-bg-default);
-  border-radius: var(--rounded-2xl);
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--spacing-1); /* 4px between header / body / footer */
-  min-height: 0;
-  overflow: hidden;
-  padding: var(--spacing-1); /* 4px */
-}
+  /* Header — pass-through slot; no extra spacing (PageHeader fills this). */
+  .sikat-panel__header {
+    flex: none;
+  }
 
-/* Header — pass-through slot; no extra spacing (PageHeader fills this). */
-.sikat-panel__header {
-  flex: none;
-}
+  /* Body — grows to fill available height; 12px padding, 16px gap, vertical scroll. */
+  .sikat-panel__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-4);
+    min-height: 0;
+    overflow-y: auto;
+    padding: var(--spacing-3);
+  }
 
-/* Body — grows to fill available height; 12px padding, 16px gap, vertical scroll. */
-.sikat-panel__body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--spacing-4);
-  min-height: 0;
-  overflow-y: auto;
-  padding: var(--spacing-3);
-}
+  /* Two-column variant — columns carry their own padding/scroll. */
+  .sikat-panel__body--columns {
+    flex-direction: row;
+    gap: 0;
+    overflow: hidden;
+    padding: 0;
+  }
 
-/* Two-column variant — columns carry their own padding/scroll. */
-.sikat-panel__body--columns {
-  flex-direction: row;
-  gap: 0;
-  overflow: hidden;
-  padding: 0;
-}
+  /* Sidebar — fixed-width left column. */
+  .sikat-panel__sidebar {
+    border-right: var(--border-width-1) solid var(--color-border-neutral-subtle);
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--spacing-3);
+    width: 300px;
+  }
 
-/* Sidebar — fixed-width left column. */
-.sikat-panel__sidebar {
-  border-right: var(--border-width-1) solid var(--color-border-neutral-subtle);
-  display: flex;
-  flex: none;
-  flex-direction: column;
-  gap: var(--spacing-2);
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: var(--spacing-3);
-  width: 300px;
-}
+  /* Main — flex-1 right column. */
+  .sikat-panel__main {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    min-height: 0;
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding: var(--spacing-3);
+  }
 
-/* Main — flex-1 right column. */
-.sikat-panel__main {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--spacing-3);
-  min-height: 0;
-  min-width: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: var(--spacing-3);
-}
+  /* Summary — entity identity block (icon + name + code). */
+  .sikat-panel__summary {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-3);
+    padding: var(--spacing-1) 0;
+  }
 
-/* Summary — entity identity block (icon + name + code). */
-.sikat-panel__summary {
-  align-items: center;
-  display: flex;
-  gap: var(--spacing-3);
-  padding: var(--spacing-1) 0;
-}
+  .sikat-panel__summary-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-0_5);
+    min-width: 0;
+  }
 
-.sikat-panel__summary-text {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  gap: var(--spacing-0_5);
-  min-width: 0;
-}
+  .sikat-panel__summary-name {
+    color: var(--color-text-heading);
+    font-family: var(--text-body-lg-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-lg-font-size);
+    font-weight: var(--text-semibold);
+    line-height: var(--text-body-lg-line-height);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-.sikat-panel__summary-name {
-  color: var(--color-text-heading);
-  font-family: var(--text-body-lg-font-family), system-ui, sans-serif;
-  font-size: var(--text-body-lg-font-size);
-  font-weight: var(--text-semibold);
-  line-height: var(--text-body-lg-line-height);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+  .sikat-panel__summary-code {
+    color: var(--color-text-caption);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-sm-font-size);
+    font-weight: var(--text-medium);
+    line-height: var(--text-body-sm-line-height);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
-.sikat-panel__summary-code {
-  color: var(--color-text-caption);
-  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
-  font-size: var(--text-body-sm-font-size);
-  font-weight: var(--text-medium);
-  line-height: var(--text-body-sm-line-height);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* Footer — action row pinned to the bottom of the panel; buttons share the
+  /* Footer — action row pinned to the bottom of the panel; buttons share the
    width equally, 8px apart. */
-.sikat-panel__footer {
-  display: flex;
-  flex: none;
-  gap: var(--spacing-2);
-  padding: 0 var(--spacing-3) var(--spacing-3);
-}
-.sikat-panel__footer > * {
-  flex: 1 1 0;
-  min-width: 0;
-}
+  .sikat-panel__footer {
+    display: flex;
+    flex: none;
+    gap: var(--spacing-2);
+    padding: 0 var(--spacing-3) var(--spacing-3);
+  }
+  .sikat-panel__footer > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
 
-/* Horizontal (Figma is Horizontal=True): content and footer side by side at
+  /* Horizontal (Figma is Horizontal=True): content and footer side by side at
    equal width; 24px padding/gap; footer buttons stack full-width. */
-.sikat-panel[data-horizontal] {
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--spacing-6);
-  padding: var(--spacing-6);
-}
-.sikat-panel[data-horizontal] > .sikat-panel__body {
-  flex: 1 1 0;
-  min-width: 0;
-  padding: 0;
-  overflow: visible;
-}
-.sikat-panel[data-horizontal] > .sikat-panel__footer {
-  flex: 1 1 0;
-  flex-direction: column;
-  min-width: 0;
-  padding: 0;
-}
-.sikat-panel[data-horizontal] > .sikat-panel__footer > * {
-  flex: none;
-  width: 100%;
+  .sikat-panel[data-horizontal] {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--spacing-6);
+    padding: var(--spacing-6);
+  }
+  .sikat-panel[data-horizontal] > .sikat-panel__body {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .sikat-panel[data-horizontal] > .sikat-panel__footer {
+    flex: 1 1 0;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0;
+  }
+  .sikat-panel[data-horizontal] > .sikat-panel__footer > * {
+    flex: none;
+    width: 100%;
+  }
 }

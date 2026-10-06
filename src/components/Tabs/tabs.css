@@ -1,131 +1,133 @@
 /* Tabs structure. Mirrors the Figma `tabs` + `tab-button` (Components file, Tabs
    page: 17442:32716 / 17442:32665). */
+@layer components {
+  /* Tab Container: bg/tertiary track, 2px padding + gap, 12px radius, Shadow/inner. */
+  .sikat-tabs-scroll {
+    width: 100%;
+  }
 
-/* Tab Container: bg/tertiary track, 2px padding + gap, 12px radius, Shadow/inner. */
-.sikat-tabs-scroll {
-  width: 100%;
-}
+  .sikat-tabs {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    width: 100%;
+    align-items: center;
+    gap: var(--spacing-0_5);
+    padding: var(--spacing-0_5);
+    border-radius: var(--rounded-xl);
+    background-color: var(--color-bg-tertiary);
+    box-shadow: inset var(--shadow-inner-1-offset-x) var(--shadow-inner-1-offset-y)
+      var(--shadow-inner-1-blur) var(--shadow-inner-1-spread) var(--shadow-inner-1-color);
+  }
 
-.sikat-tabs {
-  display: flex;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scrollbar-width: none;
-  width: 100%;
-  align-items: center;
-  gap: var(--spacing-0_5);
-  padding: var(--spacing-0_5);
-  border-radius: var(--rounded-xl);
-  background-color: var(--color-bg-tertiary);
-  box-shadow: inset var(--shadow-inner-1-offset-x) var(--shadow-inner-1-offset-y)
-    var(--shadow-inner-1-blur) var(--shadow-inner-1-spread) var(--shadow-inner-1-color);
-}
+  .sikat-tabs::-webkit-scrollbar {
+    display: none;
+  }
 
-.sikat-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-/* tab-button: 6px / 10px padding (32px with the 20px icon / badge), 10px radius,
+  /* tab-button: 6px / 10px padding (32px with the 20px icon / badge), 10px radius,
    4px gap, Body/sm/Medium label. State=Default: transparent, caption text,
    fg/quarternary icon. */
-.sikat-tabs__tab {
-  display: inline-flex;
-  flex-shrink: 0;
-  align-items: center;
-  gap: var(--spacing-1);
-  margin: 0;
-  padding: var(--spacing-1_5) var(--spacing-2_5);
-  border: 0;
-  border-radius: var(--rounded-lg-plus);
-  background-color: transparent;
-  color: var(--color-text-caption);
-  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
-  letter-spacing: var(--text-body-sm-letter-spacing);
-  font-weight: var(--text-medium);
-  white-space: nowrap;
-  cursor: pointer;
-  --tabs-icon: var(--color-fg-quarternary);
-}
-.sikat-tabs__icon {
-  display: flex;
-  flex: none;
-  color: var(--tabs-icon);
-}
-.sikat-tabs__icon .sikat-icon {
-  font-size: 20px;
-}
-.sikat-tabs__tab:focus-visible {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 1px;
-}
-/* State=Hover. */
-.sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
-  background-color: var(--color-bg-quarternary);
-}
-/* State=Active — lifted by Figma Shadow/Default (0 4 9 0, black 12%; no token). */
-.sikat-tabs__tab[aria-selected='true'] {
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
-}
-/* Type=Primary: primary fill, white text + icon. */
-.sikat-tabs[data-variant='primary'] .sikat-tabs__tab[aria-selected='true'] {
-  background-color: var(--color-bg-primary);
-  color: var(--color-fg-white);
-  --tabs-icon: var(--color-fg-white);
-}
-/* Type=Secondary: white fill, body text + icon. */
-.sikat-tabs[data-variant='secondary'] .sikat-tabs__tab[aria-selected='true'] {
-  background-color: var(--color-bg-white);
-  color: var(--color-text-body);
-  --tabs-icon: var(--color-fg-tertiary-solid);
-}
-/* State=Disabled: white fill (as in Figma), disabled text, fg/tertiary icon. */
-.sikat-tabs__tab:disabled {
-  background-color: var(--color-bg-white);
-  color: var(--color-text-disabled);
-  cursor: not-allowed;
-  --tabs-icon: var(--color-fg-tertiary);
-}
+  .sikat-tabs__tab {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin: 0;
+    padding: var(--spacing-1_5) var(--spacing-2_5);
+    border: 0;
+    border-radius: var(--rounded-lg-plus);
+    background-color: transparent;
+    color: var(--color-text-caption);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+    letter-spacing: var(--text-body-sm-letter-spacing);
+    font-weight: var(--text-medium);
+    white-space: nowrap;
+    cursor: pointer;
+    --tabs-icon: var(--color-fg-quarternary);
+  }
+  .sikat-tabs__icon {
+    display: flex;
+    flex: none;
+    color: var(--tabs-icon);
+  }
+  .sikat-tabs__icon .sikat-icon {
+    font-size: 20px;
+  }
+  .sikat-tabs__tab:focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 1px;
+  }
+  /* State=Hover. */
+  .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
+    background-color: var(--color-bg-quarternary);
+  }
+  /* State=Active — lifted by Figma Shadow/Default (0 4 9 0, black 12%; no token). */
+  .sikat-tabs__tab[aria-selected='true'] {
+    box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+  }
+  /* Type=Primary: primary fill, white text + icon. */
+  .sikat-tabs[data-variant='primary'] .sikat-tabs__tab[aria-selected='true'] {
+    background-color: var(--color-bg-primary);
+    color: var(--color-fg-white);
+    --tabs-icon: var(--color-fg-white);
+  }
+  /* Type=Secondary: white fill, body text + icon. */
+  .sikat-tabs[data-variant='secondary'] .sikat-tabs__tab[aria-selected='true'] {
+    background-color: var(--color-bg-white);
+    color: var(--color-text-body);
+    --tabs-icon: var(--color-fg-tertiary-solid);
+  }
+  /* State=Disabled: white fill (as in Figma), disabled text, fg/tertiary icon. */
+  .sikat-tabs__tab:disabled {
+    background-color: var(--color-bg-white);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+    --tabs-icon: var(--color-fg-tertiary);
+  }
 
-/* Type=Outline — Figma Tab Item, Style=Outline (set 17251:5692). No track;
+  /* Type=Outline — Figma Tab Item, Style=Outline (set 17251:5692). No track;
    tabs are 4px 8px 0 around a 6px-padded content row, over a 4px accent bar
    (top corners 2px). Selected = fg/primary bar; text stays caption. Disabled
    greys the text, icon and bar. */
-.sikat-tabs[data-variant='outline'] {
-  gap: 0;
-  padding: 0;
-  border-radius: 0;
-  background-color: transparent;
-  box-shadow: none;
-}
-.sikat-tabs[data-variant='outline'] .sikat-tabs__tab {
-  position: relative;
-  padding: calc(var(--spacing-1) + var(--spacing-1_5)) var(--spacing-2);
-  border-radius: 0;
-  background-color: transparent;
-  box-shadow: none;
-  --tabs-icon: var(--color-fg-tertiary);
-  --tabs-accent: transparent;
-}
-.sikat-tabs[data-variant='outline'] .sikat-tabs__tab::after {
-  content: '';
-  position: absolute;
-  inset: auto 0 0;
-  height: var(--spacing-1);
-  border-radius: var(--rounded-xs) var(--rounded-xs) 0 0;
-  background-color: var(--tabs-accent);
-}
-.sikat-tabs[data-variant='outline'] .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
-  background-color: transparent;
-  color: var(--color-text-body);
-}
-.sikat-tabs[data-variant='outline'] .sikat-tabs__tab[aria-selected='true'] {
-  --tabs-accent: var(--color-fg-primary);
-}
-.sikat-tabs[data-variant='outline'] .sikat-tabs__tab:disabled {
-  background-color: transparent;
-  color: var(--color-text-disabled);
-  --tabs-icon: var(--color-fg-disabled);
-  --tabs-accent: transparent;
+  .sikat-tabs[data-variant='outline'] {
+    gap: 0;
+    padding: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .sikat-tabs[data-variant='outline'] .sikat-tabs__tab {
+    position: relative;
+    padding: calc(var(--spacing-1) + var(--spacing-1_5)) var(--spacing-2);
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    --tabs-icon: var(--color-fg-tertiary);
+    --tabs-accent: transparent;
+  }
+  .sikat-tabs[data-variant='outline'] .sikat-tabs__tab::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0;
+    height: var(--spacing-1);
+    border-radius: var(--rounded-xs) var(--rounded-xs) 0 0;
+    background-color: var(--tabs-accent);
+  }
+  .sikat-tabs[data-variant='outline']
+    .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
+    background-color: transparent;
+    color: var(--color-text-body);
+  }
+  .sikat-tabs[data-variant='outline'] .sikat-tabs__tab[aria-selected='true'] {
+    --tabs-accent: var(--color-fg-primary);
+  }
+  .sikat-tabs[data-variant='outline'] .sikat-tabs__tab:disabled {
+    background-color: transparent;
+    color: var(--color-text-disabled);
+    --tabs-icon: var(--color-fg-disabled);
+    --tabs-accent: transparent;
+  }
 }

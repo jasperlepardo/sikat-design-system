@@ -89,10 +89,11 @@ export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
   orientation?: 'horizontal' | 'vertical' | 'responsive';
 }
 
+// Gap comes from .sikat-form__group (per orientation), not a utility.
 const COLS_CLASS: Record<1 | 2 | 3, string> = {
-  1: 'grid! gap-2 grid-cols-1 items-start',
-  2: 'grid! gap-2 grid-cols-1 md:grid-cols-2 items-start',
-  3: 'grid! gap-2 grid-cols-1 md:grid-cols-3 items-start',
+  1: 'grid grid-cols-1 items-start',
+  2: 'grid grid-cols-1 md:grid-cols-2 items-start',
+  3: 'grid grid-cols-1 md:grid-cols-3 items-start',
 };
 
 /** Field group — vertical stack (or responsive grid when `columns`) inside a Card. */

@@ -7,379 +7,381 @@
    a shell (`--shell`) around the native control (`__input`), carrying state as
    data-attributes ([data-filled] / [data-disabled] / [data-readonly] /
    [data-invalid], :focus-within); Textarea is the box itself. */
-.sikat-field {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  height: var(--field-h);
-  padding-inline: var(--field-px);
-  border: none;
-  /* 1px stroke drawn inside the box (Figma stroke align: inside), so it takes no
-     space: content sits exactly at the 10px padding, like Figma. */
-  box-shadow: inset 0 0 0 var(--border-width-1) var(--field-border);
-  border-radius: var(--field-radius);
-  background-color: var(--field-bg);
-  color: var(--field-text);
-  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
-  font-size: var(--field-fs);
-  line-height: var(--field-lh);
-  font-weight: var(--text-medium);
-  outline: none;
-  transition:
-    border-color 120ms ease,
-    background-color 120ms ease,
-    color 120ms ease,
-    box-shadow 120ms ease;
-}
-.sikat-field::placeholder,
-.sikat-field__input::placeholder {
-  color: var(--field-placeholder);
-  font-style: italic;
-}
-/* Focus ring — code addition (Figma has no focus state); the border switches to
-   primary via the generated focus state. */
-.sikat-field:focus-within:not(:is(:disabled, [data-disabled])) {
-  box-shadow:
-    inset 0 0 0 var(--border-width-1) var(--field-border),
-    0 0 0 2px color-mix(in oklch, var(--color-border-primary) 40%, transparent);
-}
-.sikat-field:is(:disabled, [data-disabled]),
-.sikat-field[data-disabled] .sikat-field__input {
-  cursor: not-allowed;
-}
-.sikat-field:is([readonly], [data-readonly]) {
-  cursor: default;
-}
 
-/* Chevron and clear (✕) on Select / Combobox / MultiSelect: hidden until the
+@layer components {
+  .sikat-field {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    height: var(--field-h);
+    padding-inline: var(--field-px);
+    border: none;
+    /* 1px stroke drawn inside the box (Figma stroke align: inside), so it takes no
+     space: content sits exactly at the 10px padding, like Figma. */
+    box-shadow: inset 0 0 0 var(--border-width-1) var(--field-border);
+    border-radius: var(--field-radius);
+    background-color: var(--field-bg);
+    color: var(--field-text);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-size: var(--field-fs);
+    line-height: var(--field-lh);
+    font-weight: var(--text-medium);
+    outline: none;
+    transition:
+      border-color 120ms ease,
+      background-color 120ms ease,
+      color 120ms ease,
+      box-shadow 120ms ease;
+  }
+  .sikat-field::placeholder,
+  .sikat-field__input::placeholder {
+    color: var(--field-placeholder);
+    font-style: italic;
+  }
+  /* Focus ring — code addition (Figma has no focus state); the border switches to
+   primary via the generated focus state. */
+  .sikat-field:focus-within:not(:is(:disabled, [data-disabled])) {
+    box-shadow:
+      inset 0 0 0 var(--border-width-1) var(--field-border),
+      0 0 0 2px color-mix(in oklch, var(--color-border-primary) 40%, transparent);
+  }
+  .sikat-field:is(:disabled, [data-disabled]),
+  .sikat-field[data-disabled] .sikat-field__input {
+    cursor: not-allowed;
+  }
+  .sikat-field:is([readonly], [data-readonly]) {
+    cursor: default;
+  }
+
+  /* Chevron and clear (✕) on Select / Combobox / MultiSelect: hidden until the
    field is hovered, focused or open. Faded rather than removed, so their slots
    stay reserved and the value/chips don't shift when they appear (the ✕ stays
    focusable — tabbing to it focuses the field, which reveals it). Touch
    devices (no hover) always show them. The chevron rotates when expanded. */
-.sikat-field__chevron,
-.sikat-field__clear {
-  opacity: 0;
-  transition: opacity 120ms ease;
-}
-.sikat-field__chevron {
-  transition:
-    opacity 120ms ease,
-    transform 150ms ease;
-}
-.sikat-field:is(:hover, [data-state='hover'], :focus-within, :has([aria-expanded='true'])):not(
-    [data-disabled]
-  )
-  :is(.sikat-field__chevron, .sikat-field__clear) {
-  opacity: 1;
-}
-@media (hover: none) {
   .sikat-field__chevron,
   .sikat-field__clear {
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+  .sikat-field__chevron {
+    transition:
+      opacity 120ms ease,
+      transform 150ms ease;
+  }
+  .sikat-field:is(:hover, [data-state='hover'], :focus-within, :has([aria-expanded='true'])):not(
+      [data-disabled]
+    )
+    :is(.sikat-field__chevron, .sikat-field__clear) {
     opacity: 1;
   }
-}
-.sikat-field:has([aria-expanded='true']) .sikat-field__chevron {
-  transform: rotate(180deg);
-}
+  @media (hover: none) {
+    .sikat-field__chevron,
+    .sikat-field__clear {
+      opacity: 1;
+    }
+  }
+  .sikat-field:has([aria-expanded='true']) .sikat-field__chevron {
+    transform: rotate(180deg);
+  }
 
-/* ── Shell: [leading icon][prefix] control [suffix][trailing icon][chevron|edit] ── */
-.sikat-field--shell {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2); /* 8px — Figma Field/gap */
-  cursor: text;
-}
-.sikat-field__input {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  outline: none;
-  appearance: none;
-}
-/* Display span for ReadOnly — same flex slot as __input but vertically centres non-native content. */
-.sikat-field__display {
-  flex: 1 1 auto;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  color: inherit;
-  font: inherit;
-}
-.sikat-field__icon {
-  display: flex;
-  flex: none;
-  color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
-}
-.sikat-field__icon .sikat-icon,
-.sikat-field__edit .sikat-icon {
-  font-size: 20px;
-}
-.sikat-field__affix {
-  flex: none;
-  color: var(--color-text-caption); /* Figma Prefix / Suffix */
-  white-space: nowrap;
-}
-/* Prefix / suffix sit 4px from the value (the shell's gap is 8px, which still
+  /* ── Shell: [leading icon][prefix] control [suffix][trailing icon][chevron|edit] ── */
+  .sikat-field--shell {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2); /* 8px — Figma Field/gap */
+    cursor: text;
+  }
+  .sikat-field__input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    outline: none;
+    appearance: none;
+  }
+  /* Display span for ReadOnly — same flex slot as __input but vertically centres non-native content. */
+  .sikat-field__display {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    color: inherit;
+    font: inherit;
+  }
+  .sikat-field__icon {
+    display: flex;
+    flex: none;
+    color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
+  }
+  .sikat-field__icon .sikat-icon,
+  .sikat-field__edit .sikat-icon {
+    font-size: 20px;
+  }
+  .sikat-field__affix {
+    flex: none;
+    color: var(--color-text-caption); /* Figma Prefix / Suffix */
+    white-space: nowrap;
+  }
+  /* Prefix / suffix sit 4px from the value (the shell's gap is 8px, which still
    spaces the leading / trailing icons). */
-.sikat-field--shell > .sikat-field__affix--prefix {
-  margin-inline-end: calc(var(--spacing-1) - var(--spacing-2));
-}
-.sikat-field--shell > .sikat-field__affix--suffix {
-  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
-}
+  .sikat-field--shell > .sikat-field__affix--prefix {
+    margin-inline-end: calc(var(--spacing-1) - var(--spacing-2));
+  }
+  .sikat-field--shell > .sikat-field__affix--suffix {
+    margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
+  }
 
-/* TextField with a suffix: the suffix (e.g. a unit) sits right after the value.
+  /* TextField with a suffix: the suffix (e.g. a unit) sits right after the value.
    __value takes the free space, so trailing icons stay at the right edge.
    __autosize is as wide as the text: its ::after is a hidden copy of the value
    (or placeholder) that sets the width, and the input is laid over it
    (absolute), so the input's own default width — which `size` can't shrink on
    type="number" — never counts. Past the free space it caps at 100% and the
    input scrolls; the suffix stays visible. */
-.sikat-field__value {
-  display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  align-items: center;
-  /* 4px from the end of the text: 3px gap + the copy's 1px caret room. */
-  gap: calc(var(--spacing-1) - 1px);
-  /* The hidden copy can't wrap, so without this a long value would become the
+  .sikat-field__value {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    align-items: center;
+    /* 4px from the end of the text: 3px gap + the copy's 1px caret room. */
+    gap: calc(var(--spacing-1) - 1px);
+    /* The hidden copy can't wrap, so without this a long value would become the
      field's min-content width and stretch grid/flex columns around it. */
-  contain: inline-size;
-}
-.sikat-field__autosize {
-  position: relative;
-  display: block;
-  min-width: 0;
-  max-width: 100%;
-  align-self: stretch;
-}
-.sikat-field__autosize::after {
-  content: attr(data-value);
-  padding-inline-end: 1px; /* room for the caret at the end of the text */
-  display: block;
-  overflow: hidden;
-  height: 0;
-  visibility: hidden;
-  white-space: pre;
-}
-.sikat-field__autosize > .sikat-field__input {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-}
-/* Number spinners would add width the hidden copy doesn't account for. */
-.sikat-field__autosize > .sikat-field__input[type='number'] {
-  -moz-appearance: textfield;
-}
-.sikat-field__autosize > .sikat-field__input::-webkit-inner-spin-button,
-.sikat-field__autosize > .sikat-field__input::-webkit-outer-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
-}
+    contain: inline-size;
+  }
+  .sikat-field__autosize {
+    position: relative;
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    align-self: stretch;
+  }
+  .sikat-field__autosize::after {
+    content: attr(data-value);
+    padding-inline-end: 1px; /* room for the caret at the end of the text */
+    display: block;
+    overflow: hidden;
+    height: 0;
+    visibility: hidden;
+    white-space: pre;
+  }
+  .sikat-field__autosize > .sikat-field__input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+  }
+  /* Number spinners would add width the hidden copy doesn't account for. */
+  .sikat-field__autosize > .sikat-field__input[type='number'] {
+    -moz-appearance: textfield;
+  }
+  .sikat-field__autosize > .sikat-field__input::-webkit-inner-spin-button,
+  .sikat-field__autosize > .sikat-field__input::-webkit-outer-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
 
-/* Combobox: full-width wrapper (mirrors .sikat-select). */
-/* Control roots fill their slot — FormField's fieldset is a flex row, so a
+  /* Combobox: full-width wrapper (mirrors .sikat-select). */
+  /* Control roots fill their slot — FormField's fieldset is a flex row, so a
    root without a width shrinks to its content. */
-.sikat-combobox,
-.sikat-multiselect,
-.sikat-autocomplete {
-  width: 100%;
-}
-/* Select: the field box is the trigger (a combobox button) and opens the Figma
+  .sikat-combobox,
+  .sikat-multiselect,
+  .sikat-autocomplete {
+    width: 100%;
+  }
+  /* Select: the field box is the trigger (a combobox button) and opens the Figma
    Dropdown underneath; chevron-down trails. `.sikat-select` is the positioned
    root the Dropdown (top: 100%) anchors to. */
-.sikat-select {
-  position: relative;
-  width: 100%;
-}
-.sikat-field--select {
-  cursor: pointer;
-}
-.sikat-field--select .sikat-field__input {
-  cursor: inherit;
-  text-align: start;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.sikat-field--select:not([data-filled]) .sikat-field__input {
-  color: var(--field-placeholder); /* empty-valued option = placeholder */
-  font-style: italic; /* match native ::placeholder */
-}
-.sikat-field--select[data-readonly] .sikat-field__input {
-  pointer-events: none;
-}
-/* Multi-line selected value (label + description). */
-.sikat-field__multiline {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: start;
-}
-.sikat-field__sublabel {
-  display: block;
-  font-size: var(--text-body-xs-font-size);
-  line-height: var(--text-body-xs-line-height);
-  font-weight: var(--text-regular);
-  color: var(--color-text-muted);
-}
-.sikat-field__description {
-  display: block;
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
-  font-weight: var(--text-regular);
-  color: var(--color-text-muted);
-}
-.sikat-field__multiline .sikat-field__sublabel {
-  margin-inline-start: 0;
-}
-/* Inline subLabel: label and code on the same row. */
-.sikat-field__multiline:has(> .sikat-field__sublabel:last-child) {
-  flex-direction: row;
-  align-items: baseline;
-  gap: var(--spacing-2);
-}
-.sikat-field--shell:has(.sikat-field__multiline) {
-  height: auto;
-  min-height: var(--field-h);
-  padding-block: var(--spacing-2);
-  align-items: center;
-}
-.sikat-field--select:has(.sikat-field__multiline) .sikat-field__input {
-  height: auto;
-  white-space: normal;
-  overflow: visible;
-  text-overflow: clip;
-}
+  .sikat-select {
+    position: relative;
+    width: 100%;
+  }
+  .sikat-field--select {
+    cursor: pointer;
+  }
+  .sikat-field--select .sikat-field__input {
+    cursor: inherit;
+    text-align: start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .sikat-field--select:not([data-filled]) .sikat-field__input {
+    color: var(--field-placeholder); /* empty-valued option = placeholder */
+    font-style: italic; /* match native ::placeholder */
+  }
+  .sikat-field--select[data-readonly] .sikat-field__input {
+    pointer-events: none;
+  }
+  /* Multi-line selected value (label + description). */
+  .sikat-field__multiline {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: start;
+  }
+  .sikat-field__sublabel {
+    display: block;
+    font-size: var(--text-body-xs-font-size);
+    line-height: var(--text-body-xs-line-height);
+    font-weight: var(--text-regular);
+    color: var(--color-text-muted);
+  }
+  .sikat-field__description {
+    display: block;
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+    font-weight: var(--text-regular);
+    color: var(--color-text-muted);
+  }
+  .sikat-field__multiline .sikat-field__sublabel {
+    margin-inline-start: 0;
+  }
+  /* Inline subLabel: label and code on the same row. */
+  .sikat-field__multiline:has(> .sikat-field__sublabel:last-child) {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--spacing-2);
+  }
+  .sikat-field--shell:has(.sikat-field__multiline) {
+    height: auto;
+    min-height: var(--field-h);
+    padding-block: var(--spacing-2);
+    align-items: center;
+  }
+  .sikat-field--select:has(.sikat-field__multiline) .sikat-field__input {
+    height: auto;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+  }
 
-/* Show the trailing edit icon on hover — both empty and filled. */
-.sikat-field__edit {
-  display: none;
-  flex: none;
-  color: var(--color-fg-quarternary);
-}
-.sikat-field:is(:hover, [data-state='hover']):not(:focus-within):not(
-    :is([data-disabled], [data-readonly], [data-invalid])
-  )
-  > .sikat-field__edit {
-  display: flex;
-}
-/* Keep edit icon visible while the picker/dropdown is open. */
-.sikat-field:has([aria-expanded='true']) > .sikat-field__edit {
-  display: flex;
-}
+  /* Show the trailing edit icon on hover — both empty and filled. */
+  .sikat-field__edit {
+    display: none;
+    flex: none;
+    color: var(--color-fg-quarternary);
+  }
+  .sikat-field:is(:hover, [data-state='hover']):not(:focus-within):not(
+      :is([data-disabled], [data-readonly], [data-invalid])
+    )
+    > .sikat-field__edit {
+    display: flex;
+  }
+  /* Keep edit icon visible while the picker/dropdown is open. */
+  .sikat-field:has([aria-expanded='true']) > .sikat-field__edit {
+    display: flex;
+  }
 
-/* Readonly fields: show edit icon and a subtle background on hover so the user
+  /* Readonly fields: show edit icon and a subtle background on hover so the user
    knows the field can be interacted with (e.g. unlocked/edited). */
-.sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled])) {
-  --field-bg: var(--color-bg-secondary);
-}
-.sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled]))
-  > .sikat-field__edit {
-  display: flex;
-}
+  .sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled])) {
+    --field-bg: var(--color-bg-secondary);
+  }
+  .sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled]))
+    > .sikat-field__edit {
+    display: flex;
+  }
 
-/* Textarea: one line is exactly a regular field's height (text centred in
+  /* Textarea: one line is exactly a regular field's height (text centred in
    --field-h); it then grows a line at a time with its content (height set by
    Textarea in Field.tsx), so no manual resize. */
-.sikat-field--multiline {
-  height: auto;
-  min-height: var(--field-h);
-  padding-block: calc((var(--field-h) - var(--field-lh)) / 2);
-  resize: none;
-  overflow-y: hidden;
-}
+  .sikat-field--multiline {
+    height: auto;
+    min-height: var(--field-h);
+    padding-block: calc((var(--field-h) - var(--field-lh)) / 2);
+    resize: none;
+    overflow-y: hidden;
+  }
 
-/* MultiSelect: wraps chips; each chip is the Figma Badge (Default / Solid /
+  /* MultiSelect: wraps chips; each chip is the Figma Badge (Default / Solid /
    Extra Small) with a dismiss button. */
-.sikat-field--wrap {
-  height: auto;
-  min-height: var(--field-h);
-  align-items: flex-start;
-  padding-block: var(--spacing-2); /* 8px */
-}
-.sikat-field__chips {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacing-1); /* 4px — Figma Content gap */
-  min-width: 0;
-}
-.sikat-field__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-0_5); /* 2px */
-  padding: var(--spacing-0_5) var(--spacing-1); /* 2px 4px */
-  border-radius: var(--rounded-full);
-  background-color: var(--color-bg-tertiary);
-  color: var(--color-text-heading);
-  font-size: var(--text-body-xs-font-size); /* 12px */
-  line-height: var(--text-body-xs-line-height); /* 16px */
-  font-weight: var(--text-medium);
-}
-.sikat-field__chip-label {
-  padding-inline: var(--spacing-1); /* 4px — Figma Badge content inset */
-}
-.sikat-field__chip-remove {
-  display: flex;
-  flex: none;
-  width: 16px;
-  height: 16px;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--rounded-md);
-  color: var(--color-fg-secondary-solid);
-  cursor: pointer;
-}
-.sikat-field__chip-remove .sikat-icon {
-  font-size: 12px;
-}
+  .sikat-field--wrap {
+    height: auto;
+    min-height: var(--field-h);
+    align-items: flex-start;
+    padding-block: var(--spacing-2); /* 8px */
+  }
+  .sikat-field__chips {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-1); /* 4px — Figma Content gap */
+    min-width: 0;
+  }
+  .sikat-field__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-0_5); /* 2px */
+    padding: var(--spacing-0_5) var(--spacing-1); /* 2px 4px */
+    border-radius: var(--rounded-full);
+    background-color: var(--color-bg-tertiary);
+    color: var(--color-text-heading);
+    font-size: var(--text-body-xs-font-size); /* 12px */
+    line-height: var(--text-body-xs-line-height); /* 16px */
+    font-weight: var(--text-medium);
+  }
+  .sikat-field__chip-label {
+    padding-inline: var(--spacing-1); /* 4px — Figma Badge content inset */
+  }
+  .sikat-field__chip-remove {
+    display: flex;
+    flex: none;
+    width: 16px;
+    height: 16px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--rounded-md);
+    color: var(--color-fg-secondary-solid);
+    cursor: pointer;
+  }
+  .sikat-field__chip-remove .sikat-icon {
+    font-size: 12px;
+  }
 
-/* Clear (✕) for clearable Select / Combobox — sits before the chevron. */
-.sikat-field__clear {
-  display: flex;
-  flex: none;
-  width: 20px;
-  height: 20px;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  border-radius: var(--rounded-md);
-  background: none;
-  color: var(--color-fg-quarternary);
-  cursor: pointer;
-}
-.sikat-field__clear:hover {
-  color: var(--color-fg-secondary-solid);
-}
-.sikat-field__clear:focus-visible {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 1px;
-}
+  /* Clear (✕) for clearable Select / Combobox — sits before the chevron. */
+  .sikat-field__clear {
+    display: flex;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--rounded-md);
+    background: none;
+    color: var(--color-fg-quarternary);
+    cursor: pointer;
+  }
+  .sikat-field__clear:hover {
+    color: var(--color-fg-secondary-solid);
+  }
+  .sikat-field__clear:focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 1px;
+  }
 
-/* ── Composed field: _Form Label + Fieldset (control + Helper) ── */
-.sikat-field-group {
-  display: flex;
-  flex-direction: column;
-}
-.sikat-field__fieldset {
-  display: flex;
-  min-width: 0;
-  flex: 1 1 auto;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-1); /* control ↔ helper: 4px */
-}
-/* Figma Orientation=Vertical: label in a fixed 200px column beside the field,
+  /* ── Composed field: _Form Label + Fieldset (control + Helper) ── */
+  .sikat-field-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .sikat-field__fieldset {
+    display: flex;
+    min-width: 0;
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-1); /* control ↔ helper: 4px */
+  }
+  /* Figma Orientation=Vertical: label in a fixed 200px column beside the field,
    vertically centered on the 36px control row.
 
    Vertical: fixed side-label, never collapses.
@@ -387,101 +389,102 @@
    to the width it's given (a Panel, SidePanel or column), not the viewport.
    Width 100% keeps the container from collapsing in a flex row (an
    inline-size container ignores its content). */
-.sikat-field-group[data-orientation='vertical'],
-.sikat-field-group[data-orientation='responsive'] {
-  width: 100%;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: 0 var(--spacing-4);
-}
-.sikat-field-group[data-orientation='vertical'] > .sikat-field__label,
-.sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
-  display: flex;
-  flex: none;
-  align-items: center;
-  width: 12.5rem;
-  min-height: var(--field-h, var(--spacing-9));
-}
-.sikat-field-group[data-orientation='vertical'] > .sikat-field__fieldset,
-.sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
-  flex: 1 1 0;
-}
-.sikat-field-group[data-orientation='responsive'] {
-  container-type: inline-size;
-}
-@container (width < 28.5rem) {
-  .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
+  .sikat-field-group[data-orientation='vertical'],
+  .sikat-field-group[data-orientation='responsive'] {
     width: 100%;
-    min-height: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 0 var(--spacing-4);
   }
+  .sikat-field-group[data-orientation='vertical'] > .sikat-field__label,
+  .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
+    display: flex;
+    flex: none;
+    align-items: center;
+    width: 12.5rem;
+    min-height: var(--field-h, var(--spacing-9));
+  }
+  .sikat-field-group[data-orientation='vertical'] > .sikat-field__fieldset,
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
-    flex-basis: 100%;
+    flex: 1 1 0;
   }
-}
+  .sikat-field-group[data-orientation='responsive'] {
+    container-type: inline-size;
+  }
+  @container (width < 28.5rem) {
+    .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
+      width: 100%;
+      min-height: 0;
+    }
+    .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
+      flex-basis: 100%;
+    }
+  }
 
-.sikat-field__label {
-  padding-inline: var(--spacing-2); /* 8px */
-  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
-  font-size: var(--text-body-sm-font-size); /* 14px */
-  line-height: var(--text-body-sm-line-height); /* 20px */
-  font-weight: var(--text-medium);
-  color: var(--color-text-caption);
-}
-/* Label follows the control's state (Figma: read-only →
-   bg/quarternary-solid as bound in the Figma file). */
-.sikat-field-group:has(
-    .sikat-field:is([readonly], [data-readonly]):not(:is(:disabled, [data-disabled]))
-  )
   .sikat-field__label {
-  color: var(--color-bg-quarternary-solid);
-}
-.sikat-field__required {
-  color: var(--color-text-danger);
-}
-/* Figma Form Label › Sub Label: body/xs regular, muted, 4px after the label. */
-.sikat-field__label .sikat-field__sublabel {
-  display: inline;
-  margin-inline-start: var(--spacing-1);
-  font-size: var(--text-body-xs-font-size); /* 12px */
-  line-height: var(--text-body-xs-line-height); /* 16px */
-  font-weight: var(--text-regular);
-  color: var(--color-text-muted);
-}
-.sikat-field__hint,
-.sikat-field__error {
-  padding-inline: var(--spacing-2); /* 8px — matches label */
-  font-size: var(--text-body-xs-font-size); /* 12px */
-  line-height: var(--text-body-xs-line-height); /* 16px */
-  font-weight: var(--text-regular);
-  color: var(--color-text-caption);
-}
-.sikat-field__error {
-  color: var(--color-text-danger);
-}
+    padding-inline: var(--spacing-2); /* 8px */
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-sm-font-size); /* 14px */
+    line-height: var(--text-body-sm-line-height); /* 20px */
+    font-weight: var(--text-medium);
+    color: var(--color-text-caption);
+  }
+  /* Label follows the control's state (Figma: read-only →
+   bg/quarternary-solid as bound in the Figma file). */
+  .sikat-field-group:has(
+      .sikat-field:is([readonly], [data-readonly]):not(:is(:disabled, [data-disabled]))
+    )
+    .sikat-field__label {
+    color: var(--color-bg-quarternary-solid);
+  }
+  .sikat-field__required {
+    color: var(--color-text-danger);
+  }
+  /* Figma Form Label › Sub Label: body/xs regular, muted, 4px after the label. */
+  .sikat-field__label .sikat-field__sublabel {
+    display: inline;
+    margin-inline-start: var(--spacing-1);
+    font-size: var(--text-body-xs-font-size); /* 12px */
+    line-height: var(--text-body-xs-line-height); /* 16px */
+    font-weight: var(--text-regular);
+    color: var(--color-text-muted);
+  }
+  .sikat-field__hint,
+  .sikat-field__error {
+    padding-inline: var(--spacing-2); /* 8px — matches label */
+    font-size: var(--text-body-xs-font-size); /* 12px */
+    line-height: var(--text-body-xs-line-height); /* 16px */
+    font-weight: var(--text-regular);
+    color: var(--color-text-caption);
+  }
+  .sikat-field__error {
+    color: var(--color-text-danger);
+  }
 
-/* Textarea pencil-icon wrapper — positions the icon relative to the box. */
-.sikat-textarea {
-  position: relative;
-  display: block;
-  width: 100%;
-}
-.sikat-textarea__edit {
-  position: absolute;
-  top: var(--spacing-2);
-  right: var(--spacing-2);
-  display: flex;
-  pointer-events: none;
-  color: var(--color-fg-quarternary);
-  opacity: 0;
-  transition: opacity 120ms ease;
-}
-.sikat-textarea__edit .sikat-icon {
-  font-size: 20px;
-}
-.sikat-textarea:hover:not(
-    :has(.sikat-field:is(:disabled, [data-disabled], [readonly], [data-readonly]))
-  )
-  > .sikat-textarea__edit {
-  opacity: 1;
+  /* Textarea pencil-icon wrapper — positions the icon relative to the box. */
+  .sikat-textarea {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+  .sikat-textarea__edit {
+    position: absolute;
+    top: var(--spacing-2);
+    right: var(--spacing-2);
+    display: flex;
+    pointer-events: none;
+    color: var(--color-fg-quarternary);
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+  .sikat-textarea__edit .sikat-icon {
+    font-size: 20px;
+  }
+  .sikat-textarea:hover:not(
+      :has(.sikat-field:is(:disabled, [data-disabled], [readonly], [data-readonly]))
+    )
+    > .sikat-textarea__edit {
+    opacity: 1;
+  }
 }
