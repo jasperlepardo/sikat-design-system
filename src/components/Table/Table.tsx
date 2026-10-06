@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import { cn } from '../../lib/cn';
+import { Button } from '../Button/Button';
 import { TableExpand } from './TableCells';
 import checkboxGlyph from './assets/checkbox.svg';
 import tuneGlyph from './assets/tune.svg';
@@ -364,15 +365,16 @@ export function Table<T>({
                         {col.header}
                       </span>
                       {col.sortable ? (
-                        <button
-                          type="button"
-                          className="sikat-table__icon-btn sikat-table__sort"
+                        <Button
+                          intent="default"
+                          variant="link"
+                          size="2xs"
+                          className="sikat-table__sort"
                           data-active={sorted ? 'true' : undefined}
                           aria-label={`Sort by ${typeof col.header === 'string' ? col.header : col.key}`}
                           onClick={() => onSortChange?.(nextSort(col.key))}
-                        >
-                          <Glyph src={switchVerticalGlyph} size={16} />
-                        </button>
+                          leadingIcon={<Glyph src={switchVerticalGlyph} size={16} />}
+                        />
                       ) : null}
                     </span>
                   </th>
@@ -381,14 +383,16 @@ export function Table<T>({
               {hasEnd ? (
                 <th className="sikat-table__th sikat-table__th--end" scope="col">
                   {onColumnSettings ? (
-                    <button
-                      type="button"
-                      className="sikat-table__icon-btn"
-                      aria-label="Column settings"
-                      onClick={onColumnSettings}
-                    >
-                      <Glyph src={tuneGlyph} />
-                    </button>
+                    <span className="sikat-table__end">
+                      <Button
+                        intent="default"
+                        variant="link"
+                        size="2xs"
+                        aria-label="Column settings"
+                        onClick={onColumnSettings}
+                        leadingIcon={<Glyph src={tuneGlyph} />}
+                      />
+                    </span>
                   ) : (
                     <span className="sikat-table__visually-hidden">Actions</span>
                   )}
@@ -457,14 +461,16 @@ export function Table<T>({
                   {hasEnd ? (
                     <td className="sikat-table__td sikat-table__td--end">
                       {onRowAction ? (
-                        <button
-                          type="button"
-                          className="sikat-table__icon-btn"
-                          aria-label={`Actions for row ${id}`}
-                          onClick={() => onRowAction(row)}
-                        >
-                          <Glyph src={dotsHorizontalGlyph} />
-                        </button>
+                        <span className="sikat-table__end">
+                          <Button
+                            intent="default"
+                            variant="link"
+                            size="2xs"
+                            aria-label={`Actions for row ${id}`}
+                            onClick={() => onRowAction(row)}
+                            leadingIcon={<Glyph src={dotsHorizontalGlyph} />}
+                          />
+                        </span>
                       ) : null}
                     </td>
                   ) : null}

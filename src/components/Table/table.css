@@ -164,8 +164,11 @@
 .sikat-table__row[data-selected] > .sikat-table__td {
   background-color: var(--color-bg-primary-subtle);
 }
-.sikat-table__td--end > .sikat-table__icon-btn {
-  margin-inline-start: auto;
+/* Column settings / row "…": a flex wrapper (no line box adds height to the 36px
+   cells) that ends the button at the cell's trailing edge. */
+.sikat-table__end {
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* Checkbox: the Figma 20px outline asset in --table-check; checked uses the
@@ -193,25 +196,7 @@
   outline-offset: 2px;
 }
 
-/* Icon Buttons inside cells (sort, tune, "…"): bare glyphs. Block-level flex, so
-   no line box / strut adds height to the 36px cells. */
-.sikat-table__icon-btn {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--color-fg-default-solid);
-  cursor: pointer;
-}
-.sikat-table__icon-btn:focus-visible {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 1px;
-  border-radius: var(--rounded-sm);
-}
+/* Icon glyphs (Figma assets) drawn in currentColor — the Button's icon color. */
 .sikat-table__glyph {
   display: block;
   flex: none;

@@ -1,5 +1,6 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
+import type { HTMLAttributes, ReactNode } from 'react';
 import { Badge } from '../Badge/Badge';
+import { Button, type ButtonProps } from '../Button/Button';
 import dragIndicator from './assets/drag-indicator.svg';
 import chevronRight from './assets/chevron-right.svg';
 
@@ -152,7 +153,8 @@ export function TableDragHandle({
   );
 }
 
-/** Type=Dropdown: the chevron-right expand button (turns down while expanded). */
+/** Type=Dropdown: the chevron-right expand button (turns down while expanded) — a
+ *  default / link / 2xs Button. */
 export function TableExpand({
   expanded,
   onToggle,
@@ -162,20 +164,23 @@ export function TableExpand({
   expanded?: boolean;
   onToggle?: () => void;
   label?: string;
-} & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'type'>) {
+} & Omit<ButtonProps, 'onClick' | 'type' | 'intent' | 'variant' | 'size' | 'children'>) {
   return (
-    <button
-      type="button"
-      className="sikat-table__icon-btn sikat-table-cell__expand"
+    <Button
+      intent="default"
+      variant="link"
+      size="2xs"
+      className="sikat-table-cell__expand"
       aria-label={label}
       aria-expanded={expanded}
       onClick={onToggle}
+      leadingIcon={
+        <span
+          className="sikat-table__glyph"
+          style={{ width: 20, height: 20, ...mask(chevronRight) }}
+        />
+      }
       {...rest}
-    >
-      <span
-        className="sikat-table__glyph"
-        style={{ width: 20, height: 20, ...mask(chevronRight) }}
-      />
-    </button>
+    />
   );
 }
