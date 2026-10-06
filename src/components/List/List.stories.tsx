@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { List, listVariants, type ListCardField, type ListVariant } from './List';
 import { Badge } from '../Badge/Badge';
 import { Icon } from '../Icon/Icon';
