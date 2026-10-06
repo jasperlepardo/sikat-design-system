@@ -160,9 +160,9 @@ const addressFields: ListCardField[] = [
   { label: 'Street', value: '8th Avenue, Unit 1204' },
   { label: 'Building', value: 'Bonifacio One Technology Tower' },
   { label: 'City', value: 'Taguig' },
-  { label: 'Region', value: ['Metro Manila', 'NCR'] },
-  { label: 'Postal', value: ['1634', 'Philippines'] },
-  { label: 'Country', value: ['Philippines', 'PH'] },
+  { label: 'Region', value: 'Metro Manila, NCR' },
+  { label: 'Postal', value: '1634, Philippines' },
+  { label: 'Country', value: 'Philippines, PH' },
 ];
 
 const onMore = fn();
