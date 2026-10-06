@@ -40,6 +40,10 @@ export interface SideNavProps extends Omit<HTMLAttributes<HTMLElement>, 'onChang
   /** Initially open module (uncontrolled). Defaults to the active item's module. */
   defaultOpenId?: string | null;
   onOpenChange?: (id: string | null) => void;
+  /** Slides the bar out to the left (it stays mounted, hidden from focus and AT). */
+  collapsed?: boolean;
+  /** While `collapsed`: slide the bar back in as an overlay on the content (e.g. on hover). */
+  peek?: boolean;
 }
 
 /**
@@ -100,7 +104,9 @@ function Row({
  * and open — one at a time — into a white Submenu card listing their sub-items;
  * the current page is Active (primary on primary-subtle; a sub-item also gets the
  * └ connector). Compact: an icon rail with 10px labels. Rows are links when given
- * an `href`, otherwise buttons (`onNavigate`).
+ * an `href`, otherwise buttons (`onNavigate`). `collapsed` slides the bar out to
+ * the left and back in, while the content beside it reflows; `peek` shows a
+ * collapsed bar as an overlay without moving the content.
  */
 export function SideNav({
   sections,
@@ -110,6 +116,8 @@ export function SideNav({
   openId: openIdProp,
   defaultOpenId,
   onOpenChange,
+  collapsed = false,
+  peek = false,
   className,
   'aria-label': ariaLabel = 'Sidebar',
   ...rest
@@ -218,6 +226,8 @@ export function SideNav({
     <nav
       aria-label={ariaLabel}
       data-orientation={orientation}
+      data-collapsed={collapsed || undefined}
+      data-peek={(collapsed && peek) || undefined}
       className={cn('sikat-sidenav', className)}
       {...rest}
     >

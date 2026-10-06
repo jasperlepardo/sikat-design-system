@@ -19,7 +19,7 @@
   padding: var(--spacing-0) var(--spacing-4);
 }
 
-/* Left: logo + app name (+ apps button). Header/Container/Logo/padding-y 8px
+/* Left: (side-nav toggle +) (apps button +) logo + app name. Header/Container/Logo/padding-y 8px
    around the 48px logo sets the 64px bar height. Left and right share the free
    space equally (flex 1, basis 0 — keeps the search centered, as in Figma) but
    never shrink below their content, so on narrow bars only the search gives. */

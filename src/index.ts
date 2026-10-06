@@ -219,6 +219,7 @@ export type { FooterProps, FooterContainerProps } from './components/Footer/Foot
 
 export { useDropdown } from './lib/useDropdown';
 export { useListbox } from './lib/useListbox';
+export { useHoverIntent } from './lib/useHoverIntent';
 export type { UseListboxOptions, UseListboxResult } from './lib/useListbox';
 
 export { List, ListGroup, ListItem, listVariants } from './components/List/List';

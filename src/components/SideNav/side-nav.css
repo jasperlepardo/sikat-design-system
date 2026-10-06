@@ -1,14 +1,54 @@
 /* SideNav structure. Mirrors the Figma Side Navigation Bar + Button-Navigation
    (Nav Item) + Submenu (Components file, Nav page; bar node 17425:17800). */
 .sikat-sidenav {
+  --sidenav-width: 260px;
   box-sizing: border-box;
-  width: 260px;
+  width: var(--sidenav-width);
   height: 100%;
   background-color: var(--color-bg-tertiary); /* Figma color/bg/tertiary */
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
 }
 .sikat-sidenav[data-orientation='compact'] {
-  width: 120px;
+  --sidenav-width: 120px;
+}
+
+/* Collapsed: slide out to the left. A negative start margin pulls the bar off
+   while the content beside it reflows into the space; visibility flips after the
+   slide so the hidden bar leaves the tab order and the accessibility tree. */
+.sikat-sidenav {
+  position: relative;
+  transition:
+    margin-inline-start 200ms ease,
+    transform 200ms ease,
+    visibility 0s;
+}
+.sikat-sidenav[data-collapsed] {
+  margin-inline-start: calc(-1 * var(--sidenav-width));
+  visibility: hidden;
+  transition:
+    margin-inline-start 200ms ease,
+    visibility 0s 200ms;
+}
+/* Peek: a collapsed bar slides back over the content (transform only, so the
+   layout keeps the collapsed space) and floats above it. */
+.sikat-sidenav[data-collapsed][data-peek] {
+  z-index: 10;
+  transform: translateX(var(--sidenav-width));
+  visibility: visible;
+  /* shadow/2xl: wide enough to read along the bar's full-height right edge
+     (shadow/lg is mostly downward and barely shows on a tall panel). */
+  box-shadow: var(--shadow-2xl-1-offset-x) var(--shadow-2xl-1-offset-y) var(--shadow-2xl-1-blur)
+    var(--shadow-2xl-1-spread) var(--shadow-2xl-1-color);
+  transition:
+    transform 200ms ease,
+    visibility 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sikat-sidenav,
+  .sikat-sidenav[data-collapsed],
+  .sikat-sidenav[data-collapsed][data-peek] {
+    transition: none;
+  }
 }
 .sikat-sidenav ul {
   margin: 0;

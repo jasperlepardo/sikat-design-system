@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
-import { expect, userEvent, within } from 'storybook/test';
+import { useState, type CSSProperties } from 'react';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Page } from './Page';
+import { useHoverIntent } from '../../lib/useHoverIntent';
 import { Panel } from '../Panel/Panel';
 import { PanelHeader, panelHeaderIcons } from '../Panel/PanelHeader';
 import { Section } from '../Section/Section';
@@ -114,10 +115,18 @@ const NAV: SideNavSection[] = [
 ];
 
 const APPS: NavbarMenuItem[] = [
-  { id: 'erp', label: 'Sikat ERP' },
-  { id: 'payments', label: 'Payments' },
-  { id: 'console', label: 'Admin Console' },
-];
+  'CRM',
+  'Sales',
+  'Purchase',
+  'Inventory',
+  'Manufacturing',
+  'Project',
+  'Service',
+  'Banking',
+  'Accounting',
+  'Human Resource',
+  'Reports',
+].map((label) => ({ id: label.toLowerCase().replace(/\s+/g, '-'), label }));
 const ORGS: NavbarMenuItem[] = [
   { id: 'sikat', label: 'Sikat Tech Inc.' },
   { id: 'acme', label: 'Acme Corp' },
@@ -142,35 +151,12 @@ const panelTabs = [
 
 /** Navbar on top + SideNav on the left + content: the full app layout. */
 function AppShellDemo() {
-  const [app, setApp] = useState('erp');
-  const [org, setOrg] = useState('sikat');
-  const [page, setPage] = useState('home');
+  const { navbar, sidenav, page } = useAppShell();
   return (
     <Page>
-      <Navbar
-        appName={APPS.find((a) => a.id === app)?.label}
-        apps={APPS}
-        appId={app}
-        onAppChange={setApp}
-        organizations={ORGS}
-        organizationId={org}
-        onOrganizationChange={setOrg}
-        avatar={<img src={avatarProfile} alt="Account" />}
-        accountItems={ACCOUNT}
-      />
+      {navbar}
       <div style={{ display: 'flex', flex: 1 }}>
-        <SideNav
-          sections={NAV}
-          activeId={page}
-          onNavigate={setPage}
-          style={{
-            position: 'sticky',
-            top: 64,
-            height: 'calc(100vh - 64px)',
-            flex: 'none',
-            width: 280,
-          }}
-        />
+        {sidenav}
         <main style={{ flex: 1, minWidth: 0 }}>
           <Section>
             <Section.Container>
@@ -202,18 +188,55 @@ export const AppShell: Story = {
       'aria-current',
       'page',
     );
+    // The navbar's toggle slides the sidebar out; the content takes its space.
+    const main = canvasElement.querySelector('main')!;
+    const toggle = canvas.getByRole('button', { name: 'Toggle side navigation' });
+    await expect(toggle).toHaveAttribute('aria-controls', sidebar.id);
+    await expect(sidebar.getBoundingClientRect().width).toBe(280);
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await waitFor(() => expect(sidebar).not.toBeVisible());
+    await waitFor(() => expect(main.getBoundingClientRect().left).toBe(0));
+    // Hovering the toggle peeks it over the content (which stays put).
+    await userEvent.hover(toggle);
+    await waitFor(() => expect(sidebar.getBoundingClientRect().left).toBe(0));
+    await expect(sidebar).toBeVisible();
+    await expect(main.getBoundingClientRect().left).toBe(0);
+    await expect(getComputedStyle(sidebar).boxShadow).toContain('rgba(0, 0, 0, 0.25)');
+    await userEvent.unhover(toggle);
+    await waitFor(() => expect(sidebar).not.toBeVisible());
+    // Clicking pins it back in.
+    await userEvent.click(toggle);
+    await expect(sidebar).toBeVisible();
+    await waitFor(() => expect(main.getBoundingClientRect().left).toBe(280));
     await userEvent.click(canvas.getByRole('combobox', { name: 'Apps' }));
-    await userEvent.click(canvas.getByRole('option', { name: 'Payments' }));
-    await expect(canvas.getByText('Payments')).toBeInTheDocument();
+    await expect(canvas.getAllByRole('option')).toHaveLength(APPS.length);
+    await userEvent.click(canvas.getByRole('option', { name: 'Accounting' }));
+    const navbar = within(canvas.getByRole('navigation', { name: 'Main' }));
+    await expect(navbar.getByText('Accounting')).toBeInTheDocument();
   },
 };
 
+/**
+ * Shared app-shell state. The navbar's toggle slides the side nav out (the
+ * content reflows) and back in; while it's out, hovering the toggle peeks it
+ * over the content, and moving into the panel keeps it open.
+ */
 function useAppShell() {
-  const [app, setApp] = useState('erp');
+  const [app, setApp] = useState('crm');
   const [org, setOrg] = useState('sikat');
   const [page, setPage] = useState('home');
+  const [navExpanded, setNavExpanded] = useState(true);
+  const peek = useHoverIntent();
   const navbar = (
     <Navbar
+      onSideNavToggle={() => {
+        setNavExpanded((v) => !v);
+        peek.reset();
+      }}
+      onSideNavToggleHover={peek.onHover}
+      sideNavExpanded={navExpanded}
+      sideNavId="app-sidenav"
       appName={APPS.find((a) => a.id === app)?.label}
       apps={APPS}
       appId={app}
@@ -227,16 +250,23 @@ function useAppShell() {
   );
   const sidenav = (
     <SideNav
+      id="app-sidenav"
+      collapsed={!navExpanded}
+      peek={peek.hovering}
+      onMouseEnter={() => peek.onHover(true)}
+      onMouseLeave={() => peek.onHover(false)}
       sections={NAV}
       activeId={page}
       onNavigate={setPage}
-      style={{
-        position: 'sticky',
-        top: 64,
-        height: 'calc(100vh - 64px)',
-        flex: 'none',
-        width: 280,
-      }}
+      style={
+        {
+          '--sidenav-width': '280px',
+          position: 'sticky',
+          top: 64,
+          height: 'calc(100vh - 64px)',
+          flex: 'none',
+        } as CSSProperties
+      }
     />
   );
   return { navbar, sidenav, page };

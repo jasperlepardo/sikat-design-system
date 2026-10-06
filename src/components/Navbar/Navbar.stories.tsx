@@ -1,8 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
 import { Navbar, navbarTypes, type NavbarMenuItem, type NavbarType } from './Navbar';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
+import { useHoverIntent } from '../../lib/useHoverIntent';
+import { SideNav, SideNavIcon, type SideNavSection } from '../SideNav/SideNav';
+import home from '../SideNav/assets/home.svg';
+import inventory2 from '../SideNav/assets/inventory-2.svg';
+import shoppingCart from '../SideNav/assets/shopping-cart.svg';
+import widgets from '../SideNav/assets/widgets.svg';
 import avatarProfile from './assets/avatar-profile.jpg';
 import avatarControlPlane from './assets/avatar-control-plane.png';
 import avatarControlPlaneTop from './assets/avatar-control-plane-overlay.png';
@@ -29,13 +35,20 @@ const ORGANIZATIONS: NavbarMenuItem[] = [
   { id: 'globex', label: 'Globex Industries' },
 ];
 
-/** Dummy apps for the app selector (the current app comes from the App control). */
-const OTHER_APPS: NavbarMenuItem[] = [
-  { id: 'ledger', label: 'Ledger' },
-  { id: 'payments', label: 'Payments' },
-  { id: 'reports', label: 'Reports' },
-  { id: 'console', label: 'Admin Console' },
-];
+/** Apps for the app selector; the App control names the bar until one is picked. */
+const APPS: NavbarMenuItem[] = [
+  'CRM',
+  'Sales',
+  'Purchase',
+  'Inventory',
+  'Manufacturing',
+  'Project',
+  'Service',
+  'Banking',
+  'Accounting',
+  'Human Resource',
+  'Reports',
+].map((label) => ({ id: label.toLowerCase().replace(/\s+/g, '-'), label }));
 
 /** Dummy account menu; actions log to the Actions panel. */
 const accountItems = (onAction: (id: string) => void): NavbarMenuItem[] =>
@@ -50,6 +63,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
   args: {
+    onSideNavToggle: fn(),
     onAppsClick: fn(),
     onCreateClick: fn(),
     onOrganizationClick: fn(),
@@ -70,6 +84,7 @@ export default meta;
 type NavbarPlaygroundArgs = {
   Type: NavbarType;
   app: string;
+  onSideNavToggle: () => void;
   onAppsClick: () => void;
   onCreateClick: () => void;
   onOrganizationClick: () => void;
@@ -88,16 +103,22 @@ function PlaygroundNavbar({
   onOrganizationChange,
   onAppChange,
   onAccountAction,
+  onSideNavToggle,
   ...handlers
 }: NavbarPlaygroundArgs) {
+  const [sideNavExpanded, setSideNavExpanded] = useState(true);
   const [org, setOrg] = useState('sikat');
-  const [appId, setAppId] = useState('current');
-  const apps = [{ id: 'current', label: app }, ...OTHER_APPS];
+  const [appId, setAppId] = useState<string>();
   return (
     <Navbar
       type={Type}
-      appName={apps.find((a) => a.id === appId)?.label}
-      apps={apps}
+      sideNavExpanded={sideNavExpanded}
+      onSideNavToggle={() => {
+        setSideNavExpanded((v) => !v);
+        onSideNavToggle();
+      }}
+      appName={APPS.find((a) => a.id === appId)?.label ?? app}
+      apps={APPS}
       appId={appId}
       onAppChange={(id) => {
         setAppId(id);
@@ -136,21 +157,27 @@ export const Playground: StoryObj<NavbarPlaygroundArgs> = {
     await expect([box.width, box.height]).toEqual([520, 40]);
     await expect(getComputedStyle(field).borderRadius).toBe('12px');
 
+    // Side-nav toggle: first in the bar, flips aria-expanded.
+    const toggle = canvas.getByRole('button', { name: 'Toggle side navigation' });
+    await expect(nav.querySelector('button')).toBe(toggle);
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(toggle);
+    await expect(args.onSideNavToggle).toHaveBeenCalledOnce();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(toggle);
+
     // App selector = Figma Dropdown, left-aligned; the chosen app becomes the name.
     const appsTrigger = canvas.getByRole('combobox', { name: 'Apps' });
     await userEvent.click(appsTrigger);
     await expect(args.onAppsClick).toHaveBeenCalledOnce();
     const appList = canvas.getByRole('listbox', { name: 'Apps' });
-    await expect(within(appList).getByRole('option', { name: '[App Name]' })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    );
+    await expect(within(appList).getAllByRole('option')).toHaveLength(APPS.length);
     await expect(Math.round(appList.getBoundingClientRect().left)).toBe(
       Math.round(appsTrigger.getBoundingClientRect().left),
     );
-    await userEvent.keyboard('l{Enter}');
-    await expect(args.onAppChange).toHaveBeenLastCalledWith('ledger');
-    await expect(canvas.getByText('Ledger')).toBeInTheDocument();
+    await userEvent.keyboard('m{Enter}');
+    await expect(args.onAppChange).toHaveBeenLastCalledWith('manufacturing');
+    await expect(canvas.getByText('Manufacturing')).toBeInTheDocument();
     await expect(appsTrigger).toHaveFocus();
     await userEvent.type(canvas.getByRole('searchbox', { name: 'Search' }), 'q');
     await expect(args.onSearchChange).toHaveBeenLastCalledWith('q');
@@ -193,6 +220,7 @@ export const Playground: StoryObj<NavbarPlaygroundArgs> = {
 export const ControlPlane: StoryObj<typeof meta> = {
   args: {
     type: 'control-plane',
+    onSideNavToggle: undefined,
     avatar: ControlPlaneAvatar,
     accountItems: accountItems(fn()),
   },
@@ -234,10 +262,143 @@ export const Narrow: StoryObj<typeof meta> = {
       const r = within(canvasElement).getByRole('button', { name }).getBoundingClientRect();
       return [Math.round(r.width), r.height];
     };
+    await expect(size('Toggle side navigation')).toEqual([32, 32]);
     await expect(size('Apps')).toEqual([32, 32]);
     await expect(size('Create')).toEqual([36, 36]);
     await expect(size('Notifications')).toEqual([32, 32]);
     await expect(size('Settings')).toEqual([32, 32]);
     await expect(size('Sikat Tech Inc.')).toEqual([134, 32]);
+  },
+};
+
+const SIDE_NAV: SideNavSection[] = [
+  {
+    id: 'main',
+    items: [
+      { id: 'home', label: 'Home', icon: <SideNavIcon src={home} /> },
+      { id: 'inventory', label: 'Inventory', icon: <SideNavIcon src={inventory2} /> },
+      { id: 'sales', label: 'Sales', icon: <SideNavIcon src={shoppingCart} /> },
+      { id: 'reports', label: 'Reports', icon: <SideNavIcon src={widgets} /> },
+    ],
+  },
+];
+
+/**
+ * Navbar + SideNav. `mode="compact"`: the toggle swaps to the compact rail;
+ * `mode="slide"`: the expanded bar slides out and back in, and while it's out,
+ * hovering the toggle peeks it over the content.
+ */
+function WithSideNavDemo({
+  mode = 'compact',
+  ...args
+}: Partial<NavbarPlaygroundArgs> & { mode?: 'compact' | 'slide' }) {
+  const [expanded, setExpanded] = useState(true);
+  const [page, setPage] = useState('home');
+  const { hovering: peek, onHover: hover, reset } = useHoverIntent();
+  const slide = mode === 'slide';
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: 480, overflow: 'hidden' }}>
+      <Navbar
+        appName="CRM"
+        avatar={AppAvatar}
+        sideNavExpanded={expanded}
+        sideNavId="navbar-story-sidenav"
+        onSideNavToggle={() => {
+          setExpanded((v) => !v);
+          reset();
+          args.onSideNavToggle?.();
+        }}
+        onSideNavToggleHover={slide ? hover : undefined}
+      />
+      <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+        <SideNav
+          id="navbar-story-sidenav"
+          orientation={slide || expanded ? 'expanded' : 'compact'}
+          collapsed={slide && !expanded}
+          peek={peek}
+          onMouseEnter={slide ? () => hover(true) : undefined}
+          onMouseLeave={slide ? () => hover(false) : undefined}
+          sections={SIDE_NAV}
+          activeId={page}
+          onNavigate={setPage}
+        />
+        <main style={{ flex: 1, minWidth: 0, padding: 24 }} className="text-body">
+          Side nav is {expanded ? 'expanded' : 'collapsed'}.
+        </main>
+      </div>
+    </div>
+  );
+}
+
+export const WithSideNav: StoryObj<typeof meta> = {
+  render: (args) => <WithSideNavDemo onSideNavToggle={args.onSideNavToggle} />,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const sidebar = canvas.getByRole('navigation', { name: 'Sidebar' });
+    const toggle = canvas.getByRole('button', { name: 'Toggle side navigation' });
+    await expect(toggle).toHaveAttribute('aria-controls', sidebar.id);
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(sidebar).toHaveAttribute('data-orientation', 'expanded');
+    const wide = sidebar.getBoundingClientRect().width;
+
+    // Collapse to the compact rail.
+    await userEvent.click(toggle);
+    await expect(args.onSideNavToggle).toHaveBeenCalledOnce();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(sidebar).toHaveAttribute('data-orientation', 'compact');
+    await expect(sidebar.getBoundingClientRect().width).toBeLessThan(wide);
+    await expect(canvas.getByText('Side nav is collapsed.')).toBeInTheDocument();
+
+    // And back.
+    await userEvent.click(toggle);
+    await expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    await expect(sidebar).toHaveAttribute('data-orientation', 'expanded');
+    await expect(sidebar.getBoundingClientRect().width).toBe(wide);
+  },
+};
+
+/** The expanded side nav slides out to the left and back in; the content reflows. */
+export const WithSlidingSideNav: StoryObj<typeof meta> = {
+  render: (args) => <WithSideNavDemo mode="slide" onSideNavToggle={args.onSideNavToggle} />,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const sidebar = canvas.getByRole('navigation', { name: 'Sidebar' });
+    const main = canvasElement.querySelector('main')!;
+    const toggle = canvas.getByRole('button', { name: 'Toggle side navigation' });
+    await expect(sidebar).toBeVisible();
+    const start = main.getBoundingClientRect().left;
+    await expect(start).toBe(sidebar.getBoundingClientRect().right);
+
+    // Slide out: stays expanded, ends off-screen and hidden; content takes the space.
+    await userEvent.click(toggle);
+    await expect(args.onSideNavToggle).toHaveBeenCalledOnce();
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    await expect(sidebar).toHaveAttribute('data-orientation', 'expanded');
+    await expect(sidebar).toHaveAttribute('data-collapsed');
+    await waitFor(() => expect(sidebar).not.toBeVisible());
+    await expect(sidebar.getBoundingClientRect().right).toBeLessThanOrEqual(0);
+    await expect(main.getBoundingClientRect().left).toBe(0);
+    await expect(canvas.getByText('Side nav is collapsed.')).toBeInTheDocument();
+
+    // Hovering the toggle peeks the bar over the content (the content doesn't move);
+    // moving into the panel keeps it open, leaving both closes it.
+    await userEvent.hover(toggle);
+    await expect(sidebar).toHaveAttribute('data-peek');
+    await waitFor(() => expect(sidebar.getBoundingClientRect().left).toBe(0));
+    await expect(sidebar).toBeVisible();
+    await expect(main.getBoundingClientRect().left).toBe(0);
+    await userEvent.unhover(toggle);
+    await userEvent.hover(sidebar);
+    await new Promise((r) => setTimeout(r, 250));
+    await expect(sidebar).toHaveAttribute('data-peek');
+    await userEvent.unhover(sidebar);
+    await waitFor(() => expect(sidebar).not.toHaveAttribute('data-peek'));
+    await waitFor(() => expect(sidebar).not.toBeVisible());
+
+    // Clicking pins it: slides back in and the content reflows.
+    await userEvent.click(toggle);
+    await expect(sidebar).not.toHaveAttribute('data-collapsed');
+    await expect(sidebar).toBeVisible();
+    await waitFor(() => expect(main.getBoundingClientRect().left).toBe(start));
   },
 };
