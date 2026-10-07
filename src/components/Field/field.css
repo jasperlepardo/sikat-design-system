@@ -275,6 +275,13 @@
   display: flex;
 }
 
+/* Search inputs: no native (browser-blue) cancel button — callers render a
+   FieldClear instead. */
+.sikat-field__input[type='search']::-webkit-search-cancel-button,
+.sikat-field__input[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
 /* Readonly fields: show edit icon and a subtle background on hover so the user
    knows the field can be interacted with (e.g. unlocked/edited). */
 .sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled])) {

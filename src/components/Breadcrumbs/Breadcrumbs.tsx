@@ -79,7 +79,10 @@ export function Breadcrumbs({
           const current = item === items[items.length - 1];
           const linked = !current && (item.href != null || item.onClick != null);
           return (
-            <li key={item.id ?? items.indexOf(item)} className="sikat-breadcrumbs__item">
+            // Keyed by position, not `id`: two crumbs may share an id (a module
+            // link that points at its own first page), and duplicate keys leave
+            // stale crumbs behind when the trail changes.
+            <li key={items.indexOf(item)} className="sikat-breadcrumbs__item">
               {separator}
               {current ? (
                 <span className="sikat-breadcrumbs__current" aria-current="page">

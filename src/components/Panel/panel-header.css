@@ -88,6 +88,25 @@
   color: var(--color-fg-default-solid);
 }
 
+/* Table with search: three equal columns — title | search | buttons. Each
+   takes a third of the bar (flex 1, basis 0); the search fills its column. */
+.sikat-panel-header[data-search] .sikat-panel-header__start,
+.sikat-panel-header[data-search] .sikat-panel-header__end {
+  flex: 1 1 0;
+}
+.sikat-panel-header[data-search] .sikat-panel-header__end {
+  justify-content: flex-end;
+}
+.sikat-panel-header__center {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.sikat-panel-header__search {
+  width: 100%;
+  min-width: 0;
+}
+
 /* Buttons Group: operations | divider | core actions. */
 .sikat-panel-header__end {
   display: flex;
