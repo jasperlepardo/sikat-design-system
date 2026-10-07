@@ -22,7 +22,7 @@ export interface SidePanelProps extends HTMLAttributes<HTMLDivElement> {
  * SidePanel — overlay/positioning wrapper for a right-edge drawer.
  * Handles backdrop, scroll lock, and fixed positioning only; compose `Panel`,
  * `PanelHeader`, `Panel.Body`, `Panel.Sidebar`, `Panel.Main`, and
- * `Panel.Summary` inside.
+ * `Panel.Summary` inside. Light theme, like the `Panel` it wraps.
  */
 export function SidePanel({
   overlay,
@@ -47,6 +47,7 @@ export function SidePanel({
       ) : null}
       <div
         className={cn('sikat-side-panel', overlay && 'sikat-side-panel--overlay', className)}
+        data-theme="light"
         {...rest}
       >
         <Panel>{children}</Panel>

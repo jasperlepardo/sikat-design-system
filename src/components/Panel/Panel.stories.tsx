@@ -250,3 +250,38 @@ export const NoFooter: Story = {
     </Panel>
   ),
 };
+
+/** Always light: on a dark page the Panel and everything in it keep the light theme. */
+export const OnDarkPage: StoryObj<typeof Panel> = {
+  render: () => (
+    <div
+      data-theme="dark"
+      style={{ height: 320, padding: 8, display: 'flex', background: 'var(--color-bg-secondary)' }}
+    >
+      <Panel>
+        <PanelHeader icon="inventory_2" title="Orders" subcopy="Light on a dark page" />
+        <Panel.Body>
+          <Card>
+            <Card.Header>Section</Card.Header>
+            <Card.Content>
+              <p className="text-body">Content</p>
+            </Card.Content>
+          </Card>
+        </Panel.Body>
+      </Panel>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const panel = canvasElement.querySelector<HTMLElement>('.sikat-panel')!;
+    await expect(panel).toHaveAttribute('data-theme', 'light');
+    await expect(getComputedStyle(panel).backgroundColor).toBe('rgb(255, 255, 255)');
+    // Nested content resolves light tokens too: the header's bg/secondary is the
+    // light value, not the dark page's bg/secondary behind it.
+    const page = canvasElement.querySelector<HTMLElement>('[data-theme="dark"]')!;
+    const header = canvas.getByRole('banner');
+    await expect(getComputedStyle(header).backgroundColor).not.toBe(
+      getComputedStyle(page).backgroundColor,
+    );
+  },
+};

@@ -260,7 +260,7 @@ export const TwoColumn: Story = {
   },
 };
 
-/** Dark theme: the shell re-themes with the Panel — no white frame around it. */
+/** On a dark page the drawer stays light — shell and Panel alike, no dark ring. */
 export const DarkMode: Story = {
   render: () => (
     <div
@@ -268,7 +268,7 @@ export const DarkMode: Story = {
       style={{ height: 320, padding: 8, background: 'var(--color-bg-secondary)' }}
     >
       <SidePanel>
-        <PanelHeader icon="inventory_2" title="Details" subcopy="Dark theme" />
+        <PanelHeader icon="inventory_2" title="Details" subcopy="Light on a dark page" />
         <Panel.Body>
           <SectionCard title="Section" />
         </Panel.Body>
@@ -279,7 +279,7 @@ export const DarkMode: Story = {
     const shell = canvasElement.querySelector<HTMLElement>('.sikat-side-panel')!;
     const panel = canvasElement.querySelector<HTMLElement>('.sikat-panel')!;
     const bg = getComputedStyle(shell).backgroundColor;
-    await expect(bg).not.toBe('rgb(255, 255, 255)');
-    await expect(bg).toBe(getComputedStyle(panel).backgroundColor);
+    await expect(bg).toBe('rgb(255, 255, 255)');
+    await expect(getComputedStyle(panel).backgroundColor).toBe(bg);
   },
 };
