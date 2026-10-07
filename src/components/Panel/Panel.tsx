@@ -15,11 +15,13 @@ export interface PanelProps extends HTMLAttributes<HTMLDivElement> {
  * Shadowed shell with three layout slots: `Panel.Header` (`<PanelHeader>`),
  * `Panel.Body` (grows to fill; holds section cards), and `Panel.Footer`
  * (action buttons). `horizontal` puts body and footer side by side.
+ * Always rendered in the light theme (`data-theme="light"`), whatever the page's.
  */
 export function Panel({ horizontal, className, children, ...rest }: PanelProps) {
   return (
     <div
       className={cn('sikat-panel', className)}
+      data-theme="light"
       data-horizontal={horizontal || undefined}
       {...rest}
     >
