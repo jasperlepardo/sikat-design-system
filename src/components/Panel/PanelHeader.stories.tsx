@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import {
@@ -216,6 +217,38 @@ export const TableWithSearch: Story = {
       getComputedStyle(canvasElement.querySelector('.sikat-panel-header__bar')!).columnGap,
     );
     await expect(Math.abs(box.width - (header.width - 2 * gap) / 3)).toBeLessThan(2);
+  },
+};
+
+/** Controlled search: the page owns the text (`searchValue` + `onSearchChange`). */
+export const ControlledSearch: Story = {
+  args: {
+    type: 'table',
+    title: 'Purchase orders',
+    showSearch: true,
+    searchLabel: 'Search purchase orders',
+    searchPlaceholder: 'Search by PO no., vendor or item',
+  },
+  render: function Render(args) {
+    const [query, setQuery] = useState('PO-1001');
+    return (
+      <PanelHeader
+        {...args}
+        searchValue={query}
+        onSearchChange={setQuery}
+        operations={operations}
+        actions={actions}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const search = canvas.getByRole('searchbox', { name: 'Search purchase orders' });
+    await expect(search).toHaveValue('PO-1001');
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear search' }));
+    await expect(search).toHaveValue('');
+    await userEvent.type(search, 'x');
+    await expect(search).toHaveValue('x');
   },
 };
 

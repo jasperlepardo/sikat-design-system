@@ -48,6 +48,10 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   showSearch?: boolean;
   /** Table: search field placeholder. */
   searchPlaceholder?: string;
+  /** Table: accessible name of the search field. Default: "Search". */
+  searchLabel?: string;
+  /** Table: the search text, for a controlled search. Omit to let the header keep it. */
+  searchValue?: string;
   /** Table: search input value changes. */
   onSearchChange?: (value: string) => void;
 }
@@ -72,6 +76,8 @@ export function PanelHeader({
   tabs,
   showSearch,
   searchPlaceholder = 'Search',
+  searchLabel = 'Search',
+  searchValue,
   onSearchChange,
   className,
   ...rest
@@ -82,9 +88,10 @@ export function PanelHeader({
   const showSubcopy = !isForms;
   const showTabs = !isForms;
   const hasSearch = type === 'table' && !!showSearch;
-  const [query, setQuery] = useState('');
+  const [ownQuery, setOwnQuery] = useState('');
+  const query = searchValue ?? ownQuery;
   const updateQuery = (next: string) => {
-    setQuery(next);
+    setOwnQuery(next);
     onSearchChange?.(next);
   };
   const leadingContent =
@@ -124,7 +131,7 @@ export function PanelHeader({
               className="sikat-panel-header__search"
               size="xl"
               type="search"
-              aria-label="Search"
+              aria-label={searchLabel}
               placeholder={searchPlaceholder}
               leadingIcon={<Icon size={20}>search</Icon>}
               value={query}

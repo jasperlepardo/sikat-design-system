@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Breadcrumbs, type BreadcrumbItem } from './Breadcrumbs';
@@ -94,4 +95,40 @@ export const AbovePanel: Story = {
       </Panel>
     </div>
   ),
+};
+
+const TRAILS: BreadcrumbItem[][] = [
+  [
+    { id: '/purchasing/dashboard', label: 'Purchasing', href: '#/purchasing/dashboard' },
+    { id: '/purchasing/dashboard', label: 'Dashboard' },
+  ],
+  [
+    { id: '/sales/dashboard', label: 'Sales', href: '#/sales/dashboard' },
+    { id: '/sales/dashboard', label: 'Dashboard' },
+  ],
+];
+
+/**
+ * A module's first page: the module crumb and the page crumb share an id.
+ * Switching trails must replace the crumbs, not pile them up.
+ */
+export const SharedIds: Story = {
+  render: function Render(args) {
+    const [n, setN] = useState(0);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'start' }}>
+        <Breadcrumbs {...args} items={TRAILS[n % 2]} />
+        <Button intent="default" variant="solid" size="small" onClick={() => setN(n + 1)}>
+          Switch module
+        </Button>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    for (let i = 0; i < 3; i++) {
+      await userEvent.click(canvas.getByRole('button', { name: 'Switch module' }));
+      await expect(canvas.getAllByRole('listitem')).toHaveLength(2);
+    }
+  },
 };
