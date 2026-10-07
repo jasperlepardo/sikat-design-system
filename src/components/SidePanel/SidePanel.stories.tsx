@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import { expect } from 'storybook/test';
 import { SidePanel } from './SidePanel';
 import { Panel } from '../Panel/Panel';
 import { PanelHeader } from '../Panel/PanelHeader';
@@ -256,5 +257,29 @@ export const TwoColumn: Story = {
         )}
       </div>
     );
+  },
+};
+
+/** Dark theme: the shell re-themes with the Panel — no white frame around it. */
+export const DarkMode: Story = {
+  render: () => (
+    <div
+      data-theme="dark"
+      style={{ height: 320, padding: 8, background: 'var(--color-bg-secondary)' }}
+    >
+      <SidePanel>
+        <PanelHeader icon="inventory_2" title="Details" subcopy="Dark theme" />
+        <Panel.Body>
+          <SectionCard title="Section" />
+        </Panel.Body>
+      </SidePanel>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const shell = canvasElement.querySelector<HTMLElement>('.sikat-side-panel')!;
+    const panel = canvasElement.querySelector<HTMLElement>('.sikat-panel')!;
+    const bg = getComputedStyle(shell).backgroundColor;
+    await expect(bg).not.toBe('rgb(255, 255, 255)');
+    await expect(bg).toBe(getComputedStyle(panel).backgroundColor);
   },
 };

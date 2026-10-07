@@ -1,5 +1,5 @@
 /* SidePanel — overlay/positioning wrapper for a right-edge drawer.
-   All visual styling (white box, shadow, header, body) comes from <Panel>.
+   All visual styling (box, shadow, header, body) comes from <Panel>.
    This file only covers the backdrop, outer shell, and two-column layout. */
 
 /* ---------------------------------------------------------------- Backdrop */
@@ -17,7 +17,7 @@
 /* ---------------------------------------------------------------- Outer shell */
 
 .sikat-side-panel {
-  background-color: var(--color-bg-white);
+  background-color: var(--color-bg-default); /* matches <Panel>; re-themes */
   border: var(--border-width-1) solid var(--color-border-neutral-subtle);
   border-radius: var(--rounded-2xl) 0 0 var(--rounded-2xl);
   box-shadow: 0 4px 4.5px 0 rgb(0 0 0 / 0.12);

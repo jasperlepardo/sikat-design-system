@@ -37,6 +37,9 @@ export type {
 export { Card } from './components/Card/Card';
 export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Card/Card';
 
+export { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
+export type { BreadcrumbsProps, BreadcrumbItem } from './components/Breadcrumbs/Breadcrumbs';
+
 export { Panel } from './components/Panel/Panel';
 export type {
   PanelProps,

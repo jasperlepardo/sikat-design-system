@@ -1,0 +1,58 @@
+/* Breadcrumbs structure: a single Body/sm row of crumbs 4px from their chevron
+   separators. */
+.sikat-breadcrumbs {
+  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  letter-spacing: var(--text-body-sm-letter-spacing);
+  font-weight: var(--text-medium);
+}
+.sikat-breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sikat-breadcrumbs__item {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--spacing-1);
+}
+.sikat-breadcrumbs__separator {
+  display: flex;
+  flex: none;
+  color: var(--color-fg-quarternary);
+}
+/* Ancestors: text/caption; hover / focus → text/heading, underlined. */
+.sikat-breadcrumbs__link,
+.sikat-breadcrumbs__text {
+  color: var(--color-text-caption);
+  white-space: nowrap;
+}
+.sikat-breadcrumbs__link {
+  border-radius: var(--rounded-sm);
+  text-decoration: none;
+  cursor: pointer;
+}
+.sikat-breadcrumbs__link:hover,
+.sikat-breadcrumbs__link:focus-visible {
+  color: var(--color-text-heading);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.sikat-breadcrumbs__link:focus-visible {
+  outline: 2px solid var(--color-border-primary);
+  outline-offset: 2px;
+}
+/* Current page: text/heading, Semibold; ellipsized when the row is too narrow. */
+.sikat-breadcrumbs__current {
+  overflow: hidden;
+  color: var(--color-text-heading);
+  font-weight: var(--text-semibold);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

@@ -6,10 +6,12 @@ import { useHoverIntent } from '../../lib/useHoverIntent';
 import { Panel } from '../Panel/Panel';
 import { PanelHeader, panelHeaderIcons } from '../Panel/PanelHeader';
 import { Section } from '../Section/Section';
+import { Breadcrumbs, type BreadcrumbItem } from '../Breadcrumbs/Breadcrumbs';
 import { Alert } from '../Alert/Alert';
 import { Card } from '../Card/Card';
 import { IconButton } from '../Button/IconButton';
 import { Button } from '../Button/Button';
+import { Link } from '../Button/Link';
 import { Tabs } from '../Tabs/Tabs';
 import { Icon } from '../Icon/Icon';
 import { Navbar, type NavbarMenuItem } from '../Navbar/Navbar';
@@ -141,6 +143,31 @@ const labelOf = (id: string) =>
   NAV.flatMap((s) => s.items.flatMap((i) => [i, ...(i.items ?? [])])).find((i) => i.id === id)
     ?.label;
 
+/** Story records for a page: three ids prefixed with the page's code (Customers → CUS-0041…). */
+const recordsOf = (page: string) => {
+  const code = (labelOf(page) ?? page).replace(/\W/g, '').slice(0, 3).toUpperCase();
+  return [41, 42, 43].map((n) => `${code}-00${n}`);
+};
+
+/**
+ * The trail App › Module › Page › Record. The app goes to its home page, the page
+ * back to its list; modules aren't pages, so they're plain text. Ids carry their
+ * level (`app:` / `page:`) so the navigate handler knows what was clicked.
+ */
+const trailOf = (app: string, page: string, record?: string): BreadcrumbItem[] => {
+  const module = NAV.flatMap((s) => s.items).find((i) => i.items?.some((c) => c.id === page));
+  return [
+    { id: 'app:home', label: APPS.find((a) => a.id === app)?.label, href: `#${app}` },
+    ...(module ? [{ id: `module:${module.id}`, label: module.label }] : []),
+    {
+      id: `page:${page}`,
+      label: labelOf(page),
+      href: record ? `#${app}/${page}` : undefined,
+    },
+    ...(record ? [{ id: `record:${record}`, label: record }] : []),
+  ];
+};
+
 const CircleIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 const SectionIcon = <Icon size={24}>art_track</Icon>;
 
@@ -269,7 +296,7 @@ function useAppShell() {
       }
     />
   );
-  return { navbar, sidenav, page };
+  return { navbar, sidenav, app, page, setPage };
 }
 
 /** Full app shell with an alert — mirrors the Figma Page/Default variant. */
@@ -443,4 +470,132 @@ function AppShellWithAlertTwoPanelDemo() {
 
 export const AppShellWithAlertTwoPanel: Story = {
   render: () => <AppShellWithAlertTwoPanelDemo />,
+};
+
+/**
+ * Breadcrumbs above the Panel: App › Module › Page › Record. The app follows the
+ * navbar's switcher, module and page follow the side nav, and opening a record
+ * adds its id; ancestors navigate back.
+ */
+function AppShellWithBreadcrumbsDemo() {
+  const { navbar, sidenav, app, page, setPage } = useAppShell();
+  // The open record belongs to an app + page; switching either closes it.
+  const [open, setOpen] = useState<{ at: string; id: string } | null>(null);
+  const at = `${app}/${page}`;
+  const record = open?.at === at ? open.id : undefined;
+  return (
+    <Page>
+      {navbar}
+      <div style={{ display: 'flex', flex: 1 }}>
+        {sidenav}
+        <main
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: 1,
+            minWidth: 0,
+            gap: 'var(--spacing-2)',
+            padding: 'var(--spacing-2)',
+          }}
+        >
+          <Breadcrumbs
+            items={trailOf(app, page, record)}
+            onNavigate={(item, e) => {
+              e.preventDefault();
+              setOpen(null);
+              if (item.id === 'app:home') setPage('home');
+            }}
+          />
+          <Panel style={{ flex: 1, minWidth: 0 }}>
+            <PanelHeader
+              icon="inventory_2"
+              iconVariant="solid"
+              title={record ?? labelOf(page) ?? 'Page Title'}
+              subcopy={record ? labelOf(page) : 'Subcopy'}
+              actions={
+                <Button intent="primary" variant="solid" size="extra-large">
+                  Button
+                </Button>
+              }
+              tabs={record ? undefined : <Tabs variant="outline" items={panelTabs} />}
+            />
+            <Panel.Body>
+              <Card>
+                <Card.Header icon={SectionIcon}>{record ?? labelOf(page)}</Card.Header>
+                <Card.Content>
+                  {record ? (
+                    <p className="text-body">Details for {record}.</p>
+                  ) : (
+                    <ul className="flex flex-col gap-2">
+                      {recordsOf(page).map((id) => (
+                        <li key={id}>
+                          <Link
+                            href={`#${at}/${id}`}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setOpen({ at, id });
+                            }}
+                          >
+                            {id}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </Card.Content>
+              </Card>
+            </Panel.Body>
+          </Panel>
+        </main>
+      </div>
+    </Page>
+  );
+}
+
+export const AppShellWithBreadcrumbs: Story = {
+  render: () => <AppShellWithBreadcrumbsDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const crumbs = () => within(canvas.getByRole('navigation', { name: 'Breadcrumb' }));
+    const trail = () =>
+      crumbs()
+        .getAllByRole('listitem')
+        .map((li) => li.textContent?.replace('chevron_right', ''));
+    const side = within(canvas.getByRole('navigation', { name: 'Sidebar' }));
+    await expect(trail()).toEqual(['CRM', 'Home']);
+
+    // Side nav → App › Module › Page.
+    await userEvent.click(side.getByRole('button', { name: 'Sales' }));
+    await userEvent.click(side.getByRole('button', { name: 'Customers' }));
+    await expect(trail()).toEqual(['CRM', 'Sales', 'Customers']);
+    await expect(crumbs().getByText('Customers')).toHaveAttribute('aria-current', 'page');
+    // The module isn't a page, so it isn't a link.
+    await expect(crumbs().queryByRole('link', { name: 'Sales' })).toBeNull();
+
+    // Opening a record adds its id; the page becomes a link back to the list.
+    await userEvent.click(canvas.getByRole('link', { name: 'CUS-0042' }));
+    await expect(trail()).toEqual(['CRM', 'Sales', 'Customers', 'CUS-0042']);
+    await expect(crumbs().getByText('CUS-0042')).toHaveAttribute('aria-current', 'page');
+    await userEvent.click(crumbs().getByRole('link', { name: 'Customers' }));
+    await expect(trail()).toEqual(['CRM', 'Sales', 'Customers']);
+
+    // The navbar's app switcher changes the first crumb.
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Apps' }));
+    await userEvent.click(canvas.getByRole('option', { name: 'Accounting' }));
+    await expect(trail()?.[0]).toBe('Accounting');
+
+    // The trail sits above the Panel.
+    const panel = canvasElement.querySelector('.sikat-panel')!;
+    await expect(
+      canvas.getByRole('navigation', { name: 'Breadcrumb' }).getBoundingClientRect().bottom,
+    ).toBeLessThanOrEqual(panel.getBoundingClientRect().top);
+
+    // The app crumb goes to the app's home page.
+    await userEvent.click(crumbs().getByRole('link', { name: 'Accounting' }));
+    await expect(trail()).toEqual(['Accounting', 'Home']);
+    await expect(side.getByRole('button', { name: 'Home' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    );
+  },
 };
