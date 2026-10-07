@@ -121,3 +121,22 @@ export const States: StoryObj<typeof meta> = {
     await expect(primary[0]).toHaveFocus();
   },
 };
+
+/** Dark theme: the selected Secondary tab and disabled tabs are bg/default (not white),
+ *  so their light text stays readable. */
+export const StatesDark: StoryObj<typeof meta> = {
+  render: (args, ctx) => (
+    <div data-theme="dark" className="bg-default p-4">
+      {States.render!(args, ctx)}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const white = 'rgb(255, 255, 255)';
+    const bg = (el: HTMLElement) => getComputedStyle(el).backgroundColor;
+    const secondary = within(canvas.getByRole('tablist', { name: 'secondary' }));
+    await expect(bg(secondary.getByRole('tab', { name: /Active/ }))).not.toBe(white);
+    for (const tab of canvas.getAllByRole('tab', { name: /Disabled/ }))
+      await expect(bg(tab)).not.toBe(white);
+  },
+};

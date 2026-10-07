@@ -1,7 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
-import { Navbar, navbarTypes, type NavbarMenuItem, type NavbarType } from './Navbar';
+import {
+  Navbar,
+  navbarThemes,
+  navbarTypes,
+  type NavbarMenuItem,
+  type NavbarTheme,
+  type NavbarType,
+} from './Navbar';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 import { useHoverIntent } from '../../lib/useHoverIntent';
 import { SideNav, SideNavIcon, type SideNavSection } from '../SideNav/SideNav';
@@ -83,6 +90,7 @@ export default meta;
  */
 type NavbarPlaygroundArgs = {
   Type: NavbarType;
+  Theme?: NavbarTheme;
   app: string;
   onSideNavToggle: () => void;
   onAppsClick: () => void;
@@ -99,6 +107,7 @@ type NavbarPlaygroundArgs = {
 /** Stateful demo: the switcher keeps the chosen organization. */
 function PlaygroundNavbar({
   Type,
+  Theme,
   app,
   onOrganizationChange,
   onAppChange,
@@ -112,6 +121,7 @@ function PlaygroundNavbar({
   return (
     <Navbar
       type={Type}
+      theme={Theme}
       sideNavExpanded={sideNavExpanded}
       onSideNavToggle={() => {
         setSideNavExpanded((v) => !v);
@@ -141,15 +151,20 @@ export const Playground: StoryObj<NavbarPlaygroundArgs> = {
   args: { Type: 'app', app: '[App Name]', onAccountAction: fn() },
   argTypes: {
     Type: figmaSelect('Type', navbarTypes, ['App', 'Control Plane']),
+    Theme: { name: 'Theme', options: navbarThemes, control: 'inline-radio' },
     app: { name: 'App', control: 'text' },
   },
-  parameters: figmaControls(['Type', 'App']),
+  parameters: figmaControls(['Type', 'Theme', 'App']),
   render: (args) => <PlaygroundNavbar {...args} />,
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const nav = canvas.getByRole('navigation', { name: 'Main' });
     await expect(nav.getBoundingClientRect().height).toBe(64);
-    await expect(nav).toHaveAttribute('data-theme', 'dark');
+    // Logo: 40px tall (12px padding-y keeps the bar at 64px).
+    const logo = nav.querySelector('.sikat-navbar__logo svg')!.getBoundingClientRect();
+    await expect(Math.round(logo.height)).toBe(40);
+    // No `theme`: the bar follows the page's theme.
+    await expect(nav).not.toHaveAttribute('data-theme');
     await expect(canvas.getByText('[App Name]')).toBeInTheDocument();
     // Search = Figma Field, size mode "Extra Large": 520×40, 12px radius.
     const field = canvasElement.querySelector('.sikat-navbar__search')!;

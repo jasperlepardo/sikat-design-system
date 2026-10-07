@@ -204,6 +204,36 @@ export const SalesOpen: StoryObj<typeof meta> = {
       <SideNav {...args} />
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    // Sales Order is 3rd: │ on Customers and Quotations, └ on it, nothing below.
+    const connectors = [
+      ...canvasElement.querySelectorAll<HTMLElement>('.sikat-sidenav__connector'),
+    ].map((c) => c.dataset.connector ?? null);
+    await expect(connectors).toEqual(['line', 'line', 'active', null, null, null]);
+    // The line is unbroken: each row's connector starts where the previous one ends.
+    const boxes = [...canvasElement.querySelectorAll<HTMLElement>('.sikat-sidenav__connector')].map(
+      (c) => c.getBoundingClientRect(),
+    );
+    await expect(boxes[1].top).toBe(boxes[0].bottom);
+    await expect(boxes[2].top).toBe(boxes[1].bottom);
+  },
+};
+
+/** Dark theme: the open Sales submenu is a bg/default card, darker than the bar — not white. */
+export const SalesOpenDark: StoryObj<typeof meta> = {
+  args: { activeId: 'sales/sales-order' },
+  render: (args) => (
+    <div data-theme="dark" style={{ height: 720 }}>
+      <SideNav {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const submenu = canvasElement.querySelector<HTMLElement>('.sikat-sidenav__submenu')!;
+    const bar = canvasElement.querySelector<HTMLElement>('.sikat-sidenav')!;
+    const bg = getComputedStyle(submenu).backgroundColor;
+    await expect(bg).not.toBe('rgb(255, 255, 255)');
+    await expect(bg).not.toBe(getComputedStyle(bar).backgroundColor);
+  },
 };
 
 /** Figma Orientation = Compact: the icon rail. */

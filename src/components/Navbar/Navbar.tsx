@@ -6,7 +6,6 @@ import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { TextField } from '../Field/Field';
-import sikatLogo from './assets/sikat-logo.svg';
 import appsGlyph from './assets/apps.svg';
 import panelCloseGlyph from './assets/left-panel-close.svg';
 import panelOpenGlyph from './assets/left-panel-open.svg';
@@ -16,10 +15,13 @@ import plusGlyph from './assets/plus.svg';
 import chevronGlyph from './assets/chevron-down.svg';
 import notificationsGlyph from './assets/notifications.svg';
 import settingsGlyph from './assets/settings.svg';
+import { SikatLogo } from './SikatLogo';
 import './navbar.css';
 
 export const navbarTypes = ['app', 'control-plane'] as const;
 export type NavbarType = (typeof navbarTypes)[number];
+export const navbarThemes = ['light', 'dark'] as const;
+export type NavbarTheme = (typeof navbarThemes)[number];
 
 /** An item in a Navbar menu (organization switcher / account menu). */
 export interface NavbarMenuItem {
@@ -35,6 +37,8 @@ export interface NavbarMenuItem {
 export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   /** Figma "Type": the full App bar, or the minimal Control Plane bar. */
   type?: NavbarType;
+  /** Pin the bar to a theme (`data-theme`); omit to follow the page. Figma's is `dark`. */
+  theme?: NavbarTheme;
   /** Figma "App": the product name next to the logo. */
   appName?: ReactNode;
   /** Brand mark (defaults to the SIKAT logo). */
@@ -158,7 +162,7 @@ function NavbarMenu({
         onKeyDown,
       })}
       {open ? (
-        // The page's (light) theme, as the Figma Dropdown — not the navbar's dark.
+        // Always the light theme, as the Figma Dropdown — whatever the navbar's theme.
         <Dropdown id={listId} aria-label={label} data-theme="light" data-side={side}>
           {items.map((item, i) => (
             <DropdownItem
@@ -179,8 +183,8 @@ function NavbarMenu({
 }
 
 /**
- * Navbar — the Figma Navbar (Components › Navbar): a 64px dark app bar
- * (`bg/default-alt`, rendered in the Dark theme via `data-theme="dark"`) with the
+ * Navbar — the Figma Navbar (Components › Navbar): a 64px app bar
+ * (`bg/secondary`, following the page's theme unless `theme` pins it; `"dark"` matches Figma) with the
  * brand mark + app name on the left, after an optional side-nav toggle
  * (`onSideNavToggle`). `type="app"` puts the apps button before the logo and
  * adds a centered search field with a gradient "+" create button, and on the
@@ -191,6 +195,7 @@ function NavbarMenu({
  */
 export function Navbar({
   type = 'app',
+  theme,
   appName = '[App Name]',
   logo,
   avatar,
@@ -241,7 +246,7 @@ export function Navbar({
     );
   return (
     <nav
-      data-theme="dark"
+      data-theme={theme}
       data-type={type}
       aria-label={ariaLabel}
       className={cn('sikat-navbar', className)}
@@ -300,9 +305,7 @@ export function Navbar({
               </IconButton>
             )
           ) : null}
-          <span className="sikat-navbar__logo">
-            {logo ?? <img src={sikatLogo} alt="SIKAT" width={46.9795} height={48} />}
-          </span>
+          <span className="sikat-navbar__logo">{logo ?? <SikatLogo />}</span>
           <span className="sikat-navbar__app">{appName}</span>
         </div>
 

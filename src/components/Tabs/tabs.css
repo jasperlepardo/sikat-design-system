@@ -74,15 +74,15 @@
   color: var(--color-fg-white);
   --tabs-icon: var(--color-fg-white);
 }
-/* Type=Secondary: white fill, body text + icon. */
+/* Type=Secondary: bg/default fill (white in light), body text + icon. */
 .sikat-tabs[data-variant='secondary'] .sikat-tabs__tab[aria-selected='true'] {
-  background-color: var(--color-bg-white);
+  background-color: var(--color-bg-default);
   color: var(--color-text-body);
   --tabs-icon: var(--color-fg-tertiary-solid);
 }
-/* State=Disabled: white fill (as in Figma), disabled text, fg/tertiary icon. */
+/* State=Disabled: bg/default fill (white in light, as in Figma), disabled text, fg/tertiary icon. */
 .sikat-tabs__tab:disabled {
-  background-color: var(--color-bg-white);
+  background-color: var(--color-bg-default);
   color: var(--color-text-disabled);
   cursor: not-allowed;
   --tabs-icon: var(--color-fg-tertiary);

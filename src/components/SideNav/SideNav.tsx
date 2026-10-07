@@ -2,7 +2,6 @@ import { useState, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import chevronRight from './assets/keyboard-arrow-right.svg';
 import chevronDown from './assets/keyboard-arrow-down.svg';
-import connectorActive from './assets/connector-active.svg';
 import dividerLine from './assets/divider.svg';
 import './side-nav.css';
 
@@ -198,8 +197,11 @@ export function SideNav({
       <li key={item.id} className="sikat-sidenav__submenu">
         {header}
         <ul id={listId} className="sikat-sidenav__subitems">
-          {item.items.map((sub) => {
+          {item.items.map((sub, i, subs) => {
             const subActive = sub.id === activeId;
+            // Tree line: │ on rows above the active one, └ on the active row.
+            const activeAt = subs.findIndex((s) => s.id === activeId);
+            const connector = subActive ? 'active' : i < activeAt ? 'line' : undefined;
             return (
               <li key={sub.id}>
                 <Row
@@ -209,9 +211,11 @@ export function SideNav({
                   aria-current={subActive ? 'page' : undefined}
                   onClick={() => navigate(sub)}
                 >
-                  <span className="sikat-sidenav__connector" aria-hidden="true">
-                    {subActive ? <img src={connectorActive} alt="" width={19} height={36} /> : null}
-                  </span>
+                  <span
+                    className="sikat-sidenav__connector"
+                    data-connector={connector}
+                    aria-hidden="true"
+                  />
                   <span className="sikat-sidenav__label">{sub.label}</span>
                 </Row>
               </li>
