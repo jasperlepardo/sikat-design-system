@@ -11,6 +11,7 @@ import {
 import { createPortal } from 'react-dom';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
+import { themeAt } from '../../lib/theme';
 import './tooltip.css';
 
 /** Side of the trigger the bubble opens on (Figma "Position"). */
@@ -101,6 +102,7 @@ export function Tooltip({
   const closeTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const rootRef = useRef<HTMLSpanElement>(null);
   const [anchor, setAnchor] = useState<{ x: number; y: number } | null>(null);
+  const [theme, setTheme] = useState<'light' | 'dark'>();
   // Portal target exists only after mount (keeps SSR output trigger-only).
   const [mounted, setMounted] = useState(false);
 
@@ -116,6 +118,7 @@ export function Tooltip({
       const el = rootRef.current;
       if (el) setAnchor(anchorPoint(el.getBoundingClientRect(), position, align));
     };
+    setTheme(themeAt(rootRef.current));
     update();
     window.addEventListener('scroll', update, true);
     window.addEventListener('resize', update);
@@ -143,6 +146,7 @@ export function Tooltip({
       className="sikat-tooltip__bubble"
       data-position={position}
       data-align={align}
+      data-theme={theme}
       hidden={!open}
       style={
         anchor

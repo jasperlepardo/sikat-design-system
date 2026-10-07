@@ -14,6 +14,16 @@ export type ThemeMode = 'light' | 'dark' | 'system';
 
 export const THEME_STORAGE_KEY = 'sikat-theme';
 
+/**
+ * The explicit theme in effect at `el` — its nearest `data-theme` ancestor
+ * (e.g. a Panel that always renders light). Portaled popups copy it, since at
+ * the end of <body> they'd otherwise get the page's theme instead.
+ */
+export function themeAt(el: Element | null | undefined): 'light' | 'dark' | undefined {
+  const theme = el?.closest('[data-theme]')?.getAttribute('data-theme');
+  return theme === 'light' || theme === 'dark' ? theme : undefined;
+}
+
 /** Read the persisted mode (defaults to `system`). SSR-safe. */
 export function getThemeMode(): ThemeMode {
   if (typeof localStorage === 'undefined') return 'system';

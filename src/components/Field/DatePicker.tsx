@@ -165,6 +165,7 @@ export function DatePicker({
               role="dialog"
               aria-label="Choose date"
               className="sikat-datepicker__panel"
+              data-theme={anchor.theme}
               style={{
                 position: 'fixed',
                 zIndex: 1000,

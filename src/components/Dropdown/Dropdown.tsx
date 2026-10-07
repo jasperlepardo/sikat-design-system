@@ -75,6 +75,7 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
       role={role}
       aria-multiselectable={multiselectable || undefined}
       data-side={side}
+      data-theme={anchor?.theme}
       className={cn('sikat-dropdown', anchor && 'sikat-dropdown--fixed', className)}
       style={fixedStyle}
       {...rest}

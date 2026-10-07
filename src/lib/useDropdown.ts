@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from 'react';
+import { themeAt } from './theme';
 
 /** Max-height of .sikat-dropdown in px — keep in sync with dropdown.css. */
 const DROPDOWN_MAX_HEIGHT = 256; // 16rem
@@ -10,6 +11,8 @@ export interface DropdownAnchor {
   top: number;
   bottom: number;
   width: number;
+  /** Explicit theme at the trigger — set it as the portaled panel's `data-theme`. */
+  theme?: 'light' | 'dark';
 }
 
 /**
@@ -56,6 +59,7 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
       top: rect.top,
       bottom: rect.bottom,
       width: rect.width,
+      theme: themeAt(rootRef.current),
     };
   };
 
@@ -94,6 +98,7 @@ export function useDropdown<T extends HTMLElement = HTMLDivElement>(): {
         top: rect.top,
         bottom: rect.bottom,
         width: rect.width,
+        theme: themeAt(rootRef.current),
       });
     };
     // Guarded: ResizeObserver is missing in jsdom and some older/SSR environments;

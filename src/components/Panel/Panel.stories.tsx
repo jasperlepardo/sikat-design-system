@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { Panel } from './Panel';
 import { PanelHeader, panelHeaderIcons } from './PanelHeader';
 import { Card } from '../Card/Card';
@@ -7,6 +7,7 @@ import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
 import { IconButton } from '../Button/IconButton';
 import { Tabs } from '../Tabs/Tabs';
+import { Select } from '../Field/Select';
 import { figmaControls } from '../../docs/figma-controls';
 
 const meta = {
@@ -265,6 +266,14 @@ export const OnDarkPage: StoryObj<typeof Panel> = {
             <Card.Header>Section</Card.Header>
             <Card.Content>
               <p className="text-body">Content</p>
+              <Select
+                aria-label="Discount"
+                defaultValue="lowest"
+                options={[
+                  { value: 'lowest', label: 'Lowest discount' },
+                  { value: 'highest', label: 'Highest discount' },
+                ]}
+              />
             </Card.Content>
           </Card>
         </Panel.Body>
@@ -283,5 +292,11 @@ export const OnDarkPage: StoryObj<typeof Panel> = {
     await expect(getComputedStyle(header).backgroundColor).not.toBe(
       getComputedStyle(page).backgroundColor,
     );
+    // Portaled popups (at the end of <body>) carry the Panel's light theme.
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Discount' }));
+    const listbox = within(document.body).getByRole('listbox');
+    await expect(listbox).toHaveAttribute('data-theme', 'light');
+    await expect(getComputedStyle(listbox).backgroundColor).toBe('rgb(255, 255, 255)');
+    await userEvent.keyboard('{Escape}');
   },
 };
