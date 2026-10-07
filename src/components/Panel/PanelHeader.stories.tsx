@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, within } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import {
   PanelHeader,
   panelHeaderIcons,
@@ -95,6 +95,7 @@ type PanelHeaderPlaygroundArgs = {
   panelTitle: string;
   panelSubTitle: string;
   showTabs: boolean;
+  showSearch: boolean;
 };
 
 export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
@@ -103,14 +104,22 @@ export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
     panelTitle: 'Panel Title',
     panelSubTitle: 'Panel Sub Title',
     showTabs: true,
+    showSearch: false,
   },
   argTypes: {
     pageType: figmaSelect('Page Type', panelHeaderTypes, ['Table', 'Forms', 'Details']),
     panelTitle: { name: 'Panel Title', control: 'text' },
     panelSubTitle: { name: 'Panel Sub Title', control: 'text' },
     showTabs: { name: 'Show Tabs', control: 'boolean' },
+    showSearch: { name: 'Show Search', control: 'boolean', if: { arg: 'pageType', eq: 'table' } },
   },
-  parameters: figmaControls(['Page Type', 'Panel Title', 'Panel Sub Title', 'Show Tabs']),
+  parameters: figmaControls([
+    'Page Type',
+    'Panel Title',
+    'Panel Sub Title',
+    'Show Tabs',
+    'Show Search',
+  ]),
   render: (a) =>
     a.pageType === 'table' ? (
       <PanelHeader
@@ -118,6 +127,7 @@ export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
         icon="radio_button_unchecked"
         title={a.panelTitle}
         subcopy={a.panelSubTitle}
+        showSearch={a.showSearch}
         operations={operations}
         actions={actions}
         tabs={a.showTabs ? <Tabs variant="outline" items={panelTabs} /> : undefined}
@@ -165,6 +175,47 @@ export const Details: Story = {
     await expect(canvas.getByText('Panel Sub Title')).toBeVisible();
     await expect(canvas.getByText('Status')).toBeVisible();
     await expect(canvas.getByRole('tablist')).toBeVisible();
+  },
+};
+
+/**
+ * Table header with search — three equal columns: title block | search | buttons.
+ */
+export const TableWithSearch: Story = {
+  args: {
+    type: 'table',
+    title: 'Panel Title',
+    subcopy: 'Panel Sub Title',
+    showSearch: true,
+    searchPlaceholder: 'Search',
+    onSearchChange: fn(),
+  },
+  render: (args) => (
+    <PanelHeader
+      {...args}
+      operations={operations}
+      actions={actions}
+      tabs={<Tabs variant="outline" items={panelTabs} />}
+    />
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const search = canvas.getByRole('searchbox', { name: 'Search' });
+    await userEvent.type(search, 'q');
+    await expect(args.onSearchChange).toHaveBeenLastCalledWith('q');
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear search' }));
+    await expect(search).toHaveValue('');
+    await expect(args.onSearchChange).toHaveBeenLastCalledWith('');
+    // Equal columns: the search fills the middle third of the bar.
+    const header = canvasElement.querySelector('.sikat-panel-header__bar')!.getBoundingClientRect();
+    const box = canvasElement.querySelector('.sikat-panel-header__center')!.getBoundingClientRect();
+    await expect(
+      Math.abs(box.left + box.width / 2 - (header.left + header.width / 2)),
+    ).toBeLessThan(2);
+    const gap = parseFloat(
+      getComputedStyle(canvasElement.querySelector('.sikat-panel-header__bar')!).columnGap,
+    );
+    await expect(Math.abs(box.width - (header.width - 2 * gap) / 3)).toBeLessThan(2);
   },
 };
 

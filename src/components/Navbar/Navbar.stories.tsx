@@ -194,8 +194,12 @@ export const Playground: StoryObj<NavbarPlaygroundArgs> = {
     await expect(args.onAppChange).toHaveBeenLastCalledWith('manufacturing');
     await expect(canvas.getByText('Manufacturing')).toBeInTheDocument();
     await expect(appsTrigger).toHaveFocus();
-    await userEvent.type(canvas.getByRole('searchbox', { name: 'Search' }), 'q');
+    const search = canvas.getByRole('searchbox', { name: 'Search' });
+    await userEvent.type(search, 'q');
     await expect(args.onSearchChange).toHaveBeenLastCalledWith('q');
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear search' }));
+    await expect(search).toHaveValue('');
+    await expect(args.onSearchChange).toHaveBeenLastCalledWith('');
     await userEvent.click(canvas.getByRole('button', { name: 'Create' }));
     await expect(args.onCreateClick).toHaveBeenCalledOnce();
     // Organization switcher = Figma Dropdown; the chosen org shows on the button.

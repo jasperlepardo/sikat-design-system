@@ -1,4 +1,4 @@
-import { useId, type HTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
+import { useId, useState, type HTMLAttributes, type KeyboardEvent, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
@@ -6,6 +6,7 @@ import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { TextField } from '../Field/Field';
+import { FieldClear } from '../Field/FieldShell';
 import appsGlyph from './assets/apps.svg';
 import panelCloseGlyph from './assets/left-panel-close.svg';
 import panelOpenGlyph from './assets/left-panel-open.svg';
@@ -223,6 +224,11 @@ export function Navbar({
   ...rest
 }: NavbarProps) {
   const isApp = type === 'app';
+  const [query, setQuery] = useState('');
+  const updateQuery = (next: string) => {
+    setQuery(next);
+    onSearchChange?.(next);
+  };
   const orgLabel =
     organization ?? organizations?.find((o) => o.id === organizationId)?.label ?? 'Sikat Tech Inc.';
   const avatarNode =
@@ -319,8 +325,16 @@ export function Navbar({
                 aria-label="Search"
                 placeholder={searchPlaceholder}
                 leadingIcon={<Glyph src={searchGlyph} />}
-                trailingIcon={<Glyph src={commandGlyph} />}
-                onChange={(e) => onSearchChange?.(e.currentTarget.value)}
+                value={query}
+                onChange={(e) => updateQuery(e.currentTarget.value)}
+                // The ⌘ hint gives way to a clear ✕ while there's a query.
+                trailingIcon={
+                  query ? (
+                    <FieldClear label="Clear search" onClear={() => updateQuery('')} />
+                  ) : (
+                    <Glyph src={commandGlyph} />
+                  )
+                }
               />
               <IconButton
                 label="Create"

@@ -1,7 +1,9 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { useState, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/DecorativeIcon';
+import { TextField } from '../Field/TextField';
+import { FieldClear } from '../Field/FieldShell';
 import './panel-header.css';
 
 export const panelHeaderTypes = ['table', 'forms', 'details'] as const;
@@ -42,6 +44,12 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   actions?: ReactNode;
   /** Tabs below the bar (table and details). */
   tabs?: ReactNode;
+  /** Table: show a search field centered between the title and the buttons (3 columns). */
+  showSearch?: boolean;
+  /** Table: search field placeholder. */
+  searchPlaceholder?: string;
+  /** Table: search input value changes. */
+  onSearchChange?: (value: string) => void;
 }
 
 /**
@@ -62,6 +70,9 @@ export function PanelHeader({
   operations,
   actions,
   tabs,
+  showSearch,
+  searchPlaceholder = 'Search',
+  onSearchChange,
   className,
   ...rest
 }: PanelHeaderProps) {
@@ -70,11 +81,22 @@ export function PanelHeader({
   const showStatusRow = isForms || isDetails;
   const showSubcopy = !isForms;
   const showTabs = !isForms;
+  const hasSearch = type === 'table' && !!showSearch;
+  const [query, setQuery] = useState('');
+  const updateQuery = (next: string) => {
+    setQuery(next);
+    onSearchChange?.(next);
+  };
   const leadingContent =
     leading ?? (icon ? <DecorativeIcon variant={iconVariant} icon={icon} size={iconSize} /> : null);
 
   return (
-    <header data-type={type} className={cn('sikat-panel-header', className)} {...rest}>
+    <header
+      data-type={type}
+      data-search={hasSearch || undefined}
+      className={cn('sikat-panel-header', className)}
+      {...rest}
+    >
       <div className="sikat-panel-header__bar">
         <div className="sikat-panel-header__start">
           {leadingContent != null ? (
@@ -96,7 +118,24 @@ export function PanelHeader({
             <span className="sikat-panel-header__title-icon">{titleIcon}</span>
           ) : null}
         </div>
-        {operations != null || actions != null ? (
+        {hasSearch ? (
+          <div className="sikat-panel-header__center">
+            <TextField
+              className="sikat-panel-header__search"
+              size="xl"
+              type="search"
+              aria-label="Search"
+              placeholder={searchPlaceholder}
+              leadingIcon={<Icon size={20}>search</Icon>}
+              value={query}
+              onChange={(e) => updateQuery(e.currentTarget.value)}
+              trailingIcon={
+                query ? <FieldClear label="Clear search" onClear={() => updateQuery('')} /> : null
+              }
+            />
+          </div>
+        ) : null}
+        {operations != null || actions != null || hasSearch ? (
           <div className="sikat-panel-header__end">
             {operations != null ? (
               <div className="sikat-panel-header__group">{operations}</div>

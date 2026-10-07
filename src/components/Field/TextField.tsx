@@ -92,9 +92,12 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
           : undefined
       }
       after={
-        <span className="sikat-field__edit" aria-hidden="true">
-          <Icon size={20}>edit</Icon>
-        </span>
+        // A search field clears instead of editing — no pencil beside its ✕.
+        inputProps.type === 'search' ? null : (
+          <span className="sikat-field__edit" aria-hidden="true">
+            <Icon size={20}>edit</Icon>
+          </span>
+        )
       }
     >
       {suffix != null ? (
