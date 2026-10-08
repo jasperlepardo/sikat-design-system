@@ -15,7 +15,7 @@
   align-items: center;
   gap: var(--spacing-0_5);
   padding: var(--spacing-0_5);
-  border-radius: var(--rounded-xl);
+  border-radius: var(--rounded-2xl);
   background-color: var(--color-bg-tertiary);
   box-shadow: inset var(--shadow-inner-1-offset-x) var(--shadow-inner-1-offset-y)
     var(--shadow-inner-1-blur) var(--shadow-inner-1-spread) var(--shadow-inner-1-color);
@@ -36,7 +36,7 @@
   margin: 0;
   padding: var(--spacing-1_5) var(--spacing-2_5);
   border: 0;
-  border-radius: var(--rounded-lg-plus);
+  border-radius: var(--rounded-xl);
   background-color: transparent;
   color: var(--color-text-caption);
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
@@ -64,9 +64,9 @@
 .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
   background-color: var(--color-bg-quarternary);
 }
-/* State=Active — lifted by Figma Shadow/Default (0 4 9 0, black 12%; no token). */
+/* State=Active — lifted out of the tray (raised tab effect). */
 .sikat-tabs__tab[aria-selected='true'] {
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+  box-shadow: var(--shadow-md);
 }
 /* Type=Primary: primary fill, white text + icon. */
 .sikat-tabs[data-variant='primary'] .sikat-tabs__tab[aria-selected='true'] {

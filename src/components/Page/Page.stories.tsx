@@ -332,26 +332,24 @@ function AppShellWithAlertDemo() {
                 icon="inventory_2"
                 iconVariant="solid"
                 title={labelOf(page) ?? 'Page Title'}
-                subcopy="Subcopy"
                 operations={
                   <>
-                    <IconButton label="Filter" intent="default" variant="solid" size="extra-large">
+                    <IconButton label="Filter" intent="default" variant="solid">
                       {CircleIcon}
                     </IconButton>
-                    <IconButton label="Sort" intent="default" variant="solid" size="extra-large">
+                    <IconButton label="Sort" intent="default" variant="solid">
                       {CircleIcon}
                     </IconButton>
                   </>
                 }
                 actions={
                   <>
-                    <Button intent="default" variant="solid" size="extra-large">
+                    <Button intent="default" variant="solid">
                       Button
                     </Button>
                     <Button
                       intent="primary"
                       variant="solid"
-                      size="extra-large"
                       trailingIcon={panelHeaderIcons.keyboardArrowDown}
                     >
                       Button
@@ -413,7 +411,6 @@ function AppShellWithAlertTwoPanelDemo() {
                 icon="inventory_2"
                 iconVariant="solid"
                 title={labelOf(page) ?? 'Page Title'}
-                subcopy="Subcopy"
                 operations={
                   <>
                     <IconButton label="Filter" intent="default" variant="solid" size="extra-large">
@@ -511,9 +508,8 @@ function AppShellWithBreadcrumbsDemo() {
               icon="inventory_2"
               iconVariant="solid"
               title={record ?? labelOf(page) ?? 'Page Title'}
-              subcopy={record ? labelOf(page) : 'Subcopy'}
               actions={
-                <Button intent="primary" variant="solid" size="extra-large">
+                <Button intent="primary" variant="solid">
                   Button
                 </Button>
               }

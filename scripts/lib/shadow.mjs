@@ -76,6 +76,11 @@ export function rawShadowTree(composites) {
 export function aliasShadowTree(rawTree, fromTier, toTier) {
   const out = {};
   for (const [size, node] of Object.entries(rawTree)) {
+    // Flat leaf token (e.g., bevel): alias as a single reference, no layer decomposition.
+    if (node.value !== undefined) {
+      out[size] = { value: `{${fromTier}.shadow.${size}}`, type: node.type ?? 'other' };
+      continue;
+    }
     out[size] = {};
     for (const [layer, parts] of Object.entries(node)) {
       if (layer === 'box') continue; // composite is CSS-only, not aliased

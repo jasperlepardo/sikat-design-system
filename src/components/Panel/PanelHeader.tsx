@@ -1,10 +1,25 @@
-import { useState, type HTMLAttributes, type ReactNode } from 'react';
+import {
+  useState,
+  Children,
+  cloneElement,
+  isValidElement,
+  type HTMLAttributes,
+  type ReactNode,
+} from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/DecorativeIcon';
 import { TextField } from '../Field/TextField';
 import { FieldClear } from '../Field/FieldShell';
 import './panel-header.css';
+
+/** Forces data-size="large" on all direct button children in the panel header. */
+function withLargeSize(children: ReactNode): ReactNode {
+  return Children.map(children, (child) => {
+    if (!isValidElement(child)) return child;
+    return cloneElement(child, { size: 'large' } as Record<string, unknown>);
+  });
+}
 
 export const panelHeaderTypes = ['table', 'forms', 'details'] as const;
 export type PanelHeaderType = (typeof panelHeaderTypes)[number];
@@ -145,12 +160,14 @@ export function PanelHeader({
         {operations != null || actions != null || hasSearch ? (
           <div className="sikat-panel-header__end">
             {operations != null ? (
-              <div className="sikat-panel-header__group">{operations}</div>
+              <div className="sikat-panel-header__group">{withLargeSize(operations)}</div>
             ) : null}
             {operations != null && actions != null ? (
               <span className="sikat-panel-header__divider" aria-hidden="true" />
             ) : null}
-            {actions != null ? <div className="sikat-panel-header__group">{actions}</div> : null}
+            {actions != null ? (
+              <div className="sikat-panel-header__group">{withLargeSize(actions)}</div>
+            ) : null}
           </div>
         ) : null}
       </div>

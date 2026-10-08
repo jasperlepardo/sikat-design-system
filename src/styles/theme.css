@@ -27,16 +27,19 @@
 
   /* radius → rounded-* */
   --radius-none: var(--p-radius-none);
+  --radius-2xs: var(--p-radius-2xs);
   --radius-xs: var(--p-radius-xs);
   --radius-sm: var(--p-radius-sm);
   --radius-md: var(--p-radius-md);
   --radius-lg: var(--p-radius-lg);
-  --radius-lg-plus: var(--p-radius-lg-plus);
   --radius-xl: var(--p-radius-xl);
   --radius-2xl: var(--p-radius-2xl);
   --radius-3xl: var(--p-radius-3xl);
   --radius-4xl: var(--p-radius-4xl);
   --radius-5xl: var(--p-radius-5xl);
+  --radius-6xl: var(--p-radius-6xl);
+  --radius-7xl: var(--p-radius-7xl);
+  --radius-8xl: var(--p-radius-8xl);
   --radius-full: var(--p-radius-full);
 
   /* container → max-w-* / @container */
@@ -134,6 +137,7 @@
   --shadow-xl: var(--p-shadow-xl-1-offset-x) var(--p-shadow-xl-1-offset-y) var(--p-shadow-xl-1-blur) var(--p-shadow-xl-1-spread) var(--p-shadow-xl-1-color), var(--p-shadow-xl-2-offset-x) var(--p-shadow-xl-2-offset-y) var(--p-shadow-xl-2-blur) var(--p-shadow-xl-2-spread) var(--p-shadow-xl-2-color);
   --shadow-2xl: var(--p-shadow-2xl-1-offset-x) var(--p-shadow-2xl-1-offset-y) var(--p-shadow-2xl-1-blur) var(--p-shadow-2xl-1-spread) var(--p-shadow-2xl-1-color);
   --shadow-inner: inset var(--p-shadow-inner-1-offset-x) var(--p-shadow-inner-1-offset-y) var(--p-shadow-inner-1-blur) var(--p-shadow-inner-1-spread) var(--p-shadow-inner-1-color);
+  --shadow-bevel: var(--p-shadow-bevel);
 }
 
 /* ════ Semantic color utilities — per property, Figma-named, themed ════ */

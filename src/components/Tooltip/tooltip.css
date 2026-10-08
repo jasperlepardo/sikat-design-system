@@ -50,7 +50,7 @@
   box-sizing: border-box;
   width: 202px;
   padding: var(--spacing-3); /* 12px */
-  border-radius: var(--rounded-sm);
+  border-radius: var(--rounded-lg);
   background-color: var(--color-bg-secondary);
   color: var(--color-text-heading);
   font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
@@ -60,9 +60,20 @@
   font-weight: var(--text-medium);
   text-align: left;
   white-space: normal;
-  /* Figma Shadow/Default (0 4 9 #0000001F) — no matching shadow token yet.
-     drop-shadow so the pointer is shadowed too. */
-  filter: drop-shadow(0 4px 4.5px rgb(0 0 0 / 0.12));
+  /* drop-shadow shadows the pointer triangle too; single-layer explicit value
+     since filter doesn't accept multi-layer CSS vars (shadow-lg equivalent) */
+  filter: drop-shadow(0 8px 12px rgb(0 0 0 / 0.15));
+}
+/* Bevel overlay via ::after — ::before is reserved for the pointer triangle */
+.sikat-tooltip__bubble::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--shadow-bevel);
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+  z-index: 1;
 }
 .sikat-tooltip__bubble[hidden] {
   display: none;

@@ -887,6 +887,10 @@
         "value": "{raw.radius.none}",
         "type": "dimension"
       },
+      "2xs": {
+        "value": "{raw.radius.2xs}",
+        "type": "dimension"
+      },
       "xs": {
         "value": "{raw.radius.xs}",
         "type": "dimension"
@@ -903,20 +907,16 @@
         "value": "{raw.radius.lg}",
         "type": "dimension"
       },
-      "lg-plus": {
-        "value": "{raw.radius.lg-plus}",
-        "type": "dimension"
-      },
       "xl": {
-        "value": "{raw.radius.lg-plus}",
-        "type": "dimension"
-      },
-      "2xl": {
         "value": "{raw.radius.xl}",
         "type": "dimension"
       },
-      "3xl": {
+      "2xl": {
         "value": "{raw.radius.2xl}",
+        "type": "dimension"
+      },
+      "3xl": {
+        "value": "{raw.radius.3xl}",
         "type": "dimension"
       },
       "4xl": {
@@ -924,7 +924,19 @@
         "type": "dimension"
       },
       "5xl": {
-        "value": "{raw.radius.3xl}",
+        "value": "{raw.radius.5xl}",
+        "type": "dimension"
+      },
+      "6xl": {
+        "value": "{raw.radius.6xl}",
+        "type": "dimension"
+      },
+      "7xl": {
+        "value": "{raw.radius.7xl}",
+        "type": "dimension"
+      },
+      "8xl": {
+        "value": "{raw.radius.8xl}",
         "type": "dimension"
       },
       "full": {
@@ -1680,6 +1692,10 @@
             "type": "color"
           }
         }
+      },
+      "bevel": {
+        "value": "1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset, -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset, 0px -1px 0px 0px rgba(0, 0, 0, 0.17) inset, 0px 1px 0px 0px rgba(204, 204, 204, 0.5) inset",
+        "type": "other"
       }
     },
     "blur": {

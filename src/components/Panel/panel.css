@@ -5,9 +5,10 @@
    body's 12px bottom padding + the shell's 4px gap. */
 
 .sikat-panel {
+  position: relative;
   background-color: var(--color-bg-default);
-  border-radius: var(--rounded-2xl);
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+  border-radius: var(--rounded-lg); /* 8px — field radius */
+  box-shadow: var(--shadow-md);
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -15,6 +16,16 @@
   min-height: 0;
   overflow: hidden;
   padding: var(--spacing-1); /* 4px */
+}
+.sikat-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--shadow-bevel);
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Header — pass-through slot; no extra spacing (PageHeader fills this). */

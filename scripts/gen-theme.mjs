@@ -60,8 +60,13 @@ const fontSize = Object.keys(prim['font-size'])
 /* ── shadow: compose the box-shadow from the decomposed parts (inner = inset) ── */
 const shadow = Object.keys(prim.shadow)
   .map((size) => {
+    const sizeNode = prim.shadow[size];
+    // Flat leaf token (e.g., bevel): pass through as a direct var reference.
+    if (sizeNode.value !== undefined) {
+      return `  --shadow-${size}: var(--p-shadow-${size});`;
+    }
     const inset = size === 'inner' ? 'inset ' : '';
-    const layers = Object.keys(prim.shadow[size])
+    const layers = Object.keys(sizeNode)
       .map(
         (L) =>
           `${inset}var(--p-shadow-${size}-${L}-offset-x) var(--p-shadow-${size}-${L}-offset-y) ` +

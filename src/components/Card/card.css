@@ -1,14 +1,14 @@
-/* Card structure — mirrors the Figma "Customer Details" section card (node 18266:140530).
-   bg-tertiary outer shell (2px padding, rounded-lg-plus) wrapping a bg-default white
-   content area (14px padding, 24px gap, rounded-lg). */
+/* Card structure — bg-tertiary outer shell (4px padding, rounded-lg/8px) wrapping
+   a bg-default white content area (14px padding, 24px gap, rounded-sm/4px).
+   Inner radius = outer (8px) − padding (4px) = 4px. */
 
 .sikat-card {
   background-color: var(--color-bg-tertiary);
-  border-radius: var(--rounded-lg-plus);
+  border-radius: var(--rounded-lg); /* 8px — field radius */
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-0_5); /* 2px between header and content */
-  padding: var(--spacing-0_5); /* 2px */
+  gap: var(--spacing-1); /* 4px between header and content */
+  padding: var(--spacing-1); /* 4px */
   width: 100%;
 }
 
@@ -50,17 +50,27 @@
   top: var(--spacing-3); /* matches Panel.Main / Panel.Sidebar padding (12px) */
   z-index: 1;
   background-color: var(--color-bg-tertiary);
-  border-radius: var(--rounded-lg-plus) var(--rounded-lg-plus) 0 0;
+  border-radius: var(--rounded-lg) var(--rounded-lg) 0 0;
 }
 
 /* Content: white inner area — 14px padding, 24px gap between children. */
 .sikat-card__content {
+  position: relative;
   background-color: var(--color-bg-default);
-  border-radius: var(--rounded-lg);
+  border-radius: var(--rounded-sm); /* 4px — inner: 8px outer − 4px padding */
   display: flex;
   flex-direction: column;
   gap: var(--spacing-6); /* 24px */
   overflow: clip; /* clips children to border-radius */
   padding: var(--spacing-3_5); /* 14px */
   width: 100%;
+}
+.sikat-card__content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--shadow-bevel);
+  mix-blend-mode: luminosity;
+  pointer-events: none;
 }

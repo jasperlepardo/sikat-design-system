@@ -511,27 +511,27 @@
   "sizing": {
     "extra-large": {
       "box": "--spacing-10",
-      "radius": "--spacing-3"
+      "radius": "--rounded-xl"
     },
     "large": {
       "box": "--spacing-9",
-      "radius": "--spacing-2_5"
+      "radius": "--rounded-lg"
     },
     "medium": {
       "box": "--spacing-8",
-      "radius": "--spacing-2"
+      "radius": "--rounded-lg"
     },
     "small": {
       "box": "--spacing-7",
-      "radius": "--spacing-1_5"
+      "radius": "--rounded-lg"
     },
     "extra-small": {
       "box": "--spacing-6",
-      "radius": "--spacing-1"
+      "radius": "--rounded-md"
     },
     "2xs": {
       "box": "--spacing-5",
-      "radius": "--spacing-px"
+      "radius": "--rounded-2xs"
     }
   }
 }

@@ -131,20 +131,13 @@ const passthrough = (group) => {
   return out;
 };
 
-// radius — brand scale (Figma 02 Primitives): raw stays Tailwind's scale, but
-// from xl up the brand names step down one notch — xl 10 (raw lg-plus), 2xl 12
-// (raw xl), 3xl 16 (raw 2xl), 5xl 24 (raw 3xl); 4xl stays 32 as in Figma.
-const RADIUS_REMAP = { xl: 'lg-plus', '2xl': 'xl', '3xl': '2xl', '4xl': '4xl', '5xl': '3xl' };
-const radius = {};
-for (const [k, leaf] of Object.entries(raw.radius)) {
-  if (k === 'full') continue;
-  if (!(k in RADIUS_REMAP)) radius[k] = { value: `{raw.radius.${k}}`, type: leaf.type };
-}
-for (const [k, from] of Object.entries(RADIUS_REMAP)) {
-  if (!raw.radius[from]) throw new Error(`radius.${k}: raw.radius.${from} is missing`);
-  radius[k] = { value: `{raw.radius.${from}}`, type: raw.radius[from].type };
-}
-radius.full = { value: '{raw.radius.full}', type: raw.radius.full.type };
+// radius — pass through raw 1:1 (raw already uses Figma-aligned naming).
+const radius = Object.fromEntries(
+  Object.entries(raw.radius).map(([k, leaf]) => [
+    k,
+    { value: `{raw.radius.${k}}`, type: leaf.type },
+  ]),
+);
 
 // layout — Screen/Column pass through raw 1:1; Grid maps each platform
 // (Web/iOS/Android) onto raw column widths + grid count/gutter, mirroring Figma's
@@ -184,7 +177,14 @@ const out = {
     'line-height': lineHeight,
     leading: passthrough('leading'),
     tracking: passthrough('tracking'),
-    shadow: aliasShadowTree(raw.shadow, 'raw', 'primitive'),
+    shadow: {
+      ...aliasShadowTree(raw.shadow, 'raw', 'primitive'),
+      bevel: {
+        value:
+          '1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset, -1px 0px 0px 0px rgba(0, 0, 0, 0.13) inset, 0px -1px 0px 0px rgba(0, 0, 0, 0.17) inset, 0px 1px 0px 0px rgba(204, 204, 204, 0.5) inset',
+        type: 'other',
+      },
+    },
     blur: passthrough('blur'),
   },
 };
