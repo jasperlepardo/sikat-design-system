@@ -16,10 +16,17 @@ export type { TextProps, TextVariant, TextWeight, TextTone } from './components/
 export { Icon } from './components/Icon/Icon';
 export type { IconProps } from './components/Icon/Icon';
 
-export { DecorativeIcon, decorativeIconVariants } from './components/DecorativeIcon/DecorativeIcon';
+export {
+  DecorativeIcon,
+  decorativeIconIntents,
+  decorativeIconVariants,
+  decorativeIconRoundeds,
+} from './components/DecorativeIcon/DecorativeIcon';
 export type {
   DecorativeIconProps,
+  DecorativeIconIntent,
   DecorativeIconVariant,
+  DecorativeIconRounded,
 } from './components/DecorativeIcon/DecorativeIcon';
 
 export { Link, linkIntents } from './components/Button/Link';

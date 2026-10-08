@@ -1,53 +1,74 @@
 import React, { type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import './decorative-icon.css';
+import {
+  decorativeIconIntents,
+  decorativeIconStyles,
+  decorativeIconRoundeds,
+  type DecorativeIconIntent,
+  type DecorativeIconStyle,
+  type DecorativeIconRounded,
+} from '../../tokens/generated/decorative-icon.manifest';
+import '../../styles/components/decorative-icon.css'; // generated box, colors + radius
 
-export const decorativeIconVariants = ['solid', 'subtle', 'outline'] as const;
-export type DecorativeIconVariant = (typeof decorativeIconVariants)[number];
-
-export const decorativeIconIntents = ['primary', 'default'] as const;
-export type DecorativeIconIntent = (typeof decorativeIconIntents)[number];
+/** Figma `Style` axis — kept under its historical `variant` name. */
+export const decorativeIconVariants = decorativeIconStyles;
+/** `subtle` is the pre-Figma name of `ghost`, still accepted. */
+export type DecorativeIconVariant = DecorativeIconStyle | 'subtle';
+export { decorativeIconIntents, decorativeIconRoundeds };
+export type { DecorativeIconIntent, DecorativeIconRounded };
 
 export interface DecorativeIconProps extends HTMLAttributes<HTMLDivElement> {
-  /** Color intent: `primary` (orange) or `default` (neutral gray). Default: primary. */
+  /** Color intent. Default: primary. */
   intent?: DecorativeIconIntent;
-  /** Visual style: filled / tinted / bordered. Default: solid. */
+  /** Visual style: filled / tinted (ghost) / bordered (outline) / bare (link). Default: solid. */
   variant?: DecorativeIconVariant;
+  /** Corner shape: circle (full), 24px corners (default) or square (none). Default: full. */
+  rounded?: DecorativeIconRounded;
+  /**
+   * @deprecated Use `rounded`. `circle` is `rounded="full"`; `rounded` keeps its
+   * original 8px (`--rounded-lg`) corners.
+   */
+  shape?: 'circle' | 'rounded';
   /** Material Symbol name (e.g. "home", "inventory_2"). Renders as a scaled icon. */
   icon?: string;
-  /** Container size in px. Default: 80. The inner icon scales proportionally (60%). */
+  /** Container size in px. Default: 80. The inner icon scales proportionally (70%). */
   size?: number;
-  /** Shape — default is `circle` (full radius); `rounded` uses `--rounded-lg`. */
-  shape?: 'circle' | 'rounded';
   /** Custom content override — use when you need something other than a Material Symbol. */
   children?: ReactNode;
 }
 
 /**
- * DecorativeIcon — circular icon container (Figma node 19410:78). Default 80px.
- * Pass `icon` with a Material Symbol name; `size` scales both container and icon.
- * `intent` picks the color palette; `variant` picks the fill style.
+ * DecorativeIcon — icon in a tinted container (Figma "Decorative Icons", node 19410:78).
+ * Colors come from the `Icon/*` tokens across Intent × Style; `rounded` picks the
+ * corner shape. Default 80px with a 56px icon; `size` scales both.
  */
 export function DecorativeIcon({
   intent = 'primary',
   variant = 'solid',
+  rounded = 'full',
+  shape,
   icon,
   size = 80,
-  shape,
   className,
   style,
   children,
   ...rest
 }: DecorativeIconProps) {
-  const iconSize = Math.round(size * 0.6);
+  const iconSize = Math.round(size * 0.7);
   return (
     <div
       className={cn('sikat-decorative-icon', className)}
       data-intent={intent}
-      data-variant={variant}
-      data-shape={shape}
-      style={{ '--decorative-icon-size': `${size}px`, ...style } as React.CSSProperties}
+      data-style={variant === 'subtle' ? 'ghost' : variant}
+      data-rounded={rounded}
+      style={
+        {
+          '--decorative-icon-size': `${size}px`,
+          ...(shape === 'rounded' ? { borderRadius: 'var(--rounded-lg)' } : null),
+          ...style,
+        } as React.CSSProperties
+      }
       {...rest}
     >
       {icon ? <Icon size={iconSize}>{icon}</Icon> : children}
