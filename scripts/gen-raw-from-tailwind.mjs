@@ -178,21 +178,21 @@ export async function run(ctx) {
      none=0, 2xs=1, xs=2, sm=4, md=6, lg=8, xl=10, 2xl=12, 3xl=14,
      4xl=16, 5xl=20, 6xl=24, 7xl=28, 8xl=32, full=∞ ---- */
   const radius = {
-    none:  dim('0px'),
-    '2xs': dim('0.0625rem'),  //  1px
-    xs:    dim('0.125rem'),   //  2px
-    sm:    dim('0.25rem'),    //  4px
-    md:    dim('0.375rem'),   //  6px
-    lg:    dim('0.5rem'),     //  8px
-    xl:    dim('0.625rem'),   // 10px
-    '2xl': dim('0.75rem'),    // 12px
-    '3xl': dim('0.875rem'),   // 14px
-    '4xl': dim('1rem'),       // 16px
-    '5xl': dim('1.25rem'),    // 20px
-    '6xl': dim('1.5rem'),     // 24px
-    '7xl': dim('1.75rem'),    // 28px
-    '8xl': dim('2rem'),       // 32px
-    full:  dim('calc(infinity * 1px)'),
+    none: dim('0px'),
+    '2xs': dim('0.0625rem'), //  1px
+    xs: dim('0.125rem'), //  2px
+    sm: dim('0.25rem'), //  4px
+    md: dim('0.375rem'), //  6px
+    lg: dim('0.5rem'), //  8px
+    xl: dim('0.625rem'), // 10px
+    '2xl': dim('0.75rem'), // 12px
+    '3xl': dim('0.875rem'), // 14px
+    '4xl': dim('1rem'), // 16px
+    '5xl': dim('1.25rem'), // 20px
+    '6xl': dim('1.5rem'), // 24px
+    '7xl': dim('1.75rem'), // 28px
+    '8xl': dim('2rem'), // 32px
+    full: dim('calc(infinity * 1px)'),
   };
 
   /* ---- border width (Tailwind has no theme vars — these are its utilities) ---- */

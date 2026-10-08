@@ -166,11 +166,11 @@ export const Playground: StoryObj<NavbarPlaygroundArgs> = {
     // No `theme`: the bar follows the page's theme.
     await expect(nav).not.toHaveAttribute('data-theme');
     await expect(canvas.getByText('[App Name]')).toBeInTheDocument();
-    // Search = Figma Field, size mode "Extra Large": 520×40, 12px radius.
+    // Search = Figma Field, size mode "Extra Large": 520×40, 8px radius (--rounded-lg).
     const field = canvasElement.querySelector('.sikat-navbar__search')!;
     const box = field.getBoundingClientRect();
     await expect([box.width, box.height]).toEqual([520, 40]);
-    await expect(getComputedStyle(field).borderRadius).toBe('12px');
+    await expect(getComputedStyle(field).borderRadius).toBe('8px');
 
     // Side-nav toggle: first in the bar, flips aria-expanded.
     const toggle = canvas.getByRole('button', { name: 'Toggle side navigation' });

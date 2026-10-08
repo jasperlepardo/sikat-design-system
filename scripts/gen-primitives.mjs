@@ -133,7 +133,10 @@ const passthrough = (group) => {
 
 // radius — pass through raw 1:1 (raw already uses Figma-aligned naming).
 const radius = Object.fromEntries(
-  Object.entries(raw.radius).map(([k, leaf]) => [k, { value: `{raw.radius.${k}}`, type: leaf.type }])
+  Object.entries(raw.radius).map(([k, leaf]) => [
+    k,
+    { value: `{raw.radius.${k}}`, type: leaf.type },
+  ]),
 );
 
 // layout — Screen/Column pass through raw 1:1; Grid maps each platform
