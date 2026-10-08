@@ -67,9 +67,9 @@
 .sikat-panel-header__title {
   margin: 0;
   color: var(--color-text-heading);
-  font-size: var(--text-body-base-font-size);
-  line-height: var(--text-body-base-line-height);
-  letter-spacing: var(--text-body-base-letter-spacing);
+  font-size: var(--text-body-lg-font-size);
+  line-height: var(--text-body-lg-line-height);
+  letter-spacing: var(--text-body-lg-letter-spacing);
   font-weight: var(--text-medium);
   white-space: nowrap;
 }
@@ -142,3 +142,4 @@
   -webkit-mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
 }
+

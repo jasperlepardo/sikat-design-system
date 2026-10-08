@@ -173,23 +173,27 @@ export async function run(ctx) {
     }
   }
 
-  /* ---- radius — Tailwind's named scale (--radius-xs…4xl), kept verbatim so raw
-     mirrors Tailwind in both CSS and Figma. Own scale (independent of the spacing
-     multiplier); none/full are Tailwind's rounded-none/full utilities. ---- */
-  const radius = { none: dim('0px') };
-  for (const [k, v] of Object.entries(collect('radius'))) radius[k] = dim(v);
-  // Brand steps from sikat.config `radius`, slotted in by size so the scale stays ordered.
-  {
-    const extra = ctx?.radius ?? {};
-    for (const k of Object.keys(extra))
-      if (k in radius) throw new Error(`radius.${k} would overwrite Tailwind's ${k} step`);
-    const all = [...Object.entries(radius), ...Object.entries(extra).map(([k, v]) => [k, dim(v)])];
-    const px = (v) => toRem(v.value, 16);
-    all.sort((a, b) => px(a[1]) - px(b[1]));
-    for (const k of Object.keys(radius)) delete radius[k];
-    for (const [k, v] of all) radius[k] = v;
-  }
-  radius.full = dim('calc(infinity * 1px)');
+  /* ---- radius — Figma-aligned scale (synced with Tokens file 2026-10-08).
+     Fully explicit; does not rely on Tailwind's naming.
+     none=0, 2xs=1, xs=2, sm=4, md=6, lg=8, xl=10, 2xl=12, 3xl=14,
+     4xl=16, 5xl=20, 6xl=24, 7xl=28, 8xl=32, full=∞ ---- */
+  const radius = {
+    none:  dim('0px'),
+    '2xs': dim('0.0625rem'),  //  1px
+    xs:    dim('0.125rem'),   //  2px
+    sm:    dim('0.25rem'),    //  4px
+    md:    dim('0.375rem'),   //  6px
+    lg:    dim('0.5rem'),     //  8px
+    xl:    dim('0.625rem'),   // 10px
+    '2xl': dim('0.75rem'),    // 12px
+    '3xl': dim('0.875rem'),   // 14px
+    '4xl': dim('1rem'),       // 16px
+    '5xl': dim('1.25rem'),    // 20px
+    '6xl': dim('1.5rem'),     // 24px
+    '7xl': dim('1.75rem'),    // 28px
+    '8xl': dim('2rem'),       // 32px
+    full:  dim('calc(infinity * 1px)'),
+  };
 
   /* ---- border width (Tailwind has no theme vars — these are its utilities) ---- */
   const borderWidth = { 0: dim('0px'), 1: dim('1px'), 2: dim('2px'), 4: dim('4px'), 8: dim('8px') };

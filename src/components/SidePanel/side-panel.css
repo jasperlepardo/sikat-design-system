@@ -19,8 +19,8 @@
 .sikat-side-panel {
   background-color: var(--color-bg-default); /* matches <Panel>; re-themes */
   border: var(--border-width-1) solid var(--color-border-neutral-subtle);
-  border-radius: var(--rounded-2xl) 0 0 var(--rounded-2xl);
-  box-shadow: 0 4px 4.5px 0 rgb(0 0 0 / 0.12);
+  border-radius: var(--rounded-3xl) 0 0 var(--rounded-3xl);
+  box-shadow: var(--shadow-2xl); /* highest elevation — matches Polaris Sheet shadow-600 */
   display: flex;
   flex-direction: column;
   height: 100%;

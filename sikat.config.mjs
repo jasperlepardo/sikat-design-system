@@ -41,7 +41,7 @@ export default {
       },
     },
   },
-  radius: { 'lg-plus': '0.625rem' },
+  radius: {},
   // 2xs: 10px / 12px line height (Tailwind has no 2xs).
   text: { '2xs': { size: '0.625rem', lineHeight: '0.75rem' } },
   fonts: {

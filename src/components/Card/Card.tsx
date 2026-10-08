@@ -8,7 +8,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 
 /**
  * Card — section container (Figma node 18266:140530). A `bg-tertiary` outer
- * shell (2px padding, rounded-lg-plus) around a `bg-default` white content box.
+ * shell (2px padding, rounded-xl) around a `bg-default` white content box.
  * Compose with `Card.Header` (icon + title) and `Card.Content` (white inner area).
  */
 export function Card({ className, children, ...rest }: CardProps) {

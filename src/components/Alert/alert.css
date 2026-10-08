@@ -5,6 +5,7 @@
    Alert/* and Button/* component variables. Spacing uses semantic tokens. */
 
 .sikat-alert {
+  position: relative;
   border-radius: var(--rounded-lg); /* 8px (Figma rounded/lg) */
   background-color: var(--alert-bg);
   /* 1px stroke drawn inside the box (Figma stroke align: inside), so it adds no size. */
@@ -24,6 +25,20 @@
 }
 .sikat-alert[data-horizontal] {
   border-radius: var(--rounded-none);
+  /* Page-level banner: add subtle elevation + bevel — matches Polaris withinPage */
+  box-shadow:
+    inset 0 0 0 var(--border-width-1) var(--alert-border),
+    var(--shadow-xs);
+}
+.sikat-alert[data-horizontal]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--shadow-bevel);
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+  z-index: 1;
 }
 .sikat-alert[data-horizontal] .sikat-alert__container {
   align-items: center;

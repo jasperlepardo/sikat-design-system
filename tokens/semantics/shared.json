@@ -147,6 +147,10 @@
         "value": "{primitive.radius.none}",
         "type": "dimension"
       },
+      "2xs": {
+        "value": "{primitive.radius.2xs}",
+        "type": "dimension"
+      },
       "xs": {
         "value": "{primitive.radius.xs}",
         "type": "dimension"
@@ -161,10 +165,6 @@
       },
       "lg": {
         "value": "{primitive.radius.lg}",
-        "type": "dimension"
-      },
-      "lg-plus": {
-        "value": "{primitive.radius.lg-plus}",
         "type": "dimension"
       },
       "xl": {
@@ -185,6 +185,18 @@
       },
       "5xl": {
         "value": "{primitive.radius.5xl}",
+        "type": "dimension"
+      },
+      "6xl": {
+        "value": "{primitive.radius.6xl}",
+        "type": "dimension"
+      },
+      "7xl": {
+        "value": "{primitive.radius.7xl}",
+        "type": "dimension"
+      },
+      "8xl": {
+        "value": "{primitive.radius.8xl}",
         "type": "dimension"
       },
       "full": {
@@ -1316,6 +1328,10 @@
             "type": "color"
           }
         }
+      },
+      "bevel": {
+        "value": "{primitive.shadow.bevel}",
+        "type": "other"
       }
     }
   }

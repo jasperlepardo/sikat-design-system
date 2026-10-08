@@ -80,7 +80,7 @@
       "px": "--spacing-2",
       "fs": "--text-body-sm-font-size",
       "lh": "--text-body-sm-line-height",
-      "radius": "--spacing-3"
+      "radius": "--rounded-lg"
     }
   }
 }

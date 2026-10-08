@@ -14,11 +14,10 @@
   max-height: 16rem;
   overflow: auto;
   box-sizing: border-box;
-  padding-block: var(--spacing-2); /* 8px top/bottom, 0 sides */
-  border-radius: var(--rounded-sm);
+  padding: var(--spacing-1); /* 4px inset — inner items use --rounded-lg (12−4=8px) */
+  border-radius: var(--rounded-2xl); /* 12px — floating surface, Polaris-aligned */
   background-color: var(--color-bg-default);
-  /* Figma effect style Shadow/Default: drop shadow 0 4 9 0, black 12% */
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+  box-shadow: var(--shadow-md);
 }
 
 /* Flip to above the trigger when data-side="top". */
@@ -46,7 +45,7 @@
   align-items: center;
   gap: var(--spacing-2); /* 8px */
   padding: var(--spacing-2) var(--spacing-4); /* 8px 16px */
-  border-radius: var(--rounded-xl); /* 12px */
+  border-radius: var(--rounded-lg); /* 8px — inner: 12px container − 4px padding */
   background-color: var(--color-bg-default);
   color: var(--color-text-body);
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;

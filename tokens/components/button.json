@@ -580,7 +580,7 @@
   "sizing": {
     "extra-large": {
       "padding": "--spacing-2_5",
-      "radius": "--spacing-3",
+      "radius": "--rounded-xl",
       "content-pad-x": "--spacing-1",
       "content-pad-y": "--spacing-0",
       "content-gap": "--spacing-1",
@@ -588,7 +588,7 @@
     },
     "large": {
       "padding": "--spacing-2",
-      "radius": "--spacing-2_5",
+      "radius": "--rounded-lg",
       "content-pad-x": "--spacing-1",
       "content-pad-y": "--spacing-0",
       "content-gap": "--spacing-1",
@@ -596,7 +596,7 @@
     },
     "medium": {
       "padding": "--spacing-1_5",
-      "radius": "--spacing-2",
+      "radius": "--rounded-lg",
       "content-pad-x": "--spacing-1",
       "content-pad-y": "--spacing-0",
       "content-gap": "--spacing-1",
@@ -604,7 +604,7 @@
     },
     "small": {
       "padding": "--spacing-1",
-      "radius": "--spacing-1_5",
+      "radius": "--rounded-lg",
       "content-pad-x": "--spacing-1",
       "content-pad-y": "--spacing-0",
       "content-gap": "--spacing-1",
@@ -612,7 +612,7 @@
     },
     "extra-small": {
       "padding": "--spacing-0_5",
-      "radius": "--spacing-1",
+      "radius": "--rounded-md",
       "content-pad-x": "--spacing-1",
       "content-pad-y": "--spacing-0",
       "content-gap": "--spacing-1",
@@ -620,7 +620,7 @@
     },
     "2xs": {
       "padding": "--spacing-0",
-      "radius": "--spacing-px",
+      "radius": "--rounded-2xs",
       "content-pad-x": "--spacing-0",
       "content-pad-y": "--spacing-0",
       "content-gap": "--spacing-1",

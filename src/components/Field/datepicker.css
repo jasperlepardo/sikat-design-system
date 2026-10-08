@@ -14,13 +14,24 @@
 }
 
 .sikat-datepicker__panel {
+  position: relative;
   background-color: var(--color-bg-default);
   border: var(--border-width-1) solid var(--color-border-neutral-subtle);
-  border-radius: var(--rounded-lg);
-  box-shadow: 0 4px 9px 0 rgb(0 0 0 / 0.12);
+  border-radius: var(--rounded-2xl); /* 12px — floating surface, matches dropdown */
+  box-shadow: var(--shadow-md);
   overflow-y: auto;
   padding: var(--spacing-3);
   width: fit-content;
+}
+.sikat-datepicker__panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: var(--shadow-bevel);
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ---------------------------------------------------------------- Header */

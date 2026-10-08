@@ -109,12 +109,13 @@ export function Badge({
     >
       {leadingIcon ? <span className="sikat-badge__icon">{leadingIcon}</span> : null}
 
+      {dot ? (
+        <span className="sikat-badge__dot-wrap">
+          <span className="sikat-badge__dot" />
+        </span>
+      ) : null}
+
       <span className="sikat-badge__content">
-        {dot ? (
-          <span className="sikat-badge__dot-wrap">
-            <span className="sikat-badge__dot" />
-          </span>
-        ) : null}
         {children != null ? <span className="sikat-badge__label">{children}</span> : null}
       </span>
 
