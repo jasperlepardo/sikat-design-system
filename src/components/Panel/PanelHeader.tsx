@@ -8,7 +8,12 @@ import {
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import { DecorativeIcon, type DecorativeIconVariant, type DecorativeIconIntent, type DecorativeIconProps } from '../DecorativeIcon/DecorativeIcon';
+import {
+  DecorativeIcon,
+  type DecorativeIconVariant,
+  type DecorativeIconIntent,
+  type DecorativeIconProps,
+} from '../DecorativeIcon/DecorativeIcon';
 import { TextField } from '../Field/TextField';
 import { FieldClear } from '../Field/FieldShell';
 import './panel-header.css';
@@ -123,7 +128,16 @@ export function PanelHeader({
     onSearchChange?.(next);
   };
   const leadingContent =
-    leading ?? (icon ? <DecorativeIcon intent={iconIntent} variant={iconVariant} icon={icon} size={iconSize} shape={iconShape} /> : null);
+    leading ??
+    (icon ? (
+      <DecorativeIcon
+        intent={iconIntent}
+        variant={iconVariant}
+        icon={icon}
+        size={iconSize}
+        shape={iconShape}
+      />
+    ) : null);
 
   return (
     <header

@@ -182,9 +182,15 @@ const SettingsIcon = <Icon size={20}>settings</Icon>;
 export const Pill: Story = {
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
-      <Button shape="pill" leadingIcon={SettingsIcon}>Settings</Button>
-      <Button shape="pill" variant="outline" leadingIcon={SettingsIcon}>Settings</Button>
-      <Button shape="pill" variant="ghost" leadingIcon={SettingsIcon}>Settings</Button>
+      <Button shape="pill" leadingIcon={SettingsIcon}>
+        Settings
+      </Button>
+      <Button shape="pill" variant="outline" leadingIcon={SettingsIcon}>
+        Settings
+      </Button>
+      <Button shape="pill" variant="ghost" leadingIcon={SettingsIcon}>
+        Settings
+      </Button>
     </div>
   ),
 };

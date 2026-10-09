@@ -45,15 +45,26 @@ const actions = (
     <Button intent="white" variant="solid" size="medium" shape="pill">
       Button
     </Button>
-    <Button intent="primary" variant="solid" size="medium" shape="pill"
-      trailingIcon={panelHeaderIcons.keyboardArrowDown}>
+    <Button
+      intent="primary"
+      variant="solid"
+      size="medium"
+      shape="pill"
+      trailingIcon={panelHeaderIcons.keyboardArrowDown}
+    >
       Button
     </Button>
   </>
 );
 
 const prevNext = (
-  <ButtonGroup type="enclosed" intent="white" variant="solid" buttonIntent="default" buttonVariant="link">
+  <ButtonGroup
+    type="enclosed"
+    intent="white"
+    variant="solid"
+    buttonIntent="default"
+    buttonVariant="link"
+  >
     <IconButton label="Previous" shape="pill" size="small">
       {panelHeaderIcons.arrowUpward}
     </IconButton>
@@ -89,8 +100,12 @@ export const Default: Story = {
         </Card>
       </Panel.Body>
       <Panel.Footer>
-        <Button intent="default" variant="solid" size="extra-large">Button</Button>
-        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+        <Button intent="default" variant="solid" size="extra-large">
+          Button
+        </Button>
+        <Button intent="primary" variant="solid" size="extra-large">
+          Button
+        </Button>
       </Panel.Footer>
     </Panel>
   ),
@@ -138,13 +153,21 @@ export const Playground: StoryObj<PanelPlaygroundArgs> = {
         <Panel.Footer>
           {a.isHorizontal ? (
             <>
-              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
-              <Button intent="default" variant="solid" size="extra-large">Button</Button>
+              <Button intent="primary" variant="solid" size="extra-large">
+                Button
+              </Button>
+              <Button intent="default" variant="solid" size="extra-large">
+                Button
+              </Button>
             </>
           ) : (
             <>
-              <Button intent="default" variant="solid" size="extra-large">Button</Button>
-              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+              <Button intent="default" variant="solid" size="extra-large">
+                Button
+              </Button>
+              <Button intent="primary" variant="solid" size="extra-large">
+                Button
+              </Button>
             </>
           )}
         </Panel.Footer>
@@ -165,8 +188,12 @@ export const Horizontal: Story = {
     <Panel horizontal style={{ width: 1248 }}>
       <Panel.Body>{SlotContent}</Panel.Body>
       <Panel.Footer>
-        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
-        <Button intent="default" variant="solid" size="extra-large">Button</Button>
+        <Button intent="primary" variant="solid" size="extra-large">
+          Button
+        </Button>
+        <Button intent="default" variant="solid" size="extra-large">
+          Button
+        </Button>
       </Panel.Footer>
     </Panel>
   ),
@@ -196,8 +223,20 @@ export const HeaderOnly: Story = {
 export const Summary: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
-      <Panel.Summary icon="person" iconVariant="outline" iconSize={40} name="Customer Name" code="BP-00001" />
-      <Panel.Summary icon="inventory_2" iconVariant="solid" iconSize={40} name="Sales Order" code="SO-2024-00042" />
+      <Panel.Summary
+        icon="person"
+        iconVariant="outline"
+        iconSize={40}
+        name="Customer Name"
+        code="BP-00001"
+      />
+      <Panel.Summary
+        icon="inventory_2"
+        iconVariant="solid"
+        iconSize={40}
+        name="Sales Order"
+        code="SO-2024-00042"
+      />
       <Panel.Summary
         icon="receipt_long"
         iconVariant="subtle"

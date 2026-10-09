@@ -1,5 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { ButtonGroup, buttonGroupOrientations, buttonGroupAligns, buttonGroupTypes } from './ButtonGroup';
+import {
+  ButtonGroup,
+  buttonGroupOrientations,
+  buttonGroupAligns,
+  buttonGroupTypes,
+} from './ButtonGroup';
 import { Button } from './Button';
 import { IconButton } from './IconButton';
 import { Icon } from '../Icon/Icon';
@@ -33,16 +38,28 @@ export const Enclosed: StoryObj<typeof meta> = {
   args: { type: 'enclosed', align: 'start' },
   render: (args) => (
     <ButtonGroup {...args}>
-      <Button intent="default" variant="outline">Day</Button>
-      <Button intent="default" variant="outline">Week</Button>
-      <Button intent="default" variant="outline">Month</Button>
+      <Button intent="default" variant="outline">
+        Day
+      </Button>
+      <Button intent="default" variant="outline">
+        Week
+      </Button>
+      <Button intent="default" variant="outline">
+        Month
+      </Button>
     </ButtonGroup>
   ),
 };
 
 /** Pill-shaped enclosed group with link icon buttons — up/down navigation. */
 export const EnclosedIconNav: StoryObj<typeof meta> = {
-  args: { type: 'enclosed', intent: 'default', variant: 'solid', buttonIntent: 'default', buttonVariant: 'link' },
+  args: {
+    type: 'enclosed',
+    intent: 'default',
+    variant: 'solid',
+    buttonIntent: 'default',
+    buttonVariant: 'link',
+  },
   render: (args) => (
     <ButtonGroup {...args}>
       <IconButton label="Previous" shape="pill" size="small">

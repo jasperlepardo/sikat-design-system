@@ -68,7 +68,13 @@ const actions = (
 );
 
 const prevNext = (
-  <ButtonGroup type="enclosed" intent="white" variant="solid" buttonIntent="default" buttonVariant="link">
+  <ButtonGroup
+    type="enclosed"
+    intent="white"
+    variant="solid"
+    buttonIntent="default"
+    buttonVariant="link"
+  >
     <IconButton label="Previous" shape="pill" size="small">
       {panelHeaderIcons.arrowUpward}
     </IconButton>
@@ -114,11 +120,26 @@ export const Playground: Story & { args: PlaygroundExtras } = {
     showOperations: { name: 'Operations', control: 'boolean' },
     showActions: { name: 'Actions', control: 'boolean' },
   },
-  parameters: figmaControls(['Variant', 'Search', 'Tabs', 'Status', 'Title Icon', 'Prev / Next', 'Operations', 'Actions']),
+  parameters: figmaControls([
+    'Variant',
+    'Search',
+    'Tabs',
+    'Status',
+    'Title Icon',
+    'Prev / Next',
+    'Operations',
+    'Actions',
+  ]),
   render: (a) => {
     const {
-      showSearch, showTabs, showStatus, showTitleIcon,
-      showTrailing, showOperations, showActions, ...rest
+      showSearch,
+      showTabs,
+      showStatus,
+      showTitleIcon,
+      showTrailing,
+      showOperations,
+      showActions,
+      ...rest
     } = a as typeof a & PlaygroundExtras;
     return (
       <PanelHeader
@@ -135,6 +156,8 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('heading', { name: (args as typeof args & { title: string }).title })).toBeVisible();
+    await expect(
+      canvas.getByRole('heading', { name: (args as typeof args & { title: string }).title }),
+    ).toBeVisible();
   },
 };
