@@ -80,6 +80,7 @@ const meta = {
   argTypes: {
     role: { control: 'inline-radio', options: ['listbox', 'menu'] },
     multiselectable: { control: 'boolean' },
+    cover: { control: 'boolean' },
   },
 } satisfies Meta<typeof Dropdown>;
 

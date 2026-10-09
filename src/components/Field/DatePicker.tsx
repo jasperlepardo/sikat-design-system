@@ -38,6 +38,9 @@ const CalendarIcon = (
   </span>
 );
 
+/** The panel overhangs the field by 4px on every side, like the Dropdown. */
+const COVER_INSET = 4;
+
 const addDays = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
 const addMonths = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth() + n, d.getDate());
 
@@ -46,6 +49,7 @@ const addMonths = (d: Date, n: number) => new Date(d.getFullYear(), d.getMonth()
  * useDropdown. Uses the Field shell for consistent styling. Arrow keys move by
  * day/week, PageUp/Down by month, Enter/Space selects, Escape closes.
  * Value is local-time ISO (YYYY-MM-DD). Control-only and FormField-compatible.
+ * Like Select, the open calendar covers the field, overhanging it by 4px.
  */
 export function DatePicker({
   value,
@@ -123,6 +127,8 @@ export function DatePicker({
   };
 
   const days = monthMatrix(view.year, view.month);
+  const displayValue = formatDisplayDate(selectedIso);
+
   const todayIso = toISODate(today);
 
   return (
@@ -147,7 +153,7 @@ export function DatePicker({
           aria-invalid={invalid || undefined}
           disabled={disabled}
           placeholder={placeholder}
-          value={formatDisplayDate(selectedIso)}
+          value={displayValue}
           onKeyDown={(e) => {
             if (disabled || readOnly) return;
             if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
@@ -165,15 +171,24 @@ export function DatePicker({
               role="dialog"
               aria-label="Choose date"
               className="sikat-datepicker__panel"
+              data-side={side}
               data-theme={anchor.theme}
               style={{
                 position: 'fixed',
                 zIndex: 1000,
-                left: hSide === 'left' ? anchor.left : anchor.right - 300,
-                right: 'auto',
+                minWidth: anchor.width + 2 * COVER_INSET,
+                ...(hSide === 'left'
+                  ? { left: anchor.left - COVER_INSET, right: 'auto' }
+                  : { left: 'auto', right: window.innerWidth - anchor.right - COVER_INSET }),
                 ...(side === 'bottom'
-                  ? { top: anchor.bottom + 4, maxHeight: window.innerHeight - anchor.bottom - 12 }
-                  : { bottom: window.innerHeight - anchor.top + 4, maxHeight: anchor.top - 12 }),
+                  ? {
+                      top: anchor.top - COVER_INSET,
+                      maxHeight: window.innerHeight - anchor.top + COVER_INSET - 8,
+                    }
+                  : {
+                      bottom: window.innerHeight - anchor.bottom - COVER_INSET,
+                      maxHeight: anchor.bottom + COVER_INSET - 8,
+                    }),
               }}
             >
               <div className="sikat-datepicker__header">

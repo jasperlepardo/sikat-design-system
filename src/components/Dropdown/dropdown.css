@@ -28,6 +28,56 @@
   margin-bottom: var(--spacing-1);
 }
 
+/* Cover: open over the trigger, overhanging it by the panel's 4px padding on
+   every side, with items at the field's 8px inline padding — the first item
+   (last when flipped) sits exactly on the field. Fixed mode positions inline. */
+.sikat-dropdown[data-cover]:not(.sikat-dropdown--fixed) {
+  top: 0;
+  left: calc(-1 * var(--spacing-1));
+  width: calc(100% + 2 * var(--spacing-1));
+  margin-top: calc(-1 * var(--spacing-1));
+}
+.sikat-dropdown[data-cover][data-side='top']:not(.sikat-dropdown--fixed) {
+  top: auto;
+  bottom: 0;
+  margin-top: 0;
+  margin-bottom: calc(-1 * var(--spacing-1));
+}
+.sikat-dropdown[data-cover] .sikat-dropdown__item {
+  padding-inline: var(--spacing-2); /* 8px — field inline padding */
+}
+
+/* Header (e.g. a search field) pinned above the items; only the list scrolls.
+   The panel itself doesn't clip, so the header field's focus ring shows in
+   full (cover mode puts it flush with the panel's top edge). */
+.sikat-dropdown[data-header] {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+}
+.sikat-dropdown__header {
+  flex: none;
+  margin-bottom: var(--spacing-1);
+}
+.sikat-dropdown__list {
+  min-height: 0;
+  overflow: auto;
+}
+/* Nothing below the header (e.g. free text with no matching suggestions). */
+.sikat-dropdown__list:empty {
+  display: none;
+}
+.sikat-dropdown__header:has(+ .sikat-dropdown__list:empty) {
+  margin-bottom: 0;
+}
+/* Nothing to show (e.g. a search with no matches). */
+.sikat-dropdown__empty {
+  padding: var(--spacing-2);
+  color: var(--color-text-muted);
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+}
+
 /* Portaled (fixed) mode — coordinates set by inline style; clear absolute offsets. */
 .sikat-dropdown--fixed {
   position: fixed;

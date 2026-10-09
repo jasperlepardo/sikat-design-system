@@ -1,8 +1,10 @@
-import { useId, useMemo, useState, type ReactNode } from 'react';
+import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { FieldShell, type FieldSize } from './FieldShell';
+import { TextField } from './TextField';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
+import { fieldLabelText, usePanelFocus } from '../../lib/usePanelFocus';
 
 export interface AutocompleteSuggestion {
   value: string;
@@ -49,7 +51,9 @@ const sugText = (s: AutocompleteSuggestion) =>
 /**
  * Autocomplete — a free-text input with a suggestion list, built on the
  * Popover/Listbox foundation. Uses the Field shell for consistent styling.
- * Unlike Combobox the value is not constrained to the suggestions.
+ * Unlike Combobox the value is not constrained to the suggestions. Like Select,
+ * the open panel covers the field: its first row is the text input (editing the
+ * same value), with the suggestions below.
  */
 export function Autocomplete({
   suggestions,
@@ -71,6 +75,8 @@ export function Autocomplete({
   const id = idProp ?? reactId;
   const listId = `${id}-listbox`;
   const getItemId = (i: number) => `${id}-opt-${i}`;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const panelInputRef = useRef<HTMLInputElement>(null);
 
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState(defaultValue);
@@ -96,7 +102,7 @@ export function Autocomplete({
     setOpen(false);
   };
 
-  const showList = open && filtered.length > 0;
+  const interactive = !disabled && !readOnly;
 
   const { activeIndex, onKeyDown, activeId } = useListbox({
     itemCount: filtered.length,
@@ -106,6 +112,8 @@ export function Autocomplete({
     getItemId,
     isDisabled: (i) => !!filtered[i]?.disabled,
   });
+
+  usePanelFocus(open, panelInputRef, inputRef);
 
   return (
     <div ref={rootRef} className="sikat-autocomplete">
@@ -119,8 +127,9 @@ export function Autocomplete({
           type="text"
           role="combobox"
           className="sikat-field__input"
-          aria-expanded={showList}
-          aria-controls={showList ? listId : undefined}
+          ref={inputRef}
+          aria-expanded={open}
+          aria-controls={open ? listId : undefined}
           aria-autocomplete="list"
           aria-activedescendant={activeId}
           aria-invalid={invalid || undefined}
@@ -133,15 +142,48 @@ export function Autocomplete({
             setText(e.target.value);
             setOpen(true);
           }}
-          onFocus={() => {
-            if (!disabled) setOpen(true);
+          onClick={() => {
+            if (interactive) setOpen(true);
           }}
           onKeyDown={onKeyDown}
           {...aria}
         />
       </FieldShell>
-      {showList && anchor ? (
-        <Dropdown ref={panelRef} id={listId} anchor={anchor} side={side} hSide={hSide}>
+      {open && anchor ? (
+        <Dropdown
+          ref={panelRef}
+          id={listId}
+          anchor={anchor}
+          side={side}
+          hSide={hSide}
+          cover
+          header={
+            <TextField
+              ref={panelInputRef}
+              size={size}
+              role="combobox"
+              aria-label={aria['aria-label'] ?? fieldLabelText(inputRef, placeholder ?? 'Search')}
+              aria-autocomplete="list"
+              aria-expanded
+              aria-controls={listId}
+              aria-activedescendant={activeId}
+              autoComplete="off"
+              placeholder={placeholder}
+              value={text}
+              onChange={(e) => setText(e.currentTarget.value)}
+              onKeyDown={(e) => {
+                // Tab: close and hand focus back to the field first, so the
+                // browser moves on to the field after it.
+                if (e.key === 'Tab') {
+                  inputRef.current?.focus();
+                  setOpen(false);
+                  return;
+                }
+                onKeyDown(e);
+              }}
+            />
+          }
+        >
           {filtered.map((s, i) => (
             <DropdownItem
               key={s.value}

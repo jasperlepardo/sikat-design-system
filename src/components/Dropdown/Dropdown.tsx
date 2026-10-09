@@ -4,6 +4,10 @@ import { cn } from '../../lib/cn';
 import type { DropdownAnchor } from '../../lib/useDropdown';
 import './dropdown.css';
 
+/** Cover mode: the panel overhangs the trigger by its own 4px padding on every
+ *  side, so the first item's box lands exactly on the field's box. */
+const COVER_OFFSET = 4;
+
 export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role'> {
   /** ARIA role for the panel (default `listbox`). */
   role?: 'listbox' | 'menu';
@@ -19,6 +23,17 @@ export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'rol
   side?: 'top' | 'bottom';
   /** Horizontal alignment — `'left'` (default) or `'right'`. Pass `hSide` from `useDropdown`. */
   hSide?: 'left' | 'right';
+  /**
+   * Open over the trigger instead of beside it. The panel overhangs the
+   * trigger by 4px on every side and items use the field's 8px inline padding,
+   * so the first item (last, when flipped up) sits exactly on the field.
+   */
+  cover?: boolean;
+  /**
+   * Content pinned above the items, outside the listbox (e.g. a search field).
+   * The items scroll beneath it; `id` and `role` move to the inner list.
+   */
+  header?: ReactNode;
   children: ReactNode;
 }
 
@@ -38,9 +53,12 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
     anchor,
     side = 'bottom',
     hSide = 'left',
+    cover,
+    header,
     className,
     style,
     children,
+    id,
     ...rest
   },
   ref,
@@ -53,34 +71,55 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
         : typeof style?.width === 'string'
           ? parseFloat(style.width)
           : anchor.width;
+    const pad = cover ? COVER_OFFSET : 0;
     fixedStyle = {
       position: 'fixed',
-      width: w,
-      left: hSide === 'left' ? anchor.left : anchor.right - w,
+      width: w + 2 * pad,
+      left: (hSide === 'left' ? anchor.left : anchor.right - w) - pad,
       right: 'auto',
       ...(side === 'bottom'
-        ? { top: anchor.bottom + 4, bottom: 'auto' }
-        : { top: 'auto', bottom: window.innerHeight - anchor.top + 4 }),
+        ? { top: cover ? anchor.top - COVER_OFFSET : anchor.bottom + 4, bottom: 'auto' }
+        : {
+            top: 'auto',
+            bottom: window.innerHeight - (cover ? anchor.bottom + COVER_OFFSET : anchor.top - 4),
+          }),
       maxHeight: Math.max(
         80,
-        side === 'bottom' ? window.innerHeight - anchor.bottom - 8 : anchor.top - 8,
+        side === 'bottom'
+          ? window.innerHeight - (cover ? anchor.top - COVER_OFFSET : anchor.bottom) - 8
+          : (cover ? anchor.bottom + COVER_OFFSET : anchor.top) - 8,
       ),
       ...style,
     };
   }
 
+  const listProps = {
+    id,
+    role,
+    'aria-multiselectable': multiselectable || undefined,
+  };
   const panel = (
     <div
       ref={ref}
-      role={role}
-      aria-multiselectable={multiselectable || undefined}
+      {...(header == null ? listProps : null)}
       data-side={side}
+      data-cover={cover || undefined}
+      data-header={header != null || undefined}
       data-theme={anchor?.theme}
       className={cn('sikat-dropdown', anchor && 'sikat-dropdown--fixed', className)}
       style={fixedStyle}
       {...rest}
     >
-      {children}
+      {header == null ? (
+        children
+      ) : (
+        <>
+          <div className="sikat-dropdown__header">{header}</div>
+          <div className="sikat-dropdown__list" {...listProps}>
+            {children}
+          </div>
+        </>
+      )}
     </div>
   );
 

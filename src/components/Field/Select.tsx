@@ -3,7 +3,9 @@ import type { ReactNode, OptionHTMLAttributes, ReactElement } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
+import { usePanelFocus } from '../../lib/usePanelFocus';
 import { cn } from '../../lib/cn';
+import { TextField } from './TextField';
 import {
   FieldShell,
   FieldClear,
@@ -42,6 +44,24 @@ export interface SelectProps extends FieldAdornments {
    * instead of a "None" option.
    */
   clearable?: boolean;
+  /**
+   * Autocomplete: the open panel starts with a search field sitting exactly
+   * over the closed field; typing filters the options. Typing on the closed
+   * field opens it with that text.
+   */
+  searchable?: boolean;
+  /** Search field placeholder (searchable). Default: "Search". */
+  searchPlaceholder?: string;
+  /**
+   * Replaces the default "No results" message when the search matches nothing.
+   * Pass a function to receive a `close` callback — use it to dismiss the
+   * dropdown before opening a modal or navigating away.
+   */
+  emptyContent?: ReactNode | ((close: () => void) => ReactNode);
+  /** Always rendered at the bottom of the open dropdown, regardless of results. */
+  footer?: ReactNode;
+  /** Called whenever the search text changes (searchable). */
+  onQueryChange?: (query: string) => void;
   /** Submitted with forms via a hidden input. */
   name?: string;
   size?: FieldSize;
@@ -61,6 +81,12 @@ export interface SelectProps extends FieldAdornments {
 }
 
 const optionText = (o: SelectOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
+
+/** Indices of the options whose text contains `query` (case-insensitive). */
+const matching = (options: SelectOption[], query: string) => {
+  const q = query.trim().toLowerCase();
+  return options.flatMap((o, i) => (!q || optionText(o).toLowerCase().includes(q) ? [i] : []));
+};
 
 function parseOptionChildren(children: ReactNode) {
   const options: SelectOption[] = [];
@@ -91,6 +117,11 @@ export function Select({
   onValueChange,
   placeholder: placeholderProp,
   clearable,
+  searchable,
+  searchPlaceholder = 'Search',
+  emptyContent,
+  footer,
+  onQueryChange,
   name,
   size = 'md',
   invalid,
@@ -110,6 +141,8 @@ export function Select({
   const listId = `${id}-listbox`;
   const getItemId = (i: number) => `${id}-opt-${i}`;
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState('');
 
   const parsed = useMemo(() => parseOptionChildren(children), [children]);
   const options = optionsProp ?? parsed.options;
@@ -124,11 +157,17 @@ export function Select({
   const selectedIndex = options.findIndex((o) => o.value === selected);
   const selectedOption = selectedIndex >= 0 ? options[selectedIndex] : null;
 
+  // Indices into `options` that are shown — all of them unless searching.
+  const visible = useMemo(
+    () => matching(options, searchable ? query : ''),
+    [options, query, searchable],
+  );
+
   const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
   const interactive = !disabled && !readOnly;
 
   const selectAt = (i: number) => {
-    const o = options[i];
+    const o = options[visible[i]];
     if (!o || o.disabled) return;
     if (!isControlled) setInternal(o.value);
     onValueChange?.(o.value);
@@ -142,16 +181,46 @@ export function Select({
     triggerRef.current?.focus();
   };
 
-  const { activeIndex, onKeyDown, activeId } = useListbox({
-    itemCount: options.length,
+  const { activeIndex, setActiveIndex, onKeyDown, activeId } = useListbox({
+    itemCount: visible.length,
     open,
     setOpen: (next) => interactive && setOpen(next),
     onActivate: selectAt,
     getItemId,
-    isDisabled: (i) => !!options[i]?.disabled,
-    getItemText: (i) => optionText(options[i]),
-    selectedIndex,
+    isDisabled: (i) => !!options[visible[i]]?.disabled,
+    // Searchable: typing goes to the search field instead of type-ahead.
+    getItemText: searchable ? undefined : (i) => optionText(options[visible[i]]),
+    selectedIndex: visible.indexOf(selectedIndex),
   });
+
+  // Searchable: focus moves into the panel's search field and back.
+  usePanelFocus(open && !!searchable, searchRef, triggerRef, () => setQuery(''));
+
+  // Filter, and highlight the first enabled match.
+  const search = (next: string) => {
+    setQuery(next);
+    onQueryChange?.(next);
+    setActiveIndex(matching(options, next).findIndex((oi) => !options[oi].disabled));
+  };
+
+  const onTriggerKeyDown: typeof onKeyDown = (e) => {
+    // Searchable: a printable key on the closed field opens it with that text.
+    if (
+      searchable &&
+      !open &&
+      e.key.length === 1 &&
+      e.key !== ' ' &&
+      !e.altKey &&
+      !e.ctrlKey &&
+      !e.metaKey
+    ) {
+      e.preventDefault();
+      setOpen(true);
+      search(e.key);
+      return;
+    }
+    onKeyDown(e);
+  };
 
   return (
     <div ref={rootRef} className="sikat-select">
@@ -186,7 +255,7 @@ export function Select({
           aria-invalid={invalid || undefined}
           aria-readonly={readOnly || undefined}
           disabled={disabled}
-          onKeyDown={interactive ? onKeyDown : undefined}
+          onKeyDown={interactive ? onTriggerKeyDown : undefined}
           {...aria}
         >
           {selectedOption ? (
@@ -215,22 +284,65 @@ export function Select({
       </FieldShell>
       {name != null ? <input type="hidden" name={name} value={selected} /> : null}
       {open && anchor ? (
-        <Dropdown ref={panelRef} id={listId} anchor={anchor} side={side} hSide={hSide}>
-          {options.map((o, i) => (
-            <DropdownItem
-              key={o.value}
-              id={getItemId(i)}
-              selected={o.value === selected}
-              active={i === activeIndex}
-              disabled={o.disabled}
-              subLabel={o.subLabel}
-              subLabelPlacement={o.subLabelPlacement}
-              description={o.description}
-              onSelect={() => selectAt(i)}
-            >
-              {o.label ?? optionText(o)}
-            </DropdownItem>
-          ))}
+        <Dropdown
+          ref={panelRef}
+          id={listId}
+          anchor={anchor}
+          side={side}
+          hSide={hSide}
+          cover
+          header={
+            searchable ? (
+              <TextField
+                ref={searchRef}
+                size={size}
+                role="combobox"
+                aria-label={searchPlaceholder}
+                aria-autocomplete="list"
+                aria-expanded
+                aria-controls={listId}
+                aria-activedescendant={activeId}
+                placeholder={searchPlaceholder}
+                value={query}
+                onChange={(e) => search(e.currentTarget.value)}
+                onKeyDown={(e) => {
+                  // Tab: close and hand focus back to the trigger first, so the
+                  // browser moves on to the field after it (the panel is portaled
+                  // to the end of <body>).
+                  if (e.key === 'Tab') {
+                    triggerRef.current?.focus();
+                    setOpen(false);
+                    return;
+                  }
+                  onKeyDown(e);
+                }}
+              />
+            ) : undefined
+          }
+        >
+          {visible.length === 0
+            ? ((typeof emptyContent === 'function'
+                ? emptyContent(() => setOpen(false))
+                : emptyContent) ?? <div className="sikat-dropdown__empty">No results</div>)
+            : visible.map((oi, i) => {
+                const o = options[oi];
+                return (
+                  <DropdownItem
+                    key={o.value}
+                    id={getItemId(i)}
+                    selected={o.value === selected}
+                    active={i === activeIndex}
+                    disabled={o.disabled}
+                    subLabel={o.subLabel}
+                    subLabelPlacement={o.subLabelPlacement}
+                    description={o.description}
+                    onSelect={() => selectAt(i)}
+                  >
+                    {o.label ?? optionText(o)}
+                  </DropdownItem>
+                );
+              })}
+          {footer}
         </Dropdown>
       ) : null}
     </div>
