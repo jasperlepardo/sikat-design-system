@@ -78,7 +78,6 @@ export const Default: Story = {
             style={{ '--sikat-side-panel-width': '560px' } as React.CSSProperties}
           >
             <PanelHeader
-              type="forms"
               leading={
                 <IconButton label="Back" intent="default" variant="outline" size="small">
                   <Icon size={20}>loyalty</Icon>
@@ -164,7 +163,6 @@ export const TwoColumn: Story = {
             style={{ '--sikat-side-panel-width': '900px' } as React.CSSProperties}
           >
             <PanelHeader
-              type="forms"
               leading={
                 <IconButton label="Back" intent="default" variant="outline" size="small">
                   <Icon size={20}>loyalty</Icon>

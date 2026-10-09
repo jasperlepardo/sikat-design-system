@@ -129,8 +129,17 @@ export type {
 export { Tabs, tabsVariants } from './components/Tabs/Tabs';
 export type { TabsProps, TabItem, TabsVariant } from './components/Tabs/Tabs';
 
-export { PanelHeader, panelHeaderIcons, panelHeaderTypes } from './components/Panel/PanelHeader';
-export type { PanelHeaderProps, PanelHeaderType } from './components/Panel/PanelHeader';
+export {
+  PanelHeader,
+  panelHeaderIcons,
+  panelHeaderTypes,
+  panelHeaderVariants,
+} from './components/Panel/PanelHeader';
+export type {
+  PanelHeaderProps,
+  PanelHeaderType,
+  PanelHeaderVariant,
+} from './components/Panel/PanelHeader';
 
 export { Table } from './components/Table/Table';
 export {

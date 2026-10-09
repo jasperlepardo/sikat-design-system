@@ -21,7 +21,12 @@ function withLargeSize(children: ReactNode): ReactNode {
   });
 }
 
+export const panelHeaderVariants = ['card', 'plain'] as const;
+export type PanelHeaderVariant = (typeof panelHeaderVariants)[number];
+
+/** @deprecated Use `panelHeaderVariants` — every slot now renders when passed. */
 export const panelHeaderTypes = ['table', 'forms', 'details'] as const;
+/** @deprecated Use `PanelHeaderVariant`. */
 export type PanelHeaderType = (typeof panelHeaderTypes)[number];
 
 export const panelHeaderIcons = {
@@ -33,13 +38,18 @@ export const panelHeaderIcons = {
 
 export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /**
-   * Visual layout: `table` (icon, title + subcopy, tabs), `forms` (single row:
-   * prev/next, title + status + icon), or `details` (forms' row plus subcopy and tabs).
+   * Chrome: `card` (secondary fill, rounded, bottom border) or `plain` (no fill,
+   * radius or border — outline tabs carry the bottom line). Default: card.
+   */
+  variant?: PanelHeaderVariant;
+  /**
+   * @deprecated Use `variant`. Every slot now renders whenever it is passed;
+   * `table` / `forms` map to `card`, `details` to `plain`.
    */
   type?: PanelHeaderType;
   /** Page title. */
   title?: ReactNode;
-  /** Subcopy below the title (table and details). */
+  /** Subcopy below the title. */
   subcopy?: ReactNode;
   /** Material Symbol name for the leading DecorativeIcon. */
   icon?: string;
@@ -49,25 +59,25 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   iconSize?: number;
   /** Custom leading slot — overrides `icon` when provided. */
   leading?: ReactNode;
-  /** Status badge (forms and details). */
+  /** Status badge after the title. */
   status?: ReactNode;
-  /** Icon after the title / status (forms and details). */
+  /** Icon after the title / status. */
   titleIcon?: ReactNode;
   /** Operation icon buttons. */
   operations?: ReactNode;
   /** Core action buttons. */
   actions?: ReactNode;
-  /** Tabs below the bar (table and details). */
+  /** Tabs below the bar — they sit on the header's bottom edge. */
   tabs?: ReactNode;
-  /** Table: show a search field centered between the title and the buttons (3 columns). */
+  /** Show a search field centered between the title and the buttons (3 columns). */
   showSearch?: boolean;
-  /** Table: search field placeholder. */
+  /** Search field placeholder. */
   searchPlaceholder?: string;
-  /** Table: accessible name of the search field. Default: "Search". */
+  /** Accessible name of the search field. Default: "Search". */
   searchLabel?: string;
-  /** Table: the search text, for a controlled search. Omit to let the header keep it. */
+  /** The search text, for a controlled search. Omit to let the header keep it. */
   searchValue?: string;
-  /** Table: search input value changes. */
+  /** Search input value changes. */
   onSearchChange?: (value: string) => void;
 }
 
@@ -77,7 +87,8 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
  * Mirrors the Figma Header (Components › Headers, set 17447:35967).
  */
 export function PanelHeader({
-  type = 'table',
+  variant,
+  type,
   title,
   subcopy,
   icon,
@@ -97,12 +108,8 @@ export function PanelHeader({
   className,
   ...rest
 }: PanelHeaderProps) {
-  const isForms = type === 'forms';
-  const isDetails = type === 'details';
-  const showStatusRow = isForms || isDetails;
-  const showSubcopy = !isForms;
-  const showTabs = !isForms;
-  const hasSearch = type === 'table' && !!showSearch;
+  const resolvedVariant = variant ?? (type === 'details' ? 'plain' : 'card');
+  const hasSearch = !!showSearch;
   const [ownQuery, setOwnQuery] = useState('');
   const query = searchValue ?? ownQuery;
   const updateQuery = (next: string) => {
@@ -114,7 +121,8 @@ export function PanelHeader({
 
   return (
     <header
-      data-type={type}
+      data-variant={resolvedVariant}
+      data-tabs={tabs != null || undefined}
       data-search={hasSearch || undefined}
       className={cn('sikat-panel-header', className)}
       {...rest}
@@ -127,18 +135,13 @@ export function PanelHeader({
           <div className="sikat-panel-header__titles">
             <div className="sikat-panel-header__title-row">
               {title != null ? <h1 className="sikat-panel-header__title">{title}</h1> : null}
-              {showStatusRow && status != null ? status : null}
-              {isDetails && titleIcon != null ? (
+              {status != null ? status : null}
+              {titleIcon != null ? (
                 <span className="sikat-panel-header__title-icon">{titleIcon}</span>
               ) : null}
             </div>
-            {showSubcopy && subcopy != null ? (
-              <p className="sikat-panel-header__subcopy">{subcopy}</p>
-            ) : null}
+            {subcopy != null ? <p className="sikat-panel-header__subcopy">{subcopy}</p> : null}
           </div>
-          {isForms && titleIcon != null ? (
-            <span className="sikat-panel-header__title-icon">{titleIcon}</span>
-          ) : null}
         </div>
         {hasSearch ? (
           <div className="sikat-panel-header__center">
@@ -171,7 +174,7 @@ export function PanelHeader({
           </div>
         ) : null}
       </div>
-      {showTabs && tabs != null ? <div className="sikat-panel-header__tabs">{tabs}</div> : null}
+      {tabs != null ? <div className="sikat-panel-header__tabs">{tabs}</div> : null}
     </header>
   );
 }
