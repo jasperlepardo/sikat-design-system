@@ -1,5 +1,6 @@
 /* PanelHeader structure. Mirrors the Figma Panel Header (set 17447:35967:
-   Page Type = Table | Forms | Details — the last is "Page Type3", 18725:323053). */
+   Page Type = Table | Forms | Details — the last is "Page Type3", 18725:323053).
+   One layout: every slot renders when passed; `variant` only picks the chrome. */
 .sikat-panel-header {
   display: flex;
   flex-direction: column;
@@ -13,18 +14,21 @@
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
 }
 
-/* Table + Details: tabs sit on the bottom border — no bottom padding; the
-   bar carries 16px below it instead. */
-.sikat-panel-header:is([data-type='table'], [data-type='details']) {
+/* Plain: no fill, radius or border — the outline tabs carry the bottom line. */
+.sikat-panel-header[data-variant='plain'] {
+  border-radius: 0;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* With tabs: they sit on the bottom edge — no bottom padding; the bar
+   carries 16px below it instead. */
+.sikat-panel-header[data-tabs] {
   gap: 0;
   padding-bottom: 0;
 }
-.sikat-panel-header:is([data-type='table'], [data-type='details']) .sikat-panel-header__bar {
+.sikat-panel-header[data-tabs] .sikat-panel-header__bar {
   padding-bottom: var(--spacing-4);
-}
-/* Details: title, status and icon sit 12px apart. */
-.sikat-panel-header[data-type='details'] .sikat-panel-header__title-row {
-  gap: var(--spacing-3);
 }
 
 /* Top Bar: title block left, button groups right. */
@@ -41,12 +45,6 @@
   align-items: center;
   gap: var(--spacing-2_5);
 }
-.sikat-panel-header[data-type='forms'] .sikat-panel-header__start {
-  gap: var(--spacing-1);
-}
-.sikat-panel-header[data-type='forms'] .sikat-panel-header__leading {
-  margin-right: var(--spacing-1_5);
-}
 .sikat-panel-header__leading {
   display: flex;
   flex: none;
@@ -59,10 +57,11 @@
   flex-direction: column;
   justify-content: center;
 }
+/* Title row: title, status and icon sit 12px apart. */
 .sikat-panel-header__title-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing-1_5);
+  gap: var(--spacing-3);
 }
 .sikat-panel-header__title {
   margin: 0;

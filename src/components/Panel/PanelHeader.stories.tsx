@@ -4,8 +4,8 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 import {
   PanelHeader,
   panelHeaderIcons,
-  panelHeaderTypes,
-  type PanelHeaderType,
+  panelHeaderVariants,
+  type PanelHeaderVariant,
 } from './PanelHeader';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
@@ -21,7 +21,7 @@ const meta = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
-    type: { control: 'select', options: panelHeaderTypes },
+    variant: { control: 'inline-radio', options: panelHeaderVariants },
     icon: { control: 'text' },
     iconVariant: { control: 'select', options: decorativeIconVariants },
     iconSize: { control: 'number' },
@@ -29,7 +29,7 @@ const meta = {
     subcopy: { control: 'text' },
   },
   args: {
-    type: 'table',
+    variant: 'card',
     icon: 'inventory_2',
     iconVariant: 'solid',
     iconSize: 40,
@@ -88,64 +88,58 @@ const statusBadge = (
 );
 
 /**
- * Controls mirror the Figma Panel Header (set 17447:35967) properties 1:1 —
- * same names, options and defaults.
+ * One layout — every slot renders when passed. `Variant` picks the chrome;
+ * `Record Controls` swaps the decorative icon for prev/next, status and refresh.
  */
 type PanelHeaderPlaygroundArgs = {
-  pageType: PanelHeaderType;
+  variant: PanelHeaderVariant;
   panelTitle: string;
   panelSubTitle: string;
+  recordControls: boolean;
   showTabs: boolean;
   showSearch: boolean;
 };
 
 export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
   args: {
-    pageType: 'table',
+    variant: 'card',
     panelTitle: 'Panel Title',
     panelSubTitle: 'Panel Sub Title',
+    recordControls: false,
     showTabs: true,
     showSearch: false,
   },
   argTypes: {
-    pageType: figmaSelect('Page Type', panelHeaderTypes, ['Table', 'Forms', 'Details']),
+    variant: figmaSelect('Variant', panelHeaderVariants, ['Card', 'Plain']),
     panelTitle: { name: 'Panel Title', control: 'text' },
     panelSubTitle: { name: 'Panel Sub Title', control: 'text' },
+    recordControls: { name: 'Record Controls', control: 'boolean' },
     showTabs: { name: 'Show Tabs', control: 'boolean' },
-    showSearch: { name: 'Show Search', control: 'boolean', if: { arg: 'pageType', eq: 'table' } },
+    showSearch: { name: 'Show Search', control: 'boolean' },
   },
   parameters: figmaControls([
-    'Page Type',
+    'Variant',
     'Panel Title',
     'Panel Sub Title',
+    'Record Controls',
     'Show Tabs',
     'Show Search',
   ]),
-  render: (a) =>
-    a.pageType === 'table' ? (
-      <PanelHeader
-        type="table"
-        icon="radio_button_unchecked"
-        title={a.panelTitle}
-        subcopy={a.panelSubTitle}
-        showSearch={a.showSearch}
-        operations={operations}
-        actions={actions}
-        tabs={a.showTabs ? <Tabs variant="outline" items={panelTabs} /> : undefined}
-      />
-    ) : (
-      <PanelHeader
-        type={a.pageType}
-        leading={prevNext}
-        title={a.panelTitle}
-        subcopy={a.panelSubTitle}
-        status={statusBadge}
-        titleIcon={panelHeaderIcons.rotateRight}
-        operations={operations}
-        actions={actions}
-        tabs={a.showTabs ? <Tabs variant="outline" items={panelTabs} /> : undefined}
-      />
-    ),
+  render: (a) => (
+    <PanelHeader
+      variant={a.variant}
+      icon={a.recordControls ? undefined : 'radio_button_unchecked'}
+      leading={a.recordControls ? prevNext : undefined}
+      status={a.recordControls ? statusBadge : undefined}
+      titleIcon={a.recordControls ? panelHeaderIcons.rotateRight : undefined}
+      title={a.panelTitle}
+      subcopy={a.panelSubTitle}
+      showSearch={a.showSearch}
+      operations={operations}
+      actions={actions}
+      tabs={a.showTabs ? <Tabs variant="outline" items={panelTabs} /> : undefined}
+    />
+  ),
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('heading', { name: args.panelTitle })).toBeVisible();
@@ -153,11 +147,17 @@ export const Playground: StoryObj<PanelHeaderPlaygroundArgs> = {
 };
 
 /**
- * Details page header (Figma Page Type3, 18725:323053) — Forms' prev/next and
- * title + status + refresh row, plus Table's subcopy and outline tabs.
+ * Details page header (Figma Page Type3, 18725:323053) — plain chrome with
+ * prev/next, title + status + refresh, subcopy, search and outline tabs.
  */
 export const Details: Story = {
-  args: { type: 'details', title: 'Panel Title', subcopy: 'Panel Sub Title' },
+  args: {
+    variant: 'plain',
+    title: 'Panel Title',
+    subcopy: 'Panel Sub Title',
+    showSearch: true,
+    onSearchChange: fn(),
+  },
   render: (args) => (
     <PanelHeader
       {...args}
@@ -170,12 +170,19 @@ export const Details: Story = {
       tabs={<Tabs variant="outline" items={panelTabs} />}
     />
   ),
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('heading', { name: 'Panel Title' })).toBeVisible();
     await expect(canvas.getByText('Panel Sub Title')).toBeVisible();
     await expect(canvas.getByText('Status')).toBeVisible();
     await expect(canvas.getByRole('tablist')).toBeVisible();
+    await userEvent.type(canvas.getByRole('searchbox', { name: 'Search' }), 'q');
+    await expect(args.onSearchChange).toHaveBeenLastCalledWith('q');
+    // Plain chrome: no fill, radius or border.
+    const header = getComputedStyle(canvasElement.querySelector('.sikat-panel-header')!);
+    await expect(header.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    await expect(header.borderTopLeftRadius).toBe('0px');
+    await expect(header.boxShadow).toBe('none');
   },
 };
 
@@ -184,7 +191,6 @@ export const Details: Story = {
  */
 export const TableWithSearch: Story = {
   args: {
-    type: 'table',
     title: 'Panel Title',
     subcopy: 'Panel Sub Title',
     showSearch: true,
@@ -223,7 +229,6 @@ export const TableWithSearch: Story = {
 /** Controlled search: the page owns the text (`searchValue` + `onSearchChange`). */
 export const ControlledSearch: Story = {
   args: {
-    type: 'table',
     title: 'Purchase orders',
     showSearch: true,
     searchLabel: 'Search purchase orders',
@@ -252,9 +257,9 @@ export const ControlledSearch: Story = {
   },
 };
 
-/** Figma Page Type=Forms (17447:40111) — prev/next, title, status, refresh glyph. */
+/** Figma Page Type=Forms (17447:40111) — the same layout with only prev/next, title, status and refresh. */
 export const Forms: Story = {
-  args: { type: 'forms', title: 'Panel Title' },
+  args: { title: 'Panel Title', subcopy: undefined },
   render: (args) => (
     <PanelHeader
       {...args}

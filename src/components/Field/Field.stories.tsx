@@ -866,7 +866,6 @@ export const ComboboxEmptyContent: Story = {
         {modalOpen && (
           <SidePanel overlay onOverlayClick={() => setModalOpen(false)}>
             <PanelHeader
-              type="forms"
               title="Create country"
               actions={
                 <>
