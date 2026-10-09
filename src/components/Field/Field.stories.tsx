@@ -906,7 +906,7 @@ export const ComboboxEmptyContent: Story = {
                   <Button
                     intent="default"
                     variant="solid"
-                    size="small"
+                    size="large"
                     onMouseDown={(e) => {
                       e.preventDefault();
                       close();

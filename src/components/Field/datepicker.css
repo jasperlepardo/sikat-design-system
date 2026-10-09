@@ -18,7 +18,7 @@
   background-color: var(--color-bg-default);
   border-radius: var(--rounded-2xl); /* 12px — floating surface, matches dropdown */
   /* Same flat surface as the Dropdown panel: shadow only, no border or bevel. */
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-xl);
   overflow-y: auto;
   padding: var(--spacing-3);
   width: fit-content;
