@@ -112,13 +112,15 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   },
   argTypes: {
     variant: figmaSelect('Variant', panelHeaderVariants, ['Card', 'Plain']),
-    showSearch: { name: 'Search', control: 'boolean' },
-    showTabs: { name: 'Tabs', control: 'boolean' },
-    showStatus: { name: 'Status', control: 'boolean' },
-    showTitleIcon: { name: 'Title Icon', control: 'boolean' },
-    showTrailing: { name: 'Prev / Next', control: 'boolean' },
-    showOperations: { name: 'Operations', control: 'boolean' },
-    showActions: { name: 'Actions', control: 'boolean' },
+    ...({
+      showSearch: { name: 'Search', control: 'boolean' },
+      showTabs: { name: 'Tabs', control: 'boolean' },
+      showStatus: { name: 'Status', control: 'boolean' },
+      showTitleIcon: { name: 'Title Icon', control: 'boolean' },
+      showTrailing: { name: 'Prev / Next', control: 'boolean' },
+      showOperations: { name: 'Operations', control: 'boolean' },
+      showActions: { name: 'Actions', control: 'boolean' },
+    } as Record<string, unknown>),
   },
   parameters: figmaControls([
     'Variant',

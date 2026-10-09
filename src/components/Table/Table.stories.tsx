@@ -507,7 +507,6 @@ export const InPanel: StoryObj<TablePlaygroundArgs> = {
             icon="table_rows"
             iconVariant="solid"
             title="Orders"
-            subcopy="Manage your sales orders"
             actions={
               <Button intent="primary" variant="solid" size="extra-large">
                 New Order

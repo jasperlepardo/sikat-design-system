@@ -266,7 +266,7 @@ export const DarkMode: Story = {
       style={{ height: 320, padding: 8, background: 'var(--color-bg-secondary)' }}
     >
       <SidePanel>
-        <PanelHeader icon="inventory_2" title="Details" subcopy="Light on a dark page" />
+        <PanelHeader icon="inventory_2" title="Details" />
         <Panel.Body>
           <SectionCard title="Section" />
         </Panel.Body>

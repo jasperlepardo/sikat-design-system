@@ -443,12 +443,7 @@ function AppShellWithAlertTwoPanelDemo() {
               </Panel.Body>
             </Panel>
             <Panel style={{ flex: 1, minWidth: 0 }}>
-              <PanelHeader
-                icon="info"
-                iconVariant="subtle"
-                title="Details"
-                subcopy="Secondary panel"
-              />
+              <PanelHeader icon="info" iconVariant="subtle" title="Details" />
               <Panel.Body>
                 <Card>
                   <Card.Header icon={SectionIcon}>Details</Card.Header>

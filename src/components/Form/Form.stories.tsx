@@ -85,12 +85,7 @@ import { PanelHeader } from '../Panel/PanelHeader';
 export const InPanel: StoryObj<typeof meta> = {
   render: (args) => (
     <Panel style={{ maxWidth: 560 }}>
-      <PanelHeader
-        icon="person"
-        iconVariant="solid"
-        title="Your Details"
-        subcopy="How we'll reach you"
-      />
+      <PanelHeader icon="person" iconVariant="solid" title="Your Details" />
       <Panel.Body>
         <Form
           onSubmit={(e) => {

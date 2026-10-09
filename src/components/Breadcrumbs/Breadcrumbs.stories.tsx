@@ -84,7 +84,6 @@ export const AbovePanel: Story = {
         <PanelHeader
           icon="receipt_long"
           title="SO-1042"
-          subcopy="Sikat Tech · Paid"
           actions={
             <Button intent="primary" variant="solid" size="extra-large">
               Edit
