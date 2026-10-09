@@ -8,8 +8,6 @@
   box-sizing: border-box;
   width: 100%;
   padding: var(--spacing-3);
-  border-radius: var(--rounded-lg);
-  background-color: var(--color-bg-secondary);
   box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
 }
@@ -66,19 +64,10 @@
 .sikat-panel-header__title {
   margin: 0;
   color: var(--color-text-heading);
-  font-size: var(--text-body-lg-font-size);
-  line-height: var(--text-body-lg-line-height);
-  letter-spacing: var(--text-body-lg-letter-spacing);
+  font-size: var(--text-body-base-font-size);
+  line-height: var(--text-body-base-line-height);
+  letter-spacing: var(--text-body-base-letter-spacing);
   font-weight: var(--text-medium);
-  white-space: nowrap;
-}
-.sikat-panel-header__subcopy {
-  margin: 0;
-  color: var(--color-text-caption);
-  font-size: var(--text-body-xs-font-size);
-  line-height: var(--text-body-xs-line-height);
-  letter-spacing: var(--text-body-xs-letter-spacing);
-  font-weight: var(--text-regular);
   white-space: nowrap;
 }
 .sikat-panel-header__title-icon {

@@ -25,6 +25,8 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   variant?: IconButtonStyle;
   /** Size (Figma): extra-large 40 / large 36 / medium 32 / small 28 / extra-small 24 / 2xs 20px, a square around a 20px glyph. */
   size?: IconButtonSize;
+  /** Shape — `pill` overrides the radius to fully rounded (border-radius: 9999px). */
+  shape?: 'pill';
 }
 
 /**
@@ -39,6 +41,7 @@ export function IconButton({
   intent = 'primary',
   variant = 'solid',
   size = 'medium',
+  shape,
   type = 'button',
   disabled,
   className,
@@ -51,6 +54,7 @@ export function IconButton({
       data-intent={intent}
       data-style={variant}
       data-size={size}
+      data-shape={shape}
       aria-label={label}
       disabled={disabled}
       {...rest}

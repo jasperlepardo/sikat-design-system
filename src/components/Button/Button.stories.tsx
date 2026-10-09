@@ -24,6 +24,7 @@ const meta = {
     intent: { control: 'inline-radio', options: buttonIntents },
     variant: { control: 'inline-radio', options: buttonStyles },
     size: { control: 'inline-radio', options: buttonSizes },
+    shape: { control: 'inline-radio', options: [undefined, 'pill'] },
     disabled: { control: 'boolean' },
   },
 } satisfies Meta<typeof Button>;
@@ -44,6 +45,7 @@ type ButtonPlaygroundArgs = {
   Type: ButtonIntent;
   Style: ButtonStyle;
   Size: ButtonSize;
+  Shape: 'default' | 'pill';
   State: 'default' | 'hover' | 'disabled';
   onClick: () => void;
 };
@@ -56,6 +58,7 @@ export const Playground: StoryObj<ButtonPlaygroundArgs> = {
     Type: 'primary',
     Style: 'solid',
     Size: 'medium',
+    Shape: 'default',
     State: 'default',
     onClick: fn(),
   },
@@ -81,6 +84,7 @@ export const Playground: StoryObj<ButtonPlaygroundArgs> = {
       'Extra Small',
       '2xs',
     ]),
+    Shape: figmaSelect('Shape', ['default', 'pill'] as const, ['Default', 'Pill']),
     State: figmaSelect('State', ['default', 'hover', 'disabled'] as const, [
       'Default',
       'Hover',
@@ -94,6 +98,7 @@ export const Playground: StoryObj<ButtonPlaygroundArgs> = {
     'Type',
     'Style',
     'Size',
+    'Shape',
     'State',
   ]),
   render: ({
@@ -103,6 +108,7 @@ export const Playground: StoryObj<ButtonPlaygroundArgs> = {
     Type,
     Style,
     Size,
+    Shape,
     State,
     onClick,
   }) => (
@@ -110,6 +116,7 @@ export const Playground: StoryObj<ButtonPlaygroundArgs> = {
       intent={Type}
       variant={Style}
       size={Size}
+      shape={Shape === 'pill' ? 'pill' : undefined}
       {...{ 'data-state': State === 'hover' ? 'hover' : undefined }}
       disabled={State === 'disabled'}
       leadingIcon={showLeadingIcon ? PlaceholderIcon : undefined}
@@ -167,6 +174,19 @@ export const ToggleGroupStory: Story = {
       </div>
     );
   },
+};
+
+const SettingsIcon = <Icon size={20}>settings</Icon>;
+
+/** `shape="pill"` — fully rounded with 1.5× horizontal padding. */
+export const Pill: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button shape="pill" leadingIcon={SettingsIcon}>Settings</Button>
+      <Button shape="pill" variant="outline" leadingIcon={SettingsIcon}>Settings</Button>
+      <Button shape="pill" variant="ghost" leadingIcon={SettingsIcon}>Settings</Button>
+    </div>
+  ),
 };
 
 /** Figma's six sizes (40/36/32/28/24/20px), with leading + trailing icons as in Figma. */

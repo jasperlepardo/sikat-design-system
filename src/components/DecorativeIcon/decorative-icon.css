@@ -1,7 +1,6 @@
-/* DecorativeIcon structure — mirrors Figma DecorativeIcons (node 10716:174).
-   80px circle in three variants: solid (primary-hover fill + white icon),
-   subtle (primary-subtle fill + primary icon), outline (primary-subtle border
-   + primary icon). Icon is centered; recommended child size is 48px. */
+/* DecorativeIcon structure — mirrors Figma DecorativeIcons (node 19410:78).
+   `intent` picks the color palette (primary / default); `variant` picks the fill
+   style (solid / subtle / outline). Shape is circle (full) or rounded (--rounded-lg). */
 
 .sikat-decorative-icon {
   --decorative-icon-size: 80px;
@@ -14,17 +13,42 @@
   height: var(--decorative-icon-size);
 }
 
-.sikat-decorative-icon[data-variant='solid'] {
+/* ------------------------------------------------------------------ Primary */
+
+.sikat-decorative-icon[data-intent='primary'][data-variant='solid'] {
   background-color: var(--color-bg-primary-hover);
   color: var(--color-text-white);
 }
 
-.sikat-decorative-icon[data-variant='subtle'] {
+.sikat-decorative-icon[data-intent='primary'][data-variant='subtle'] {
   background-color: var(--color-bg-primary-subtle);
   color: var(--color-text-primary);
 }
 
-.sikat-decorative-icon[data-variant='outline'] {
+.sikat-decorative-icon[data-intent='primary'][data-variant='outline'] {
   box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-primary-subtle);
   color: var(--color-text-primary);
+}
+
+/* ------------------------------------------------------------------ Default */
+
+.sikat-decorative-icon[data-intent='default'][data-variant='solid'] {
+  background-color: var(--color-bg-neutral);
+  color: var(--color-fg-default-solid);
+}
+
+.sikat-decorative-icon[data-intent='default'][data-variant='subtle'] {
+  background-color: var(--color-bg-neutral-subtle);
+  color: var(--color-fg-default-solid);
+}
+
+.sikat-decorative-icon[data-intent='default'][data-variant='outline'] {
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-neutral);
+  color: var(--color-fg-default-solid);
+}
+
+/* ------------------------------------------------------------------- Shape */
+
+.sikat-decorative-icon[data-shape='rounded'] {
+  border-radius: var(--rounded-lg);
 }

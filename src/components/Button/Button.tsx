@@ -22,6 +22,8 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   variant?: ButtonStyle;
   /** Size. */
   size?: ButtonSize;
+  /** Shape — `pill` overrides the radius to fully rounded (border-radius: 9999px). */
+  shape?: 'pill';
   /** Leading icon slot. */
   leadingIcon?: ReactNode;
   /** Trailing icon slot. */
@@ -39,6 +41,7 @@ export function Button({
   intent = 'primary',
   variant = 'solid',
   size = 'medium',
+  shape,
   type = 'button',
   className,
   leadingIcon,
@@ -53,6 +56,7 @@ export function Button({
       data-intent={intent}
       data-style={variant}
       data-size={size}
+      data-shape={shape}
       {...rest}
     >
       {leadingIcon ? <span className="sikat-btn__icon">{leadingIcon}</span> : null}

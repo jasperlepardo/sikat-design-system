@@ -6,6 +6,7 @@ import { Card } from '../Card/Card';
 import { Button } from '../Button/Button';
 import { Icon } from '../Icon/Icon';
 import { IconButton } from '../Button/IconButton';
+import { ButtonGroup } from '../Button/ButtonGroup';
 import { Tabs } from '../Tabs/Tabs';
 import { Select } from '../Field/Select';
 import { figmaControls } from '../../docs/figma-controls';
@@ -28,40 +29,53 @@ const panelTabs = [
   { value: 'active', label: 'Active', icon: CircleIcon },
 ];
 
+const operations = (
+  <>
+    <IconButton label="Filter" intent="white" variant="solid" size="medium" shape="pill">
+      {CircleIcon}
+    </IconButton>
+    <IconButton label="Sort" intent="white" variant="solid" size="medium" shape="pill">
+      {CircleIcon}
+    </IconButton>
+  </>
+);
+
+const actions = (
+  <>
+    <Button intent="white" variant="solid" size="medium" shape="pill">
+      Button
+    </Button>
+    <Button intent="primary" variant="solid" size="medium" shape="pill"
+      trailingIcon={panelHeaderIcons.keyboardArrowDown}>
+      Button
+    </Button>
+  </>
+);
+
+const prevNext = (
+  <ButtonGroup type="enclosed" intent="white" variant="solid" buttonIntent="default" buttonVariant="link">
+    <IconButton label="Previous" shape="pill" size="small">
+      {panelHeaderIcons.arrowUpward}
+    </IconButton>
+    <IconButton label="Next" shape="pill" size="small">
+      {panelHeaderIcons.arrowDownward}
+    </IconButton>
+  </ButtonGroup>
+);
+
 /** Full panel: header with DecorativeIcon, tabs, Card body, and 2-button footer. */
 export const Default: Story = {
   render: () => (
     <Panel style={{ width: 632 }}>
       <PanelHeader
         icon="inventory_2"
-        iconVariant="solid"
+        iconIntent="default"
+        iconVariant="outline"
+        iconSize={28}
+        iconShape="rounded"
         title="Page Title"
-        subcopy="Subcopy"
-        operations={
-          <>
-            <IconButton label="Filter" intent="default" variant="solid" size="extra-large">
-              {CircleIcon}
-            </IconButton>
-            <IconButton label="Sort" intent="default" variant="solid" size="extra-large">
-              {CircleIcon}
-            </IconButton>
-          </>
-        }
-        actions={
-          <>
-            <Button intent="default" variant="solid" size="extra-large">
-              Button
-            </Button>
-            <Button
-              intent="primary"
-              variant="solid"
-              size="extra-large"
-              trailingIcon={panelHeaderIcons.keyboardArrowDown}
-            >
-              Button
-            </Button>
-          </>
-        }
+        operations={operations}
+        actions={actions}
         tabs={<Tabs variant="outline" items={panelTabs} />}
       />
       <Panel.Body>
@@ -75,12 +89,8 @@ export const Default: Story = {
         </Card>
       </Panel.Body>
       <Panel.Footer>
-        <Button intent="default" variant="solid" size="extra-large">
-          Button
-        </Button>
-        <Button intent="primary" variant="solid" size="extra-large">
-          Button
-        </Button>
+        <Button intent="default" variant="solid" size="extra-large">Button</Button>
+        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
       </Panel.Footer>
     </Panel>
   ),
@@ -112,29 +122,15 @@ export const Playground: StoryObj<PanelPlaygroundArgs> = {
     <Panel horizontal={a.isHorizontal} style={{ width: a.isHorizontal ? 1248 : 632 }}>
       {a.isHorizontal ? null : (
         <PanelHeader
-          icon="radio_button_unchecked"
+          icon="inventory_2"
+          iconIntent="default"
+          iconVariant="outline"
+          iconSize={28}
+          iconShape="rounded"
           title="Panel Title"
-          subcopy="Panel Sub Title"
-          operations={
-            <>
-              <IconButton label="Filter" intent="default" variant="solid" size="extra-large">
-                {CircleIcon}
-              </IconButton>
-              <IconButton label="Sort" intent="default" variant="solid" size="extra-large">
-                {CircleIcon}
-              </IconButton>
-            </>
-          }
-          actions={
-            <>
-              <Button intent="default" variant="solid" size="extra-large">
-                Button
-              </Button>
-              <Button intent="primary" variant="solid" size="extra-large">
-                Button
-              </Button>
-            </>
-          }
+          operations={operations}
+          actions={actions}
+          trailing={prevNext}
         />
       )}
       <Panel.Body>{SlotContent}</Panel.Body>
@@ -142,21 +138,13 @@ export const Playground: StoryObj<PanelPlaygroundArgs> = {
         <Panel.Footer>
           {a.isHorizontal ? (
             <>
-              <Button intent="primary" variant="solid" size="extra-large">
-                Button
-              </Button>
-              <Button intent="default" variant="solid" size="extra-large">
-                Button
-              </Button>
+              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+              <Button intent="default" variant="solid" size="extra-large">Button</Button>
             </>
           ) : (
             <>
-              <Button intent="default" variant="solid" size="extra-large">
-                Button
-              </Button>
-              <Button intent="primary" variant="solid" size="extra-large">
-                Button
-              </Button>
+              <Button intent="default" variant="solid" size="extra-large">Button</Button>
+              <Button intent="primary" variant="solid" size="extra-large">Button</Button>
             </>
           )}
         </Panel.Footer>
@@ -177,12 +165,8 @@ export const Horizontal: Story = {
     <Panel horizontal style={{ width: 1248 }}>
       <Panel.Body>{SlotContent}</Panel.Body>
       <Panel.Footer>
-        <Button intent="primary" variant="solid" size="extra-large">
-          Button
-        </Button>
-        <Button intent="default" variant="solid" size="extra-large">
-          Button
-        </Button>
+        <Button intent="primary" variant="solid" size="extra-large">Button</Button>
+        <Button intent="default" variant="solid" size="extra-large">Button</Button>
       </Panel.Footer>
     </Panel>
   ),
@@ -196,9 +180,11 @@ export const HeaderOnly: Story = {
         <PanelHeader
           key={variant}
           icon="inventory_2"
+          iconIntent="default"
           iconVariant={variant}
+          iconSize={28}
+          iconShape="rounded"
           title="Page Title"
-          subcopy={`iconVariant="${variant}"`}
           tabs={<Tabs variant="outline" items={panelTabs} />}
         />
       ))}
@@ -210,20 +196,8 @@ export const HeaderOnly: Story = {
 export const Summary: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
-      <Panel.Summary
-        icon="person"
-        iconVariant="outline"
-        iconSize={40}
-        name="Customer Name"
-        code="BP-00001"
-      />
-      <Panel.Summary
-        icon="inventory_2"
-        iconVariant="solid"
-        iconSize={40}
-        name="Sales Order"
-        code="SO-2024-00042"
-      />
+      <Panel.Summary icon="person" iconVariant="outline" iconSize={40} name="Customer Name" code="BP-00001" />
+      <Panel.Summary icon="inventory_2" iconVariant="solid" iconSize={40} name="Sales Order" code="SO-2024-00042" />
       <Panel.Summary
         icon="receipt_long"
         iconVariant="subtle"
@@ -239,7 +213,14 @@ export const Summary: Story = {
 export const NoFooter: Story = {
   render: () => (
     <Panel style={{ width: 632 }}>
-      <PanelHeader icon="home" iconVariant="subtle" title="Page Title" subcopy="Subcopy" />
+      <PanelHeader
+        icon="home"
+        iconIntent="default"
+        iconVariant="outline"
+        iconSize={28}
+        iconShape="rounded"
+        title="Page Title"
+      />
       <Panel.Body>
         <Card>
           <Card.Header icon={ArtTrackIcon}>Details</Card.Header>
@@ -260,7 +241,14 @@ export const OnDarkPage: StoryObj<typeof Panel> = {
       style={{ height: 320, padding: 8, display: 'flex', background: 'var(--color-bg-secondary)' }}
     >
       <Panel>
-        <PanelHeader icon="inventory_2" title="Orders" subcopy="Light on a dark page" />
+        <PanelHeader
+          icon="inventory_2"
+          iconIntent="default"
+          iconVariant="outline"
+          iconSize={28}
+          iconShape="rounded"
+          title="Orders"
+        />
         <Panel.Body>
           <Card>
             <Card.Header>Section</Card.Header>
@@ -285,14 +273,11 @@ export const OnDarkPage: StoryObj<typeof Panel> = {
     const panel = canvasElement.querySelector<HTMLElement>('.sikat-panel')!;
     await expect(panel).toHaveAttribute('data-theme', 'light');
     await expect(getComputedStyle(panel).backgroundColor).toBe('rgb(255, 255, 255)');
-    // Nested content resolves light tokens too: the header's bg/secondary is the
-    // light value, not the dark page's bg/secondary behind it.
     const page = canvasElement.querySelector<HTMLElement>('[data-theme="dark"]')!;
     const header = canvas.getByRole('banner');
     await expect(getComputedStyle(header).backgroundColor).not.toBe(
       getComputedStyle(page).backgroundColor,
     );
-    // Portaled popups (at the end of <body>) carry the Panel's light theme.
     await userEvent.click(canvas.getByRole('combobox', { name: 'Discount' }));
     const listbox = within(document.body).getByRole('listbox');
     await expect(listbox).toHaveAttribute('data-theme', 'light');

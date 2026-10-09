@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/DecorativeIcon';
+import { DecorativeIcon, type DecorativeIconVariant, type DecorativeIconIntent, type DecorativeIconProps } from '../DecorativeIcon/DecorativeIcon';
 import { TextField } from '../Field/TextField';
 import { FieldClear } from '../Field/FieldShell';
 import './panel-header.css';
@@ -49,14 +49,16 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   type?: PanelHeaderType;
   /** Page title. */
   title?: ReactNode;
-  /** Subcopy below the title. */
-  subcopy?: ReactNode;
   /** Material Symbol name for the leading DecorativeIcon. */
   icon?: string;
+  /** DecorativeIcon color intent. Default: primary. */
+  iconIntent?: DecorativeIconIntent;
   /** DecorativeIcon variant. Default: solid. */
   iconVariant?: DecorativeIconVariant;
   /** DecorativeIcon size in px. Default: 40. */
   iconSize?: number;
+  /** DecorativeIcon shape. Default: circle. */
+  iconShape?: DecorativeIconProps['shape'];
   /** Custom leading slot — overrides `icon` when provided. */
   leading?: ReactNode;
   /** Status badge after the title. */
@@ -67,6 +69,8 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   operations?: ReactNode;
   /** Core action buttons. */
   actions?: ReactNode;
+  /** Trailing slot — renders after actions, outside the size-injection wrapper. */
+  trailing?: ReactNode;
   /** Tabs below the bar — they sit on the header's bottom edge. */
   tabs?: ReactNode;
   /** Show a search field centered between the title and the buttons (3 columns). */
@@ -90,15 +94,17 @@ export function PanelHeader({
   variant,
   type,
   title,
-  subcopy,
   icon,
+  iconIntent = 'primary',
   iconVariant = 'solid',
   iconSize = 40,
+  iconShape,
   leading,
   status,
   titleIcon,
   operations,
   actions,
+  trailing,
   tabs,
   showSearch,
   searchPlaceholder = 'Search',
@@ -117,7 +123,7 @@ export function PanelHeader({
     onSearchChange?.(next);
   };
   const leadingContent =
-    leading ?? (icon ? <DecorativeIcon variant={iconVariant} icon={icon} size={iconSize} /> : null);
+    leading ?? (icon ? <DecorativeIcon intent={iconIntent} variant={iconVariant} icon={icon} size={iconSize} shape={iconShape} /> : null);
 
   return (
     <header
@@ -140,7 +146,6 @@ export function PanelHeader({
                 <span className="sikat-panel-header__title-icon">{titleIcon}</span>
               ) : null}
             </div>
-            {subcopy != null ? <p className="sikat-panel-header__subcopy">{subcopy}</p> : null}
           </div>
         </div>
         {hasSearch ? (
@@ -160,7 +165,7 @@ export function PanelHeader({
             />
           </div>
         ) : null}
-        {operations != null || actions != null || hasSearch ? (
+        {operations != null || actions != null || trailing != null || hasSearch ? (
           <div className="sikat-panel-header__end">
             {operations != null ? (
               <div className="sikat-panel-header__group">{withLargeSize(operations)}</div>
@@ -171,6 +176,7 @@ export function PanelHeader({
             {actions != null ? (
               <div className="sikat-panel-header__group">{withLargeSize(actions)}</div>
             ) : null}
+            {trailing != null ? trailing : null}
           </div>
         ) : null}
       </div>
