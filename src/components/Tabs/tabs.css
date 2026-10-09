@@ -88,16 +88,17 @@
   --tabs-icon: var(--color-fg-tertiary);
 }
 
-/* Type=Outline — Figma Tab Item, Style=Outline (set 17251:5692). No track;
-   tabs are 4px 8px 0 around a 6px-padded content row, over a 4px accent bar
-   (top corners 2px). Selected = fg/primary bar; text stays caption. Disabled
-   greys the text, icon and bar. */
+/* Type=Outline — Figma Tab Item, Style=Outline (set 17251:5692). 1px
+   border-default bottom border, no track; tabs are 4px 8px 0 around a
+   6px-padded content row, over a centered 16px-wide, 4px accent bar (top
+   corners 2px). Selected = fg/primary bar + icon, text/primary text.
+   Disabled greys the text, icon and bar. */
 .sikat-tabs[data-variant='outline'] {
   gap: 0;
   padding: 0;
   border-radius: 0;
   background-color: transparent;
-  box-shadow: none;
+  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
 }
 .sikat-tabs[data-variant='outline'] .sikat-tabs__tab {
   position: relative;
@@ -111,8 +112,11 @@
 .sikat-tabs[data-variant='outline'] .sikat-tabs__tab::after {
   content: '';
   position: absolute;
-  inset: auto 0 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--spacing-4);
   height: var(--spacing-1);
+  transform: translateX(-50%);
   border-radius: var(--rounded-xs) var(--rounded-xs) 0 0;
   background-color: var(--tabs-accent);
 }
@@ -121,6 +125,8 @@
   color: var(--color-text-body);
 }
 .sikat-tabs[data-variant='outline'] .sikat-tabs__tab[aria-selected='true'] {
+  color: var(--color-text-primary);
+  --tabs-icon: var(--color-fg-primary);
   --tabs-accent: var(--color-fg-primary);
 }
 .sikat-tabs[data-variant='outline'] .sikat-tabs__tab:disabled {
