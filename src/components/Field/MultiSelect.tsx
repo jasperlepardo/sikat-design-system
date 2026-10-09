@@ -4,6 +4,7 @@ import { Icon } from '../Icon/Icon';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
+import { fieldLabelText, usePanelFocus } from '../../lib/usePanelFocus';
 import type { ComboboxOption } from './Combobox';
 import { FieldShell, ChevronDown, type FieldAdornments } from './FieldShell';
 
@@ -34,7 +35,8 @@ const optText = (o: MultiSelectOption) =>
  * foundation, styled as the Figma Multi Select (the shared field box, 36px, with
  * a trailing chevron). Type to filter; ↑/↓ + Enter toggles options (the menu stays
  * open); picked values become removable chips (Figma Badge, Default / Solid /
- * Extra Small); Backspace on an empty query removes the last chip. Optional
+ * Extra Small); Backspace on an empty query removes the last chip. Like Select,
+ * the open panel covers the field and starts with the search field. Optional
  * `leadingIcon` / `prefix` / `suffix` / `trailingIcon`. Control-only and
  * FormField-compatible (the input takes the `id`).
  */
@@ -59,6 +61,7 @@ export function MultiSelect({
   const listId = `${id}-listbox`;
   const getItemId = (i: number) => `${id}-opt-${i}`;
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<string[]>(defaultValue);
@@ -96,6 +99,8 @@ export function MultiSelect({
     closeOnActivate: false,
   });
 
+  usePanelFocus(open, searchRef, inputRef, () => setQuery(''));
+
   const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     if (e.key === 'Backspace' && query === '' && selected.length) {
       commit(selected.slice(0, -1));
@@ -108,8 +113,14 @@ export function MultiSelect({
     .map((v) => options.find((o) => o.value === v))
     .filter((o): o is MultiSelectOption => o != null);
 
-  return (
-    <div ref={rootRef} className={cn('sikat-multiselect', className)}>
+  /**
+   * The field — chips + text input. Rendered twice: closed in place, and again
+   * as the open panel's header (sitting exactly over it), so the chips stay
+   * visible and removable while picking.
+   */
+  const renderField = (inPanel: boolean) => {
+    const ref = inPanel ? searchRef : inputRef;
+    return (
       <FieldShell
         className="sikat-field--wrap"
         state={{ size: 'md', filled: selectedOptions.length > 0, disabled, invalid }}
@@ -120,10 +131,9 @@ export function MultiSelect({
           </span>
         }
         onClick={() => {
-          if (!disabled) {
-            inputRef.current?.focus();
-            setOpen(true);
-          }
+          if (disabled) return;
+          ref.current?.focus();
+          if (!inPanel) setOpen(true);
         }}
       >
         <span className="sikat-field__chips">
@@ -145,8 +155,8 @@ export function MultiSelect({
             </span>
           ))}
           <input
-            ref={inputRef}
-            id={id}
+            ref={ref}
+            id={inPanel ? undefined : id}
             type="text"
             role="combobox"
             aria-expanded={open}
@@ -164,14 +174,35 @@ export function MultiSelect({
               setQuery(e.target.value);
               if (!open) setOpen(true);
             }}
-            onFocus={() => {
-              if (!disabled) setOpen(true);
-            }}
-            onKeyDown={handleKeyDown}
+            onKeyDown={
+              inPanel
+                ? (e) => {
+                    // Tab: close and hand focus back to the field first, so
+                    // the browser moves on to the field after it.
+                    if (e.key === 'Tab') {
+                      inputRef.current?.focus();
+                      setOpen(false);
+                      return;
+                    }
+                    handleKeyDown(e);
+                  }
+                : handleKeyDown
+            }
             {...aria}
+            aria-label={
+              inPanel
+                ? (aria['aria-label'] ?? fieldLabelText(inputRef, placeholder))
+                : aria['aria-label']
+            }
           />
         </span>
       </FieldShell>
+    );
+  };
+
+  return (
+    <div ref={rootRef} className={cn('sikat-multiselect', className)}>
+      {renderField(false)}
       {open && anchor ? (
         <Dropdown
           ref={panelRef}
@@ -180,11 +211,11 @@ export function MultiSelect({
           anchor={anchor}
           side={side}
           hSide={hSide}
+          cover
+          header={renderField(true)}
         >
           {filtered.length === 0 ? (
-            <div style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}>
-              No results
-            </div>
+            <div className="sikat-dropdown__empty">No results</div>
           ) : (
             filtered.map((o, i) => (
               <DropdownItem

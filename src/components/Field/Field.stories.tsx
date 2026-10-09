@@ -265,6 +265,12 @@ export const SelectPlayground: StoryObj<
     await userEvent.click(trigger);
     await expect(body.getByRole('listbox')).toHaveClass('sikat-dropdown');
     await expect(body.getAllByRole('option')).toHaveLength(3);
+    // Cover: the first option's box sits exactly on the field's box.
+    const field = canvasElement.querySelector('.sikat-select')!.getBoundingClientRect();
+    const first = body.getAllByRole('option')[0].getBoundingClientRect();
+    await expect(Math.abs(first.top - field.top)).toBeLessThan(1);
+    await expect(Math.abs(first.left - field.left)).toBeLessThan(1);
+    await expect(Math.abs(first.width - field.width)).toBeLessThan(1);
     await userEvent.keyboard('{ArrowDown}{Enter}');
     await expect(trigger).toHaveTextContent('Option B');
     await expect(trigger).toHaveAttribute('aria-expanded', 'false');
@@ -289,6 +295,60 @@ export const SelectPlayground: StoryObj<
     await userEvent.keyboard('{Escape}');
     await expect(trigger).toHaveAttribute('aria-expanded', 'false');
     await expect(trigger).toHaveTextContent('Option A');
+  },
+};
+
+/**
+ * Searchable Select (autocomplete) — the open panel starts with a search field
+ * sitting exactly over the closed field; typing filters the options.
+ */
+export const SearchableSelect: Story = {
+  render: () => (
+    <div style={{ width: 480 }}>
+      <Select
+        aria-label="Fruit"
+        searchable
+        placeholder="Pick a fruit"
+        options={[
+          { value: 'apple', label: 'Apple' },
+          { value: 'apricot', label: 'Apricot' },
+          { value: 'banana', label: 'Banana' },
+          { value: 'cherry', label: 'Cherry', disabled: true },
+          { value: 'grape', label: 'Grape' },
+        ]}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const trigger = canvas.getByRole('combobox', { name: 'Fruit' });
+
+    // Opening focuses the search field, which sits exactly on the field.
+    await userEvent.click(trigger);
+    const search = body.getByRole('combobox', { name: 'Search' });
+    await expect(search).toHaveFocus();
+    const field = canvasElement.querySelector('.sikat-select')!.getBoundingClientRect();
+    const box = search.closest('.sikat-field')!.getBoundingClientRect();
+    await expect(Math.abs(box.top - field.top)).toBeLessThan(1);
+    await expect(Math.abs(box.left - field.left)).toBeLessThan(1);
+    await expect(Math.abs(box.width - field.width)).toBeLessThan(1);
+
+    // Typing filters; Enter picks the first match and focus returns.
+    await userEvent.keyboard('ap');
+    await expect(body.getAllByRole('option')).toHaveLength(3); // Apple, Apricot, Grape
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    await expect(trigger).toHaveTextContent('Apricot');
+    await expect(trigger).toHaveFocus();
+
+    // Typing on the closed field opens it with that text; no match → empty state.
+    await userEvent.keyboard('x');
+    await expect(body.getByRole('combobox', { name: 'Search' })).toHaveValue('x');
+    await expect(body.getByText('No results')).toBeVisible();
+    await userEvent.keyboard('{Escape}');
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(trigger).toHaveFocus();
+    await expect(trigger).toHaveTextContent('Apricot');
   },
 };
 
@@ -813,11 +873,10 @@ export const Clearable: Story = {
 
     // Combobox: starts filled; ✕ clears to the placeholder.
     const combobox = canvas.getByRole('combobox', { name: /Country/ });
-    await expect(combobox).not.toHaveValue('');
+    await expect(combobox).toHaveTextContent('Philippines');
     await userEvent.click(clearCombobox);
-    await userEvent.keyboard('{Escape}');
-    await expect(combobox).toHaveValue('');
-    await expect(combobox).toHaveAttribute('placeholder', 'Use the default country');
+    await expect(combobox).toHaveTextContent('Use the default country');
+    await expect(combobox).toHaveAttribute('aria-expanded', 'false');
     await expect(canvas.queryByRole('button', { name: 'Clear selection' })).not.toBeInTheDocument();
   },
 };
@@ -974,9 +1033,27 @@ export const MultiSelectField: Story = {
     const opacity = () => getComputedStyle(chevron).opacity;
     await waitFor(() => expect(opacity()).toBe('0'));
     await userEvent.tab();
-    await expect(canvas.getByRole('combobox')).toHaveFocus();
-    await expect(canvas.getByRole('combobox')).toHaveAttribute('aria-expanded', 'true');
+    const field = canvas.getByRole('combobox');
+    await expect(field).toHaveFocus();
+    await expect(field).toHaveAttribute('aria-expanded', 'false');
     await waitFor(() => expect(opacity()).toBe('1'));
+
+    // ↓ opens over the field with the search focused; picks stay open as chips.
+    const body = within(document.body);
+    await userEvent.keyboard('{ArrowDown}');
+    const panel = document.querySelector<HTMLElement>('.sikat-dropdown')!;
+    const search = within(panel).getByRole('combobox', { name: 'Countries' });
+    await expect(search).toHaveFocus();
+    await userEvent.keyboard('jap{Enter}');
+    await expect(body.getByRole('option', { name: 'Japan' })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    // The panel's header mirrors the field, so the new chip shows while open.
+    await expect(within(panel).getByRole('button', { name: 'Remove Japan' })).toBeVisible();
+    await userEvent.keyboard('{Escape}');
+    await expect(field).toHaveFocus();
+    await expect(canvas.getByRole('button', { name: 'Remove Japan' })).toBeInTheDocument();
   },
 };
 

@@ -1,10 +1,6 @@
-import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { cn } from '../../lib/cn';
-import { Icon } from '../Icon/Icon';
-import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
-import { FieldClear, FieldShell, type FieldSize } from './FieldShell';
-import { useDropdown } from '../../lib/useDropdown';
-import { useListbox } from '../../lib/useListbox';
+import type { ReactNode } from 'react';
+import { Select } from './Select';
+import type { FieldSize } from './FieldShell';
 
 export interface ComboboxOption {
   value: string;
@@ -52,195 +48,27 @@ export interface ComboboxProps {
   onQueryChange?: (query: string) => void;
 }
 
-const optText = (o: ComboboxOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
-
-const ChevronIcon = (
-  <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
-    <Icon size={16}>expand_more</Icon>
-  </span>
-);
-
 /**
- * Combobox — a searchable, single-select combobox built on the Popover/Listbox
- * foundation (useDropdown + useListbox + Dropdown). Uses the Field shell for
- * consistent styling. Type to filter; ↑/↓ + Enter to choose; Escape to close.
+ * Combobox — a searchable, single-select picker: `<Select searchable>` with a
+ * nullable value. The open panel covers the field and starts with a search
+ * field over it; type to filter, ↑/↓ + Enter to choose, Escape to close.
  */
 export function Combobox({
-  options,
   value,
   defaultValue = null,
   onValueChange,
   placeholder,
-  clearable,
-  size = 'md',
-  invalid,
-  disabled,
-  readOnly,
-  id: idProp,
-  className,
-  emptyContent,
-  footer,
-  onQueryChange,
-  ...aria
+  ...rest
 }: ComboboxProps) {
-  const reactId = useId();
-  const id = idProp ?? reactId;
-  const listId = `${id}-listbox`;
-  const getItemId = (i: number) => `${id}-opt-${i}`;
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const isControlled = value !== undefined;
-  const [internal, setInternal] = useState<string | null>(defaultValue);
-  const selected = isControlled ? value : internal;
-
-  const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
-  const [query, setQuery] = useState('');
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return q ? options.filter((o) => optText(o).toLowerCase().includes(q)) : options;
-  }, [options, query]);
-
-  const selectedOption = options.find((o) => o.value === selected) ?? null;
-  const display = open && query ? query : selectedOption ? optText(selectedOption) : '';
-  const showMultiline =
-    !open &&
-    selectedOption != null &&
-    (selectedOption.subLabel != null || selectedOption.description != null);
-
-  const commit = (next: string | null) => {
-    if (!isControlled) setInternal(next);
-    onValueChange?.(next);
-  };
-  const selectAt = (i: number) => {
-    const o = filtered[i];
-    if (!o || o.disabled) return;
-    commit(o.value);
-    setQuery('');
-    setOpen(false);
-  };
-  const clear = () => {
-    commit(null);
-    setQuery('');
-    // Refocus so keyboard users stay in the field (focus opens the list to pick again).
-    inputRef.current?.focus();
-  };
-
-  const { activeIndex, onKeyDown, activeId } = useListbox({
-    itemCount: filtered.length,
-    open,
-    setOpen,
-    onActivate: selectAt,
-    getItemId,
-    isDisabled: (i) => !!filtered[i]?.disabled,
-    selectedIndex: filtered.findIndex((o) => o.value === selected),
-  });
-
   return (
-    <div ref={rootRef} className={cn('sikat-combobox', className)}>
-      <FieldShell
-        state={{ size, filled: selectedOption != null, disabled, readOnly, invalid }}
-        adornments={{}}
-        after={
-          <>
-            {clearable && !disabled && !readOnly && selectedOption ? (
-              <FieldClear onClear={clear} />
-            ) : null}
-            {ChevronIcon}
-          </>
-        }
-      >
-        {showMultiline ? (
-          <span
-            className="sikat-field__display"
-            onClick={() => !disabled && !readOnly && inputRef.current?.focus()}
-            style={{ cursor: disabled || readOnly ? 'default' : 'text' }}
-          >
-            <span className="sikat-field__multiline">
-              {selectedOption!.subLabel != null &&
-              (selectedOption!.subLabelPlacement ?? 'top') === 'top' ? (
-                <span className="sikat-field__sublabel">{selectedOption!.subLabel}</span>
-              ) : null}
-              <span>{selectedOption!.label ?? optText(selectedOption!)}</span>
-              {selectedOption!.subLabel != null &&
-              selectedOption!.subLabelPlacement === 'inline' ? (
-                <span className="sikat-field__sublabel">{selectedOption!.subLabel}</span>
-              ) : null}
-              {selectedOption!.description != null ? (
-                <span className="sikat-field__description">{selectedOption!.description}</span>
-              ) : null}
-            </span>
-          </span>
-        ) : null}
-        <input
-          ref={inputRef}
-          id={id}
-          type="text"
-          role="combobox"
-          className="sikat-field__input"
-          aria-expanded={open}
-          aria-controls={listId}
-          aria-autocomplete="list"
-          aria-activedescendant={activeId}
-          aria-invalid={invalid || undefined}
-          autoComplete="off"
-          disabled={disabled}
-          readOnly={readOnly}
-          placeholder={placeholder}
-          value={display}
-          style={
-            showMultiline
-              ? { flex: '0 0 0', width: 0, overflow: 'hidden', opacity: 0, pointerEvents: 'none' }
-              : undefined
-          }
-          onChange={(e) => {
-            setQuery(e.target.value);
-            onQueryChange?.(e.target.value);
-            if (!open) setOpen(true);
-          }}
-          onFocus={() => {
-            if (!disabled) {
-              setQuery('');
-              setOpen(true);
-            }
-          }}
-          onClick={() => {
-            if (!disabled) setOpen(true);
-          }}
-          onKeyDown={onKeyDown}
-          {...aria}
-        />
-      </FieldShell>
-      {open && anchor ? (
-        <Dropdown ref={panelRef} id={listId} anchor={anchor} side={side} hSide={hSide}>
-          {filtered.length === 0
-            ? ((typeof emptyContent === 'function'
-                ? emptyContent(() => setOpen(false))
-                : emptyContent) ?? (
-                <div
-                  style={{ padding: '8px 12px', fontSize: 14, color: 'var(--color-text-muted)' }}
-                >
-                  No results
-                </div>
-              ))
-            : filtered.map((o, i) => (
-                <DropdownItem
-                  key={o.value}
-                  id={getItemId(i)}
-                  selected={o.value === selected}
-                  active={i === activeIndex}
-                  disabled={o.disabled}
-                  subLabel={o.subLabel}
-                  subLabelPlacement={o.subLabelPlacement}
-                  description={o.description}
-                  onSelect={() => selectAt(i)}
-                >
-                  {o.label ?? optText(o)}
-                </DropdownItem>
-              ))}
-          {footer}
-        </Dropdown>
-      ) : null}
-    </div>
+    <Select
+      {...rest}
+      searchable
+      placeholder={placeholder}
+      searchPlaceholder={placeholder}
+      value={value === undefined ? undefined : (value ?? '')}
+      defaultValue={defaultValue ?? ''}
+      onValueChange={(v) => onValueChange?.(v === '' ? null : v)}
+    />
   );
 }

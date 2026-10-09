@@ -16,22 +16,13 @@
 .sikat-datepicker__panel {
   position: relative;
   background-color: var(--color-bg-default);
-  border: var(--border-width-1) solid var(--color-border-neutral-subtle);
   border-radius: var(--rounded-2xl); /* 12px — floating surface, matches dropdown */
+  /* Same flat surface as the Dropdown panel: shadow only, no border or bevel. */
   box-shadow: var(--shadow-md);
   overflow-y: auto;
   padding: var(--spacing-3);
   width: fit-content;
-}
-.sikat-datepicker__panel::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  box-shadow: var(--shadow-bevel);
-  mix-blend-mode: luminosity;
-  pointer-events: none;
-  z-index: 1;
+  box-sizing: border-box;
 }
 
 /* ---------------------------------------------------------------- Header */
@@ -76,7 +67,7 @@
 .sikat-datepicker__weekdays {
   display: grid;
   gap: var(--spacing-1);
-  grid-template-columns: repeat(7, 36px);
+  grid-template-columns: repeat(7, minmax(36px, 1fr)); /* stretch to the panel (field-wide) */
   margin-bottom: var(--spacing-1);
   text-align: center;
 }
@@ -94,7 +85,7 @@
 .sikat-datepicker__grid {
   display: grid;
   gap: var(--spacing-1);
-  grid-template-columns: repeat(7, 36px);
+  grid-template-columns: repeat(7, minmax(36px, 1fr)); /* stretch to the panel (field-wide) */
 }
 
 .sikat-datepicker__day {
@@ -113,7 +104,7 @@
   line-height: var(--text-body-sm-line-height);
   outline: none;
   padding: 0;
-  width: 36px;
+  width: 100%; /* fills its (≥36px) column */
 }
 
 .sikat-datepicker__day:hover:not([aria-selected='true']) {
