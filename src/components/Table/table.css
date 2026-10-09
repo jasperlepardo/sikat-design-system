@@ -156,9 +156,46 @@
   --table-check: var(--color-fg-quarternary);
 }
 /* Table Cell State=Hover: the rule turns border/primary-subtle, checkbox darkens. */
-.sikat-table__row:hover > .sikat-table__td {
+.sikat-table__row:hover:not(:has(.sikat-table__insert:hover)) > .sikat-table__td {
   box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-primary-subtle);
   --table-check: var(--color-fg-quarternary-solid); /* Figma cell hover #44403B */
+}
+/* Insert line (onRowInsert): a 12px hit area centred on the 2px gap above a row.
+   The row is its containing block, so it spans the full row even when scrolled
+   sideways; z-index 0 paints it over the rows but under the sticky header. Hover or
+   keyboard focus shows a border/primary rule and the "+" button (opacity, so it stays in the
+   accessibility tree and keyboard order — like the sort control). */
+.sikat-table__row {
+  position: relative;
+}
+.sikat-table__insert {
+  position: absolute;
+  z-index: 0;
+  inset-inline: 0;
+  top: calc(-1 * var(--spacing-1_5));
+  display: flex;
+  height: var(--spacing-3);
+  align-items: center;
+  padding-inline-start: var(--spacing-2);
+}
+.sikat-table__insert::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: var(--spacing-0_5);
+  translate: 0 -50%;
+  border-radius: var(--rounded-full);
+  background-color: var(--color-border-primary);
+  opacity: 0;
+}
+.sikat-table__insert-btn {
+  position: relative; /* above the rule */
+  opacity: 0;
+}
+.sikat-table__insert:is(:hover, :has(:focus-visible))::before,
+.sikat-table__insert:is(:hover, :has(:focus-visible)) .sikat-table__insert-btn {
+  opacity: 1;
 }
 /* Table Row Variant2 (selected): bg/primary-subtle. */
 .sikat-table__row[data-selected] > .sikat-table__td {

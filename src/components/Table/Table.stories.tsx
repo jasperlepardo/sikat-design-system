@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useMemo, useState } from 'react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Table, type TableColumn, type TableSort } from './Table';
+import { Table, type TableColumn, type TableInsertTarget, type TableSort } from './Table';
 import {
   TableActions,
   TableAmount,
@@ -487,6 +487,93 @@ export const TreeRows: StoryObj<{ onRowAction: (row: Item) => void }> = {
     await expect(args.onRowAction).toHaveBeenLastCalledWith(
       expect.objectContaining({ id: 'LOT-A' }),
     );
+  },
+};
+
+/** `onRowInsert`: hovering (or tabbing to) the gap between rows shows an insert
+ *  line with a "+" button; the story inserts the row into its own `rows`. */
+export const InsertRows: StoryObj<{ onRowInsert: (target: TableInsertTarget) => void }> = {
+  args: { onRowInsert: fn() },
+  render: (args) => {
+    const [rows, setRows] = useState(() => figmaRows(4));
+    return (
+      <Card style={{ width: 918 }}>
+        <Table
+          caption="Insertable"
+          columns={FIGMA_COLUMNS}
+          rows={rows}
+          getRowId={(r) => r.id}
+          onRowInsert={(target) => {
+            args.onRowInsert(target);
+            setRows((prev) => {
+              const next = [...prev];
+              const id = `new-${prev.length + 1}`;
+              next.splice(target.index, 0, { id, a: 'New', b: 'New', c: 'New', d: 'New' });
+              return next;
+            });
+          }}
+        />
+      </Card>
+    );
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const table = canvas.getByRole('table', { name: 'Insertable' });
+    const ids = () =>
+      within(table)
+        .getAllByRole('row')
+        .slice(1)
+        .map((r) => r.getAttribute('data-row-id'));
+
+    // Only gaps between rows: nothing above the first one.
+    await expect(canvas.queryByRole('button', { name: 'Insert row before row 1' })).toBeNull();
+
+    const insert = canvas.getByRole('button', { name: 'Insert row before row 2' });
+    await expect(getComputedStyle(insert).opacity).toBe('0');
+    await userEvent.click(insert);
+    await expect(args.onRowInsert).toHaveBeenLastCalledWith({
+      index: 1,
+      parentId: undefined,
+      beforeId: '2',
+      afterId: '1',
+    });
+    await expect(ids()).toEqual(['1', 'new-5', '2', '3', '4']);
+
+    // Keyboard focus reveals it (so does hover, in CSS — a mouse click doesn't
+    // leave it showing, as only :focus-visible counts).
+    const last = canvas.getByRole('button', { name: 'Insert row before row 4' });
+    while (document.activeElement !== last) await userEvent.tab();
+    await expect(getComputedStyle(last).opacity).toBe('1');
+    last.blur();
+  },
+};
+
+/** In a tree, the new row is a sibling of the row below the gap. */
+export const InsertTreeRows: StoryObj<{ onRowInsert: (target: TableInsertTarget) => void }> = {
+  args: { onRowInsert: fn() },
+  render: (args) => (
+    <Table
+      caption="Orders"
+      getRowId={(r) => r.id}
+      getSubRows={(r) => r.children}
+      defaultExpandedIds={['SO-1042']}
+      rows={TREE}
+      onRowInsert={args.onRowInsert}
+      columns={[
+        { key: 'id', header: 'Order' },
+        { key: 'name', header: 'Name' },
+      ]}
+    />
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'Insert row before row SO-1042-1' }));
+    await expect(args.onRowInsert).toHaveBeenLastCalledWith({
+      index: 0,
+      parentId: 'SO-1042',
+      beforeId: 'SO-1042-1',
+      afterId: 'SO-1042',
+    });
   },
 };
 

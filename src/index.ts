@@ -159,6 +159,7 @@ export type {
   TableSort,
   TableSortDirection,
   TablePagination,
+  TableInsertTarget,
 } from './components/Table/Table';
 
 export { Page } from './components/Page/Page';

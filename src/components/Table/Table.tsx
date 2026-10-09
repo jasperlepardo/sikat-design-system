@@ -17,6 +17,7 @@ import scrollThumb from './assets/scroll-thumb.svg';
 import pagePrevGlyph from './assets/page-prev.svg';
 import pageNextGlyph from './assets/page-next.svg';
 import chevronDown from './assets/chevron-down.svg';
+import plusGlyph from './assets/plus.svg';
 import './table.css';
 
 export interface TableColumn<T> {
@@ -35,6 +36,18 @@ export type TableSortDirection = 'asc' | 'desc';
 export interface TableSort {
   key: string;
   direction: TableSortDirection;
+}
+
+/** Where `onRowInsert` asks the new row to go: a sibling of the row below the gap. */
+export interface TableInsertTarget {
+  /** Position (0-based) among its siblings the new row should take. */
+  index: number;
+  /** Parent of the new row in a tree table (undefined = top level). */
+  parentId?: string;
+  /** The row below the gap — the new row goes before it. */
+  beforeId: string;
+  /** The row above the gap. */
+  afterId: string;
 }
 
 export interface TablePagination {
@@ -88,6 +101,13 @@ export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   /** Initially expanded row ids (uncontrolled). */
   defaultExpandedIds?: string[];
   onExpandedChange?: (ids: string[]) => void;
+  /**
+   * Adds an insert line to the gap between rows (shown on hover / focus): its "+"
+   * button asks for a new row there. The Table doesn't add it — insert into `rows`
+   * yourself. The new row is a sibling of the row below the gap, so in a tree the
+   * gap under an expanded parent inserts its first child.
+   */
+  onRowInsert?: (target: TableInsertTarget) => void;
 }
 
 interface TreeNode<T> {
@@ -211,7 +231,8 @@ function ScrollIndicator({ scroller }: { scroller: HTMLDivElement | null }) {
  * body of 36px rows (8px cells, bottom `border/default`, 14/20 Medium body text;
  * hover turns the row's rule `border/primary-subtle`; selected rows are
  * `bg/primary-subtle`). Optional checkbox column, trailing "…" action column,
- * header column-settings button, horizontal scroll indicator and pagination.
+ * header column-settings button, horizontal scroll indicator, pagination and
+ * an insert line between rows.
  */
 export function Table<T>({
   columns,
@@ -232,6 +253,7 @@ export function Table<T>({
   expandedIds,
   defaultExpandedIds = [],
   onExpandedChange,
+  onRowInsert,
   className,
   ...rest
 }: TableProps<T>) {
@@ -401,8 +423,30 @@ export function Table<T>({
             </tr>
           </thead>
           <tbody ref={bodyRef}>
-            {visible.map(({ node, pos, size }) => {
+            {visible.map(({ node, pos, size }, rowIndex) => {
               const { row, id, depth } = node;
+              const above = visible[rowIndex - 1]?.node.id;
+              const insert =
+                onRowInsert && above !== undefined ? (
+                  <span className="sikat-table__insert">
+                    <Button
+                      intent="primary"
+                      variant="solid"
+                      size="2xs"
+                      className="sikat-table__insert-btn"
+                      aria-label={`Insert row before row ${id}`}
+                      onClick={() =>
+                        onRowInsert({
+                          index: pos - 1,
+                          parentId: node.parentId,
+                          beforeId: id,
+                          afterId: above,
+                        })
+                      }
+                      leadingIcon={<Glyph src={plusGlyph} size={16} />}
+                    />
+                  </span>
+                ) : null;
               const { checked: isSelected, mixed } = rowState(node);
               const hasChildren = node.children.length > 0;
               const isOpen = expanded.has(id);
@@ -421,6 +465,7 @@ export function Table<T>({
                 >
                   {selectable ? (
                     <td className="sikat-table__td sikat-table__td--check">
+                      {insert}
                       <Check
                         label={`Select row ${id}`}
                         checked={isSelected}
@@ -435,6 +480,7 @@ export function Table<T>({
                       : String((row as Record<string, unknown>)[col.key] ?? '');
                     return (
                       <td key={col.key} className="sikat-table__td">
+                        {!selectable && i === 0 ? insert : null}
                         {tree && i === 0 ? (
                           <span
                             className="sikat-table__tree"
