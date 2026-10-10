@@ -158,7 +158,6 @@ export function Autocomplete({
               size={size}
               leadingIcon={leadingIcon}
               prefix={prefix}
-              suffix={suffix}
               trailingIcon={trailingIcon}
               role="combobox"
               aria-label={aria['aria-label'] ?? fieldLabelText(inputRef, placeholder ?? 'Search')}

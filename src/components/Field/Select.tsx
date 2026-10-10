@@ -302,7 +302,6 @@ export function Select({
                 size={size}
                 leadingIcon={leadingIcon}
                 prefix={prefix}
-                suffix={suffix}
                 trailingIcon={trailingIcon}
                 role="combobox"
                 aria-label={searchPlaceholder}
