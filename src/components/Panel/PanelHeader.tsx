@@ -166,7 +166,7 @@ export function PanelHeader({
           <div className="sikat-panel-header__center">
             <TextField
               className="sikat-panel-header__search"
-              size="xl"
+              size="md"
               type="search"
               aria-label={searchLabel}
               placeholder={searchPlaceholder}
