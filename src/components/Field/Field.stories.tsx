@@ -298,9 +298,9 @@ export const SelectPlayground: StoryObj<
 export const Adornments: StoryObj<FigmaAdornmentArgs> = {
   args: {
     ...figmaAdornmentDefaults,
-    content: 'Search country…',
-    prefixText: 'PH',
-    suffixText: 'USD',
+    content: 'Search employee…',
+    prefixText: 'EMP001',
+    suffixText: 'Dept',
   },
   argTypes: figmaAdornmentArgTypes,
   parameters: figmaControls(figmaAdornmentNames),
@@ -312,25 +312,25 @@ export const Adornments: StoryObj<FigmaAdornmentArgs> = {
         <Field.Select
           aria-label="Select"
           placeholder={args.content}
-          options={COUNTRIES}
+          options={EMPLOYEES_NAME_ONLY}
           {...a}
         />
         <Field.Combobox
           aria-label="Combobox"
           placeholder={args.content}
-          options={COUNTRIES}
+          options={EMPLOYEES_NAME_ONLY}
           {...a}
         />
         <Field.MultiSelect
           aria-label="Multi Select"
           placeholder={args.content}
-          options={COUNTRIES}
+          options={EMPLOYEES_NAME_ONLY}
           {...a}
         />
         <Field.Autocomplete
           aria-label="Autocomplete"
           placeholder={args.content}
-          suggestions={COUNTRIES.map((c) => ({ value: c.value, label: c.label }))}
+          suggestions={EMPLOYEES_NAME_ONLY}
           {...a}
         />
       </div>
@@ -830,6 +830,16 @@ const COUNTRIES = [
   { value: 'jp', label: 'Japan' },
   { value: 'us', label: 'United States' },
 ];
+const EMPLOYEES = [
+  { value: 'EMP001', label: 'Juan dela Cruz', subLabel: 'EMP001', description: 'Engineering' },
+  { value: 'EMP002', label: 'Maria Santos', subLabel: 'EMP002', description: 'Design' },
+  { value: 'EMP003', label: 'Pedro Reyes', subLabel: 'EMP003', description: 'Finance' },
+  { value: 'EMP004', label: 'Ana Gomez', subLabel: 'EMP004', description: 'Operations' },
+];
+const EMPLOYEES_NAME_ONLY = EMPLOYEES.map(({ subLabel, description: _d, ...e }) => ({
+  ...e,
+  prefix: subLabel,
+}));
 
 /** Combobox — searchable single-select, constrained to options. */
 export const ComboboxField: Story = {
@@ -1113,13 +1123,6 @@ export const DatePickerField: Story = {
   ),
 };
 
-const EMPLOYEES = [
-  { value: 'EMP001', label: 'Juan dela Cruz', subLabel: 'EMP001', description: 'Engineering' },
-  { value: 'EMP002', label: 'Maria Santos', subLabel: 'EMP002', description: 'Design' },
-  { value: 'EMP003', label: 'Pedro Reyes', subLabel: 'EMP003', description: 'Finance' },
-  { value: 'EMP004', label: 'Ana Gomez', subLabel: 'EMP004', description: 'Operations' },
-];
-
 /**
  * Options with a `description` — a secondary line shown below the label in the
  * dropdown (body/xs, muted). Supported by Select, Combobox, MultiSelect, and
@@ -1132,10 +1135,6 @@ const EMPLOYEES = [
 const empCode = (value: string | null | undefined) =>
   EMPLOYEES.find((e) => e.value === value)?.subLabel as string | undefined;
 
-const EMPLOYEES_NAME_ONLY = EMPLOYEES.map(({ subLabel, description: _d, ...e }) => ({
-  ...e,
-  prefix: subLabel,
-}));
 
 function EmployeeCodePrefixDemo() {
   const [selectVal, setSelectVal] = useState('EMP001');
