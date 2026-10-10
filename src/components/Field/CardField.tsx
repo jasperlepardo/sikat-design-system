@@ -1,10 +1,11 @@
-import { useId, type ReactNode } from 'react';
+import { useContext, useId, type ReactNode } from 'react';
 import { IconButton } from '../Button/IconButton';
 import { Icon } from '../Icon/Icon';
 import { List } from '../List/List';
 import { Combobox, type ComboboxOption } from './Combobox';
 import { FormLabel } from './FormLabel';
 import { type ListCardField } from '../List/List';
+import { FieldOrientationCtx } from '../Form/fields';
 
 export interface CardFieldOption {
   value: string;
@@ -72,6 +73,7 @@ export function CardField({
   'aria-describedby': ariaDescribedby,
 }: CardFieldProps) {
   const comboboxId = useId();
+  const orientation = useContext(FieldOrientationCtx) ?? 'horizontal';
   const selected = value ? (options.find((o) => o.value === value) ?? null) : null;
   const interactive = !disabled && !readOnly;
 
@@ -145,7 +147,7 @@ export function CardField({
   if (!labelEl) return content;
 
   return (
-    <div className="sikat-field-group" data-orientation="vertical">
+    <div className="sikat-field-group" data-orientation={orientation}>
       {labelEl}
       {content}
     </div>
