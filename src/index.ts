@@ -211,20 +211,18 @@ export type { OTPProps } from './components/OTP/OTP';
 export { Dropdown, DropdownItem } from './components/Dropdown/Dropdown';
 export type { DropdownProps, DropdownItemProps } from './components/Dropdown/Dropdown';
 
-export { Combobox } from './components/Field/Combobox';
-export type { ComboboxProps, ComboboxOption } from './components/Field/Combobox';
-
-export { MultiSelect } from './components/Field/MultiSelect';
-export type { MultiSelectProps, MultiSelectOption } from './components/Field/MultiSelect';
-
-export { Autocomplete } from './components/Field/Autocomplete';
-export type { AutocompleteProps, AutocompleteSuggestion } from './components/Field/Autocomplete';
-
-export { DatePicker } from './components/Field/DatePicker';
-export type { DatePickerProps } from './components/Field/DatePicker';
-
-export { CardField } from './components/Field/CardField';
-export type { CardFieldProps, CardFieldOption } from './components/Field/CardField';
+export { Combobox, MultiSelect, Autocomplete, DatePicker, CardField, Field } from './components/Field/Field';
+export type {
+  ComboboxProps,
+  ComboboxOption,
+  MultiSelectProps,
+  MultiSelectOption,
+  AutocompleteProps,
+  AutocompleteSuggestion,
+  DatePickerProps,
+  CardFieldProps,
+  CardFieldOption,
+} from './components/Field/Field';
 
 export { Footer } from './components/Footer/Footer';
 export type { FooterProps, FooterContainerProps } from './components/Footer/Footer';

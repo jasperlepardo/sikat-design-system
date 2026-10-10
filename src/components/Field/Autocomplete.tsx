@@ -1,22 +1,13 @@
-import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
 import { TextField } from './TextField';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { fieldLabelText, usePanelFocus } from '../../lib/usePanelFocus';
+import type { SelectOption } from './Select';
 
-export interface AutocompleteSuggestion {
-  value: string;
-  label?: ReactNode;
-  /** Plain text for matching (when `label` is a node). Defaults to `value`. */
-  text?: string;
-  subLabel?: ReactNode;
-  subLabelPlacement?: 'top' | 'inline';
-  /** Third line shown below the label in the dropdown (body/xs, muted). */
-  description?: ReactNode;
-  disabled?: boolean;
-}
+export type AutocompleteSuggestion = SelectOption;
 
 export interface AutocompleteProps extends FieldAdornments {
   /** Suggestions — plain strings or `{ value, label, text }`. */
@@ -194,6 +185,8 @@ export function Autocomplete({
               id={getItemId(i)}
               active={i === activeIndex}
               disabled={s.disabled}
+              prefix={s.prefix}
+              suffix={s.suffix}
               subLabel={s.subLabel}
               subLabelPlacement={s.subLabelPlacement}
               description={s.description}

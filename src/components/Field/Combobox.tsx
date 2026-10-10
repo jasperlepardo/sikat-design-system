@@ -1,22 +1,9 @@
 import type { ReactNode } from 'react';
 import { Select } from './Select';
+import type { SelectOption } from './Select';
 import type { FieldAdornments, FieldSize } from './FieldShell';
 
-export interface ComboboxOption {
-  value: string;
-  label?: ReactNode;
-  /** Plain text for filtering + the closed display (when `label` is a node). */
-  text?: string;
-  subLabel?: ReactNode;
-  subLabelPlacement?: 'top' | 'inline';
-  /** Third line shown below the label in the dropdown (body/xs, muted). */
-  description?: ReactNode;
-  /** Text before the label in the dropdown item (text/muted). */
-  prefix?: ReactNode;
-  /** Text after the label in the dropdown item (text/muted). */
-  suffix?: ReactNode;
-  disabled?: boolean;
-}
+export type ComboboxOption = SelectOption;
 
 export interface ComboboxProps extends FieldAdornments {
   options: ComboboxOption[];

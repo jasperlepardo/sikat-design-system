@@ -1,26 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import {
-  FormField,
-  ReadOnly,
-  TextField,
-  Textarea,
-  Select,
-  Checkbox,
-  Radio,
-  fieldSizes,
-} from './Field';
-import { MultiSelect } from './MultiSelect';
-import { Combobox } from './Combobox';
+import { Field, fieldSizes } from './Field';
 import { Button } from '../Button/Button';
 import { SidePanel } from '../SidePanel/SidePanel';
 import { Panel } from '../Panel/Panel';
 import { PanelHeader } from '../Panel/PanelHeader';
 import { Card } from '../Card/Card';
 import { Form } from '../Form/Form';
-import { Autocomplete } from './Autocomplete';
-import { DatePicker } from './DatePicker';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import {
   figmaAdornmentArgTypes,
@@ -42,14 +29,14 @@ const adorn = (a: FigmaAdornmentArgs) => ({
 
 const meta = {
   title: 'Components/Field',
-  component: TextField,
+  component: Field.Text,
   tags: ['autodocs'],
   args: { placeholder: 'Enter text…', size: 'md' },
   argTypes: {
     size: { control: 'inline-radio', options: fieldSizes },
     invalid: { control: 'boolean' },
   },
-} satisfies Meta<typeof TextField>;
+} satisfies Meta<typeof Field.Text>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -152,7 +139,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
     };
     return (
       <div style={{ width: 664 }}>
-        <FormField
+        <Field.Group
           orientation={orientation}
           label={showLabel ? 'Label' : undefined}
           subLabel={showSubLabel ? subLabel : undefined}
@@ -163,7 +150,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
           {(props) => (
             <>
               {type === 'text-field' ? (
-                <TextField
+                <Field.Text
                   key={String(hasContent)}
                   placeholder="Placeholder"
                   defaultValue={content}
@@ -171,7 +158,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
                   {...props}
                 />
               ) : type === 'textarea' ? (
-                <Textarea
+                <Field.Textarea
                   key={String(hasContent)}
                   placeholder="Placeholder"
                   defaultValue={content}
@@ -179,7 +166,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
                   {...props}
                 />
               ) : type === 'select' ? (
-                <Select
+                <Field.Select
                   key={String(hasContent)}
                   defaultValue={content ?? ''}
                   {...common}
@@ -189,9 +176,9 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
                     Placeholder
                   </option>
                   <option value="Content">Content</option>
-                </Select>
+                </Field.Select>
               ) : (
-                <MultiSelect
+                <Field.MultiSelect
                   key={String(hasContent)}
                   id={props.id}
                   placeholder="Placeholder"
@@ -210,7 +197,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
               ) : null}
             </>
           )}
-        </FormField>
+        </Field.Group>
       </div>
     );
   },
@@ -224,7 +211,7 @@ export const TextFieldPlayground: StoryObj<FigmaAdornmentArgs & { Type: 'text' }
   parameters: figmaControls([...figmaAdornmentNames, 'Type']),
   render: (a) => (
     <div style={{ width: 480 }}>
-      <TextField aria-label="Text Field" placeholder={a.content} {...adorn(a)} />
+      <Field.Text aria-label="Text Field" placeholder={a.content} {...adorn(a)} />
     </div>
   ),
 };
@@ -243,14 +230,20 @@ export const SelectPlayground: StoryObj<
   parameters: figmaControls([...figmaAdornmentNames, 'Type', 'Clearable']),
   render: ({ clearable, ...a }) => (
     <div style={{ width: 480 }}>
-      <Select aria-label="Select" name="choice" defaultValue="" clearable={clearable} {...adorn(a)}>
+      <Field.Select
+        aria-label="Select"
+        name="choice"
+        defaultValue=""
+        clearable={clearable}
+        {...adorn(a)}
+      >
         <option value="" disabled>
           {a.content}
         </option>
         <option value="a">Option A</option>
         <option value="b">Option B</option>
         <option value="c">Banana</option>
-      </Select>
+      </Field.Select>
     </div>
   ),
   play: async ({ canvasElement }) => {
@@ -305,7 +298,7 @@ export const SelectPlayground: StoryObj<
 export const SearchableSelect: Story = {
   render: () => (
     <div style={{ width: 480 }}>
-      <Select
+      <Field.Select
         aria-label="Fruit"
         searchable
         placeholder="Pick a fruit"
@@ -362,10 +355,10 @@ export const TextareaAutoGrow: Story = {
     const [notes, setNotes] = useState('Line 1\nLine 2\nLine 3\nLine 4');
     return (
       <div style={{ display: 'grid', gap: 16, width: 480 }}>
-        <TextField aria-label="Regular field" placeholder="Regular field" />
-        <Textarea aria-label="Grows" placeholder="Type a few lines…" />
-        <Textarea aria-label="Max 3 rows" maxRows={3} placeholder="Caps at 3 lines…" />
-        <Textarea
+        <Field.Text aria-label="Regular field" placeholder="Regular field" />
+        <Field.Textarea aria-label="Grows" placeholder="Type a few lines…" />
+        <Field.Textarea aria-label="Max 3 rows" maxRows={3} placeholder="Caps at 3 lines…" />
+        <Field.Textarea
           aria-label="Controlled"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
@@ -417,7 +410,7 @@ export const TextareaPlayground: StoryObj<{ content: string; Type: 'text' }> = {
   parameters: figmaControls(['Content', 'Type']),
   render: (a) => (
     <div style={{ width: 480 }}>
-      <Textarea aria-label="Textarea" placeholder={a.content} />
+      <Field.Textarea aria-label="Textarea" placeholder={a.content} />
     </div>
   ),
 };
@@ -426,9 +419,9 @@ export const TextareaPlayground: StoryObj<{ content: string; Type: 'text' }> = {
 export const TypingInteraction: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <FormField label="Label" hint="Helper">
-        {(props) => <TextField placeholder="Placeholder" {...props} />}
-      </FormField>
+      <Field.Group label="Label" hint="Helper">
+        {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+      </Field.Group>
     </div>
   ),
   play: async ({ canvasElement }) => {
@@ -445,9 +438,9 @@ export const TypingInteraction: Story = {
 export const WithLabelAndHint: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <FormField label="Email" hint="We'll never share it." required>
-        {(props) => <TextField type="email" placeholder="you@example.com" {...props} />}
-      </FormField>
+      <Field.Group label="Email" hint="We'll never share it." required>
+        {(props) => <Field.Text type="email" placeholder="you@example.com" {...props} />}
+      </Field.Group>
     </div>
   ),
 };
@@ -461,17 +454,17 @@ export const ResponsiveOrientation: Story = {
   render: () => {
     const fields = (prefix: string) => (
       <>
-        <FormField orientation="responsive" label={`${prefix} name`}>
-          {(props) => <TextField placeholder="Placeholder" {...props} />}
-        </FormField>
-        <FormField
+        <Field.Group orientation="responsive" label={`${prefix} name`}>
+          {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+        </Field.Group>
+        <Field.Group
           orientation="responsive"
           label={`${prefix} email`}
           subLabel="(optional)"
           tooltip="We'll only use this for receipts."
         >
-          {(props) => <TextField placeholder="Placeholder" {...props} />}
-        </FormField>
+          {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+        </Field.Group>
       </>
     );
     return (
@@ -483,9 +476,9 @@ export const ResponsiveOrientation: Story = {
           {fields('Narrow')}
         </div>
         <div data-testid="stacked" style={{ width: 320 }}>
-          <FormField label="Stacked name">
-            {(props) => <TextField placeholder="Placeholder" {...props} />}
-          </FormField>
+          <Field.Group label="Stacked name">
+            {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+          </Field.Group>
         </div>
       </div>
     );
@@ -532,34 +525,34 @@ export const SuffixInline: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 24, width: 640 }}>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 16px' }}>
-        <FormField label="Length">
-          {(props) => <TextField type="number" defaultValue="0" suffix="cm" {...props} />}
-        </FormField>
-        <FormField label="Width">
-          {(props) => <TextField type="number" defaultValue="0" suffix="cm" {...props} />}
-        </FormField>
-        <FormField label="Volume">
-          {(props) => <TextField type="number" defaultValue="0" suffix="cm³" {...props} />}
-        </FormField>
-        <FormField label="Net weight" tooltip="Weight of one piece, without packaging.">
-          {(props) => <TextField type="number" defaultValue="0.1" suffix="kg" {...props} />}
-        </FormField>
+        <Field.Group label="Length">
+          {(props) => <Field.Text type="number" defaultValue="0" suffix="cm" {...props} />}
+        </Field.Group>
+        <Field.Group label="Width">
+          {(props) => <Field.Text type="number" defaultValue="0" suffix="cm" {...props} />}
+        </Field.Group>
+        <Field.Group label="Volume">
+          {(props) => <Field.Text type="number" defaultValue="0" suffix="cm³" {...props} />}
+        </Field.Group>
+        <Field.Group label="Net weight" tooltip="Weight of one piece, without packaging.">
+          {(props) => <Field.Text type="number" defaultValue="0.1" suffix="kg" {...props} />}
+        </Field.Group>
       </div>
       <div style={{ display: 'grid', gap: 12, width: 320 }}>
-        <TextField aria-label="Empty" placeholder="Placeholder" suffix="cm" />
-        <TextField
+        <Field.Text aria-label="Empty" placeholder="Placeholder" suffix="cm" />
+        <Field.Text
           aria-label="With icon"
           defaultValue="12.5"
           suffix="kg"
           trailingIcon={<Icon size={20}>info</Icon>}
         />
-        <TextField
+        <Field.Text
           aria-label="Prefix and suffix"
           defaultValue="1,250.00"
           prefix="PHP"
           suffix="/mo"
         />
-        <TextField aria-label="Long" defaultValue={'1234567890'.repeat(6)} suffix="cm" />
+        <Field.Text aria-label="Long" defaultValue={'1234567890'.repeat(6)} suffix="cm" />
       </div>
     </div>
   ),
@@ -637,13 +630,13 @@ export const SuffixInline: Story = {
 export const WithSubLabel: Story = {
   render: () => (
     <div style={{ maxWidth: 360, paddingTop: 64 }}>
-      <FormField
+      <Field.Group
         label="Middle name"
         subLabel="(optional)"
         tooltip="As shown on your government ID."
       >
-        {(props) => <TextField placeholder="Placeholder" {...props} />}
-      </FormField>
+        {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+      </Field.Group>
     </div>
   ),
   play: async ({ canvasElement }) => {
@@ -666,15 +659,15 @@ export const WithSubLabel: Story = {
 export const ReadOnlyField: Story = {
   render: () => (
     <div style={{ maxWidth: 480, display: 'grid', gap: 8 }}>
-      <FormField label="Average delay" disabled tooltip="Calculated from payment history.">
-        <ReadOnly value="5 days" />
-      </FormField>
-      <FormField label="Normal balance" disabled tooltip="Determined by the account drawer.">
-        <ReadOnly value="Debit" />
-      </FormField>
-      <FormField label="Inventory account" disabled tooltip="From the item group.">
-        <ReadOnly value="1300 Raw Materials Inventory" />
-      </FormField>
+      <Field.Group label="Average delay" disabled tooltip="Calculated from payment history.">
+        <Field.ReadOnly value="5 days" />
+      </Field.Group>
+      <Field.Group label="Normal balance" disabled tooltip="Determined by the account drawer.">
+        <Field.ReadOnly value="Debit" />
+      </Field.Group>
+      <Field.Group label="Inventory account" disabled tooltip="From the item group.">
+        <Field.ReadOnly value="1300 Raw Materials Inventory" />
+      </Field.Group>
     </div>
   ),
 };
@@ -687,15 +680,15 @@ export const ReadOnlyWithDescription: Story = {
   name: 'ReadOnly — with Description',
   render: () => (
     <div style={{ maxWidth: 480, display: 'grid', gap: 8 }}>
-      <FormField label="Assigned employee" disabled>
-        <ReadOnly value="Juan dela Cruz" subLabel="EMP001" description="Engineering" />
-      </FormField>
-      <FormField label="Chart of account" disabled>
-        <ReadOnly value="Cash and Cash Equivalents" subLabel="1000" description="Assets" />
-      </FormField>
-      <FormField label="Vendor" disabled>
-        <ReadOnly value="Acme Supplies Co." subLabel="VND-0042" description="Active" />
-      </FormField>
+      <Field.Group label="Assigned employee" disabled>
+        <Field.ReadOnly value="Juan dela Cruz" subLabel="EMP001" description="Engineering" />
+      </Field.Group>
+      <Field.Group label="Chart of account" disabled>
+        <Field.ReadOnly value="Cash and Cash Equivalents" subLabel="1000" description="Assets" />
+      </Field.Group>
+      <Field.Group label="Vendor" disabled>
+        <Field.ReadOnly value="Acme Supplies Co." subLabel="VND-0042" description="Active" />
+      </Field.Group>
     </div>
   ),
 };
@@ -703,9 +696,9 @@ export const ReadOnlyWithDescription: Story = {
 export const WithError: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <FormField label="Username" error="That username is taken.">
-        {(props) => <TextField defaultValue="jasper" {...props} />}
-      </FormField>
+      <Field.Group label="Username" error="That username is taken.">
+        {(props) => <Field.Text defaultValue="jasper" {...props} />}
+      </Field.Group>
     </div>
   ),
 };
@@ -733,15 +726,15 @@ export const Matrix: Story = {
             style={{ gridTemplateColumns: 'repeat(5, 320px)' }}
           >
             {states.map((s) => (
-              <FormField
+              <Field.Group
                 key={s.name}
                 orientation={orientation}
                 label="Label"
                 hint={s.error ? undefined : 'Helper'}
                 error={s.error}
               >
-                {(props) => <TextField placeholder="Placeholder" {...s.props} {...props} />}
-              </FormField>
+                {(props) => <Field.Text placeholder="Placeholder" {...s.props} {...props} />}
+              </Field.Group>
             ))}
           </div>
         ))}
@@ -753,31 +746,31 @@ export const Matrix: Story = {
 export const Controls: Story = {
   render: () => (
     <div className="flex flex-col gap-4" style={{ maxWidth: 360 }}>
-      <FormField label="Country">
+      <Field.Group label="Country">
         {(props) => (
-          <Select {...props} defaultValue="ph">
+          <Field.Select {...props} defaultValue="ph">
             <option value="ph">Philippines</option>
             <option value="sg">Singapore</option>
             <option value="jp">Japan</option>
-          </Select>
+          </Field.Select>
         )}
-      </FormField>
-      <FormField label="Notes" hint="Optional.">
-        {(props) => <Textarea placeholder="Add a note…" {...props} />}
-      </FormField>
+      </Field.Group>
+      <Field.Group label="Notes" hint="Optional.">
+        {(props) => <Field.Textarea placeholder="Add a note…" {...props} />}
+      </Field.Group>
       <fieldset className="flex flex-col gap-2">
-        <Checkbox defaultChecked>Email me updates</Checkbox>
-        <Checkbox>Subscribe to newsletter</Checkbox>
-        <Checkbox disabled>Unavailable option</Checkbox>
+        <Field.Checkbox defaultChecked>Email me updates</Field.Checkbox>
+        <Field.Checkbox>Subscribe to newsletter</Field.Checkbox>
+        <Field.Checkbox disabled>Unavailable option</Field.Checkbox>
       </fieldset>
       <fieldset className="flex flex-col gap-2">
-        <Radio name="plan" defaultChecked>
+        <Field.Radio name="plan" defaultChecked>
           Starter
-        </Radio>
-        <Radio name="plan">Pro</Radio>
-        <Radio name="plan" disabled>
+        </Field.Radio>
+        <Field.Radio name="plan">Pro</Field.Radio>
+        <Field.Radio name="plan" disabled>
           Enterprise (soon)
-        </Radio>
+        </Field.Radio>
       </fieldset>
     </div>
   ),
@@ -796,9 +789,11 @@ export const ComboboxField: Story = {
   name: 'Combobox',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <FormField label="Country">
-        {(props) => <Combobox {...props} options={COUNTRIES} placeholder="Search country…" />}
-      </FormField>
+      <Field.Group label="Country">
+        {(props) => (
+          <Field.Combobox {...props} options={COUNTRIES} placeholder="Search country…" />
+        )}
+      </Field.Group>
     </div>
   ),
 };
@@ -813,9 +808,9 @@ export const Clearable: Story = {
     const [country, setCountry] = useState<string | null>('ph');
     return (
       <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
-        <FormField label="Parent account" subLabel="(optional)">
+        <Field.Group label="Parent account" subLabel="(optional)">
           {(props) => (
-            <Select
+            <Field.Select
               {...props}
               clearable
               placeholder="None"
@@ -827,10 +822,10 @@ export const Clearable: Story = {
               ]}
             />
           )}
-        </FormField>
-        <FormField label="Country" subLabel="(optional)">
+        </Field.Group>
+        <Field.Group label="Country" subLabel="(optional)">
           {(props) => (
-            <Combobox
+            <Field.Combobox
               {...props}
               clearable
               options={COUNTRIES}
@@ -839,7 +834,7 @@ export const Clearable: Story = {
               onValueChange={setCountry}
             />
           )}
-        </FormField>
+        </Field.Group>
       </div>
     );
   },
@@ -892,9 +887,9 @@ export const ComboboxEmptyContent: Story = {
     const [draftName, setDraftName] = useState('');
     return (
       <div style={{ maxWidth: 360 }}>
-        <FormField label="Country">
+        <Field.Group label="Country">
           {(props) => (
-            <Combobox
+            <Field.Combobox
               {...props}
               options={options}
               value={value}
@@ -920,7 +915,7 @@ export const ComboboxEmptyContent: Story = {
               )}
             />
           )}
-        </FormField>
+        </Field.Group>
 
         {modalOpen && (
           <SidePanel overlay onOverlayClick={() => setModalOpen(false)}>
@@ -958,9 +953,9 @@ export const ComboboxEmptyContent: Story = {
               <Card>
                 <Card.Content>
                   <Form.Group>
-                    <FormField label="Country name">
+                    <Field.Group label="Country name">
                       {(props) => (
-                        <TextField
+                        <Field.Text
                           {...props}
                           autoFocus
                           value={draftName}
@@ -968,7 +963,7 @@ export const ComboboxEmptyContent: Story = {
                           placeholder="e.g. Narnia"
                         />
                       )}
-                    </FormField>
+                    </Field.Group>
                   </Form.Group>
                 </Card.Content>
               </Card>
@@ -996,9 +991,9 @@ export const AutocompleteField: Story = {
     const [value, setValue] = useState('');
     return (
       <div style={{ maxWidth: 360 }}>
-        <FormField label="Fruit" hint="Free text — suggestions assist.">
+        <Field.Group label="Fruit" hint="Free text — suggestions assist.">
           {(props) => (
-            <Autocomplete
+            <Field.Autocomplete
               {...props}
               suggestions={FRUITS}
               value={value}
@@ -1006,7 +1001,7 @@ export const AutocompleteField: Story = {
               placeholder="Type a fruit…"
             />
           )}
-        </FormField>
+        </Field.Group>
       </div>
     );
   },
@@ -1018,9 +1013,11 @@ export const MultiSelectField: Story = {
   name: 'Multi Select',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <FormField label="Countries">
-        {(props) => <MultiSelect {...props} options={COUNTRIES} placeholder="Select countries…" />}
-      </FormField>
+      <Field.Group label="Countries">
+        {(props) => (
+          <Field.MultiSelect {...props} options={COUNTRIES} placeholder="Select countries…" />
+        )}
+      </Field.Group>
     </div>
   ),
   play: async ({ canvasElement }) => {
@@ -1062,9 +1059,9 @@ export const DatePickerField: Story = {
   name: 'Date Picker',
   render: () => (
     <div style={{ maxWidth: 360 }}>
-      <FormField label="Date" hint="Select a date from the calendar.">
-        {(props) => <DatePicker {...props} />}
-      </FormField>
+      <Field.Group label="Date" hint="Select a date from the calendar.">
+        {(props) => <Field.DatePicker {...props} />}
+      </Field.Group>
     </div>
   ),
 };
@@ -1088,7 +1085,10 @@ const EMPLOYEES = [
 const empCode = (value: string | null | undefined) =>
   EMPLOYEES.find((e) => e.value === value)?.subLabel as string | undefined;
 
-const EMPLOYEES_NAME_ONLY = EMPLOYEES.map(({ subLabel, description: _d, ...e }) => ({ ...e, prefix: subLabel }));
+const EMPLOYEES_NAME_ONLY = EMPLOYEES.map(({ subLabel, description: _d, ...e }) => ({
+  ...e,
+  prefix: subLabel,
+}));
 
 function EmployeeCodePrefixDemo() {
   const [selectVal, setSelectVal] = useState('EMP001');
@@ -1096,9 +1096,9 @@ function EmployeeCodePrefixDemo() {
   const [multiVal, setMultiVal] = useState<string[]>([]);
   return (
     <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
-      <FormField label="Employee (Select)">
+      <Field.Group label="Employee (Select)">
         {(props) => (
-          <Select
+          <Field.Select
             {...props}
             prefix={empCode(selectVal)}
             options={EMPLOYEES_NAME_ONLY}
@@ -1107,10 +1107,10 @@ function EmployeeCodePrefixDemo() {
             onValueChange={setSelectVal}
           />
         )}
-      </FormField>
-      <FormField label="Employee (Combobox)">
+      </Field.Group>
+      <Field.Group label="Employee (Combobox)">
         {(props) => (
-          <Combobox
+          <Field.Combobox
             {...props}
             prefix={empCode(comboVal)}
             options={EMPLOYEES_NAME_ONLY}
@@ -1119,10 +1119,10 @@ function EmployeeCodePrefixDemo() {
             onValueChange={setComboVal}
           />
         )}
-      </FormField>
-      <FormField label="Employees (Multi Select)">
+      </Field.Group>
+      <Field.Group label="Employees (Multi Select)">
         {(props) => (
-          <MultiSelect
+          <Field.MultiSelect
             {...props}
             options={EMPLOYEES_NAME_ONLY}
             placeholder="Select employees…"
@@ -1130,7 +1130,7 @@ function EmployeeCodePrefixDemo() {
             onValueChange={setMultiVal}
           />
         )}
-      </FormField>
+      </Field.Group>
     </div>
   );
 }
@@ -1143,28 +1143,54 @@ export const OptionWithEmployeeCodePrefix: Story = {
 
 export const OptionWithDescription: StoryObj<FigmaAdornmentArgs> = {
   name: 'Option — with Description',
-  args: { ...figmaAdornmentDefaults, showLeadingIcon: false, showTrailingIcon: false, showPrefix: false, showSuffix: false },
+  args: {
+    ...figmaAdornmentDefaults,
+    showLeadingIcon: false,
+    showTrailingIcon: false,
+    showPrefix: false,
+    showSuffix: false,
+  },
   argTypes: figmaAdornmentArgTypes,
   parameters: figmaControls(figmaAdornmentNames),
   render: (args) => {
     const a = adorn(args);
     return (
       <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
-        <FormField label="Employee (Select — empty)">
-          {(props) => <Select {...props} {...a} options={EMPLOYEES} placeholder="Select employee…" />}
-        </FormField>
-        <FormField label="Employee (Select — filled)">
-          {(props) => <Select {...props} {...a} options={EMPLOYEES} defaultValue="EMP001" />}
-        </FormField>
-        <FormField label="Employee (Combobox — empty)">
-          {(props) => <Combobox {...props} {...a} options={EMPLOYEES} placeholder="Search employee…" />}
-        </FormField>
-        <FormField label="Employee (Combobox — filled)">
-          {(props) => <Combobox {...props} {...a} options={EMPLOYEES} defaultValue="EMP002" />}
-        </FormField>
-        <FormField label="Employees (Multi Select)">
-          {(props) => <MultiSelect {...props} {...a} options={EMPLOYEES} placeholder="Select employees…" />}
-        </FormField>
+        <Field.Group label="Employee (Select — empty)">
+          {(props) => (
+            <Field.Select {...props} {...a} options={EMPLOYEES} placeholder="Select employee…" />
+          )}
+        </Field.Group>
+        <Field.Group label="Employee (Select — filled)">
+          {(props) => (
+            <Field.Select {...props} {...a} options={EMPLOYEES} defaultValue="EMP001" />
+          )}
+        </Field.Group>
+        <Field.Group label="Employee (Combobox — empty)">
+          {(props) => (
+            <Field.Combobox
+              {...props}
+              {...a}
+              options={EMPLOYEES}
+              placeholder="Search employee…"
+            />
+          )}
+        </Field.Group>
+        <Field.Group label="Employee (Combobox — filled)">
+          {(props) => (
+            <Field.Combobox {...props} {...a} options={EMPLOYEES} defaultValue="EMP002" />
+          )}
+        </Field.Group>
+        <Field.Group label="Employees (Multi Select)">
+          {(props) => (
+            <Field.MultiSelect
+              {...props}
+              {...a}
+              options={EMPLOYEES}
+              placeholder="Select employees…"
+            />
+          )}
+        </Field.Group>
       </div>
     );
   },

@@ -306,7 +306,7 @@ export function Select({
                 aria-expanded
                 aria-controls={listId}
                 aria-activedescendant={activeId}
-                placeholder={searchPlaceholder}
+                placeholder={selectedOption ? optionText(selectedOption) : searchPlaceholder}
                 value={query}
                 onChange={(e) => search(e.currentTarget.value)}
                 onKeyDown={(e) => {
