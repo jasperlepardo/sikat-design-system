@@ -1,7 +1,6 @@
 import { useId, useMemo, useRef, useState } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
-import { TextField } from './TextField';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { fieldLabelText, usePanelFocus } from '../../lib/usePanelFocus';
@@ -153,33 +152,35 @@ export function Autocomplete({
           hSide={hSide}
           cover
           header={
-            <TextField
-              ref={panelInputRef}
-              size={size}
-              leadingIcon={leadingIcon}
-              prefix={prefix}
-              trailingIcon={trailingIcon}
-              role="combobox"
-              aria-label={aria['aria-label'] ?? fieldLabelText(inputRef, placeholder ?? 'Search')}
-              aria-autocomplete="list"
-              aria-expanded
-              aria-controls={listId}
-              aria-activedescendant={activeId}
-              autoComplete="off"
-              placeholder={placeholder}
-              value={text}
-              onChange={(e) => setText(e.currentTarget.value)}
-              onKeyDown={(e) => {
-                // Tab: close and hand focus back to the field first, so the
-                // browser moves on to the field after it.
-                if (e.key === 'Tab') {
-                  inputRef.current?.focus();
-                  setOpen(false);
-                  return;
-                }
-                onKeyDown(e);
-              }}
-            />
+            <FieldShell
+              state={{ size, filled: text !== '', disabled, invalid }}
+              adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+            >
+              <input
+                ref={panelInputRef}
+                className="sikat-field__input"
+                role="combobox"
+                aria-label={aria['aria-label'] ?? fieldLabelText(inputRef, placeholder ?? 'Search')}
+                aria-autocomplete="list"
+                aria-expanded
+                aria-controls={listId}
+                aria-activedescendant={activeId}
+                autoComplete="off"
+                placeholder={placeholder}
+                value={text}
+                onChange={(e) => setText(e.currentTarget.value)}
+                onKeyDown={(e) => {
+                  // Tab: close and hand focus back to the field first, so the
+                  // browser moves on to the field after it.
+                  if (e.key === 'Tab') {
+                    inputRef.current?.focus();
+                    setOpen(false);
+                    return;
+                  }
+                  onKeyDown(e);
+                }}
+              />
+            </FieldShell>
           }
         >
           {filtered.map((s, i) => (

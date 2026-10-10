@@ -5,7 +5,6 @@ import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { usePanelFocus } from '../../lib/usePanelFocus';
 import { cn } from '../../lib/cn';
-import { TextField } from './TextField';
 import {
   FieldShell,
   FieldClear,
@@ -297,33 +296,36 @@ export function Select({
           cover
           header={
             searchable ? (
-              <TextField
-                ref={searchRef}
-                size={size}
-                leadingIcon={leadingIcon}
-                prefix={prefix}
-                trailingIcon={trailingIcon}
-                role="combobox"
-                aria-label={searchPlaceholder}
-                aria-autocomplete="list"
-                aria-expanded
-                aria-controls={listId}
-                aria-activedescendant={activeId}
-                placeholder={selectedOption ? optionText(selectedOption) : searchPlaceholder}
-                value={query}
-                onChange={(e) => search(e.currentTarget.value)}
-                onKeyDown={(e) => {
-                  // Tab: close and hand focus back to the trigger first, so the
-                  // browser moves on to the field after it (the panel is portaled
-                  // to the end of <body>).
-                  if (e.key === 'Tab') {
-                    triggerRef.current?.focus();
-                    setOpen(false);
-                    return;
-                  }
-                  onKeyDown(e);
-                }}
-              />
+              <FieldShell
+                state={{ size, filled: query !== '', disabled, invalid }}
+                adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+              >
+                <input
+                  ref={searchRef}
+                  className="sikat-field__input"
+                  role="combobox"
+                  aria-label={searchPlaceholder}
+                  aria-autocomplete="list"
+                  aria-expanded
+                  aria-controls={listId}
+                  aria-activedescendant={activeId}
+                  autoComplete="off"
+                  placeholder={selectedOption ? optionText(selectedOption) : searchPlaceholder}
+                  value={query}
+                  onChange={(e) => search(e.currentTarget.value)}
+                  onKeyDown={(e) => {
+                    // Tab: close and hand focus back to the trigger first, so the
+                    // browser moves on to the field after it (the panel is portaled
+                    // to the end of <body>).
+                    if (e.key === 'Tab') {
+                      triggerRef.current?.focus();
+                      setOpen(false);
+                      return;
+                    }
+                    onKeyDown(e);
+                  }}
+                />
+              </FieldShell>
             ) : undefined
           }
         >
