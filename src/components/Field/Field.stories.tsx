@@ -291,18 +291,17 @@ export const SelectPlayground: StoryObj<
   },
 };
 
-const ADORNMENT_OPTIONS = [
-  { value: 'a', label: 'Option A' },
-  { value: 'b', label: 'Option B' },
-  { value: 'c', label: 'Option C' },
-];
-
 /**
  * All field controls that accept adornments — leadingIcon, prefix, suffix,
  * trailingIcon — shown together. Toggle each via the controls panel.
  */
 export const Adornments: StoryObj<FigmaAdornmentArgs> = {
-  args: { ...figmaAdornmentDefaults },
+  args: {
+    ...figmaAdornmentDefaults,
+    content: 'Search country…',
+    prefixText: 'PH',
+    suffixText: 'USD',
+  },
   argTypes: figmaAdornmentArgTypes,
   parameters: figmaControls(figmaAdornmentNames),
   render: (args) => {
@@ -313,25 +312,25 @@ export const Adornments: StoryObj<FigmaAdornmentArgs> = {
         <Field.Select
           aria-label="Select"
           placeholder={args.content}
-          options={ADORNMENT_OPTIONS}
+          options={COUNTRIES}
           {...a}
         />
         <Field.Combobox
           aria-label="Combobox"
           placeholder={args.content}
-          options={ADORNMENT_OPTIONS}
+          options={COUNTRIES}
           {...a}
         />
         <Field.MultiSelect
           aria-label="Multi Select"
           placeholder={args.content}
-          options={ADORNMENT_OPTIONS}
+          options={COUNTRIES}
           {...a}
         />
         <Field.Autocomplete
           aria-label="Autocomplete"
           placeholder={args.content}
-          suggestions={ADORNMENT_OPTIONS}
+          suggestions={COUNTRIES.map((c) => ({ value: c.value, label: c.label }))}
           {...a}
         />
       </div>
