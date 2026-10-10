@@ -86,7 +86,7 @@
 .sikat-field--shell {
   display: flex;
   align-items: center;
-  gap: var(--spacing-2); /* 8px — Figma Field/gap */
+  gap: var(--spacing-1); /* 4px — prefix/suffix ↔ value spacing */
   cursor: text;
 }
 .sikat-field__input {
@@ -115,6 +115,8 @@
   display: flex;
   flex: none;
   color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
+  /* Icons need 8px from prefix/suffix; gap is 4px so add 4px margin on each inner side. */
+  margin-inline: var(--spacing-1);
 }
 .sikat-field__icon .sikat-icon,
 .sikat-field__edit .sikat-icon {
@@ -124,14 +126,6 @@
   flex: none;
   color: var(--color-text-caption); /* Figma Prefix / Suffix */
   white-space: nowrap;
-}
-/* Prefix / suffix sit 4px from the value (the shell's gap is 8px, which still
-   spaces the leading / trailing icons). */
-.sikat-field--shell > .sikat-field__affix--prefix {
-  margin-inline-end: calc(var(--spacing-1) - var(--spacing-2));
-}
-.sikat-field--shell > .sikat-field__affix--suffix {
-  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
 }
 
 /* TextField with a suffix: the suffix (e.g. a unit) sits right after the value.
