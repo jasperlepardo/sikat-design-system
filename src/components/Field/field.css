@@ -398,7 +398,13 @@
 .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
   display: flex;
   flex: none;
-  align-items: center;
+  align-items: flex-start;
+  /* Push label text to the vertical midpoint of a standard field row so it aligns
+     with single-line controls. For taller controls (e.g. CardField) the label
+     grows naturally without the text floating in a fixed 36px box. */
+  padding-block-start: calc(
+    (var(--field-h, var(--spacing-9)) - var(--text-body-sm-line-height, 20px)) / 2
+  );
   width: 12.5rem;
   min-height: var(--field-h, var(--spacing-9));
 }
@@ -413,6 +419,7 @@
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
     width: 100%;
     min-height: 0;
+    padding-block-start: 0;
   }
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
     flex-basis: 100%;
