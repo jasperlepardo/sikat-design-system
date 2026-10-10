@@ -299,6 +299,11 @@ export function Select({
               <FieldShell
                 state={{ size, filled: query !== '', disabled, invalid }}
                 adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+                after={
+                  <span className="sikat-field__icon sikat-field__chevron" aria-hidden="true">
+                    {ChevronDown}
+                  </span>
+                }
               >
                 <input
                   ref={searchRef}
