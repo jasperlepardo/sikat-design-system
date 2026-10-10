@@ -211,7 +211,14 @@ export type { OTPProps } from './components/OTP/OTP';
 export { Dropdown, DropdownItem } from './components/Dropdown/Dropdown';
 export type { DropdownProps, DropdownItemProps } from './components/Dropdown/Dropdown';
 
-export { Combobox, MultiSelect, Autocomplete, DatePicker, CardField, Field } from './components/Field/Field';
+export {
+  Combobox,
+  MultiSelect,
+  Autocomplete,
+  DatePicker,
+  CardField,
+  Field,
+} from './components/Field/Field';
 export type {
   ComboboxProps,
   ComboboxOption,

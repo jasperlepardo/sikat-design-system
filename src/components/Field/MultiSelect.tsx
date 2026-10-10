@@ -126,7 +126,10 @@ export function MultiSelect({
         state={{ size: 'md', filled: selectedOptions.length > 0, disabled, invalid }}
         adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
         after={
-          <span className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron" aria-hidden="true">
+          <span
+            className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron"
+            aria-hidden="true"
+          >
             {ChevronDown}
           </span>
         }

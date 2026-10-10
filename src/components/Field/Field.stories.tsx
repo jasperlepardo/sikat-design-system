@@ -847,9 +847,7 @@ export const ComboboxField: Story = {
   render: () => (
     <div style={{ maxWidth: 360 }}>
       <Field.Group label="Country">
-        {(props) => (
-          <Field.Combobox {...props} options={COUNTRIES} placeholder="Search country…" />
-        )}
+        {(props) => <Field.Combobox {...props} options={COUNTRIES} placeholder="Search country…" />}
       </Field.Group>
     </div>
   ),
@@ -1135,7 +1133,6 @@ export const DatePickerField: Story = {
 const empCode = (value: string | null | undefined) =>
   EMPLOYEES.find((e) => e.value === value)?.subLabel as string | undefined;
 
-
 function EmployeeCodePrefixDemo() {
   const [selectVal, setSelectVal] = useState('EMP001');
   const [comboVal, setComboVal] = useState<string | null>('EMP002');
@@ -1208,18 +1205,11 @@ export const OptionWithDescription: StoryObj<FigmaAdornmentArgs> = {
           )}
         </Field.Group>
         <Field.Group label="Employee (Select — filled)">
-          {(props) => (
-            <Field.Select {...props} {...a} options={EMPLOYEES} defaultValue="EMP001" />
-          )}
+          {(props) => <Field.Select {...props} {...a} options={EMPLOYEES} defaultValue="EMP001" />}
         </Field.Group>
         <Field.Group label="Employee (Combobox — empty)">
           {(props) => (
-            <Field.Combobox
-              {...props}
-              {...a}
-              options={EMPLOYEES}
-              placeholder="Search employee…"
-            />
+            <Field.Combobox {...props} {...a} options={EMPLOYEES} placeholder="Search employee…" />
           )}
         </Field.Group>
         <Field.Group label="Employee (Combobox — filled)">

@@ -234,7 +234,10 @@ export function Select({
         after={
           <>
             {clearable && interactive && selectedOption ? <FieldClear onClear={clear} /> : null}
-            <span className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron" aria-hidden="true">
+            <span
+              className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron"
+              aria-hidden="true"
+            >
               {ChevronDown}
             </span>
           </>
@@ -300,7 +303,10 @@ export function Select({
                 state={{ size, filled: query !== '', disabled, invalid }}
                 adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
                 after={
-                  <span className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron" aria-hidden="true">
+                  <span
+                    className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron"
+                    aria-hidden="true"
+                  >
                     {ChevronDown}
                   </span>
                 }
