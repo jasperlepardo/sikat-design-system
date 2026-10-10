@@ -63,7 +63,7 @@ export function FieldShell({
       data-state={state.dataState}
       onClick={onClick}
     >
-      {leadingIcon ? <span className="sikat-field__icon">{leadingIcon}</span> : null}
+      {leadingIcon ? <span className="sikat-field__icon sikat-field__icon--leading">{leadingIcon}</span> : null}
       {prefix != null ? (
         <span className="sikat-field__affix sikat-field__affix--prefix">{prefix}</span>
       ) : null}
@@ -72,7 +72,7 @@ export function FieldShell({
       {suffix != null ? (
         <span className="sikat-field__affix sikat-field__affix--suffix">{suffix}</span>
       ) : null}
-      {trailingIcon ? <span className="sikat-field__icon">{trailingIcon}</span> : null}
+      {trailingIcon ? <span className="sikat-field__icon sikat-field__icon--trailing">{trailingIcon}</span> : null}
       {after}
     </span>
   );

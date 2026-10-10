@@ -115,8 +115,13 @@
   display: flex;
   flex: none;
   color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
-  /* Icons need 8px from prefix/suffix; gap is 4px so add 4px margin on each inner side. */
-  margin-inline: var(--spacing-1);
+}
+/* Icons need 8px from prefix/suffix; gap is 4px, so add 4px on the inner side only. */
+.sikat-field__icon--leading {
+  margin-inline-end: var(--spacing-1);
+}
+.sikat-field__icon--trailing {
+  margin-inline-start: var(--spacing-1);
 }
 .sikat-field__icon .sikat-icon,
 .sikat-field__edit .sikat-icon {
