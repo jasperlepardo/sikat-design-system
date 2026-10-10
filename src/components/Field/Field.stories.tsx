@@ -291,6 +291,54 @@ export const SelectPlayground: StoryObj<
   },
 };
 
+const ADORNMENT_OPTIONS = [
+  { value: 'a', label: 'Option A' },
+  { value: 'b', label: 'Option B' },
+  { value: 'c', label: 'Option C' },
+];
+
+/**
+ * All field controls that accept adornments — leadingIcon, prefix, suffix,
+ * trailingIcon — shown together. Toggle each via the controls panel.
+ */
+export const Adornments: StoryObj<FigmaAdornmentArgs> = {
+  args: { ...figmaAdornmentDefaults },
+  argTypes: figmaAdornmentArgTypes,
+  parameters: figmaControls(figmaAdornmentNames),
+  render: (args) => {
+    const a = adorn(args);
+    return (
+      <div style={{ display: 'grid', gap: 12, width: 480 }}>
+        <Field.Text aria-label="Text Field" placeholder={args.content} {...a} />
+        <Field.Select
+          aria-label="Select"
+          placeholder={args.content}
+          options={ADORNMENT_OPTIONS}
+          {...a}
+        />
+        <Field.Combobox
+          aria-label="Combobox"
+          placeholder={args.content}
+          options={ADORNMENT_OPTIONS}
+          {...a}
+        />
+        <Field.MultiSelect
+          aria-label="Multi Select"
+          placeholder={args.content}
+          options={ADORNMENT_OPTIONS}
+          {...a}
+        />
+        <Field.Autocomplete
+          aria-label="Autocomplete"
+          placeholder={args.content}
+          suggestions={ADORNMENT_OPTIONS}
+          {...a}
+        />
+      </div>
+    );
+  },
+};
+
 /**
  * Searchable Select (autocomplete) — the open panel starts with a search field
  * sitting exactly over the closed field; typing filters the options.
