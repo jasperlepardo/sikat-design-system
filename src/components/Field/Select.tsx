@@ -300,6 +300,10 @@ export function Select({
               <TextField
                 ref={searchRef}
                 size={size}
+                leadingIcon={leadingIcon}
+                prefix={prefix}
+                suffix={suffix}
+                trailingIcon={trailingIcon}
                 role="combobox"
                 aria-label={searchPlaceholder}
                 aria-autocomplete="list"
