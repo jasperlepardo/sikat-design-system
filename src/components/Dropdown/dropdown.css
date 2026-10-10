@@ -165,6 +165,7 @@
 .sikat-dropdown__affix {
   flex: none;
   color: var(--color-text-caption);
+  font-weight: var(--text-regular);
 }
 /* Prefix / suffix sit 4px from the label (item gap is 8px; −4px brings it to 4px). */
 .sikat-dropdown__affix + .sikat-dropdown__label {
