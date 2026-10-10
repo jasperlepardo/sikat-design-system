@@ -59,6 +59,11 @@
   flex: none;
   margin-bottom: var(--spacing-1);
 }
+/* Dropup: header is at the bottom — flip the gap */
+.sikat-dropdown[data-side='top'] .sikat-dropdown__header {
+  margin-bottom: 0;
+  margin-top: var(--spacing-1);
+}
 .sikat-dropdown__list {
   min-height: 0;
   overflow: auto;
@@ -69,6 +74,10 @@
 }
 .sikat-dropdown__header:has(+ .sikat-dropdown__list:empty) {
   margin-bottom: 0;
+}
+/* Dropup + empty list: no gap above the header */
+.sikat-dropdown[data-side='top'] .sikat-dropdown__list:empty + .sikat-dropdown__header {
+  margin-top: 0;
 }
 /* Nothing to show (e.g. a search with no matches). */
 .sikat-dropdown__empty {
@@ -155,8 +164,14 @@
 }
 .sikat-dropdown__affix {
   flex: none;
-  color: var(--color-text-muted);
-  font-weight: var(--text-regular);
+  color: var(--color-text-caption);
+}
+/* Prefix / suffix sit 4px from the label (item gap is 8px; −4px brings it to 4px). */
+.sikat-dropdown__affix + .sikat-dropdown__label {
+  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
+}
+.sikat-dropdown__label + .sikat-dropdown__affix {
+  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
 }
 .sikat-dropdown__icon {
   display: flex;

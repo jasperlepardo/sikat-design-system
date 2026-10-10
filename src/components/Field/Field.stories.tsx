@@ -1085,25 +1085,87 @@ const EMPLOYEES = [
  * single line in the field (native `<input>` limitation) but shows two lines in
  * the dropdown.
  */
-export const OptionWithDescription: Story = {
-  name: 'Option — with Description',
-  render: () => (
+const empCode = (value: string | null | undefined) =>
+  EMPLOYEES.find((e) => e.value === value)?.subLabel as string | undefined;
+
+const EMPLOYEES_NAME_ONLY = EMPLOYEES.map(({ subLabel, description: _d, ...e }) => ({ ...e, prefix: subLabel }));
+
+function EmployeeCodePrefixDemo() {
+  const [selectVal, setSelectVal] = useState('EMP001');
+  const [comboVal, setComboVal] = useState<string | null>('EMP002');
+  const [multiVal, setMultiVal] = useState<string[]>([]);
+  return (
     <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
-      <FormField label="Employee (Select — empty)">
-        {(props) => <Select {...props} options={EMPLOYEES} placeholder="Select employee…" />}
+      <FormField label="Employee (Select)">
+        {(props) => (
+          <Select
+            {...props}
+            prefix={empCode(selectVal)}
+            options={EMPLOYEES_NAME_ONLY}
+            placeholder="Select employee…"
+            value={selectVal}
+            onValueChange={setSelectVal}
+          />
+        )}
       </FormField>
-      <FormField label="Employee (Select — filled)">
-        {(props) => <Select {...props} options={EMPLOYEES} defaultValue="EMP001" />}
-      </FormField>
-      <FormField label="Employee (Combobox — empty)">
-        {(props) => <Combobox {...props} options={EMPLOYEES} placeholder="Search employee…" />}
-      </FormField>
-      <FormField label="Employee (Combobox — filled)">
-        {(props) => <Combobox {...props} options={EMPLOYEES} defaultValue="EMP002" />}
+      <FormField label="Employee (Combobox)">
+        {(props) => (
+          <Combobox
+            {...props}
+            prefix={empCode(comboVal)}
+            options={EMPLOYEES_NAME_ONLY}
+            placeholder="Search employee…"
+            value={comboVal}
+            onValueChange={setComboVal}
+          />
+        )}
       </FormField>
       <FormField label="Employees (Multi Select)">
-        {(props) => <MultiSelect {...props} options={EMPLOYEES} placeholder="Select employees…" />}
+        {(props) => (
+          <MultiSelect
+            {...props}
+            options={EMPLOYEES_NAME_ONLY}
+            placeholder="Select employees…"
+            value={multiVal}
+            onValueChange={setMultiVal}
+          />
+        )}
       </FormField>
     </div>
-  ),
+  );
+}
+
+/** Employee code (EMP001, EMP002…) shown as a dynamic prefix — updates as you select. */
+export const OptionWithEmployeeCodePrefix: Story = {
+  name: 'Option — with Employee Code Prefix',
+  render: () => <EmployeeCodePrefixDemo />,
+};
+
+export const OptionWithDescription: StoryObj<FigmaAdornmentArgs> = {
+  name: 'Option — with Description',
+  args: { ...figmaAdornmentDefaults, showLeadingIcon: false, showTrailingIcon: false, showPrefix: false, showSuffix: false },
+  argTypes: figmaAdornmentArgTypes,
+  parameters: figmaControls(figmaAdornmentNames),
+  render: (args) => {
+    const a = adorn(args);
+    return (
+      <div style={{ display: 'grid', gap: 16, maxWidth: 360 }}>
+        <FormField label="Employee (Select — empty)">
+          {(props) => <Select {...props} {...a} options={EMPLOYEES} placeholder="Select employee…" />}
+        </FormField>
+        <FormField label="Employee (Select — filled)">
+          {(props) => <Select {...props} {...a} options={EMPLOYEES} defaultValue="EMP001" />}
+        </FormField>
+        <FormField label="Employee (Combobox — empty)">
+          {(props) => <Combobox {...props} {...a} options={EMPLOYEES} placeholder="Search employee…" />}
+        </FormField>
+        <FormField label="Employee (Combobox — filled)">
+          {(props) => <Combobox {...props} {...a} options={EMPLOYEES} defaultValue="EMP002" />}
+        </FormField>
+        <FormField label="Employees (Multi Select)">
+          {(props) => <MultiSelect {...props} {...a} options={EMPLOYEES} placeholder="Select employees…" />}
+        </FormField>
+      </div>
+    );
+  },
 };

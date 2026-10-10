@@ -15,7 +15,7 @@
   gap: var(--spacing-1); /* 4px between header / body / footer */
   min-height: 0;
   overflow: hidden;
-  padding: var(--spacing-1); /* 4px */
+  padding: 0;
 }
 .sikat-panel::before {
   content: '';

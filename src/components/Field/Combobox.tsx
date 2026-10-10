@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { Select } from './Select';
-import type { FieldSize } from './FieldShell';
+import type { FieldAdornments, FieldSize } from './FieldShell';
 
 export interface ComboboxOption {
   value: string;
@@ -11,10 +11,14 @@ export interface ComboboxOption {
   subLabelPlacement?: 'top' | 'inline';
   /** Third line shown below the label in the dropdown (body/xs, muted). */
   description?: ReactNode;
+  /** Text before the label in the dropdown item (text/muted). */
+  prefix?: ReactNode;
+  /** Text after the label in the dropdown item (text/muted). */
+  suffix?: ReactNode;
   disabled?: boolean;
 }
 
-export interface ComboboxProps {
+export interface ComboboxProps extends FieldAdornments {
   options: ComboboxOption[];
   /** Controlled selected value (`null` = none). */
   value?: string | null;
@@ -58,11 +62,19 @@ export function Combobox({
   defaultValue = null,
   onValueChange,
   placeholder,
+  leadingIcon,
+  prefix,
+  suffix,
+  trailingIcon,
   ...rest
 }: ComboboxProps) {
   return (
     <Select
       {...rest}
+      leadingIcon={leadingIcon}
+      prefix={prefix}
+      suffix={suffix}
+      trailingIcon={trailingIcon}
       searchable
       placeholder={placeholder}
       searchPlaceholder={placeholder}

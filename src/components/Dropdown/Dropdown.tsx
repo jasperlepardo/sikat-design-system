@@ -112,6 +112,11 @@ export const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(function Dropd
     >
       {header == null ? (
         children
+      ) : side === 'top' ? (
+        <>
+          <div className="sikat-dropdown__list" {...listProps}>{children}</div>
+          <div className="sikat-dropdown__header">{header}</div>
+        </>
       ) : (
         <>
           <div className="sikat-dropdown__header">{header}</div>

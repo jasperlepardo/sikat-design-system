@@ -24,6 +24,10 @@ export interface SelectOption {
   subLabelPlacement?: 'top' | 'inline';
   /** Third line shown below the label in the dropdown (body/xs, muted). */
   description?: ReactNode;
+  /** Text before the label in the dropdown item (text/muted). */
+  prefix?: ReactNode;
+  /** Text after the label in the dropdown item (text/muted). */
+  suffix?: ReactNode;
   disabled?: boolean;
 }
 
@@ -333,6 +337,8 @@ export function Select({
                     selected={o.value === selected}
                     active={i === activeIndex}
                     disabled={o.disabled}
+                    prefix={o.prefix}
+                    suffix={o.suffix}
                     subLabel={o.subLabel}
                     subLabelPlacement={o.subLabelPlacement}
                     description={o.description}

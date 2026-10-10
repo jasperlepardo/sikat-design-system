@@ -224,6 +224,8 @@ export function MultiSelect({
                 selected={selected.includes(o.value)}
                 active={i === activeIndex}
                 disabled={o.disabled}
+                prefix={o.prefix}
+                suffix={o.suffix}
                 subLabel={o.subLabel}
                 subLabelPlacement={o.subLabelPlacement}
                 description={o.description}

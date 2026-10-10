@@ -1,6 +1,6 @@
 import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
-import { FieldShell, type FieldSize } from './FieldShell';
+import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
 import { TextField } from './TextField';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
@@ -18,7 +18,7 @@ export interface AutocompleteSuggestion {
   disabled?: boolean;
 }
 
-export interface AutocompleteProps {
+export interface AutocompleteProps extends FieldAdornments {
   /** Suggestions — plain strings or `{ value, label, text }`. */
   suggestions: Array<AutocompleteSuggestion | string>;
   /** Controlled free-text value. */
@@ -69,6 +69,10 @@ export function Autocomplete({
   readOnly,
   id: idProp,
   className,
+  leadingIcon,
+  prefix,
+  suffix,
+  trailingIcon,
   ...aria
 }: AutocompleteProps) {
   const reactId = useId();
@@ -120,7 +124,7 @@ export function Autocomplete({
       <FieldShell
         className={className}
         state={{ size, filled: text !== '', disabled, readOnly, invalid }}
-        adornments={{}}
+        adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
       >
         <input
           id={id}
