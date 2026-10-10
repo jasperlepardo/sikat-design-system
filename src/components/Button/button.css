@@ -205,8 +205,8 @@
    The shell is purely visual; only children are interactive. */
 .sikat-button-group[data-type='enclosed'] {
   display: inline-flex;
-  gap: var(--spacing-1);
-  padding: var(--spacing-1);
+  gap: var(--spacing-0_5);
+  padding: var(--spacing-0_5);
   border-radius: var(--rounded-full);
   pointer-events: none;
   cursor: default;
