@@ -12,7 +12,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--spacing-1); /* 4px between header / body / footer */
+  gap: 0;
   min-height: 0;
   overflow: hidden;
   padding: 0;
@@ -41,7 +41,7 @@
   gap: var(--spacing-4);
   min-height: 0;
   overflow-y: auto;
-  padding: var(--spacing-3);
+  padding: var(--spacing-4);
 }
 
 /* Two-column variant — columns carry their own padding/scroll. */

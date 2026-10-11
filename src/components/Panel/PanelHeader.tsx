@@ -66,10 +66,10 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   iconShape?: DecorativeIconProps['shape'];
   /** Custom leading slot — overrides `icon` when provided. */
   leading?: ReactNode;
+  /** Called when the back button is pressed; turns the leading icon into an interactive back button on hover. */
+  onBack?: () => void;
   /** Status badge after the title. */
   status?: ReactNode;
-  /** Icon after the title / status. */
-  titleIcon?: ReactNode;
   /** Operation icon buttons. */
   operations?: ReactNode;
   /** Core action buttons. */
@@ -105,8 +105,8 @@ export function PanelHeader({
   iconSize = 40,
   iconShape,
   leading,
+  onBack,
   status,
-  titleIcon,
   operations,
   actions,
   trailing,
@@ -129,7 +129,26 @@ export function PanelHeader({
   };
   const leadingContent =
     leading ??
-    (icon ? (
+    (onBack ? (
+      <button className="sikat-panel-header__back" aria-label="Back" onClick={onBack}>
+        <DecorativeIcon
+          className="sikat-panel-header__back-default"
+          intent={iconIntent}
+          variant={iconVariant}
+          icon={icon}
+          size={iconSize}
+          shape={iconShape}
+        />
+        <DecorativeIcon
+          className="sikat-panel-header__back-arrow"
+          intent={iconIntent}
+          variant={iconVariant}
+          icon="arrow_back"
+          size={iconSize}
+          shape={iconShape}
+        />
+      </button>
+    ) : icon ? (
       <DecorativeIcon
         intent={iconIntent}
         variant={iconVariant}
@@ -156,9 +175,6 @@ export function PanelHeader({
             <div className="sikat-panel-header__title-row">
               {title != null ? <h1 className="sikat-panel-header__title">{title}</h1> : null}
               {status != null ? status : null}
-              {titleIcon != null ? (
-                <span className="sikat-panel-header__title-icon">{titleIcon}</span>
-              ) : null}
             </div>
           </div>
         </div>

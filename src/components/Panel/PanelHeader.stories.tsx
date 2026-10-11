@@ -91,10 +91,10 @@ const statusBadge = (
 );
 
 type PlaygroundExtras = {
+  showBack: boolean;
   showSearch: boolean;
   showTabs: boolean;
   showStatus: boolean;
-  showTitleIcon: boolean;
   showTrailing: boolean;
   showOperations: boolean;
   showActions: boolean;
@@ -102,10 +102,10 @@ type PlaygroundExtras = {
 
 export const Playground: Story & { args: PlaygroundExtras } = {
   args: {
+    showBack: false,
     showSearch: false,
     showTabs: true,
     showStatus: false,
-    showTitleIcon: false,
     showTrailing: false,
     showOperations: true,
     showActions: true,
@@ -113,10 +113,10 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   argTypes: {
     variant: figmaSelect('Variant', panelHeaderVariants, ['Card', 'Plain']),
     ...({
+      showBack: { name: 'Back', control: 'boolean' },
       showSearch: { name: 'Search', control: 'boolean' },
       showTabs: { name: 'Tabs', control: 'boolean' },
       showStatus: { name: 'Status', control: 'boolean' },
-      showTitleIcon: { name: 'Title Icon', control: 'boolean' },
       showTrailing: { name: 'Prev / Next', control: 'boolean' },
       showOperations: { name: 'Operations', control: 'boolean' },
       showActions: { name: 'Actions', control: 'boolean' },
@@ -124,20 +124,20 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   },
   parameters: figmaControls([
     'Variant',
+    'Back',
     'Search',
     'Tabs',
     'Status',
-    'Title Icon',
     'Prev / Next',
     'Operations',
     'Actions',
   ]),
   render: (a) => {
     const {
+      showBack,
       showSearch,
       showTabs,
       showStatus,
-      showTitleIcon,
       showTrailing,
       showOperations,
       showActions,
@@ -146,8 +146,8 @@ export const Playground: Story & { args: PlaygroundExtras } = {
     return (
       <PanelHeader
         {...rest}
+        onBack={showBack ? () => {} : undefined}
         status={showStatus ? statusBadge : undefined}
-        titleIcon={showTitleIcon ? panelHeaderIcons.rotateRight : undefined}
         showSearch={showSearch}
         operations={showOperations ? operations : undefined}
         actions={showActions ? actions : undefined}
