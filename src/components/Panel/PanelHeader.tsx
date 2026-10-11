@@ -68,8 +68,6 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   leading?: ReactNode;
   /** Status badge after the title. */
   status?: ReactNode;
-  /** Icon after the title / status. */
-  titleIcon?: ReactNode;
   /** Operation icon buttons. */
   operations?: ReactNode;
   /** Core action buttons. */
@@ -106,7 +104,6 @@ export function PanelHeader({
   iconShape,
   leading,
   status,
-  titleIcon,
   operations,
   actions,
   trailing,
@@ -156,9 +153,6 @@ export function PanelHeader({
             <div className="sikat-panel-header__title-row">
               {title != null ? <h1 className="sikat-panel-header__title">{title}</h1> : null}
               {status != null ? status : null}
-              {titleIcon != null ? (
-                <span className="sikat-panel-header__title-icon">{titleIcon}</span>
-              ) : null}
             </div>
           </div>
         </div>

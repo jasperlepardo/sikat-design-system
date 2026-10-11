@@ -94,7 +94,6 @@ type PlaygroundExtras = {
   showSearch: boolean;
   showTabs: boolean;
   showStatus: boolean;
-  showTitleIcon: boolean;
   showTrailing: boolean;
   showOperations: boolean;
   showActions: boolean;
@@ -105,7 +104,6 @@ export const Playground: Story & { args: PlaygroundExtras } = {
     showSearch: false,
     showTabs: true,
     showStatus: false,
-    showTitleIcon: false,
     showTrailing: false,
     showOperations: true,
     showActions: true,
@@ -116,7 +114,6 @@ export const Playground: Story & { args: PlaygroundExtras } = {
       showSearch: { name: 'Search', control: 'boolean' },
       showTabs: { name: 'Tabs', control: 'boolean' },
       showStatus: { name: 'Status', control: 'boolean' },
-      showTitleIcon: { name: 'Title Icon', control: 'boolean' },
       showTrailing: { name: 'Prev / Next', control: 'boolean' },
       showOperations: { name: 'Operations', control: 'boolean' },
       showActions: { name: 'Actions', control: 'boolean' },
@@ -127,7 +124,6 @@ export const Playground: Story & { args: PlaygroundExtras } = {
     'Search',
     'Tabs',
     'Status',
-    'Title Icon',
     'Prev / Next',
     'Operations',
     'Actions',
@@ -137,7 +133,6 @@ export const Playground: Story & { args: PlaygroundExtras } = {
       showSearch,
       showTabs,
       showStatus,
-      showTitleIcon,
       showTrailing,
       showOperations,
       showActions,
@@ -147,7 +142,6 @@ export const Playground: Story & { args: PlaygroundExtras } = {
       <PanelHeader
         {...rest}
         status={showStatus ? statusBadge : undefined}
-        titleIcon={showTitleIcon ? panelHeaderIcons.rotateRight : undefined}
         showSearch={showSearch}
         operations={showOperations ? operations : undefined}
         actions={showActions ? actions : undefined}
