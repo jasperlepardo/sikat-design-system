@@ -45,6 +45,34 @@
   align-items: center;
   gap: var(--spacing-1);
 }
+.sikat-panel-header__back {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.sikat-panel-header__back-default,
+.sikat-panel-header__back-arrow {
+  transition: opacity 200ms ease, filter 200ms ease;
+}
+.sikat-panel-header__back-arrow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  filter: blur(6px);
+}
+.sikat-panel-header__back:hover .sikat-panel-header__back-default {
+  opacity: 0;
+  filter: blur(6px);
+}
+.sikat-panel-header__back:hover .sikat-panel-header__back-arrow {
+  opacity: 1;
+  filter: blur(0);
+}
 .sikat-panel-header__titles {
   display: flex;
   min-width: 0;

@@ -91,6 +91,7 @@ const statusBadge = (
 );
 
 type PlaygroundExtras = {
+  showBack: boolean;
   showSearch: boolean;
   showTabs: boolean;
   showStatus: boolean;
@@ -101,6 +102,7 @@ type PlaygroundExtras = {
 
 export const Playground: Story & { args: PlaygroundExtras } = {
   args: {
+    showBack: false,
     showSearch: false,
     showTabs: true,
     showStatus: false,
@@ -111,6 +113,7 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   argTypes: {
     variant: figmaSelect('Variant', panelHeaderVariants, ['Card', 'Plain']),
     ...({
+      showBack: { name: 'Back', control: 'boolean' },
       showSearch: { name: 'Search', control: 'boolean' },
       showTabs: { name: 'Tabs', control: 'boolean' },
       showStatus: { name: 'Status', control: 'boolean' },
@@ -121,6 +124,7 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   },
   parameters: figmaControls([
     'Variant',
+    'Back',
     'Search',
     'Tabs',
     'Status',
@@ -130,6 +134,7 @@ export const Playground: Story & { args: PlaygroundExtras } = {
   ]),
   render: (a) => {
     const {
+      showBack,
       showSearch,
       showTabs,
       showStatus,
@@ -141,6 +146,7 @@ export const Playground: Story & { args: PlaygroundExtras } = {
     return (
       <PanelHeader
         {...rest}
+        onBack={showBack ? () => {} : undefined}
         status={showStatus ? statusBadge : undefined}
         showSearch={showSearch}
         operations={showOperations ? operations : undefined}

@@ -66,6 +66,8 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   iconShape?: DecorativeIconProps['shape'];
   /** Custom leading slot — overrides `icon` when provided. */
   leading?: ReactNode;
+  /** Called when the back button is pressed; turns the leading icon into an interactive back button on hover. */
+  onBack?: () => void;
   /** Status badge after the title. */
   status?: ReactNode;
   /** Operation icon buttons. */
@@ -103,6 +105,7 @@ export function PanelHeader({
   iconSize = 40,
   iconShape,
   leading,
+  onBack,
   status,
   operations,
   actions,
@@ -126,7 +129,26 @@ export function PanelHeader({
   };
   const leadingContent =
     leading ??
-    (icon ? (
+    (onBack ? (
+      <button className="sikat-panel-header__back" aria-label="Back" onClick={onBack}>
+        <DecorativeIcon
+          className="sikat-panel-header__back-default"
+          intent={iconIntent}
+          variant={iconVariant}
+          icon={icon}
+          size={iconSize}
+          shape={iconShape}
+        />
+        <DecorativeIcon
+          className="sikat-panel-header__back-arrow"
+          intent={iconIntent}
+          variant={iconVariant}
+          icon="arrow_back"
+          size={iconSize}
+          shape={iconShape}
+        />
+      </button>
+    ) : icon ? (
       <DecorativeIcon
         intent={iconIntent}
         variant={iconVariant}
