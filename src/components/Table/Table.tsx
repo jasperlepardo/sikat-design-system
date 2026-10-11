@@ -29,6 +29,8 @@ export interface TableColumn<T> {
   /** Keep the header visually blank (Figma Spacer header cell) but named for
    *  assistive tech — e.g. drag-handle or expand columns. */
   srOnlyHeader?: boolean;
+  /** Horizontal alignment of the header and cells. Default: start. */
+  align?: 'start' | 'end';
 }
 
 export type TableSortDirection = 'asc' | 'desc';
@@ -356,6 +358,7 @@ export function Table<T>({
                     key={col.key}
                     scope="col"
                     className="sikat-table__th"
+                    data-align={col.align === 'end' ? 'end' : undefined}
                     aria-sort={
                       sorted === 'asc' ? 'ascending' : sorted === 'desc' ? 'descending' : undefined
                     }
@@ -440,7 +443,7 @@ export function Table<T>({
                       ? col.cell(row)
                       : String((row as Record<string, unknown>)[col.key] ?? '');
                     return (
-                      <td key={col.key} className="sikat-table__td">
+                      <td key={col.key} className="sikat-table__td" data-align={col.align === 'end' ? 'end' : undefined}>
                         {tree && i === 0 ? (
                           <span
                             className="sikat-table__tree"

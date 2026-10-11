@@ -104,6 +104,15 @@
 .sikat-table__th:hover {
   color: var(--color-text-body);
 }
+.sikat-table__th[data-align='end'] {
+  text-align: end;
+}
+.sikat-table__th[data-align='end'] .sikat-table__th-inner {
+  justify-content: flex-end;
+}
+.sikat-table__td[data-align='end'] {
+  text-align: end;
+}
 .sikat-table__th-inner {
   display: flex;
   align-items: center;
