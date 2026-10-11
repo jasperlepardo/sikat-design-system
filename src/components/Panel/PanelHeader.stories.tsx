@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, within } from 'storybook/test';
+import { expect, within, fn } from 'storybook/test';
 import { PanelHeader, panelHeaderIcons, panelHeaderVariants } from './PanelHeader';
 import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
@@ -161,5 +161,23 @@ export const Playground: Story & { args: PlaygroundExtras } = {
     await expect(
       canvas.getByRole('heading', { name: (args as typeof args & { title: string }).title }),
     ).toBeVisible();
+  },
+};
+
+export const WithBreadcrumbs: Story = {
+  args: {
+    title: undefined,
+    breadcrumbs: [
+      { label: 'Home', href: '#' },
+      { label: 'Settings', href: '#' },
+      { label: 'Users' },
+    ],
+    onBreadcrumbNavigate: fn(),
+    status: statusBadge,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('navigation', { name: 'Breadcrumb' })).toBeVisible();
+    await expect(canvas.getByText('Users')).toBeVisible();
   },
 };

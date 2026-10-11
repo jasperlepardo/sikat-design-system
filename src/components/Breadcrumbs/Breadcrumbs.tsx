@@ -1,7 +1,6 @@
 import { useState, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Button } from '../Button/Button';
-import { Icon } from '../Icon/Icon';
 import './breadcrumbs.css';
 
 /** One step in the trail. The last item is the current page. */
@@ -57,9 +56,7 @@ export function Breadcrumbs({
         {visible.map((item, i) => {
           const separator =
             i > 0 ? (
-              <span className="sikat-breadcrumbs__separator" aria-hidden="true">
-                <Icon size={16}>chevron_right</Icon>
-              </span>
+              <span className="sikat-breadcrumbs__separator" aria-hidden="true">/</span>
             ) : null;
           if (item === 'ellipsis')
             return (

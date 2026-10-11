@@ -23,7 +23,6 @@
   gap: var(--spacing-1);
 }
 .sikat-breadcrumbs__separator {
-  display: flex;
   flex: none;
   color: var(--color-fg-quarternary);
 }

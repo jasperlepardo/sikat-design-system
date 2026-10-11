@@ -16,6 +16,11 @@ import {
 } from '../DecorativeIcon/DecorativeIcon';
 import { TextField } from '../Field/TextField';
 import { FieldClear } from '../Field/FieldShell';
+import {
+  Breadcrumbs,
+  type BreadcrumbItem,
+  type BreadcrumbsProps,
+} from '../Breadcrumbs/Breadcrumbs';
 import './panel-header.css';
 
 /** Forces data-size="large" on all direct button children in the panel header. */
@@ -68,6 +73,13 @@ export interface PanelHeaderProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
   leading?: ReactNode;
   /** Called when the back button is pressed; turns the leading icon into an interactive back button on hover. */
   onBack?: () => void;
+  /**
+   * Breadcrumb trail — when provided, replaces `title` with a `<Breadcrumbs>`
+   * component. The last item is the current page; ancestors are links.
+   */
+  breadcrumbs?: BreadcrumbItem[];
+  /** Called when a linked ancestor in `breadcrumbs` is clicked — for client-side routing. */
+  onBreadcrumbNavigate?: BreadcrumbsProps['onNavigate'];
   /** Status badge after the title. */
   status?: ReactNode;
   /** Operation icon buttons. */
@@ -99,6 +111,8 @@ export function PanelHeader({
   variant,
   type,
   title,
+  breadcrumbs,
+  onBreadcrumbNavigate,
   icon,
   iconIntent = 'primary',
   iconVariant = 'solid',
@@ -173,7 +187,11 @@ export function PanelHeader({
           ) : null}
           <div className="sikat-panel-header__titles">
             <div className="sikat-panel-header__title-row">
-              {title != null ? <h1 className="sikat-panel-header__title">{title}</h1> : null}
+              {breadcrumbs != null ? (
+                <Breadcrumbs items={breadcrumbs} onNavigate={onBreadcrumbNavigate} />
+              ) : title != null ? (
+                <h1 className="sikat-panel-header__title">{title}</h1>
+              ) : null}
               {status != null ? status : null}
             </div>
           </div>
