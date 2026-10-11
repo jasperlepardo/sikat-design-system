@@ -53,15 +53,10 @@ export function Breadcrumbs({
   return (
     <nav aria-label={ariaLabel} className={cn('sikat-breadcrumbs', className)} {...rest}>
       <ol className="sikat-breadcrumbs__list">
-        {visible.map((item, i) => {
-          const separator =
-            i > 0 ? (
-              <span className="sikat-breadcrumbs__separator" aria-hidden="true">/</span>
-            ) : null;
+        {visible.map((item) => {
           if (item === 'ellipsis')
             return (
               <li key="ellipsis" className="sikat-breadcrumbs__item">
-                {separator}
                 <Button
                   intent="default"
                   variant="link"
@@ -80,7 +75,6 @@ export function Breadcrumbs({
             // link that points at its own first page), and duplicate keys leave
             // stale crumbs behind when the trail changes.
             <li key={items.indexOf(item)} className="sikat-breadcrumbs__item">
-              {separator}
               {current ? (
                 <span className="sikat-breadcrumbs__current" aria-current="page">
                   {item.label}

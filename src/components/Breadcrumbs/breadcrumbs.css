@@ -1,5 +1,4 @@
-/* Breadcrumbs structure: a single Body/sm row of crumbs 4px from their chevron
-   separators. */
+/* Breadcrumbs structure: a single Body/sm row of crumbs separated by "/". */
 .sikat-breadcrumbs {
   font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
   font-size: var(--text-body-sm-font-size);
@@ -22,7 +21,9 @@
   align-items: center;
   gap: var(--spacing-1);
 }
-.sikat-breadcrumbs__separator {
+/* Separator via ::before so it carries no DOM text content — tests stay clean. */
+.sikat-breadcrumbs__item + .sikat-breadcrumbs__item::before {
+  content: '/';
   flex: none;
   color: var(--color-fg-quarternary);
 }
