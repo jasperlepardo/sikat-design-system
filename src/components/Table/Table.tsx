@@ -78,6 +78,11 @@ export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   /** Accessible table name. */
   caption?: string;
   /**
+   * A row spanning all columns rendered in `<tfoot>` — use for "add a line"
+   * inputs or aggregate footers.
+   */
+  footerRow?: ReactNode;
+  /**
    * Child rows (same columns), nested to any depth. Turns the table into a tree
    * grid: the first column indents per level and holds the expand chevron, and
    * selection cascades (a parent is checked when all its descendants are).
@@ -228,6 +233,7 @@ export function Table<T>({
   scroll,
   layout,
   caption,
+  footerRow,
   getSubRows,
   expandedIds,
   defaultExpandedIds = [],
@@ -477,6 +483,16 @@ export function Table<T>({
                 </tr>
               );
             })}
+            {footerRow ? (
+              <tr className="sikat-table__row">
+                <td
+                  className="sikat-table__td"
+                  colSpan={columns.length + (selectable ? 1 : 0) + (hasEnd ? 1 : 0)}
+                >
+                  {footerRow}
+                </td>
+              </tr>
+            ) : null}
           </tbody>
         </table>
       </div>
