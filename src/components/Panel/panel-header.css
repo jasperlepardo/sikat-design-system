@@ -37,7 +37,7 @@
   flex: 1 1 auto;
   min-width: 0;
   align-items: center;
-  gap: var(--spacing-2_5);
+  gap: var(--spacing-2);
 }
 .sikat-panel-header__leading {
   display: flex;
@@ -85,6 +85,12 @@
   align-items: center;
   gap: var(--spacing-3);
 }
+.sikat-panel-header__titles .sikat-breadcrumbs {
+  font-size: var(--text-body-base-font-size);
+  line-height: var(--text-body-base-line-height);
+  letter-spacing: var(--text-body-base-letter-spacing);
+}
+
 .sikat-panel-header__title {
   margin: 0;
   color: var(--color-text-heading);
