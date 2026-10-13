@@ -9,6 +9,7 @@ const options: CardFieldOption[] = [
   {
     value: 'co',
     label: 'Sikat Tech Inc.',
+    href: '#locations/co',
     icon: <Icon size={16}>business</Icon>,
     fields: [
       { label: 'Street', value: 'Unit 1203, Tektite East Tower, Exchange Road' },
@@ -20,6 +21,7 @@ const options: CardFieldOption[] = [
   {
     value: 'mnl',
     label: 'Manila distribution center',
+    href: '#locations/mnl',
     icon: <Icon size={16}>warehouse</Icon>,
     fields: [
       { label: 'Street', value: '20 C. Raymundo Ave.' },
@@ -79,6 +81,7 @@ export const Default: Story = {
           label="Ship to"
           value={value}
           onValueChange={setValue}
+          editLabel="Edit for this PO"
           onEdit={() =>
             setEditText(
               options
