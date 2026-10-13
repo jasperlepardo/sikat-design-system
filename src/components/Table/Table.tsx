@@ -443,7 +443,11 @@ export function Table<T>({
                       ? col.cell(row)
                       : String((row as Record<string, unknown>)[col.key] ?? '');
                     return (
-                      <td key={col.key} className="sikat-table__td" data-align={col.align === 'end' ? 'end' : undefined}>
+                      <td
+                        key={col.key}
+                        className="sikat-table__td"
+                        data-align={col.align === 'end' ? 'end' : undefined}
+                      >
                         {tree && i === 0 ? (
                           <span
                             className="sikat-table__tree"
