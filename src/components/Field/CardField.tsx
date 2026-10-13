@@ -1,5 +1,6 @@
 import { useContext, useId, type ReactNode } from 'react';
 import { IconButton } from '../Button/IconButton';
+import { Link } from '../Button/Link';
 import { Icon } from '../Icon/Icon';
 import { List } from '../List/List';
 import { Combobox, type ComboboxOption } from './Combobox';
@@ -12,6 +13,8 @@ export interface CardFieldOption {
   label: string;
   icon?: ReactNode;
   fields?: ListCardField[];
+  /** When set, the selected card's title renders as a `Link` to this URL. */
+  href?: string;
 }
 
 export interface CardFieldProps {
@@ -37,6 +40,15 @@ export interface CardFieldProps {
    * open a side panel for freeform editing of the address text.
    */
   onEdit?: () => void;
+  /** Accessible label for the edit action. Defaults to "Edit". */
+  editLabel?: string;
+  /** Icon for the edit action. Defaults to `<Icon size={16}>edit</Icon>`. */
+  editIcon?: ReactNode;
+  /**
+   * Shown after the selected card's title. Defaults to a check icon; pass
+   * `null` to hide it.
+   */
+  badge?: ReactNode;
   'aria-label'?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
@@ -68,6 +80,9 @@ export function CardField({
   readOnly,
   footer,
   onEdit,
+  editLabel = 'Edit',
+  editIcon = <Icon size={16}>edit</Icon>,
+  badge = <Icon size={12}>check</Icon>,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
@@ -91,9 +106,9 @@ export function CardField({
   const content = selected ? (
     <List.Group>
       <List.Card
-        title={selected.label}
+        title={selected.href ? <Link href={selected.href}>{selected.label}</Link> : selected.label}
         icon={selected.icon}
-        badge={<Icon size={12}>check</Icon>}
+        badge={badge}
         fields={selected.fields}
         data-selected
         actions={
@@ -102,13 +117,13 @@ export function CardField({
               {onEdit ? (
                 <IconButton
                   type="button"
-                  label="Edit for this PO"
+                  label={editLabel}
                   intent="default"
                   variant="link"
                   size="extra-small"
                   onClick={onEdit}
                 >
-                  <Icon size={16}>edit</Icon>
+                  {editIcon}
                 </IconButton>
               ) : null}
               <IconButton
