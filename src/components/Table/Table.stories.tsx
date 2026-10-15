@@ -903,7 +903,6 @@ const TREE: TreeOrder[] = [
   { id: 'SO-1044', name: 'Globex', qty: '1', amount: '870.00' },
 ];
 
-
 /** Tree grid — `getSubRows` nests rows; expand chevron in first column; cascading selection. */
 export const TreeRows: StoryObj<{ onRowAction: (row: TreeOrder) => void }> = {
   args: { onRowAction: fn() },
