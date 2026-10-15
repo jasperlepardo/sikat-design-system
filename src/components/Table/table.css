@@ -118,6 +118,15 @@
   align-items: center;
   gap: var(--spacing-2);
 }
+.sikat-table__th-icon {
+  display: flex;
+  flex: none;
+  opacity: 0;
+}
+.sikat-table__th:hover .sikat-table__th-icon,
+.sikat-table__th-icon:focus-within {
+  opacity: 1;
+}
 /* Checkbox / Column / Spacer header cells: 36px squares, 8px padding. */
 .sikat-table__th--check,
 .sikat-table__th--end,
@@ -164,10 +173,10 @@
   white-space: nowrap;
   --table-check: var(--color-fg-quarternary);
 }
-/* Table Cell State=Hover: the rule turns border/primary-subtle, checkbox darkens. */
+/* Table Cell State=Hover: secondary background, checkbox darkens. */
 .sikat-table__row:hover > .sikat-table__td {
-  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-primary-subtle);
-  --table-check: var(--color-fg-quarternary-solid); /* Figma cell hover #44403B */
+  background-color: var(--color-bg-secondary);
+  --table-check: var(--color-fg-quarternary-solid);
 }
 /* Table Row Variant2 (selected): bg/primary-subtle. */
 .sikat-table__row[data-selected] > .sikat-table__td {
@@ -205,16 +214,6 @@
   outline-offset: 2px;
 }
 
-/* Icon glyphs (Figma assets) drawn in currentColor — the Button's icon color. */
-.sikat-table__glyph {
-  display: block;
-  flex: none;
-  background-color: currentColor;
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-}
 
 /* Scroll Indicator: the Figma 4px #E7E5E4 thumb over an invisible track. */
 .sikat-table__scroll {
@@ -299,30 +298,15 @@
   flex-direction: column;
   justify-content: center;
 }
-/* Subcopy: Body/xs/Medium, text/muted. */
+
+/* Subcopy: Body/xs/Medium, text/muted — bottom level below main. */
 .sikat-table-cell__subcopy {
   color: var(--color-text-muted);
   font-size: var(--text-body-xs-font-size);
   line-height: var(--text-body-xs-line-height);
   letter-spacing: var(--text-body-xs-letter-spacing);
 }
-/* Link/ID: Body/sm Semibold, underlined, text/body. */
-.sikat-table-cell__link {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--color-text-body);
-  font: inherit;
-  font-weight: var(--text-semibold);
-  text-decoration: underline;
-  text-underline-position: from-font;
-  cursor: pointer;
-}
-.sikat-table-cell__link:focus-visible {
-  outline: 2px solid var(--color-border-primary);
-  outline-offset: 2px;
-}
+
 /* Media: 24px image. */
 .sikat-table-cell__media {
   display: block;
@@ -337,17 +321,9 @@
 .sikat-table-cell__user {
   margin-block: var(--spacing-1);
 }
+/* Avatar: extends DecorativeIcon — adds overflow clip, initials text scale, and photo fill. */
 .sikat-table-cell__avatar {
-  display: flex;
-  flex: none;
-  width: 32px;
-  height: 32px;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-  border-radius: var(--rounded-full);
-  background-color: var(--color-bg-primary-subtle);
-  color: var(--color-text-primary);
   font-size: var(--text-body-xs-font-size);
   line-height: var(--text-body-xs-line-height);
   font-weight: var(--text-semibold);
@@ -376,15 +352,23 @@
   border-radius: 1px;
   background-color: var(--color-border-default);
 }
+/* Expand toggle: hidden until row hover or focus. */
+.sikat-table-cell__expand {
+  opacity: 0;
+}
+.sikat-table__row:hover .sikat-table-cell__expand,
+.sikat-table-cell__expand:focus-visible {
+  opacity: 1;
+}
 /* Dropdown: the chevron turns down while expanded. */
-.sikat-table-cell__expand .sikat-table__glyph {
+.sikat-table-cell__expand .sikat-icon {
   transition: transform 150ms ease;
 }
-.sikat-table-cell__expand[aria-expanded='true'] .sikat-table__glyph {
+.sikat-table-cell__expand[aria-expanded='true'] .sikat-icon {
   transform: rotate(90deg);
 }
 @media (prefers-reduced-motion: reduce) {
-  .sikat-table-cell__expand .sikat-table__glyph {
+  .sikat-table-cell__expand .sikat-icon {
     transition: none;
   }
 }

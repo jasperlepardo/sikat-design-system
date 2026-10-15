@@ -12,10 +12,6 @@ import {
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
 import { useHoverIntent } from '../../lib/useHoverIntent';
 import { SideNav, SideNavIcon, type SideNavSection } from '../SideNav/SideNav';
-import home from '../SideNav/assets/home.svg';
-import inventory2 from '../SideNav/assets/inventory-2.svg';
-import shoppingCart from '../SideNav/assets/shopping-cart.svg';
-import widgets from '../SideNav/assets/widgets.svg';
 import avatarProfile from './assets/avatar-profile.jpg';
 import avatarControlPlane from './assets/avatar-control-plane.png';
 import avatarControlPlaneTop from './assets/avatar-control-plane-overlay.png';
@@ -294,10 +290,10 @@ const SIDE_NAV: SideNavSection[] = [
   {
     id: 'main',
     items: [
-      { id: 'home', label: 'Home', icon: <SideNavIcon src={home} /> },
-      { id: 'inventory', label: 'Inventory', icon: <SideNavIcon src={inventory2} /> },
-      { id: 'sales', label: 'Sales', icon: <SideNavIcon src={shoppingCart} /> },
-      { id: 'reports', label: 'Reports', icon: <SideNavIcon src={widgets} /> },
+      { id: 'home', label: 'Home', icon: <SideNavIcon icon="home" /> },
+      { id: 'inventory', label: 'Inventory', icon: <SideNavIcon icon="inventory_2" /> },
+      { id: 'sales', label: 'Sales', icon: <SideNavIcon icon="shopping_cart" /> },
+      { id: 'reports', label: 'Reports', icon: <SideNavIcon icon="widgets" /> },
     ],
   },
 ];

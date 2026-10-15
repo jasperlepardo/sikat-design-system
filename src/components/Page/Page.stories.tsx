@@ -17,13 +17,6 @@ import { Icon } from '../Icon/Icon';
 import { Navbar, type NavbarMenuItem } from '../Navbar/Navbar';
 import { SideNav, SideNavIcon, type SideNavItem, type SideNavSection } from '../SideNav/SideNav';
 import avatarProfile from '../Navbar/assets/avatar-profile.jpg';
-import home from '../SideNav/assets/home.svg';
-import inventory2 from '../SideNav/assets/inventory-2.svg';
-import discount from '../SideNav/assets/discount.svg';
-import shoppingCart from '../SideNav/assets/shopping-cart.svg';
-import widgets from '../SideNav/assets/widgets.svg';
-import accountTree from '../SideNav/assets/account-tree.svg';
-import importContacts from '../SideNav/assets/import-contacts.svg';
 
 const meta = {
   title: 'Layout/Page',
@@ -56,17 +49,17 @@ const NAV: SideNavSection[] = [
   {
     id: 'core',
     items: [
-      { id: 'home', label: 'Home', icon: <SideNavIcon src={home} /> },
+      { id: 'home', label: 'Home', icon: <SideNavIcon icon="home" /> },
       {
         id: 'item',
         label: 'Item',
-        icon: <SideNavIcon src={inventory2} />,
+        icon: <SideNavIcon icon="inventory_2" />,
         items: sub('item', ['Items']),
       },
       {
         id: 'sales',
         label: 'Sales',
-        icon: <SideNavIcon src={discount} />,
+        icon: <SideNavIcon icon="discount" />,
         items: sub('sales', [
           'Customers',
           'Quotations',
@@ -79,19 +72,19 @@ const NAV: SideNavSection[] = [
       {
         id: 'procurement',
         label: 'Procurement',
-        icon: <SideNavIcon src={shoppingCart} />,
+        icon: <SideNavIcon icon="shopping_cart" />,
         items: sub('procurement', ['Purchase Request', 'RFQs', 'Purchase Orders', 'Receiving']),
       },
       {
         id: 'inventory',
         label: 'Inventory',
-        icon: <SideNavIcon src={widgets} />,
+        icon: <SideNavIcon icon="widgets" />,
         items: sub('inventory', ['Stock', 'Warehouse', 'Transfers']),
       },
       {
         id: 'accounting',
         label: 'Accounting',
-        icon: <SideNavIcon src={accountTree} />,
+        icon: <SideNavIcon icon="account_tree" />,
         items: sub('accounting', ['General Ledger', 'Accounts Receivable', 'Accounts Payable']),
       },
     ],
@@ -103,13 +96,13 @@ const NAV: SideNavSection[] = [
       {
         id: 'reporting',
         label: 'Reporting',
-        icon: <SideNavIcon src={importContacts} />,
+        icon: <SideNavIcon icon="import_contacts" />,
         items: sub('reporting', ['Dashboards', 'Exports']),
       },
       {
         id: 'configurations',
         label: 'Configurations',
-        icon: <SideNavIcon src={inventory2} />,
+        icon: <SideNavIcon icon="inventory_2" />,
         items: sub('configurations', ['General', 'Users & Roles']),
       },
     ],

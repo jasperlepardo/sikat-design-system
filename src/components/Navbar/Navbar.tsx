@@ -7,15 +7,7 @@ import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { TextField } from '../Field/Field';
 import { FieldClear } from '../Field/FieldShell';
-import appsGlyph from './assets/apps.svg';
-import panelCloseGlyph from './assets/left-panel-close.svg';
-import panelOpenGlyph from './assets/left-panel-open.svg';
-import searchGlyph from './assets/search-lg.svg';
-import commandGlyph from './assets/keyboard-command-key.svg';
-import plusGlyph from './assets/plus.svg';
-import chevronGlyph from './assets/chevron-down.svg';
-import notificationsGlyph from './assets/notifications.svg';
-import settingsGlyph from './assets/settings.svg';
+import { Icon } from '../Icon/Icon';
 import { SikatLogo } from './SikatLogo';
 import './navbar.css';
 
@@ -81,20 +73,6 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   onSettingsClick?: () => void;
 }
 
-/**
- * A Figma icon asset drawn in `currentColor` (used as a mask, so the exact
- * geometry is kept while the parent's icon color token applies — as in Figma,
- * where the instance's icon-color variable overrides the asset fill).
- */
-function Glyph({ src }: { src: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className="sikat-navbar__glyph"
-      style={{ maskImage: `url("${src}")`, WebkitMaskImage: `url("${src}")` }}
-    />
-  );
-}
 
 type MenuTriggerProps = {
   role: 'combobox';
@@ -272,7 +250,7 @@ export function Navbar({
               onMouseEnter={() => onSideNavToggleHover?.(true)}
               onMouseLeave={() => onSideNavToggleHover?.(false)}
             >
-              <Glyph src={sideNavExpanded === false ? panelOpenGlyph : panelCloseGlyph} />
+              <Icon size={20}>{sideNavExpanded === false ? 'left_panel_open' : 'left_panel_close'}</Icon>
             </IconButton>
           ) : null}
           {isApp ? (
@@ -295,7 +273,7 @@ export function Navbar({
                     }}
                     {...props}
                   >
-                    <Glyph src={appsGlyph} />
+                    <Icon size={20}>apps</Icon>
                   </IconButton>
                 )}
               />
@@ -307,7 +285,7 @@ export function Navbar({
                 size="medium"
                 onClick={onAppsClick}
               >
-                <Glyph src={appsGlyph} />
+                <Icon size={20}>apps</Icon>
               </IconButton>
             )
           ) : null}
@@ -324,7 +302,7 @@ export function Navbar({
                 type="search"
                 aria-label="Search"
                 placeholder={searchPlaceholder}
-                leadingIcon={<Glyph src={searchGlyph} />}
+                leadingIcon={<Icon size={20}>search</Icon>}
                 value={query}
                 onChange={(e) => updateQuery(e.currentTarget.value)}
                 // The ⌘ hint gives way to a clear ✕ while there's a query.
@@ -332,7 +310,7 @@ export function Navbar({
                   query ? (
                     <FieldClear label="Clear search" onClear={() => updateQuery('')} />
                   ) : (
-                    <Glyph src={commandGlyph} />
+                    <Icon size={20}>keyboard_command_key</Icon>
                   )
                 }
               />
@@ -344,7 +322,7 @@ export function Navbar({
                 className="sikat-navbar__create"
                 onClick={onCreateClick}
               >
-                <Glyph src={plusGlyph} />
+                <Icon size={20}>add</Icon>
               </IconButton>
             </div>
             <div className="sikat-navbar__end">
@@ -359,7 +337,7 @@ export function Navbar({
                       intent="default"
                       variant="link"
                       size="medium"
-                      trailingIcon={<Glyph src={chevronGlyph} />}
+                      trailingIcon={<Icon size={20}>expand_more</Icon>}
                       onClick={() => {
                         onOrganizationClick?.();
                         onClick();
@@ -375,7 +353,7 @@ export function Navbar({
                   intent="default"
                   variant="link"
                   size="medium"
-                  trailingIcon={<Glyph src={chevronGlyph} />}
+                  trailingIcon={<Icon size={20}>expand_more</Icon>}
                   onClick={onOrganizationClick}
                 >
                   {orgLabel}
@@ -390,7 +368,7 @@ export function Navbar({
                   size="medium"
                   onClick={onNotificationsClick}
                 >
-                  <Glyph src={notificationsGlyph} />
+                  <Icon size={20}>notifications</Icon>
                 </IconButton>
                 <IconButton
                   label="Settings"
@@ -399,7 +377,7 @@ export function Navbar({
                   size="medium"
                   onClick={onSettingsClick}
                 >
-                  <Glyph src={settingsGlyph} />
+                  <Icon size={20}>settings</Icon>
                 </IconButton>
                 {avatarNode}
               </div>

@@ -1,8 +1,12 @@
-import type { HTMLAttributes, ReactNode } from 'react';
-import { Badge } from '../Badge/Badge';
-import { Button, type ButtonProps } from '../Button/Button';
-import dragIndicator from './assets/drag-indicator.svg';
-import chevronRight from './assets/chevron-right.svg';
+import { Children, type ReactNode } from 'react';
+import { Badge, type BadgeProps } from '../Badge/Badge';
+import { Button } from '../Button/Button';
+import { DecorativeIcon, type DecorativeIconProps } from '../DecorativeIcon/DecorativeIcon';
+import { Icon } from '../Icon/Icon';
+import { Link } from '../Button/Link';
+import { Text, type TextProps } from '../Text/Text';
+
+export type TableContentTextProps = TextProps;
 
 /*
  * Cell content for the Figma Table Cell types (Components › Table, 17239:6211).
@@ -10,100 +14,132 @@ import chevronRight from './assets/chevron-right.svg';
  * (rule → border/primary-subtle, handle / checkbox → fg/quarternary-solid).
  */
 
-const mask = (src: string) => ({ maskImage: `url("${src}")`, WebkitMaskImage: `url("${src}")` });
 
-/** Type=Link/ID: Body/sm Semibold, underlined, text/body. */
-export function TableLink({
+/**
+ * Unified cell content component. Props compose freely:
+ * - `onClick`/`href` → link/button text
+ * - `media`/`src` → 24px leading icon or image
+ * - `initials`/`avatarSrc` → 32px user avatar
+ * - `texts` → generic n-level text stack via the Text component
+ * - `children` + `subcopy` → shorthand for single main + one sub line
+ */
+export function TableContent({
   href,
   onClick,
+  media,
+  src,
+  alt = '',
+  decorativeIcon,
+  avatar,
+  avatarSrc,
+  initials,
+  texts,
+  subcopy,
   children,
 }: {
   href?: string;
   onClick?: () => void;
-  children: ReactNode;
-}) {
-  return href ? (
-    <a className="sikat-table-cell__link" href={href} onClick={onClick}>
-      {children}
-    </a>
-  ) : (
-    <button type="button" className="sikat-table-cell__link" onClick={onClick}>
-      {children}
-    </button>
-  );
-}
-
-/** Type=Media: a 24px image/icon + content. Pass `src` for an image or `media` for any ReactNode. */
-export function TableMedia({
-  src,
-  media,
-  alt = '',
-  children,
-}: {
-  src?: string;
+  /** Leading ReactNode — for a plain icon or custom element. */
   media?: ReactNode;
-  alt?: string;
-  children: ReactNode;
-}) {
-  return (
-    <span className="sikat-table-cell__row">
-      {media ?? (
-        <img className="sikat-table-cell__media" src={src} alt={alt} width={24} height={24} />
-      )}
-      <span>{children}</span>
-    </span>
-  );
-}
-
-/** Type=Subcontent: content (Body/sm) over a subcopy (Body/xs, text/muted). */
-export function TableSubcontent({
-  children,
-  subcopy,
-}: {
-  children: ReactNode;
-  subcopy?: ReactNode;
-}) {
-  return (
-    <span className="sikat-table-cell__stack">
-      <span>{children}</span>
-      {subcopy != null ? <span className="sikat-table-cell__subcopy">{subcopy}</span> : null}
-    </span>
-  );
-}
-
-/** Type=User: 32px avatar (image, or initials on primary-subtle) + name / subcopy. */
-export function TableUser({
-  name,
-  subcopy,
-  initials,
-  src,
-}: {
-  name: ReactNode;
-  subcopy?: ReactNode;
-  /** Shown when there's no image (Figma: "ST", Body/xs Semibold, text/primary). */
-  initials?: string;
+  /** Leading image URL (renders a 24px img). */
   src?: string;
+  alt?: string;
+  /** Leading DecorativeIcon — full DecorativeIconProps; size defaults to 32. */
+  decorativeIcon?: DecorativeIconProps;
+  /** Avatar DecorativeIcon props — intent, variant, shape, etc. Defaults: primary/subtle/circle. */
+  avatar?: Omit<DecorativeIconProps, 'size' | 'children'>;
+  /** Avatar photo URL — rendered inside the avatar container. */
+  avatarSrc?: string;
+  /** Initials shown when there is no avatar photo. */
+  initials?: string;
+  /**
+   * Generic multi-level text stack. Each item renders as `<Text as="span">`.
+   * Use `<Link>` or `<Button>` inside `children` for linked levels.
+   * When provided, `subcopy` is ignored.
+   */
+  texts?: TableContentTextProps[];
+  /** Shorthand sub line below main text (xs, muted). Ignored when `texts` is set. */
+  subcopy?: ReactNode;
+  children?: ReactNode;
 }) {
-  return (
-    <span className="sikat-table-cell__row sikat-table-cell__user">
-      <span className="sikat-table-cell__avatar" aria-hidden={src ? undefined : 'true'}>
-        {src ? <img src={src} alt="" /> : initials}
-      </span>
-      <TableSubcontent subcopy={subcopy}>{name}</TableSubcontent>
+  const resolvedMedia =
+    decorativeIcon != null
+      ? <DecorativeIcon size={32} {...decorativeIcon} />
+      : media;
+
+  const isUser = initials != null || avatarSrc != null || avatar != null;
+  const hasMedia = !isUser && (resolvedMedia != null || src != null);
+  const hasTexts = texts != null && texts.length > 0;
+  const hasStack = isUser || hasTexts || subcopy != null;
+
+  const mainContent =
+    href != null ? (
+      <Link href={href} intent="default" onClick={onClick}>{children}</Link>
+    ) : onClick != null ? (
+      <Button intent="default" variant="link" onClick={onClick}>{children}</Button>
+    ) : children;
+
+  const textStack = (
+    <span className="sikat-table-cell__stack">
+      {hasTexts
+        ? texts!.map((item, i) => <Text key={i} as="span" {...item} />)
+        : (
+          <>
+            <span>{mainContent}</span>
+            {subcopy != null ? (
+              <span className="sikat-table-cell__subcopy">{subcopy}</span>
+            ) : null}
+          </>
+        )
+      }
     </span>
   );
+
+  const content = hasStack ? textStack : mainContent;
+
+  if (isUser) {
+    return (
+      <span className="sikat-table-cell__row sikat-table-cell__user">
+        <DecorativeIcon
+          intent="primary"
+          variant="subtle"
+          size={32}
+          {...avatar}
+          className="sikat-table-cell__avatar"
+          aria-hidden={avatarSrc ? undefined : 'true'}
+        >
+          {avatarSrc ? <img src={avatarSrc} alt="" /> : initials}
+        </DecorativeIcon>
+        {textStack}
+      </span>
+    );
+  }
+
+  if (hasMedia) {
+    return (
+      <span className="sikat-table-cell__row">
+        {resolvedMedia ?? (
+          <img className="sikat-table-cell__media" src={src} alt={alt} width={24} height={24} />
+        )}
+        <span>{content}</span>
+      </span>
+    );
+  }
+
+  return <>{content}</>;
 }
 
 /** Type=Badge: a Success / Ghost / Small status Badge with a dot. */
 export function TableStatus({
   intent = 'success',
+  variant = 'ghost',
+  size = 'small',
+  dot = true,
   children,
-}: {
-  intent?: 'default' | 'primary' | 'success' | 'warning' | 'danger';
-  children: ReactNode;
-}) {
+  ...rest
+}: BadgeProps) {
   return (
-    <Badge intent={intent} variant="ghost" size="small" dot>
+    <Badge intent={intent} variant={variant} size={size} dot={dot} {...rest}>
       {children}
     </Badge>
   );
@@ -123,64 +159,76 @@ export function TableAmount({ currency, children }: { currency?: ReactNode; chil
   );
 }
 
-/** Type=Action CTA: action buttons (Figma: Button Default / Ghost / Medium) split by
- * the Figma 20px divider. */
-export function TableActions({ children }: { children: ReactNode[] }) {
+export type TableActionItem =
+  | { type: 'drag'; label?: string }
+  | { type: 'expand'; expanded?: boolean; onToggle?: () => void; label?: string; onKeyDown?: (e: React.KeyboardEvent<HTMLButtonElement>) => void }
+  | { type: 'button'; icon: ReactNode; label: string; onClick: () => void; disabled?: boolean };
+
+/** Unified action cell covering drag handles, expand toggles, and icon buttons.
+ *  Pass `items` with typed entries, or `children` for fully custom content. */
+export function TableActions({
+  items,
+  children,
+}: {
+  items?: TableActionItem[];
+  children?: ReactNode;
+}) {
+  const nodes: ReactNode[] = items
+    ? items.map((item, i) => {
+        if (item.type === 'drag') {
+          return (
+            <Button
+              key={i}
+              intent="default"
+              variant="link"
+              size="2xs"
+              className="sikat-table-cell__drag"
+              aria-label={item.label ?? 'Drag to reorder'}
+              leadingIcon={<Icon size={20}>drag_indicator</Icon>}
+            />
+          );
+        }
+        if (item.type === 'expand') {
+          return (
+            <Button
+              key={i}
+              intent="default"
+              variant="link"
+              size="2xs"
+              className="sikat-table-cell__expand"
+              aria-label={item.label ?? 'Expand row'}
+              aria-expanded={item.expanded}
+              onClick={item.onToggle}
+              onKeyDown={item.onKeyDown}
+              leadingIcon={
+                <Icon size={20}>chevron_right</Icon>
+              }
+            />
+          );
+        }
+        return (
+          <Button
+            key={item.label}
+            intent="default"
+            variant="link"
+            size="2xs"
+            aria-label={item.label}
+            onClick={item.onClick}
+            disabled={item.disabled}
+            leadingIcon={item.icon}
+          />
+        );
+      })
+    : Children.toArray(children);
+
   return (
     <span className="sikat-table-cell__row sikat-table-cell__actions">
-      {children.map((child, i) => (
+      {nodes.map((node, i) => (
         <span key={i} className="sikat-table-cell__row">
           {i > 0 ? <span className="sikat-table-cell__divider" aria-hidden="true" /> : null}
-          {child}
+          {node}
         </span>
       ))}
     </span>
-  );
-}
-
-/** Type=Item: the drag_indicator handle (fg/quarternary; darker on row hover). */
-export function TableDragHandle({
-  label = 'Drag to reorder',
-  ...rest
-}: { label?: string } & HTMLAttributes<HTMLSpanElement>) {
-  return (
-    <span className="sikat-table-cell__drag" role="img" aria-label={label} {...rest}>
-      <span
-        className="sikat-table__glyph"
-        style={{ width: 20, height: 20, ...mask(dragIndicator) }}
-      />
-    </span>
-  );
-}
-
-/** Type=Dropdown: the chevron-right expand button (turns down while expanded) — a
- *  default / link / 2xs Button. */
-export function TableExpand({
-  expanded,
-  onToggle,
-  label = 'Expand row',
-  ...rest
-}: {
-  expanded?: boolean;
-  onToggle?: () => void;
-  label?: string;
-} & Omit<ButtonProps, 'onClick' | 'type' | 'intent' | 'variant' | 'size' | 'children'>) {
-  return (
-    <Button
-      intent="default"
-      variant="link"
-      size="2xs"
-      className="sikat-table-cell__expand"
-      aria-label={label}
-      aria-expanded={expanded}
-      onClick={onToggle}
-      leadingIcon={
-        <span
-          className="sikat-table__glyph"
-          style={{ width: 20, height: 20, ...mask(chevronRight) }}
-        />
-      }
-      {...rest}
-    />
   );
 }
