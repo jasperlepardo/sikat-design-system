@@ -10,13 +10,6 @@ import {
   type SideNavSection,
 } from './SideNav';
 import { figmaControls, figmaSelect } from '../../docs/figma-controls';
-import home from './assets/home.svg';
-import inventory2 from './assets/inventory-2.svg';
-import discount from './assets/discount.svg';
-import shoppingCart from './assets/shopping-cart.svg';
-import widgets from './assets/widgets.svg';
-import accountTree from './assets/account-tree.svg';
-import importContacts from './assets/import-contacts.svg';
 
 const sub = (prefix: string, labels: string[]): SideNavItem[] =>
   labels.map((label) => ({ id: `${prefix}/${label.toLowerCase().replace(/\W+/g, '-')}`, label }));
@@ -26,17 +19,17 @@ const SECTIONS: SideNavSection[] = [
   {
     id: 'core',
     items: [
-      { id: 'home', label: 'Home', icon: <SideNavIcon src={home} /> },
+      { id: 'home', label: 'Home', icon: <SideNavIcon icon="home" /> },
       {
         id: 'item',
         label: 'Item',
-        icon: <SideNavIcon src={inventory2} />,
+        icon: <SideNavIcon icon="inventory_2" />,
         items: sub('item', ['Items']),
       },
       {
         id: 'sales',
         label: 'Sales',
-        icon: <SideNavIcon src={discount} />,
+        icon: <SideNavIcon icon="discount" />,
         items: sub('sales', [
           'Customers',
           'Quotations',
@@ -49,7 +42,7 @@ const SECTIONS: SideNavSection[] = [
       {
         id: 'procurement',
         label: 'Procurement',
-        icon: <SideNavIcon src={shoppingCart} />,
+        icon: <SideNavIcon icon="shopping_cart" />,
         items: sub('procurement', [
           'Purchase Request',
           'RFQs',
@@ -63,7 +56,7 @@ const SECTIONS: SideNavSection[] = [
       {
         id: 'inventory',
         label: 'Inventory',
-        icon: <SideNavIcon src={widgets} />,
+        icon: <SideNavIcon icon="widgets" />,
         items: sub('inventory', [
           'Stock',
           'Warehouse',
@@ -77,7 +70,7 @@ const SECTIONS: SideNavSection[] = [
       {
         id: 'accounting',
         label: 'Accounting',
-        icon: <SideNavIcon src={accountTree} />,
+        icon: <SideNavIcon icon="account_tree" />,
         items: sub('accounting', [
           'General Ledger',
           'Accounts Receivable',
@@ -98,13 +91,13 @@ const SECTIONS: SideNavSection[] = [
       {
         id: 'reporting',
         label: 'Reporting',
-        icon: <SideNavIcon src={importContacts} />,
+        icon: <SideNavIcon icon="import_contacts" />,
         items: sub('reporting', ['Dashboards', 'Exports']),
       },
       {
         id: 'configurations',
         label: 'Configurations',
-        icon: <SideNavIcon src={inventory2} />,
+        icon: <SideNavIcon icon="inventory_2" />,
         items: sub('configurations', ['General', 'Users & Roles']),
       },
     ],

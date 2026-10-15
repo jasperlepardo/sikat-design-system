@@ -1,5 +1,7 @@
 import {
+  useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
   type HTMLAttributes,
@@ -8,20 +10,24 @@ import {
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Button } from '../Button/Button';
-import { TableExpand } from './TableCells';
+import {
+  TableActions,
+  TableAmount,
+  TableContent,
+  TableStatus,
+  type TableActionItem,
+} from './TableCells';
+import { Icon } from '../Icon/Icon';
 import checkboxGlyph from './assets/checkbox.svg';
-import tuneGlyph from './assets/tune.svg';
-import switchVerticalGlyph from './assets/switch-vertical-01.svg';
-import dotsHorizontalGlyph from './assets/dots-horizontal.svg';
 import scrollThumb from './assets/scroll-thumb.svg';
-import pagePrevGlyph from './assets/page-prev.svg';
-import pageNextGlyph from './assets/page-next.svg';
 import chevronDown from './assets/chevron-down.svg';
 import './table.css';
 
 export interface TableColumn<T> {
   key: string;
   header: ReactNode;
+  /** Icon rendered before the header label — use to align with tree toggle. */
+  headerIcon?: ReactNode;
   /** Cell content for a row (defaults to `String(row[key])`). */
   cell?: (row: T) => ReactNode;
   /** Shows the sort control on the header (Figma header cell hover). */
@@ -58,10 +64,10 @@ export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
   onSelectionChange?: (ids: string[]) => void;
   sort?: TableSort | null;
   onSortChange?: (sort: TableSort | null) => void;
-  /** Adds the trailing Action column: the row's "…" button. */
-  onRowAction?: (row: T) => void;
-  /** Adds the header's column-settings ("tune") button. */
-  onColumnSettings?: () => void;
+  /** Items rendered in the trailing Action column per row via TableActions. */
+  rowActions?: TableActionItem[] | ((row: T) => TableActionItem[]);
+  /** Items rendered in the header's trailing Action cell via TableActions. */
+  headerActions?: TableActionItem[];
   /** Figma "Bottom Action": page size, total and prev / next. */
   pagination?: TablePagination;
   /** Give the table its own horizontal scroll container. Without this the page scrolls. */
@@ -134,21 +140,6 @@ function walk<T>(nodes: TreeNode<T>[], out: TreeNode<T>[] = []): TreeNode<T>[] {
   return out;
 }
 
-/** A Figma icon asset drawn in `currentColor` (mask). */
-function Glyph({ src, size = 20 }: { src: string; size?: number }) {
-  return (
-    <span
-      aria-hidden="true"
-      className="sikat-table__glyph"
-      style={{
-        width: size,
-        height: size,
-        maskImage: `url("${src}")`,
-        WebkitMaskImage: `url("${src}")`,
-      }}
-    />
-  );
-}
 
 function Check({
   checked,
@@ -229,8 +220,8 @@ export function Table<T>({
   onSelectionChange,
   sort,
   onSortChange,
-  onRowAction,
-  onColumnSettings,
+  rowActions,
+  headerActions,
   pagination,
   scroll,
   layout,
@@ -246,64 +237,95 @@ export function Table<T>({
   const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
   const bodyRef = useRef<HTMLTableSectionElement>(null);
   const [ownExpanded, setOwnExpanded] = useState(defaultExpandedIds);
-  const expanded = new Set(expandedIds ?? ownExpanded);
-  const tree = !!getSubRows;
-  const roots = buildTree(rows, getRowId, getSubRows);
-  const nodes = walk(roots);
-  const byId = new Map(nodes.map((n) => [n.id, n]));
-  const ids = nodes.map((n) => n.id);
-  const leaves = nodes.filter((n) => n.children.length === 0);
 
-  const selected = new Set(selectedIds);
+  const tree = !!getSubRows;
+
+  const roots = useMemo(
+    () => buildTree(rows, getRowId, getSubRows),
+    [rows, getRowId, getSubRows],
+  );
+  const nodes = useMemo(() => walk(roots), [roots]);
+  const byId = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
+  const ids = useMemo(() => nodes.map((n) => n.id), [nodes]);
+  const leaves = useMemo(() => nodes.filter((n) => n.children.length === 0), [nodes]);
+
+  const expanded = useMemo(
+    () => new Set(expandedIds ?? ownExpanded),
+    [expandedIds, ownExpanded],
+  );
+  const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
+
   /** A row is checked when all its leaves are selected; mixed when only some are. */
-  const rowState = (n: TreeNode<T>) => {
-    if (n.children.length === 0) return { checked: selected.has(n.id), mixed: false };
-    const own = walk(n.children).filter((c) => c.children.length === 0);
-    const count = own.filter((c) => selected.has(c.id)).length;
-    return { checked: count === own.length, mixed: count > 0 && count < own.length };
-  };
+  const rowState = useCallback(
+    (n: TreeNode<T>) => {
+      if (n.children.length === 0) return { checked: selected.has(n.id), mixed: false };
+      const own = walk(n.children).filter((c) => c.children.length === 0);
+      const count = own.filter((c) => selected.has(c.id)).length;
+      return { checked: count === own.length, mixed: count > 0 && count < own.length };
+    },
+    [selected],
+  );
+
   const allSelected = leaves.length > 0 && leaves.every((n) => selected.has(n.id));
   const someSelected = leaves.some((n) => selected.has(n.id));
-  const hasEnd = !!onRowAction || !!onColumnSettings;
+  const hasEnd = !!rowActions || !!headerActions;
 
   /** Re-derive parent ids from their descendants (post-order), keeping ids outside this tree. */
-  const normalize = (next: Set<string>) => {
-    const visit = (n: TreeNode<T>): boolean => {
-      if (n.children.length === 0) return next.has(n.id);
-      const all = n.children.map(visit).every(Boolean);
-      if (all) next.add(n.id);
-      else next.delete(n.id);
-      return all;
-    };
-    roots.forEach(visit);
-    return [...next];
-  };
-  const toggleAll = (on: boolean) =>
-    onSelectionChange?.(
-      on ? [...new Set([...selectedIds, ...ids])] : selectedIds.filter((id) => !ids.includes(id)),
-    );
-  const toggleRow = (id: string, on: boolean) => {
-    const next = new Set(selectedIds);
-    for (const n of walk([byId.get(id)!])) {
-      if (on) next.add(n.id);
-      else next.delete(n.id);
-    }
-    onSelectionChange?.(normalize(next));
-  };
+  const normalize = useCallback(
+    (next: Set<string>) => {
+      const visit = (n: TreeNode<T>): boolean => {
+        if (n.children.length === 0) return next.has(n.id);
+        const all = n.children.map(visit).every(Boolean);
+        if (all) next.add(n.id);
+        else next.delete(n.id);
+        return all;
+      };
+      roots.forEach(visit);
+      return [...next];
+    },
+    [roots],
+  );
 
-  const setExpanded = (id: string, open: boolean) => {
-    const next = open ? [...expanded, id] : [...expanded].filter((x) => x !== id);
-    if (expandedIds === undefined) setOwnExpanded(next);
-    onExpandedChange?.(next);
-  };
+  const toggleAll = useCallback(
+    (on: boolean) =>
+      onSelectionChange?.(
+        on ? [...new Set([...selectedIds, ...ids])] : selectedIds.filter((id) => !ids.includes(id)),
+      ),
+    [onSelectionChange, selectedIds, ids],
+  );
+
+  const toggleRow = useCallback(
+    (id: string, on: boolean) => {
+      const next = new Set(selectedIds);
+      for (const n of walk([byId.get(id)!])) {
+        if (on) next.add(n.id);
+        else next.delete(n.id);
+      }
+      onSelectionChange?.(normalize(next));
+    },
+    [selectedIds, byId, onSelectionChange, normalize],
+  );
+
+  const setExpanded = useCallback(
+    (id: string, open: boolean) => {
+      const next = open ? [...expanded, id] : [...expanded].filter((x) => x !== id);
+      if (expandedIds === undefined) setOwnExpanded(next);
+      onExpandedChange?.(next);
+    },
+    [expanded, expandedIds, onExpandedChange],
+  );
+
   /** The visible rows: descend only into expanded nodes. */
-  const visible: { node: TreeNode<T>; pos: number; size: number }[] = [];
-  const collect = (list: TreeNode<T>[]) =>
-    list.forEach((node, i) => {
-      visible.push({ node, pos: i + 1, size: list.length });
-      if (expanded.has(node.id)) collect(node.children);
-    });
-  collect(roots);
+  const visible = useMemo(() => {
+    const result: { node: TreeNode<T>; pos: number; size: number }[] = [];
+    const collect = (list: TreeNode<T>[]) =>
+      list.forEach((node, i) => {
+        result.push({ node, pos: i + 1, size: list.length });
+        if (expanded.has(node.id)) collect(node.children);
+      });
+    collect(roots);
+    return result;
+  }, [roots, expanded]);
 
   const focusIn = (id: string | undefined, selector: string) =>
     id &&
@@ -364,6 +386,9 @@ export function Table<T>({
                     }
                   >
                     <span className="sikat-table__th-inner">
+                      {col.headerIcon ? (
+                        <span className="sikat-table__th-icon">{col.headerIcon}</span>
+                      ) : null}
                       <span
                         className={
                           col.srOnlyHeader
@@ -382,7 +407,7 @@ export function Table<T>({
                           data-active={sorted ? 'true' : undefined}
                           aria-label={`Sort by ${typeof col.header === 'string' ? col.header : col.key}`}
                           onClick={() => onSortChange?.(nextSort(col.key))}
-                          leadingIcon={<Glyph src={switchVerticalGlyph} size={16} />}
+                          leadingIcon={<Icon size={16}>unfold_more</Icon>}
                         />
                       ) : null}
                     </span>
@@ -391,16 +416,9 @@ export function Table<T>({
               })}
               {hasEnd ? (
                 <th className="sikat-table__th sikat-table__th--end" scope="col">
-                  {onColumnSettings ? (
+                  {headerActions ? (
                     <span className="sikat-table__end">
-                      <Button
-                        intent="default"
-                        variant="link"
-                        size="2xs"
-                        aria-label="Column settings"
-                        onClick={onColumnSettings}
-                        leadingIcon={<Glyph src={tuneGlyph} />}
-                      />
+                      <TableActions items={headerActions} />
                     </span>
                   ) : (
                     <span className="sikat-table__visually-hidden">Actions</span>
@@ -454,11 +472,14 @@ export function Table<T>({
                             style={{ ['--table-depth' as string]: depth }}
                           >
                             {hasChildren ? (
-                              <TableExpand
-                                expanded={isOpen}
-                                label={`${isOpen ? 'Collapse' : 'Expand'} row ${id}`}
-                                onToggle={() => setExpanded(id, !isOpen)}
-                                onKeyDown={(e) => onExpandKey(node, e)}
+                              <TableActions
+                                items={[{
+                                  type: 'expand',
+                                  expanded: isOpen,
+                                  label: `${isOpen ? 'Collapse' : 'Expand'} row ${id}`,
+                                  onToggle: () => setExpanded(id, !isOpen),
+                                  onKeyDown: (e) => onExpandKey(node, e),
+                                }]}
                               />
                             ) : (
                               <span className="sikat-table__tree-spacer" aria-hidden="true" />
@@ -473,15 +494,10 @@ export function Table<T>({
                   })}
                   {hasEnd ? (
                     <td className="sikat-table__td sikat-table__td--end">
-                      {onRowAction ? (
+                      {rowActions ? (
                         <span className="sikat-table__end">
-                          <Button
-                            intent="default"
-                            variant="link"
-                            size="2xs"
-                            aria-label={`Actions for row ${id}`}
-                            onClick={() => onRowAction(row)}
-                            leadingIcon={<Glyph src={dotsHorizontalGlyph} />}
+                          <TableActions
+                            items={typeof rowActions === 'function' ? rowActions(row) : rowActions}
                           />
                         </span>
                       ) : null}
@@ -508,6 +524,11 @@ export function Table<T>({
     </div>
   );
 }
+
+Table.Content = TableContent;
+Table.Status = TableStatus;
+Table.Amount = TableAmount;
+Table.Actions = TableActions;
 
 /** Figma Bottom Action › Pagination Container: "10 ▾ of 89" and ← →. */
 function Pagination({
@@ -545,7 +566,7 @@ function Pagination({
           disabled={page <= 1}
           onClick={() => onPageChange(page - 1)}
         >
-          <Glyph src={pagePrevGlyph} size={16} />
+          <Icon size={16}>navigate_before</Icon>
         </button>
         <button
           type="button"
@@ -554,7 +575,7 @@ function Pagination({
           disabled={page >= pages}
           onClick={() => onPageChange(page + 1)}
         >
-          <Glyph src={pageNextGlyph} size={16} />
+          <Icon size={16}>navigate_next</Icon>
         </button>
       </div>
     </nav>

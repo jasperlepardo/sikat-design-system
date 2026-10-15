@@ -143,15 +143,14 @@ export type {
 
 export { Table } from './components/Table/Table';
 export {
-  TableLink,
-  TableMedia,
-  TableSubcontent,
-  TableUser,
+  TableContent,
   TableStatus,
   TableAmount,
   TableActions,
-  TableDragHandle,
-  TableExpand,
+} from './components/Table/TableCells';
+export type {
+  TableContentTextProps,
+  TableActionItem,
 } from './components/Table/TableCells';
 export type {
   TableProps,

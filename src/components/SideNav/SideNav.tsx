@@ -1,8 +1,6 @@
 import { useState, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import chevronRight from './assets/keyboard-arrow-right.svg';
-import chevronDown from './assets/keyboard-arrow-down.svg';
-import dividerLine from './assets/divider.svg';
+import { Icon } from '../Icon/Icon';
 import './side-nav.css';
 
 export const sideNavOrientations = ['expanded', 'compact'] as const;
@@ -45,19 +43,9 @@ export interface SideNavProps extends Omit<HTMLAttributes<HTMLElement>, 'onChang
   peek?: boolean;
 }
 
-/**
- * A Figma icon asset drawn in `currentColor` (used as a mask), so the Nav Item's
- * state color applies — as in Figma, where the icon-color variable overrides the
- * asset fill.
- */
-export function SideNavIcon({ src }: { src: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className="sikat-sidenav__glyph"
-      style={{ maskImage: `url("${src}")`, WebkitMaskImage: `url("${src}")` }}
-    />
-  );
+/** A 20px Material Symbol icon for use as a nav item icon. */
+export function SideNavIcon({ icon }: { icon: string }) {
+  return <Icon size={20} className="sikat-sidenav__glyph">{icon}</Icon>;
 }
 
 const moduleOf = (sections: SideNavSection[], id?: string) => {
@@ -188,7 +176,7 @@ export function SideNav({
         {icon(item)}
         <span className="sikat-sidenav__label">{item.label}</span>
         <span className="sikat-sidenav__chevron">
-          <SideNavIcon src={open ? chevronDown : chevronRight} />
+          <Icon size={20}>{open ? 'keyboard_arrow_down' : 'keyboard_arrow_right'}</Icon>
         </span>
       </Row>
     );
@@ -238,11 +226,10 @@ export function SideNav({
       <div className="sikat-sidenav__content">
         {sections.map((section, i) => [
           i > 0 ? (
-            <img
+            <span
               key={`${section.id}-divider`}
               className="sikat-sidenav__divider"
-              src={dividerLine}
-              alt=""
+              aria-hidden="true"
             />
           ) : null,
           <div key={section.id} className="sikat-sidenav__section">
