@@ -491,35 +491,19 @@ export const TreeRows: StoryObj<{ onRowAction: (row: TreeOrder) => void }> = {
   parameters: { docs: { source: { type: 'code', code: '// See Table.stories.tsx → TreeRows' } } },
   render: (args) => {
     const [selected, setSelected] = useState<string[]>([]);
-    const [expanded, setExpanded] = useState<string[]>(['SO-1042', 'SO-1042-1']);
-    const allExpanded = TREE_EXPANDABLE_IDS.every((id) => expanded.includes(id));
     return (
       <Table
         caption="Orders"
         getRowId={(r) => r.id}
         getSubRows={(r) => r.children}
-        expandedIds={expanded}
-        onExpandedChange={setExpanded}
+        defaultExpandedIds={['SO-1042', 'SO-1042-1']}
         rows={TREE}
         selectable
         selectedIds={selected}
         onSelectionChange={setSelected}
         rowActions={(row) => [{ type: 'button', icon: <Icon size={20}>more_horiz</Icon>, label: `Actions for row ${row.id}`, onClick: () => args.onRowAction(row) }]}
         columns={[
-          {
-            key: 'id',
-            header: 'Order',
-            headerIcon: (
-              <Button
-                intent="default"
-                variant="link"
-                size="2xs"
-                aria-label={allExpanded ? 'Collapse all rows' : 'Expand all rows'}
-                onClick={() => setExpanded(allExpanded ? [] : TREE_EXPANDABLE_IDS)}
-                leadingIcon={<Icon size={20}>{allExpanded ? 'collapse_all' : 'expand_all'}</Icon>}
-              />
-            ),
-          },
+          { key: 'id',     header: 'Order', expandToggle: true },
           { key: 'name',   header: 'Name' },
           { key: 'qty',    header: 'Qty' },
           { key: 'amount', header: 'Amount', align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },

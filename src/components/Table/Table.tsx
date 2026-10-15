@@ -26,8 +26,8 @@ import './table.css';
 export interface TableColumn<T> {
   key: string;
   header: ReactNode;
-  /** Icon rendered before the header label — use to align with tree toggle. */
-  headerIcon?: ReactNode;
+  /** Show a built-in expand-all / collapse-all toggle in the header (tree mode only). */
+  expandToggle?: boolean;
   /** Cell content for a row (defaults to `String(row[key])`). */
   cell?: (row: T) => ReactNode;
   /** Shows the sort control on the header (Figma header cell hover). */
@@ -248,6 +248,8 @@ export function Table<T>({
   const byId = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
   const ids = useMemo(() => nodes.map((n) => n.id), [nodes]);
   const leaves = useMemo(() => nodes.filter((n) => n.children.length === 0), [nodes]);
+  const expandable = useMemo(() => nodes.filter((n) => n.children.length > 0).map((n) => n.id), [nodes]);
+  const allExpanded = expandable.length > 0 && expandable.every((id) => expanded.has(id));
 
   const expanded = useMemo(
     () => new Set(expandedIds ?? ownExpanded),
@@ -386,8 +388,21 @@ export function Table<T>({
                     }
                   >
                     <span className="sikat-table__th-inner">
-                      {col.headerIcon ? (
-                        <span className="sikat-table__th-icon">{col.headerIcon}</span>
+                      {col.expandToggle && tree ? (
+                        <span className="sikat-table__th-icon">
+                          <Button
+                            intent="default"
+                            variant="link"
+                            size="2xs"
+                            aria-label={allExpanded ? 'Collapse all rows' : 'Expand all rows'}
+                            onClick={() => {
+                              const next = allExpanded ? [] : expandable;
+                              if (expandedIds === undefined) setOwnExpanded(next);
+                              onExpandedChange?.(next);
+                            }}
+                            leadingIcon={<Icon size={20}>{allExpanded ? 'collapse_all' : 'expand_all'}</Icon>}
+                          />
+                        </span>
                       ) : null}
                       <span
                         className={
