@@ -249,12 +249,12 @@ export function Table<T>({
   const ids = useMemo(() => nodes.map((n) => n.id), [nodes]);
   const leaves = useMemo(() => nodes.filter((n) => n.children.length === 0), [nodes]);
   const expandable = useMemo(() => nodes.filter((n) => n.children.length > 0).map((n) => n.id), [nodes]);
-  const allExpanded = expandable.length > 0 && expandable.every((id) => expanded.has(id));
 
   const expanded = useMemo(
     () => new Set(expandedIds ?? ownExpanded),
     [expandedIds, ownExpanded],
   );
+  const allExpanded = expandable.length > 0 && expandable.every((id) => expanded.has(id));
   const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
 
   /** A row is checked when all its leaves are selected; mixed when only some are. */
