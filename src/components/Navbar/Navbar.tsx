@@ -73,7 +73,6 @@ export interface NavbarProps extends HTMLAttributes<HTMLElement> {
   onSettingsClick?: () => void;
 }
 
-
 type MenuTriggerProps = {
   role: 'combobox';
   'aria-label': string;
@@ -250,7 +249,9 @@ export function Navbar({
               onMouseEnter={() => onSideNavToggleHover?.(true)}
               onMouseLeave={() => onSideNavToggleHover?.(false)}
             >
-              <Icon size={20}>{sideNavExpanded === false ? 'left_panel_open' : 'left_panel_close'}</Icon>
+              <Icon size={20}>
+                {sideNavExpanded === false ? 'left_panel_open' : 'left_panel_close'}
+              </Icon>
             </IconButton>
           ) : null}
           {isApp ? (

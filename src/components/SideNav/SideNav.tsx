@@ -45,7 +45,11 @@ export interface SideNavProps extends Omit<HTMLAttributes<HTMLElement>, 'onChang
 
 /** A 20px Material Symbol icon for use as a nav item icon. */
 export function SideNavIcon({ icon }: { icon: string }) {
-  return <Icon size={20} className="sikat-sidenav__glyph">{icon}</Icon>;
+  return (
+    <Icon size={20} className="sikat-sidenav__glyph">
+      {icon}
+    </Icon>
+  );
 }
 
 const moduleOf = (sections: SideNavSection[], id?: string) => {
