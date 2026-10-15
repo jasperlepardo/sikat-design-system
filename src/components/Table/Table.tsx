@@ -140,7 +140,6 @@ function walk<T>(nodes: TreeNode<T>[], out: TreeNode<T>[] = []): TreeNode<T>[] {
   return out;
 }
 
-
 function Check({
   checked,
   indeterminate,
@@ -240,20 +239,17 @@ export function Table<T>({
 
   const tree = !!getSubRows;
 
-  const roots = useMemo(
-    () => buildTree(rows, getRowId, getSubRows),
-    [rows, getRowId, getSubRows],
-  );
+  const roots = useMemo(() => buildTree(rows, getRowId, getSubRows), [rows, getRowId, getSubRows]);
   const nodes = useMemo(() => walk(roots), [roots]);
   const byId = useMemo(() => new Map(nodes.map((n) => [n.id, n])), [nodes]);
   const ids = useMemo(() => nodes.map((n) => n.id), [nodes]);
   const leaves = useMemo(() => nodes.filter((n) => n.children.length === 0), [nodes]);
-  const expandable = useMemo(() => nodes.filter((n) => n.children.length > 0).map((n) => n.id), [nodes]);
-
-  const expanded = useMemo(
-    () => new Set(expandedIds ?? ownExpanded),
-    [expandedIds, ownExpanded],
+  const expandable = useMemo(
+    () => nodes.filter((n) => n.children.length > 0).map((n) => n.id),
+    [nodes],
   );
+
+  const expanded = useMemo(() => new Set(expandedIds ?? ownExpanded), [expandedIds, ownExpanded]);
   const allExpanded = expandable.length > 0 && expandable.every((id) => expanded.has(id));
   const selected = useMemo(() => new Set(selectedIds), [selectedIds]);
 
@@ -400,7 +396,9 @@ export function Table<T>({
                               if (expandedIds === undefined) setOwnExpanded(next);
                               onExpandedChange?.(next);
                             }}
-                            leadingIcon={<Icon size={20}>{allExpanded ? 'collapse_all' : 'expand_all'}</Icon>}
+                            leadingIcon={
+                              <Icon size={20}>{allExpanded ? 'collapse_all' : 'expand_all'}</Icon>
+                            }
                           />
                         </span>
                       ) : null}
@@ -488,13 +486,15 @@ export function Table<T>({
                           >
                             {hasChildren ? (
                               <TableActions
-                                items={[{
-                                  type: 'expand',
-                                  expanded: isOpen,
-                                  label: `${isOpen ? 'Collapse' : 'Expand'} row ${id}`,
-                                  onToggle: () => setExpanded(id, !isOpen),
-                                  onKeyDown: (e) => onExpandKey(node, e),
-                                }]}
+                                items={[
+                                  {
+                                    type: 'expand',
+                                    expanded: isOpen,
+                                    label: `${isOpen ? 'Collapse' : 'Expand'} row ${id}`,
+                                    onToggle: () => setExpanded(id, !isOpen),
+                                    onKeyDown: (e) => onExpandKey(node, e),
+                                  },
+                                ]}
                               />
                             ) : (
                               <span className="sikat-table__tree-spacer" aria-hidden="true" />

@@ -14,7 +14,6 @@ export type TableContentTextProps = TextProps;
  * (rule → border/primary-subtle, handle / checkbox → fg/quarternary-solid).
  */
 
-
 /**
  * Unified cell content component. Props compose freely:
  * - `onClick`/`href` → link/button text
@@ -63,9 +62,7 @@ export function TableContent({
   children?: ReactNode;
 }) {
   const resolvedMedia =
-    decorativeIcon != null
-      ? <DecorativeIcon size={32} {...decorativeIcon} />
-      : media;
+    decorativeIcon != null ? <DecorativeIcon size={32} {...decorativeIcon} /> : media;
 
   const isUser = initials != null || avatarSrc != null || avatar != null;
   const hasMedia = !isUser && (resolvedMedia != null || src != null);
@@ -74,24 +71,27 @@ export function TableContent({
 
   const mainContent =
     href != null ? (
-      <Link href={href} intent="default" onClick={onClick}>{children}</Link>
+      <Link href={href} intent="default" onClick={onClick}>
+        {children}
+      </Link>
     ) : onClick != null ? (
-      <Button intent="default" variant="link" onClick={onClick}>{children}</Button>
-    ) : children;
+      <Button intent="default" variant="link" onClick={onClick}>
+        {children}
+      </Button>
+    ) : (
+      children
+    );
 
   const textStack = (
     <span className="sikat-table-cell__stack">
-      {hasTexts
-        ? texts!.map((item, i) => <Text key={i} as="span" {...item} />)
-        : (
-          <>
-            <span>{mainContent}</span>
-            {subcopy != null ? (
-              <span className="sikat-table-cell__subcopy">{subcopy}</span>
-            ) : null}
-          </>
-        )
-      }
+      {hasTexts ? (
+        texts!.map((item, i) => <Text key={i} as="span" {...item} />)
+      ) : (
+        <>
+          <span>{mainContent}</span>
+          {subcopy != null ? <span className="sikat-table-cell__subcopy">{subcopy}</span> : null}
+        </>
+      )}
     </span>
   );
 
@@ -161,7 +161,13 @@ export function TableAmount({ currency, children }: { currency?: ReactNode; chil
 
 export type TableActionItem =
   | { type: 'drag'; label?: string }
-  | { type: 'expand'; expanded?: boolean; onToggle?: () => void; label?: string; onKeyDown?: (e: React.KeyboardEvent<HTMLButtonElement>) => void }
+  | {
+      type: 'expand';
+      expanded?: boolean;
+      onToggle?: () => void;
+      label?: string;
+      onKeyDown?: (e: React.KeyboardEvent<HTMLButtonElement>) => void;
+    }
   | { type: 'button'; icon: ReactNode; label: string; onClick: () => void; disabled?: boolean };
 
 /** Unified action cell covering drag handles, expand toggles, and icon buttons.
@@ -200,9 +206,7 @@ export function TableActions({
               aria-expanded={item.expanded}
               onClick={item.onToggle}
               onKeyDown={item.onKeyDown}
-              leadingIcon={
-                <Icon size={20}>chevron_right</Icon>
-              }
+              leadingIcon={<Icon size={20}>chevron_right</Icon>}
             />
           );
         }

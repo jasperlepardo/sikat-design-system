@@ -25,14 +25,78 @@ type Order = {
 };
 
 const ORDERS: Order[] = [
-  { id: 'SO-1042', product: 'Steel bolts',   customer: 'Sikat Tech', email: 'ops@sikat.ph',     status: 'Paid',    amount: '12,450.00', note: 'Net 30' },
-  { id: 'SO-1043', product: 'Copper wire',   customer: 'Acme Corp',  email: 'buy@acme.com',     status: 'Pending', amount: '3,980.50',  note: 'COD'    },
-  { id: 'SO-1044', product: 'PVC pipes',     customer: 'Globex',     email: 'ap@globex.io',     status: 'Overdue', amount: '870.00',    note: 'Net 15' },
-  { id: 'SO-1045', product: 'Hex nuts',      customer: 'Umbrella',   email: 'po@umbrella.com',  status: 'Paid',    amount: '5,200.00',  note: 'Net 60' },
-  { id: 'SO-1046', product: 'Angle bars',    customer: 'Initech',    email: 'buy@initech.com',  status: 'Pending', amount: '9,100.00',  note: 'Net 30' },
-  { id: 'SO-1047', product: 'Sheet metal',   customer: 'Hooli',      email: 'ops@hooli.com',    status: 'Overdue', amount: '1,340.00',  note: 'COD'    },
-  { id: 'SO-1048', product: 'Welding rods',  customer: 'Dunder',     email: 'ap@dunder.com',    status: 'Paid',    amount: '7,830.00',  note: 'Net 60' },
-  { id: 'SO-1049', product: 'Safety gloves', customer: 'Pied Piper', email: 'po@piedpiper.com', status: 'Pending', amount: '2,120.00',  note: 'Net 15' },
+  {
+    id: 'SO-1042',
+    product: 'Steel bolts',
+    customer: 'Sikat Tech',
+    email: 'ops@sikat.ph',
+    status: 'Paid',
+    amount: '12,450.00',
+    note: 'Net 30',
+  },
+  {
+    id: 'SO-1043',
+    product: 'Copper wire',
+    customer: 'Acme Corp',
+    email: 'buy@acme.com',
+    status: 'Pending',
+    amount: '3,980.50',
+    note: 'COD',
+  },
+  {
+    id: 'SO-1044',
+    product: 'PVC pipes',
+    customer: 'Globex',
+    email: 'ap@globex.io',
+    status: 'Overdue',
+    amount: '870.00',
+    note: 'Net 15',
+  },
+  {
+    id: 'SO-1045',
+    product: 'Hex nuts',
+    customer: 'Umbrella',
+    email: 'po@umbrella.com',
+    status: 'Paid',
+    amount: '5,200.00',
+    note: 'Net 60',
+  },
+  {
+    id: 'SO-1046',
+    product: 'Angle bars',
+    customer: 'Initech',
+    email: 'buy@initech.com',
+    status: 'Pending',
+    amount: '9,100.00',
+    note: 'Net 30',
+  },
+  {
+    id: 'SO-1047',
+    product: 'Sheet metal',
+    customer: 'Hooli',
+    email: 'ops@hooli.com',
+    status: 'Overdue',
+    amount: '1,340.00',
+    note: 'COD',
+  },
+  {
+    id: 'SO-1048',
+    product: 'Welding rods',
+    customer: 'Dunder',
+    email: 'ap@dunder.com',
+    status: 'Paid',
+    amount: '7,830.00',
+    note: 'Net 60',
+  },
+  {
+    id: 'SO-1049',
+    product: 'Safety gloves',
+    customer: 'Pied Piper',
+    email: 'po@piedpiper.com',
+    status: 'Pending',
+    amount: '2,120.00',
+    note: 'Net 15',
+  },
 ];
 
 const statusIntent = (s: Order['status']) =>
@@ -81,15 +145,66 @@ export const Playground: StoryObj<PlaygroundArgs> = {
           selectable
           selectedIds={selected}
           onSelectionChange={setSelected}
-          rowActions={(row) => [{ type: 'button', icon: <Icon size={20}>more_horiz</Icon>, label: `Actions for row ${row.id}`, onClick: () => args.onRowAction(row) }]}
-          headerActions={[{ type: 'button', icon: <Icon size={20}>tune</Icon>, label: 'Column settings', onClick: args.onColumnSettings }]}
-          pagination={{ page, pageSize: 10, total: 89, onPageChange: (p) => { setPage(p); args.onPageChange(p); } }}
+          rowActions={(row) => [
+            {
+              type: 'button',
+              icon: <Icon size={20}>more_horiz</Icon>,
+              label: `Actions for row ${row.id}`,
+              onClick: () => args.onRowAction(row),
+            },
+          ]}
+          headerActions={[
+            {
+              type: 'button',
+              icon: <Icon size={20}>tune</Icon>,
+              label: 'Column settings',
+              onClick: args.onColumnSettings,
+            },
+          ]}
+          pagination={{
+            page,
+            pageSize: 10,
+            total: 89,
+            onPageChange: (p) => {
+              setPage(p);
+              args.onPageChange(p);
+            },
+          }}
           columns={[
-            { key: 'id',       header: 'Order',    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content> },
-            { key: 'product',  header: 'Product',  cell: (r) => <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content> },
-            { key: 'customer', header: 'Customer', cell: (r) => <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.customer}</Table.Content> },
-            { key: 'status',   header: 'Status',   cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-            { key: 'amount',   header: 'Amount',   align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+            {
+              key: 'id',
+              header: 'Order',
+              cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+            },
+            {
+              key: 'product',
+              header: 'Product',
+              cell: (r) => (
+                <Table.Content media={<Icon size={24}>inventory_2</Icon>}>
+                  {r.product}
+                </Table.Content>
+              ),
+            },
+            {
+              key: 'customer',
+              header: 'Customer',
+              cell: (r) => (
+                <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>
+                  {r.customer}
+                </Table.Content>
+              ),
+            },
+            {
+              key: 'status',
+              header: 'Status',
+              cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+            },
+            {
+              key: 'amount',
+              header: 'Amount',
+              align: 'end',
+              cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+            },
           ]}
         />
       </Card>
@@ -107,7 +222,9 @@ export const Playground: StoryObj<PlaygroundArgs> = {
     await expect(all.indeterminate).toBe(true);
 
     await userEvent.click(canvas.getByRole('button', { name: 'Actions for row SO-1043' }));
-    await expect(args.onRowAction).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'SO-1043' }));
+    await expect(args.onRowAction).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: 'SO-1043' }),
+    );
     await userEvent.click(canvas.getByRole('button', { name: 'Column settings' }));
     await expect(args.onColumnSettings).toHaveBeenCalledOnce();
     await expect(canvas.getByRole('button', { name: 'Previous page' })).toBeDisabled();
@@ -141,11 +258,21 @@ export const Sorting: StoryObj<typeof meta> = {
         sort={sort}
         onSortChange={setSort}
         columns={[
-          { key: 'id',       header: 'Order',    sortable: true },
-          { key: 'product',  header: 'Product',  sortable: true },
+          { key: 'id', header: 'Order', sortable: true },
+          { key: 'product', header: 'Product', sortable: true },
           { key: 'customer', header: 'Customer', sortable: true },
-          { key: 'status',   header: 'Status',   cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-          { key: 'amount',   header: 'Amount',   sortable: true, align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+          {
+            key: 'status',
+            header: 'Status',
+            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+          },
+          {
+            key: 'amount',
+            header: 'Amount',
+            sortable: true,
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
         ]}
       />
     );
@@ -180,14 +307,30 @@ export const Scroll: StoryObj<typeof meta> = {
         scroll
         selectable
         columns={[
-          { key: 'id',       header: 'Order' },
-          { key: 'product',  header: 'Product' },
+          { key: 'id', header: 'Order' },
+          { key: 'product', header: 'Product' },
           { key: 'customer', header: 'Customer' },
-          { key: 'status',   header: 'Status',  cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-          { key: 'amount',   header: 'Amount',  align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
-          { key: 'note',     header: 'Terms' },
+          {
+            key: 'status',
+            header: 'Status',
+            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+          },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
+          { key: 'note', header: 'Terms' },
         ]}
-        rowActions={[{ type: 'button', icon: <Icon size={20}>more_horiz</Icon>, label: 'Row actions', onClick: () => {} }]}
+        rowActions={[
+          {
+            type: 'button',
+            icon: <Icon size={20}>more_horiz</Icon>,
+            label: 'Row actions',
+            onClick: () => {},
+          },
+        ]}
       />
     </div>
   ),
@@ -198,7 +341,10 @@ export const Scroll: StoryObj<typeof meta> = {
     const scroller = canvasElement.querySelector<HTMLElement>('.sikat-table__scroller')!;
     scroller.scrollLeft = scroller.scrollWidth;
     await new Promise((r) => setTimeout(r, 50));
-    await expect(parseFloat(thumb!.style.left) + parseFloat(thumb!.style.width)).toBeCloseTo(100, 0);
+    await expect(parseFloat(thumb!.style.left) + parseFloat(thumb!.style.width)).toBeCloseTo(
+      100,
+      0,
+    );
   },
 };
 
@@ -217,11 +363,38 @@ export const LayoutScroll: StoryObj<typeof meta> = {
         rows={ORDERS}
         layout="scroll"
         columns={[
-          { key: 'id',       header: 'Order',    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content> },
-          { key: 'product',  header: 'Product',  cell: (r) => <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content> },
-          { key: 'customer', header: 'Customer', cell: (r) => <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.customer}</Table.Content> },
-          { key: 'status',   header: 'Status',   cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-          { key: 'amount',   header: 'Amount',   align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+          {
+            key: 'id',
+            header: 'Order',
+            cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+          },
+          {
+            key: 'product',
+            header: 'Product',
+            cell: (r) => (
+              <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content>
+            ),
+          },
+          {
+            key: 'customer',
+            header: 'Customer',
+            cell: (r) => (
+              <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>
+                {r.customer}
+              </Table.Content>
+            ),
+          },
+          {
+            key: 'status',
+            header: 'Status',
+            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+          },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
         ]}
       />
     </Card>
@@ -241,11 +414,40 @@ export const LayoutFill: StoryObj<typeof meta> = {
           rows={ORDERS}
           layout="fill"
           columns={[
-            { key: 'id',       header: 'Order',    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content> },
-            { key: 'product',  header: 'Product',  cell: (r) => <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content> },
-            { key: 'customer', header: 'Customer', cell: (r) => <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.customer}</Table.Content> },
-            { key: 'status',   header: 'Status',   cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-            { key: 'amount',   header: 'Amount',   align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+            {
+              key: 'id',
+              header: 'Order',
+              cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+            },
+            {
+              key: 'product',
+              header: 'Product',
+              cell: (r) => (
+                <Table.Content media={<Icon size={24}>inventory_2</Icon>}>
+                  {r.product}
+                </Table.Content>
+              ),
+            },
+            {
+              key: 'customer',
+              header: 'Customer',
+              cell: (r) => (
+                <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>
+                  {r.customer}
+                </Table.Content>
+              ),
+            },
+            {
+              key: 'status',
+              header: 'Status',
+              cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+            },
+            {
+              key: 'amount',
+              header: 'Amount',
+              align: 'end',
+              cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+            },
           ]}
         />
       </Card>
@@ -265,15 +467,29 @@ export const FooterRow: StoryObj<typeof meta> = {
       getRowId={(r) => r.id}
       rows={ORDERS.slice(0, 3)}
       footerRow={
-        <Button intent="default" variant="ghost" size="medium" leadingIcon={<Icon size={20}>add</Icon>}>
+        <Button
+          intent="default"
+          variant="ghost"
+          size="medium"
+          leadingIcon={<Icon size={20}>add</Icon>}
+        >
           Add line item
         </Button>
       }
       columns={[
-        { key: 'id',      header: 'Order' },
+        { key: 'id', header: 'Order' },
         { key: 'product', header: 'Product' },
-        { key: 'status',  header: 'Status', cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-        { key: 'amount',  header: 'Amount', align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+        {
+          key: 'status',
+          header: 'Status',
+          cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+        },
+        {
+          key: 'amount',
+          header: 'Amount',
+          align: 'end',
+          cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+        },
       ]}
     />
   ),
@@ -299,22 +515,95 @@ export const CellTypes: StoryObj<typeof meta> = {
         selectable
         selectedIds={selected}
         onSelectionChange={setSelected}
-        rowActions={(row) => [{ type: 'button', icon: <Icon size={20}>more_horiz</Icon>, label: `Actions for row ${row.id}`, onClick: () => {} }]}
-        columns={[
-          { key: 'drag',   header: 'Reorder', srOnlyHeader: true, cell: () => <Table.Actions items={[{ type: 'drag' }]} /> },
-          { key: 'expand', header: 'Expand',  srOnlyHeader: true, cell: (r) => <Table.Actions items={[{ type: 'expand', expanded: expanded.includes(r.id), onToggle: () => toggle(r.id) }]} /> },
-          { key: 'id',       header: 'Order',    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content> },
-          { key: 'product',  header: 'Product',  cell: (r) => <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content> },
-          { key: 'customer', header: 'Customer', cell: (r) => <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.customer}</Table.Content> },
-          { key: 'status',   header: 'Status',   cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-          { key: 'amount',   header: 'Amount',   align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
-          { key: 'note',     header: 'Terms',    cell: (r) => <Table.Content subcopy="Payment terms">{r.note}</Table.Content> },
+        rowActions={(row) => [
           {
-            key: 'cta', header: 'Actions',
+            type: 'button',
+            icon: <Icon size={20}>more_horiz</Icon>,
+            label: `Actions for row ${row.id}`,
+            onClick: () => {},
+          },
+        ]}
+        columns={[
+          {
+            key: 'drag',
+            header: 'Reorder',
+            srOnlyHeader: true,
+            cell: () => <Table.Actions items={[{ type: 'drag' }]} />,
+          },
+          {
+            key: 'expand',
+            header: 'Expand',
+            srOnlyHeader: true,
+            cell: (r) => (
+              <Table.Actions
+                items={[
+                  {
+                    type: 'expand',
+                    expanded: expanded.includes(r.id),
+                    onToggle: () => toggle(r.id),
+                  },
+                ]}
+              />
+            ),
+          },
+          {
+            key: 'id',
+            header: 'Order',
+            cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+          },
+          {
+            key: 'product',
+            header: 'Product',
+            cell: (r) => (
+              <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content>
+            ),
+          },
+          {
+            key: 'customer',
+            header: 'Customer',
+            cell: (r) => (
+              <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>
+                {r.customer}
+              </Table.Content>
+            ),
+          },
+          {
+            key: 'status',
+            header: 'Status',
+            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+          },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
+          {
+            key: 'note',
+            header: 'Terms',
+            cell: (r) => <Table.Content subcopy="Payment terms">{r.note}</Table.Content>,
+          },
+          {
+            key: 'cta',
+            header: 'Actions',
             cell: () => (
               <Table.Actions>
-                <Button intent="default" variant="ghost" size="medium" leadingIcon={<Icon size={20}>edit</Icon>}>Edit</Button>
-                <Button intent="default" variant="ghost" size="medium" leadingIcon={<Icon size={20}>delete</Icon>}>Delete</Button>
+                <Button
+                  intent="default"
+                  variant="ghost"
+                  size="medium"
+                  leadingIcon={<Icon size={20}>edit</Icon>}
+                >
+                  Edit
+                </Button>
+                <Button
+                  intent="default"
+                  variant="ghost"
+                  size="medium"
+                  leadingIcon={<Icon size={20}>delete</Icon>}
+                >
+                  Delete
+                </Button>
               </Table.Actions>
             ),
           },
@@ -348,24 +637,79 @@ export const TableContentVariants: StoryObj<typeof meta> = {
       getRowId={(r) => r.id}
       rows={ORDERS.slice(0, 3)}
       columns={[
-        { key: 'button',  header: 'Button link',   cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content> },
-        { key: 'href',    header: 'Anchor link',    cell: (r) => <Table.Content href="#">{r.id}</Table.Content> },
-        { key: 'media',   header: 'Media icon',     cell: (r) => <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content> },
-        { key: 'decicon', header: 'Decorative icon',cell: (r) => <Table.Content decorativeIcon={{ icon: 'package_2', intent: 'primary', variant: 'subtle' }}>{r.product}</Table.Content> },
-        { key: 'user',    header: 'User avatar',    cell: (r) => <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.customer}</Table.Content> },
-        { key: 'subcopy', header: 'Subcopy',        cell: (r) => <Table.Content subcopy="Payment terms">{r.note}</Table.Content> },
-        { key: 'texts',   header: 'Text stack',     cell: (r) => (
-          <Table.Content texts={[
-            { variant: 'caption', tone: 'muted', children: 'Order' },
-            { variant: 'small', weight: 'semibold', children: r.id },
-            { variant: 'caption', tone: 'muted', children: r.product },
-          ]} />
-        )},
-        { key: 'inline',  header: 'Inline link',    cell: (r) => (
-          <Table.Content subcopy={<Text variant="caption" as="span">Ref: <Link href="#" intent="primary">{r.id}</Link></Text>}>
-            {r.product}
-          </Table.Content>
-        )},
+        {
+          key: 'button',
+          header: 'Button link',
+          cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+        },
+        {
+          key: 'href',
+          header: 'Anchor link',
+          cell: (r) => <Table.Content href="#">{r.id}</Table.Content>,
+        },
+        {
+          key: 'media',
+          header: 'Media icon',
+          cell: (r) => (
+            <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content>
+          ),
+        },
+        {
+          key: 'decicon',
+          header: 'Decorative icon',
+          cell: (r) => (
+            <Table.Content
+              decorativeIcon={{ icon: 'package_2', intent: 'primary', variant: 'subtle' }}
+            >
+              {r.product}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'user',
+          header: 'User avatar',
+          cell: (r) => (
+            <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>
+              {r.customer}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'subcopy',
+          header: 'Subcopy',
+          cell: (r) => <Table.Content subcopy="Payment terms">{r.note}</Table.Content>,
+        },
+        {
+          key: 'texts',
+          header: 'Text stack',
+          cell: (r) => (
+            <Table.Content
+              texts={[
+                { variant: 'caption', tone: 'muted', children: 'Order' },
+                { variant: 'small', weight: 'semibold', children: r.id },
+                { variant: 'caption', tone: 'muted', children: r.product },
+              ]}
+            />
+          ),
+        },
+        {
+          key: 'inline',
+          header: 'Inline link',
+          cell: (r) => (
+            <Table.Content
+              subcopy={
+                <Text variant="caption" as="span">
+                  Ref:{' '}
+                  <Link href="#" intent="primary">
+                    {r.id}
+                  </Link>
+                </Text>
+              }
+            >
+              {r.product}
+            </Table.Content>
+          ),
+        },
       ]}
     />
   ),
@@ -377,9 +721,9 @@ export const TableContentVariants: StoryObj<typeof meta> = {
 
 type Person = { id: string; name: string; email: string; avatarSrc?: string };
 const PEOPLE: Person[] = [
-  { id: '1', name: 'Juan dela Cruz', email: 'ops@sikat.ph'  },
-  { id: '2', name: 'Maria Santos',   email: 'buy@acme.com'  },
-  { id: '3', name: 'Pedro Reyes',    email: 'ap@globex.io'  },
+  { id: '1', name: 'Juan dela Cruz', email: 'ops@sikat.ph' },
+  { id: '2', name: 'Maria Santos', email: 'buy@acme.com' },
+  { id: '3', name: 'Pedro Reyes', email: 'ap@globex.io' },
 ];
 
 /** Avatar — intent, variant, shape, icon, and photo (avatarSrc) options via the `avatar` prop. */
@@ -391,12 +735,76 @@ export const AvatarVariants: StoryObj<typeof meta> = {
       getRowId={(r) => r.id}
       rows={PEOPLE}
       columns={[
-        { key: 'default',  header: 'Primary / Subtle (default)', cell: (r) => <Table.Content initials={r.name.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.name}</Table.Content> },
-        { key: 'neutral',  header: 'Default / Subtle',           cell: (r) => <Table.Content avatar={{ intent: 'default', variant: 'subtle' }} initials={r.name.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.name}</Table.Content> },
-        { key: 'solid',    header: 'Primary / Solid',            cell: (r) => <Table.Content avatar={{ intent: 'primary', variant: 'solid' }} initials={r.name.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.name}</Table.Content> },
-        { key: 'outline',  header: 'Outline',                    cell: (r) => <Table.Content avatar={{ variant: 'outline' }} initials={r.name.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.name}</Table.Content> },
-        { key: 'rounded',  header: 'Rounded',                    cell: (r) => <Table.Content avatar={{ shape: 'rounded' }} initials={r.name.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.name}</Table.Content> },
-        { key: 'icon',     header: 'Icon',                       cell: (r) => <Table.Content avatar={{ icon: 'person' }} subcopy={r.email}>{r.name}</Table.Content> },
+        {
+          key: 'default',
+          header: 'Primary / Subtle (default)',
+          cell: (r) => (
+            <Table.Content initials={r.name.slice(0, 2).toUpperCase()} subcopy={r.email}>
+              {r.name}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'neutral',
+          header: 'Default / Subtle',
+          cell: (r) => (
+            <Table.Content
+              avatar={{ intent: 'default', variant: 'subtle' }}
+              initials={r.name.slice(0, 2).toUpperCase()}
+              subcopy={r.email}
+            >
+              {r.name}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'solid',
+          header: 'Primary / Solid',
+          cell: (r) => (
+            <Table.Content
+              avatar={{ intent: 'primary', variant: 'solid' }}
+              initials={r.name.slice(0, 2).toUpperCase()}
+              subcopy={r.email}
+            >
+              {r.name}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'outline',
+          header: 'Outline',
+          cell: (r) => (
+            <Table.Content
+              avatar={{ variant: 'outline' }}
+              initials={r.name.slice(0, 2).toUpperCase()}
+              subcopy={r.email}
+            >
+              {r.name}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'rounded',
+          header: 'Rounded',
+          cell: (r) => (
+            <Table.Content
+              avatar={{ shape: 'rounded' }}
+              initials={r.name.slice(0, 2).toUpperCase()}
+              subcopy={r.email}
+            >
+              {r.name}
+            </Table.Content>
+          ),
+        },
+        {
+          key: 'icon',
+          header: 'Icon',
+          cell: (r) => (
+            <Table.Content avatar={{ icon: 'person' }} subcopy={r.email}>
+              {r.name}
+            </Table.Content>
+          ),
+        },
       ]}
     />
   ),
@@ -440,11 +848,20 @@ export const CellActions: StoryObj<typeof meta> = {
     return (
       <div style={{ display: 'flex', gap: 24, padding: 12, alignItems: 'center' }}>
         <Table.Actions items={[{ type: 'drag' }]} />
-        <Table.Actions items={[{ type: 'expand', expanded, onToggle: () => setExpanded((e) => !e) }]} />
-        <Table.Actions items={[
-          { type: 'button', icon: <Icon size={20}>edit</Icon>,   label: 'Edit',   onClick: () => {} },
-          { type: 'button', icon: <Icon size={20}>delete</Icon>, label: 'Delete', onClick: () => {} },
-        ]} />
+        <Table.Actions
+          items={[{ type: 'expand', expanded, onToggle: () => setExpanded((e) => !e) }]}
+        />
+        <Table.Actions
+          items={[
+            { type: 'button', icon: <Icon size={20}>edit</Icon>, label: 'Edit', onClick: () => {} },
+            {
+              type: 'button',
+              icon: <Icon size={20}>delete</Icon>,
+              label: 'Delete',
+              onClick: () => {},
+            },
+          ]}
+        />
       </div>
     );
   },
@@ -458,9 +875,16 @@ type TreeOrder = { id: string; name: string; qty: string; amount: string; childr
 
 const TREE: TreeOrder[] = [
   {
-    id: 'SO-1042', name: 'Sikat Tech', qty: '3', amount: '12,450.00',
+    id: 'SO-1042',
+    name: 'Sikat Tech',
+    qty: '3',
+    amount: '12,450.00',
     children: [
-      { id: 'SO-1042-1', name: 'Steel bolts', qty: '2', amount: '8,000.00',
+      {
+        id: 'SO-1042-1',
+        name: 'Steel bolts',
+        qty: '2',
+        amount: '8,000.00',
         children: [
           { id: 'LOT-A', name: 'Lot A', qty: '1', amount: '5,000.00' },
           { id: 'LOT-B', name: 'Lot B', qty: '1', amount: '3,000.00' },
@@ -470,7 +894,10 @@ const TREE: TreeOrder[] = [
     ],
   },
   {
-    id: 'SO-1043', name: 'Acme Corp', qty: '1', amount: '3,980.50',
+    id: 'SO-1043',
+    name: 'Acme Corp',
+    qty: '1',
+    amount: '3,980.50',
     children: [{ id: 'SO-1043-1', name: 'Copper wire', qty: '1', amount: '3,980.50' }],
   },
   { id: 'SO-1044', name: 'Globex', qty: '1', amount: '870.00' },
@@ -479,7 +906,12 @@ const TREE: TreeOrder[] = [
 const TREE_EXPANDABLE_IDS = (() => {
   const ids: string[] = [];
   const collect = (rows: TreeOrder[]) => {
-    for (const r of rows) { if (r.children?.length) { ids.push(r.id); collect(r.children); } }
+    for (const r of rows) {
+      if (r.children?.length) {
+        ids.push(r.id);
+        collect(r.children);
+      }
+    }
   };
   collect(TREE);
   return ids;
@@ -501,12 +933,24 @@ export const TreeRows: StoryObj<{ onRowAction: (row: TreeOrder) => void }> = {
         selectable
         selectedIds={selected}
         onSelectionChange={setSelected}
-        rowActions={(row) => [{ type: 'button', icon: <Icon size={20}>more_horiz</Icon>, label: `Actions for row ${row.id}`, onClick: () => args.onRowAction(row) }]}
+        rowActions={(row) => [
+          {
+            type: 'button',
+            icon: <Icon size={20}>more_horiz</Icon>,
+            label: `Actions for row ${row.id}`,
+            onClick: () => args.onRowAction(row),
+          },
+        ]}
         columns={[
-          { key: 'id',     header: 'Order', expandToggle: true },
-          { key: 'name',   header: 'Name' },
-          { key: 'qty',    header: 'Qty' },
-          { key: 'amount', header: 'Amount', align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+          { key: 'id', header: 'Order', expandToggle: true },
+          { key: 'name', header: 'Name' },
+          { key: 'qty', header: 'Qty' },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
         ]}
       />
     );
@@ -551,7 +995,9 @@ export const TreeRows: StoryObj<{ onRowAction: (row: TreeOrder) => void }> = {
     await expect(check('SO-1042').checked).toBe(true);
 
     await userEvent.click(canvas.getByRole('button', { name: 'Actions for row LOT-A' }));
-    await expect(args.onRowAction).toHaveBeenLastCalledWith(expect.objectContaining({ id: 'LOT-A' }));
+    await expect(args.onRowAction).toHaveBeenLastCalledWith(
+      expect.objectContaining({ id: 'LOT-A' }),
+    );
   },
 };
 
@@ -572,7 +1018,11 @@ export const InPanel: StoryObj<PlaygroundArgs> = {
             icon="table_rows"
             iconVariant="solid"
             title="Orders"
-            actions={<Button intent="primary" variant="solid" size="extra-large">New Order</Button>}
+            actions={
+              <Button intent="primary" variant="solid" size="extra-large">
+                New Order
+              </Button>
+            }
           />
           <Panel.Body>
             <Card>
@@ -583,15 +1033,71 @@ export const InPanel: StoryObj<PlaygroundArgs> = {
                 selectable
                 selectedIds={selected}
                 onSelectionChange={setSelected}
-                rowActions={(row) => [{ type: 'button', icon: <Icon size={20}>more_horiz</Icon>, label: `Actions for row ${row.id}`, onClick: () => args.onRowAction(row) }]}
-                headerActions={[{ type: 'button', icon: <Icon size={20}>tune</Icon>, label: 'Column settings', onClick: args.onColumnSettings }]}
-                pagination={{ page, pageSize: 10, total: 89, onPageChange: (p) => { setPage(p); args.onPageChange(p); } }}
+                rowActions={(row) => [
+                  {
+                    type: 'button',
+                    icon: <Icon size={20}>more_horiz</Icon>,
+                    label: `Actions for row ${row.id}`,
+                    onClick: () => args.onRowAction(row),
+                  },
+                ]}
+                headerActions={[
+                  {
+                    type: 'button',
+                    icon: <Icon size={20}>tune</Icon>,
+                    label: 'Column settings',
+                    onClick: args.onColumnSettings,
+                  },
+                ]}
+                pagination={{
+                  page,
+                  pageSize: 10,
+                  total: 89,
+                  onPageChange: (p) => {
+                    setPage(p);
+                    args.onPageChange(p);
+                  },
+                }}
                 columns={[
-                  { key: 'id',       header: 'Order',    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content> },
-                  { key: 'product',  header: 'Product',  cell: (r) => <Table.Content media={<Icon size={24}>inventory_2</Icon>}>{r.product}</Table.Content> },
-                  { key: 'customer', header: 'Customer', cell: (r) => <Table.Content initials={r.customer.slice(0, 2).toUpperCase()} subcopy={r.email}>{r.customer}</Table.Content> },
-                  { key: 'status',   header: 'Status',   cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status> },
-                  { key: 'amount',   header: 'Amount',   align: 'end', cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount> },
+                  {
+                    key: 'id',
+                    header: 'Order',
+                    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+                  },
+                  {
+                    key: 'product',
+                    header: 'Product',
+                    cell: (r) => (
+                      <Table.Content media={<Icon size={24}>inventory_2</Icon>}>
+                        {r.product}
+                      </Table.Content>
+                    ),
+                  },
+                  {
+                    key: 'customer',
+                    header: 'Customer',
+                    cell: (r) => (
+                      <Table.Content
+                        initials={r.customer.slice(0, 2).toUpperCase()}
+                        subcopy={r.email}
+                      >
+                        {r.customer}
+                      </Table.Content>
+                    ),
+                  },
+                  {
+                    key: 'status',
+                    header: 'Status',
+                    cell: (r) => (
+                      <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>
+                    ),
+                  },
+                  {
+                    key: 'amount',
+                    header: 'Amount',
+                    align: 'end',
+                    cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+                  },
                 ]}
               />
             </Card>

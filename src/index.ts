@@ -148,10 +148,7 @@ export {
   TableAmount,
   TableActions,
 } from './components/Table/TableCells';
-export type {
-  TableContentTextProps,
-  TableActionItem,
-} from './components/Table/TableCells';
+export type { TableContentTextProps, TableActionItem } from './components/Table/TableCells';
 export type {
   TableProps,
   TableColumn,
