@@ -23,16 +23,34 @@ so that users can select a date from an interactive calendar.
 
 ### Controls
 
-| Control       | Type           | Options           | Default           |
-| ------------- | -------------- | ----------------- | ----------------- |
-| value         | string \| null | YYYY-MM-DD format | —                 |
-| defaultValue  | string \| null | —                 | `''`              |
-| onValueChange | function       | —                 | —                 |
-| placeholder   | string         | —                 | `'Select a date'` |
-| size          | string         | `md`              | `md`              |
-| disabled      | boolean        | `true` \| `false` | `false`           |
-| readOnly      | boolean        | `true` \| `false` | `false`           |
-| invalid       | boolean        | `true` \| `false` | `false`           |
+| Control       | Type           | Options           | Default                  |
+| ------------- | -------------- | ----------------- | ------------------------ |
+| value         | string \| null | YYYY-MM-DD format | —                        |
+| defaultValue  | string \| null | —                 | `''`                     |
+| onValueChange | function       | —                 | —                        |
+| placeholder   | string         | —                 | `'Select a date'`        |
+| size          | string         | `md`              | `md`                     |
+| disabled      | boolean        | `true` \| `false` | `false`                  |
+| readOnly      | boolean        | `true` \| `false` | `false`                  |
+| invalid       | boolean        | `true` \| `false` | `false`                  |
+| formatValue   | function       | `(iso) => string` | provider / `27 May 2026` |
+
+---
+
+## Display Format
+
+### User Story
+
+As a developer consuming Sikat,
+I want to choose how a DatePicker shows its date, app-wide or per field,
+so that dates read in the user's preferred format.
+
+### Acceptance Criteria
+
+- [ ] `DateFormatProvider format={fn}` sets the displayed text of every DatePicker inside it
+- [ ] `formatValue` on a DatePicker overrides the provider for that field
+- [ ] Without either, dates read as `27 May 2026`
+- [ ] The value passed to `onValueChange` stays `YYYY-MM-DD`
 
 ---
 

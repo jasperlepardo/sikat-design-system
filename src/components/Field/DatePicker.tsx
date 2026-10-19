@@ -5,14 +5,8 @@ import { Icon } from '../Icon/Icon';
 import { FieldShell, type FieldSize } from './FieldShell';
 import { useDropdown } from '../../lib/useDropdown';
 import './datepicker.css';
-import {
-  WEEKDAYS,
-  MONTH_NAMES,
-  monthMatrix,
-  toISODate,
-  fromISODate,
-  formatDisplayDate,
-} from '../../lib/calendar';
+import { WEEKDAYS, MONTH_NAMES, monthMatrix, toISODate, fromISODate } from '../../lib/calendar';
+import { useDateFormat, type DateFormatter } from './DateFormat';
 
 export interface DatePickerProps {
   /** Controlled value, YYYY-MM-DD (`''`/`null` = empty). */
@@ -24,6 +18,11 @@ export interface DatePickerProps {
   invalid?: boolean;
   disabled?: boolean;
   readOnly?: boolean;
+  /**
+   * How the selected date reads in the field. Defaults to the nearest `DateFormatProvider`,
+   * else "27 May 2026". Display only: `value` stays `YYYY-MM-DD`.
+   */
+  formatValue?: DateFormatter;
   /** Applied to the trigger input, so a `<label htmlFor>` focuses it. */
   id?: string;
   className?: string;
@@ -60,10 +59,12 @@ export function DatePicker({
   invalid,
   disabled,
   readOnly,
+  formatValue,
   id: idProp,
   className,
   ...aria
 }: DatePickerProps) {
+  const providerFormat = useDateFormat();
   const isControlled = value !== undefined;
   const [internal, setInternal] = useState<string>(defaultValue ?? '');
   const selectedIso = (isControlled ? (value ?? '') : internal) || '';
@@ -127,7 +128,7 @@ export function DatePicker({
   };
 
   const days = monthMatrix(view.year, view.month);
-  const displayValue = formatDisplayDate(selectedIso);
+  const displayValue = selectedIso ? (formatValue ?? providerFormat)(selectedIso) : '';
 
   const todayIso = toISODate(today);
 

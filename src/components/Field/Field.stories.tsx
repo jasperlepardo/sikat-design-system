@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { Field, fieldSizes } from './Field';
+import { DateFormatProvider, Field, fieldSizes } from './Field';
 import { Button } from '../Button/Button';
 import { SidePanel } from '../SidePanel/SidePanel';
 import { Panel } from '../Panel/Panel';
@@ -1119,6 +1119,39 @@ export const DatePickerField: Story = {
       </Field.Group>
     </div>
   ),
+};
+
+/**
+ * `DateFormatProvider` sets how every DatePicker inside reads its date — e.g. the user's
+ * preferred format. `formatValue` overrides it for one field. Values stay `YYYY-MM-DD`.
+ */
+export const DatePickerFormat: Story = {
+  name: 'Date Picker — Format',
+  render: () => (
+    <div style={{ maxWidth: 360, display: 'grid', gap: 16 }}>
+      <DateFormatProvider format={(iso) => iso.split('-').reverse().join('/')}>
+        <Field.Group label="From the provider (dd/MM/yyyy)">
+          {(props) => <Field.DatePicker {...props} defaultValue="2026-10-19" />}
+        </Field.Group>
+        <Field.Group label="formatValue overrides it (yyyy-MM-dd)">
+          {(props) => (
+            <Field.DatePicker {...props} defaultValue="2026-10-19" formatValue={(iso) => iso} />
+          )}
+        </Field.Group>
+      </DateFormatProvider>
+      <Field.Group label="No provider (default)">
+        {(props) => <Field.DatePicker {...props} defaultValue="2026-10-19" />}
+      </Field.Group>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByLabelText('From the provider (dd/MM/yyyy)')).toHaveValue('19/10/2026');
+    await expect(canvas.getByLabelText('formatValue overrides it (yyyy-MM-dd)')).toHaveValue(
+      '2026-10-19',
+    );
+    await expect(canvas.getByLabelText('No provider (default)')).toHaveValue('19 October 2026');
+  },
 };
 
 /**
