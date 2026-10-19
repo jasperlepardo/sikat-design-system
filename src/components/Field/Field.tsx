@@ -47,6 +47,8 @@ export type { MultiSelectProps, MultiSelectOption } from './MultiSelect';
 
 export { DatePicker };
 export type { DatePickerProps } from './DatePicker';
+export { DateFormatProvider, useDateFormat } from './DateFormat';
+export type { DateFormatter, DateFormatProviderProps } from './DateFormat';
 
 export { Autocomplete };
 export type { AutocompleteProps, AutocompleteSuggestion } from './Autocomplete';

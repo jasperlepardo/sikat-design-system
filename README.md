@@ -150,7 +150,7 @@ component re-themes across light/dark and is documented in **Storybook**
 - `Combobox` — searchable single-select.
 - `MultiSelect` — multi-value with removable chips.
 - `Autocomplete` — free-text with suggestions.
-- `DatePicker` — keyboard-navigable calendar popover.
+- `DatePicker` — keyboard-navigable calendar popover. `DateFormatProvider` (or the `formatValue` prop) sets how dates read; values stay `YYYY-MM-DD`.
 
 **Layout**
 
