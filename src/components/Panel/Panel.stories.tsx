@@ -310,11 +310,11 @@ export const OnDarkPage: StoryObj<typeof Panel> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const panel = canvasElement.querySelector<HTMLElement>('.sikat-panel')!;
+    const page = canvasElement.querySelector<HTMLElement>('[data-theme="dark"]')!;
     await expect(panel).toHaveAttribute('data-theme', 'light');
     await expect(getComputedStyle(panel).backgroundColor).not.toBe(
       getComputedStyle(page).backgroundColor,
     );
-    const page = canvasElement.querySelector<HTMLElement>('[data-theme="dark"]')!;
     const header = canvas.getByRole('banner');
     await expect(getComputedStyle(header).backgroundColor).not.toBe(
       getComputedStyle(page).backgroundColor,
