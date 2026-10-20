@@ -8,6 +8,7 @@ import { Autocomplete } from './Autocomplete';
 import { Checkbox } from './Checkbox';
 import { Radio } from './Radio';
 import { CardField } from './CardField';
+import { AffixSelect } from './AffixSelect';
 import { ReadOnly } from './ReadOnly';
 import { FormLabel } from './FormLabel';
 import { FormField } from './FormField';
@@ -56,6 +57,9 @@ export type { AutocompleteProps, AutocompleteSuggestion } from './Autocomplete';
 export { CardField };
 export type { CardFieldProps, CardFieldOption } from './CardField';
 
+export { AffixSelect };
+export type { AffixSelectProps, AffixSelectOption } from './AffixSelect';
+
 /** Namespace for all field controls. Use standalone named imports or access via `Field.*`. */
 export const Field = {
   Text: TextField,
@@ -68,6 +72,7 @@ export const Field = {
   Checkbox,
   Radio,
   Card: CardField,
+  AffixSelect,
   ReadOnly,
   Label: FormLabel,
   Group: FormField,

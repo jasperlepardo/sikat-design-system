@@ -2,7 +2,8 @@ import type { AnchorHTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import './button.css';
 
-// Mirrors the Figma "Link Button" › Type axis (node 8919:1847).
+// Mirrors the Figma "Link Button" › Type axis (node 8919:1847), plus `caption`
+// (a code addition): text/caption, the color of a field prefix / suffix.
 export const linkIntents = [
   'default',
   'primary',
@@ -11,6 +12,7 @@ export const linkIntents = [
   'danger',
   'white',
   'black',
+  'caption',
 ] as const;
 export type LinkIntent = (typeof linkIntents)[number];
 
