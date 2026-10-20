@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { CardField, type CardFieldOption } from './CardField';
 import { Icon } from '../Icon/Icon';
 import { Button } from '../Button/Button';
-import { FormField } from './FormField';
 
 const options: CardFieldOption[] = [
   {
@@ -66,9 +65,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * When a value is selected the card shows full detail with a clear (✕) action.
- * Clicking ✕ removes the selection and shows the Combobox. Opening the Combobox
- * dropdown shows each option as name + full address on one line.
+ * When a value is selected the shell shows the name + full address with clear (✕)
+ * and edit (✏) actions. Clicking ✕ removes the selection and shows the Combobox.
+ * Opening the Combobox dropdown shows each option as name + full address.
  */
 export const Default: Story = {
   render: (args) => {
@@ -172,37 +171,103 @@ export const WithFooter: Story = {
   },
 };
 
-/** Two fields side by side — the PO address layout. */
+/** Two fields side by side using CardField's own label prop. */
 export const SideBySide: Story = {
   render: (args) => {
     const [shipTo, setShipTo] = useState('mnl');
     const [billTo, setBillTo] = useState('co');
     return (
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 860 }}>
-        <FormField label="Ship to">
-          {(p) => <CardField {...args} {...p} value={shipTo} onValueChange={setShipTo} />}
-        </FormField>
-        <FormField label="Bill to">
-          {(p) => (
-            <CardField
-              {...args}
-              {...p}
-              options={options.filter((o) => o.value === 'co')}
-              value={billTo}
-              onValueChange={setBillTo}
-            />
-          )}
-        </FormField>
+        <CardField {...args} label="Ship to" value={shipTo} onValueChange={setShipTo} />
+        <CardField
+          {...args}
+          label="Bill to"
+          options={options.filter((o) => o.value === 'co')}
+          value={billTo}
+          onValueChange={setBillTo}
+        />
       </div>
     );
   },
 };
 
-/** Read-only: no clear action; card is display-only. */
+/** hint and error states — mirrors the standard `FormField` pattern. */
+export const HintAndError: Story = {
+  render: (args) => {
+    const [value, setValue] = useState('');
+    return (
+      <div style={{ maxWidth: 420, display: 'flex', flexDirection: 'column', gap: 16 }}>
+        <CardField
+          {...args}
+          label="Ship to"
+          subLabel="(required)"
+          hint="Choose the destination for this purchase order."
+          value={value}
+          onValueChange={setValue}
+        />
+        <CardField
+          {...args}
+          label="Bill to"
+          error="A billing address is required."
+          value=""
+          onValueChange={() => {}}
+        />
+      </div>
+    );
+  },
+};
+
+/** subLabel and tooltip on the label — same as FormField. */
+export const LabelExtras: Story = {
+  render: (args) => {
+    const [value, setValue] = useState('mnl');
+    return (
+      <div style={{ maxWidth: 420 }}>
+        <CardField
+          {...args}
+          label="Ship to"
+          subLabel="(optional)"
+          tooltip="The warehouse or address that will receive this shipment."
+          value={value}
+          onValueChange={setValue}
+        />
+      </div>
+    );
+  },
+};
+
+/** leadingIcon and trailingIcon adornments — same slots as TextField. */
+export const WithAdornments: Story = {
+  render: (args) => {
+    const [value, setValue] = useState('mnl');
+    return (
+      <div style={{ maxWidth: 420 }}>
+        <CardField
+          {...args}
+          label="Ship to"
+          leadingIcon={<Icon size={20}>location_on</Icon>}
+          value={value}
+          onValueChange={setValue}
+        />
+      </div>
+    );
+  },
+};
+
+/** Read-only: no clear or edit actions; the shell is display-only. */
 export const IsReadOnly: Story = {
   render: (args) => (
     <div style={{ maxWidth: 420 }}>
-      <CardField {...args} aria-label="Ship to" value="mnl" readOnly />
+      <CardField {...args} label="Ship to" value="mnl" readOnly />
+    </div>
+  ),
+};
+
+/** Disabled: lock icon on the label, no interactions. */
+export const IsDisabled: Story = {
+  render: (args) => (
+    <div style={{ maxWidth: 420 }}>
+      <CardField {...args} label="Ship to" value="mnl" disabled />
     </div>
   ),
 };
