@@ -3,6 +3,7 @@ import {
   Children,
   cloneElement,
   isValidElement,
+  Fragment,
   type HTMLAttributes,
   type ReactNode,
 } from 'react';
@@ -27,6 +28,13 @@ import './panel-header.css';
 function withLargeSize(children: ReactNode): ReactNode {
   return Children.map(children, (child) => {
     if (!isValidElement(child)) return child;
+    // A Fragment can only hold `key`/`ref`/`children` — cloning `size` onto it
+    // trips React's validateFragmentProps. Recurse into its children instead so
+    // the buttons inside still get sized.
+    if (child.type === Fragment) {
+      const { children: inner } = child.props as { children?: ReactNode };
+      return <Fragment key={child.key ?? undefined}>{withLargeSize(inner)}</Fragment>;
+    }
     return cloneElement(child, { size: 'large' } as Record<string, unknown>);
   });
 }
