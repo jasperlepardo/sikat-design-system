@@ -5,7 +5,7 @@ import { Link } from '../Button/Link';
 import { Icon } from '../Icon/Icon';
 import { Combobox, type ComboboxOption } from './Combobox';
 import { FormLabel } from './FormLabel';
-import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
+import { FieldShell, FieldClear, type FieldAdornments, type FieldSize } from './FieldShell';
 import { cn } from '../../lib/cn';
 import { type ListCardField } from '../List/List';
 import { FieldOrientationCtx } from '../Form/fields';
@@ -209,16 +209,7 @@ export function CardField({
                 {editIcon}
               </IconButton>
             ) : null}
-            <IconButton
-              type="button"
-              label="Clear selection"
-              intent="default"
-              variant="link"
-              size="2xs"
-              onClick={() => onValueChange?.('')}
-            >
-              <Icon size={16}>close</Icon>
-            </IconButton>
+            <FieldClear onClear={() => onValueChange?.('')} />
           </div>
         ) : undefined
       }
