@@ -7,7 +7,6 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 import { cn } from '../../lib/cn';
-import { Icon } from '../Icon/Icon';
 import { useFilled } from './FieldShell';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -89,9 +88,6 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         }}
         {...rest}
       />
-      <span className="sikat-textarea__edit" aria-hidden="true">
-        <Icon size={20}>edit</Icon>
-      </span>
     </div>
   );
 });
