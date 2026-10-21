@@ -14,7 +14,7 @@ const VARIANT_CLASS: Record<TextVariant, string> = {
   h3: 'text-xl/[28px] font-semibold text-heading',
   body: 'text-base/[24px] text-body',
   small: 'text-sm/[20px] text-body',
-  caption: 'text-xs/[16px] text-muted',
+  caption: 'text-xs/[16px] text-caption',
 };
 
 const DEFAULT_TAG: Record<TextVariant, ElementType> = {

@@ -685,9 +685,9 @@ export const TableContentVariants: StoryObj<typeof meta> = {
           cell: (r) => (
             <Table.Content
               texts={[
-                { variant: 'caption', tone: 'muted', children: 'Order' },
+                { variant: 'caption', children: 'Order' },
                 { variant: 'small', weight: 'semibold', children: r.id },
-                { variant: 'caption', tone: 'muted', children: r.product },
+                { variant: 'caption', children: r.product },
               ]}
             />
           ),

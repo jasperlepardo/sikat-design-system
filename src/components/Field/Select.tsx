@@ -136,6 +136,8 @@ export function Select({
   prefix,
   suffix,
   trailingIcon,
+  leadingAlign,
+  trailingAlign,
   'data-state': dataState,
   ...aria
 }: SelectProps) {
@@ -230,7 +232,7 @@ export function Select({
       <FieldShell
         className={cn('sikat-field--select', className)}
         state={{ size, filled: selectedOption != null, disabled, readOnly, invalid, dataState }}
-        adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+        adornments={{ leadingIcon, prefix, suffix, trailingIcon, leadingAlign, trailingAlign }}
         after={
           <>
             {clearable && interactive && selectedOption ? <FieldClear onClear={clear} /> : null}
@@ -301,7 +303,14 @@ export function Select({
             searchable ? (
               <FieldShell
                 state={{ size, filled: query !== '', disabled, invalid }}
-                adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+                adornments={{
+                  leadingIcon,
+                  prefix,
+                  suffix,
+                  trailingIcon,
+                  leadingAlign,
+                  trailingAlign,
+                }}
                 after={
                   <span
                     className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron"

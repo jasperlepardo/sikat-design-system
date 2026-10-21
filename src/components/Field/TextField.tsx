@@ -36,6 +36,8 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
     prefix,
     suffix,
     trailingIcon,
+    leadingAlign,
+    trailingAlign,
     ...rest
   },
   ref,
@@ -83,7 +85,7 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
         invalid,
         dataState,
       }}
-      adornments={{ leadingIcon, prefix, trailingIcon }}
+      adornments={{ leadingIcon, prefix, trailingIcon, leadingAlign, trailingAlign }}
       onClick={
         suffix != null
           ? () => {

@@ -54,6 +54,8 @@ export function MultiSelect({
   prefix,
   suffix,
   trailingIcon,
+  leadingAlign,
+  trailingAlign,
   ...aria
 }: MultiSelectProps) {
   const reactId = useId();
@@ -124,7 +126,7 @@ export function MultiSelect({
       <FieldShell
         className="sikat-field--wrap"
         state={{ size: 'md', filled: selectedOptions.length > 0, disabled, invalid }}
-        adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+        adornments={{ leadingIcon, prefix, suffix, trailingIcon, leadingAlign, trailingAlign }}
         after={
           <span
             className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron"
