@@ -29,6 +29,9 @@ export type {
   DecorativeIconRounded,
 } from './components/DecorativeIcon/DecorativeIcon';
 
+export { Avatar, avatarVariants, avatarIntents } from './components/Avatar/Avatar';
+export type { AvatarProps, AvatarVariant, AvatarIntent } from './components/Avatar/Avatar';
+
 export { Link, linkIntents } from './components/Button/Link';
 export type { LinkProps, LinkIntent } from './components/Button/Link';
 
@@ -117,6 +120,7 @@ export type {
   TextareaProps,
   SelectProps,
   SelectOption,
+  FieldOption,
   CheckboxProps,
   RadioProps,
   FormFieldProps,

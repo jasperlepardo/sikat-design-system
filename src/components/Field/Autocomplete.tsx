@@ -1,12 +1,12 @@
 import { useId, useMemo, useRef, useState } from 'react';
-import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { fieldLabelText, usePanelFocus } from '../../lib/usePanelFocus';
-import type { SelectOption } from './Select';
+import { OptionItem, optionText, toOption, type FieldOption } from './options';
 
-export type AutocompleteSuggestion = SelectOption;
+export type AutocompleteSuggestion = FieldOption;
 
 export interface AutocompleteProps extends FieldAdornments {
   /** Suggestions — plain strings or `{ value, label, text }`. */
@@ -32,11 +32,6 @@ export interface AutocompleteProps extends FieldAdornments {
   'aria-labelledby'?: string;
   'aria-invalid'?: boolean;
 }
-
-const norm = (s: AutocompleteSuggestion | string): AutocompleteSuggestion =>
-  typeof s === 'string' ? { value: s } : s;
-const sugText = (s: AutocompleteSuggestion) =>
-  s.text ?? (typeof s.label === 'string' ? s.label : s.value);
 
 /**
  * Autocomplete — a free-text input with a suggestion list, built on the
@@ -78,10 +73,10 @@ export function Autocomplete({
 
   const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
 
-  const items = useMemo(() => suggestions.map(norm), [suggestions]);
+  const items = useMemo(() => suggestions.map(toOption), [suggestions]);
   const filtered = useMemo(() => {
     const q = text.trim().toLowerCase();
-    return filter && q ? items.filter((s) => sugText(s).toLowerCase().includes(q)) : items;
+    return filter && q ? items.filter((s) => optionText(s).toLowerCase().includes(q)) : items;
   }, [items, text, filter]);
 
   const setText = (next: string) => {
@@ -91,7 +86,7 @@ export function Autocomplete({
   const selectAt = (i: number) => {
     const s = filtered[i];
     if (!s || s.disabled) return;
-    setText(sugText(s));
+    setText(optionText(s));
     onSelect?.(s.value);
     setOpen(false);
   };
@@ -184,20 +179,13 @@ export function Autocomplete({
           }
         >
           {filtered.map((s, i) => (
-            <DropdownItem
+            <OptionItem
               key={s.value}
+              option={s}
               id={getItemId(i)}
               active={i === activeIndex}
-              disabled={s.disabled}
-              prefix={s.prefix}
-              suffix={s.suffix}
-              subLabel={s.subLabel}
-              subLabelPlacement={s.subLabelPlacement}
-              description={s.description}
               onSelect={() => selectAt(i)}
-            >
-              {s.label ?? sugText(s)}
-            </DropdownItem>
+            />
           ))}
         </Dropdown>
       ) : null}

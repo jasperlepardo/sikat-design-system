@@ -14,7 +14,8 @@ import { FormLabel } from './FormLabel';
 import { FormField } from './FormField';
 
 export { fieldSizes } from './FieldShell';
-export type { FieldSize, FieldAdornments } from './FieldShell';
+export type { FieldSize, FieldAdornments, AdornmentAlign } from './FieldShell';
+export type { FieldOption } from './options';
 
 export { TextField };
 export type { TextFieldProps } from './TextField';

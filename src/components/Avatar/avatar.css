@@ -1,0 +1,68 @@
+/* Avatar — a user/entity image with a photo, initials, or icon fallback.
+   Standalone: its own container + placeholder palettes (mirrors the
+   DecorativeIcon intents/variants, scoped to .sikat-avatar), plus photo clip,
+   initials typography, and image fill. */
+
+.sikat-avatar {
+  --avatar-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: var(--rounded-full);
+  overflow: hidden;
+  /* Initials: Body/xs Semibold, scaled to the container. */
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
+  font-weight: var(--text-semibold);
+  user-select: none;
+}
+
+.sikat-avatar > img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ Primary */
+
+.sikat-avatar[data-intent='primary'][data-variant='solid'] {
+  background-color: var(--color-bg-primary-hover);
+  color: var(--color-text-white);
+}
+
+.sikat-avatar[data-intent='primary'][data-variant='subtle'] {
+  background-color: var(--color-bg-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+.sikat-avatar[data-intent='primary'][data-variant='outline'] {
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-primary-subtle);
+  color: var(--color-text-primary);
+}
+
+/* ------------------------------------------------------------------ Default */
+
+.sikat-avatar[data-intent='default'][data-variant='solid'] {
+  background-color: var(--color-bg-neutral);
+  color: var(--color-fg-default-solid);
+}
+
+.sikat-avatar[data-intent='default'][data-variant='subtle'] {
+  background-color: var(--color-bg-neutral-subtle);
+  color: var(--color-fg-default-solid);
+}
+
+.sikat-avatar[data-intent='default'][data-variant='outline'] {
+  box-shadow: inset 0 0 0 var(--border-width-1) var(--color-border-neutral);
+  color: var(--color-fg-default-solid);
+}
+
+/* ------------------------------------------------------------------- Shape */
+
+.sikat-avatar[data-shape='rounded'] {
+  border-radius: var(--rounded-lg);
+}

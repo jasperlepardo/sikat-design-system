@@ -5,6 +5,7 @@
 import { createContext, useState, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
+import { IconButton } from '../Button/IconButton';
 import { fieldSizes, type FieldSize } from '../../tokens/generated/field.manifest';
 import '../../styles/components/field.css';
 import './field.css';
@@ -12,15 +13,31 @@ import './field.css';
 export { fieldSizes };
 export type { FieldSize };
 
+/**
+ * Vertical placement of a leading/trailing adornment within the field.
+ * `center` (default), `top`, or `bottom`. The adornment keeps whatever size it
+ * declares; when it's taller than a standard row the field grows to contain it,
+ * keeping its block padding — alignment then positions it within that height.
+ */
+export type AdornmentAlign = 'top' | 'center' | 'bottom';
+
 export interface FieldAdornments {
-  /** Leading icon (20px, fg/quarternary). */
+  /**
+   * Leading adornment. A plain `<Icon>` renders at fg/quarternary; you can also
+   * pass a `<DecorativeIcon>`, an avatar/`<Image>`, or any node — size it on the
+   * node itself (the slot no longer forces a glyph size).
+   */
   leadingIcon?: ReactNode;
   /** Text before the value (text/caption), e.g. a currency or protocol. */
   prefix?: ReactNode;
   /** Text after the value (text/caption), e.g. a unit or domain. */
   suffix?: ReactNode;
-  /** Trailing icon (20px, fg/quarternary). */
+  /** Trailing adornment — same accepted content as `leadingIcon`. */
   trailingIcon?: ReactNode;
+  /** Vertical alignment of the leading adornment. Default `center`. */
+  leadingAlign?: AdornmentAlign;
+  /** Vertical alignment of the trailing adornment. Default `center`. */
+  trailingAlign?: AdornmentAlign;
 }
 
 export type ShellState = {
@@ -54,7 +71,7 @@ export function FieldShell({
   after?: ReactNode;
   children: ReactNode;
 }) {
-  const { leadingIcon, prefix, suffix, trailingIcon } = adornments;
+  const { leadingIcon, prefix, suffix, trailingIcon, leadingAlign, trailingAlign } = adornments;
   return (
     <span
       className={cn('sikat-field sikat-field--shell', className)}
@@ -68,7 +85,9 @@ export function FieldShell({
     >
       <FieldStateContext.Provider value={{ disabled: state.disabled, readOnly: state.readOnly }}>
         {leadingIcon ? (
-          <span className="sikat-field__icon sikat-field__icon--leading">{leadingIcon}</span>
+          <span className="sikat-field__icon sikat-field__icon--leading" data-align={leadingAlign}>
+            {leadingIcon}
+          </span>
         ) : null}
         {prefix != null ? (
           <span className="sikat-field__affix sikat-field__affix--prefix">{prefix}</span>
@@ -79,7 +98,12 @@ export function FieldShell({
           <span className="sikat-field__affix sikat-field__affix--suffix">{suffix}</span>
         ) : null}
         {trailingIcon ? (
-          <span className="sikat-field__icon sikat-field__icon--trailing">{trailingIcon}</span>
+          <span
+            className="sikat-field__icon sikat-field__icon--trailing"
+            data-align={trailingAlign}
+          >
+            {trailingIcon}
+          </span>
         ) : null}
         {after}
       </FieldStateContext.Provider>
@@ -105,25 +129,33 @@ export function takeDataState<T extends object>(rest: T) {
 
 export const ChevronDown = <Icon size={20}>expand_more</Icon>;
 
-/** The small ✕ that `clearable` Select / Combobox show while a value is set. */
+/**
+ * The ✕ that clears a field (`clearable` Select / Combobox, CardField, search
+ * boxes): a 2xs link IconButton. The wrapper only reveals it on hover / focus;
+ * pass `reveal={false}` when a parent (CardField's actions) already does that.
+ */
 export function FieldClear({
   onClear,
   label = 'Clear selection',
+  reveal = true,
 }: {
   onClear: () => void;
   label?: string;
+  reveal?: boolean;
 }) {
-  return (
-    <button
-      type="button"
-      className="sikat-field__clear"
-      aria-label={label}
+  const button = (
+    <IconButton
+      label={label}
+      intent="default"
+      variant="link"
+      size="2xs"
       onClick={(e) => {
         e.stopPropagation();
         onClear();
       }}
     >
       <Icon size={16}>close</Icon>
-    </button>
+    </IconButton>
   );
+  return reveal ? <span className="sikat-field__clear">{button}</span> : button;
 }
