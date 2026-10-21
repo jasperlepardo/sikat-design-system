@@ -1,159 +1,162 @@
 /* PanelHeader structure. Mirrors the Figma Panel Header (set 17447:35967:
    Page Type = Table | Forms | Details — the last is "Page Type3", 18725:323053).
    One layout: every slot renders when passed; `variant` only picks the chrome. */
-.sikat-panel-header {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-3);
-  box-sizing: border-box;
-  width: 100%;
-  padding: var(--spacing-4);
-  box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
-  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
-}
 
-/* Plain: no fill, radius or border — the outline tabs carry the bottom line. */
-.sikat-panel-header[data-variant='plain'] {
-  border-radius: 0;
-  background-color: transparent;
-  box-shadow: none;
-}
+@layer components {
+  .sikat-panel-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    box-sizing: border-box;
+    width: 100%;
+    padding: var(--spacing-4);
+    box-shadow: inset 0 calc(-1 * var(--border-width-1)) 0 var(--color-border-default);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+  }
 
-/* With tabs: they sit on the bottom edge — no bottom padding or gap. */
-.sikat-panel-header[data-tabs] {
-  gap: 0;
-  padding-bottom: 0;
-}
+  /* Plain: no fill, radius or border — the outline tabs carry the bottom line. */
+  .sikat-panel-header[data-variant='plain'] {
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+  }
 
-/* Top Bar: title block left, button groups right. */
-.sikat-panel-header__bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-3);
-}
-.sikat-panel-header__start {
-  display: flex;
-  flex: 1 1 auto;
-  min-width: 0;
-  align-items: center;
-  gap: var(--spacing-2);
-}
-.sikat-panel-header__leading {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: var(--spacing-1);
-}
-.sikat-panel-header__back {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-.sikat-panel-header__back-default,
-.sikat-panel-header__back-arrow {
-  transition:
-    opacity 200ms ease,
-    filter 200ms ease;
-}
-.sikat-panel-header__back-arrow {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  filter: blur(6px);
-}
-.sikat-panel-header__back:hover .sikat-panel-header__back-default {
-  opacity: 0;
-  filter: blur(6px);
-}
-.sikat-panel-header__back:hover .sikat-panel-header__back-arrow {
-  opacity: 1;
-  filter: blur(0);
-}
-.sikat-panel-header__titles {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  justify-content: center;
-}
-/* Title row: title, status and icon sit 12px apart. */
-.sikat-panel-header__title-row {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3);
-}
-.sikat-panel-header__titles .sikat-breadcrumbs {
-  font-size: var(--text-body-base-font-size);
-  line-height: var(--text-body-base-line-height);
-  letter-spacing: var(--text-body-base-letter-spacing);
-}
+  /* With tabs: they sit on the bottom edge — no bottom padding or gap. */
+  .sikat-panel-header[data-tabs] {
+    gap: 0;
+    padding-bottom: 0;
+  }
 
-.sikat-panel-header__title {
-  margin: 0;
-  color: var(--color-text-heading);
-  font-size: var(--text-body-base-font-size);
-  line-height: var(--text-body-base-line-height);
-  letter-spacing: var(--text-body-base-letter-spacing);
-  font-weight: var(--text-medium);
-  white-space: nowrap;
-}
+  /* Top Bar: title block left, button groups right. */
+  .sikat-panel-header__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-3);
+  }
+  .sikat-panel-header__start {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+  .sikat-panel-header__leading {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+  .sikat-panel-header__back {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  .sikat-panel-header__back-default,
+  .sikat-panel-header__back-arrow {
+    transition:
+      opacity 200ms ease,
+      filter 200ms ease;
+  }
+  .sikat-panel-header__back-arrow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    filter: blur(6px);
+  }
+  .sikat-panel-header__back:hover .sikat-panel-header__back-default {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  .sikat-panel-header__back:hover .sikat-panel-header__back-arrow {
+    opacity: 1;
+    filter: blur(0);
+  }
+  .sikat-panel-header__titles {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+  }
+  /* Title row: title, status and icon sit 12px apart. */
+  .sikat-panel-header__title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+  .sikat-panel-header__titles .sikat-breadcrumbs {
+    font-size: var(--text-body-base-font-size);
+    line-height: var(--text-body-base-line-height);
+    letter-spacing: var(--text-body-base-letter-spacing);
+  }
 
-/* Table with search: three equal columns — title | search | buttons. Each
-   takes a third of the bar (flex 1, basis 0); the search fills its column. */
-.sikat-panel-header[data-search] .sikat-panel-header__start,
-.sikat-panel-header[data-search] .sikat-panel-header__end {
-  flex: 1 1 0;
-}
-.sikat-panel-header[data-search] .sikat-panel-header__end {
-  justify-content: flex-end;
-}
-.sikat-panel-header__center {
-  display: flex;
-  flex: 1 1 0;
-  min-width: 0;
-}
-.sikat-panel-header__search {
-  width: 100%;
-  min-width: 0;
-}
+  .sikat-panel-header__title {
+    margin: 0;
+    color: var(--color-text-heading);
+    font-size: var(--text-body-base-font-size);
+    line-height: var(--text-body-base-line-height);
+    letter-spacing: var(--text-body-base-letter-spacing);
+    font-weight: var(--text-medium);
+    white-space: nowrap;
+  }
 
-/* Buttons Group: operations | divider | core actions. */
-.sikat-panel-header__end {
-  display: flex;
-  flex: none;
-  align-items: center;
-  gap: var(--spacing-3);
-}
-.sikat-panel-header__group {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-1);
-}
-.sikat-panel-header__divider {
-  flex: none;
-  width: 2px;
-  height: 20px;
-  border-radius: 1px;
-  background-color: var(--color-border-default);
-}
+  /* Table with search: three equal columns — title | search | buttons. Each
+     takes a third of the bar (flex 1, basis 0); the search fills its column. */
+  .sikat-panel-header[data-search] .sikat-panel-header__start,
+  .sikat-panel-header[data-search] .sikat-panel-header__end {
+    flex: 1 1 0;
+  }
+  .sikat-panel-header[data-search] .sikat-panel-header__end {
+    justify-content: flex-end;
+  }
+  .sikat-panel-header__center {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .sikat-panel-header__search {
+    width: 100%;
+    min-width: 0;
+  }
 
-.sikat-panel-header__tabs {
-  display: flex;
-}
+  /* Buttons Group: operations | divider | core actions. */
+  .sikat-panel-header__end {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--spacing-3);
+  }
+  .sikat-panel-header__group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+  .sikat-panel-header__divider {
+    flex: none;
+    width: 2px;
+    height: 20px;
+    border-radius: 1px;
+    background-color: var(--color-border-default);
+  }
 
-.sikat-panel-header__glyph {
-  display: block;
-  flex: none;
-  width: 20px;
-  height: 20px;
-  background-color: currentColor;
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
+  .sikat-panel-header__tabs {
+    display: flex;
+  }
+
+  .sikat-panel-header__glyph {
+    display: block;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    background-color: currentColor;
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+  }
 }

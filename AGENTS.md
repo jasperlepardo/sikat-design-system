@@ -62,6 +62,7 @@ src/
   - A `play` function on Playground (or a dedicated interaction story) for components with user interactions
 - `play` functions import from `storybook/test`: `expect`, `fn`, `userEvent`, `within`
 - Mock handlers go in meta `args` (`onClick: fn()`), not in individual stories
+- Component CSS (`<name>.css`) goes inside `@layer components { … }` so consumers' Tailwind utilities override it (`<TextField className="w-24" />`). Never leave component rules unlayered: unlayered CSS beats every utility
 
 ## Token pipeline rules
 
