@@ -1,5 +1,4 @@
 import { forwardRef, useRef, useState, type InputHTMLAttributes } from 'react';
-import { Icon } from '../Icon/Icon';
 import {
   FieldShell,
   useFilled,
@@ -18,10 +17,10 @@ export interface TextFieldProps
  * TextField — a themed text input (Figma Text Field). Use standalone or inside
  * <FormField>. Optional `leadingIcon` / `prefix` / `suffix` / `trailingIcon`.
  * Tracks whether it has content (`data-filled`, controlled or not) for Figma's
- * "has Content" states: primary border at rest, and on hover a tertiary fill with
- * a trailing edit (pencil) icon. A `suffix` (e.g. a unit) sits right after the
- * value — the input is as wide as its text — while trailing icons stay at the
- * right edge. `className` goes on the field box; the rest of the props go on
+ * "has Content" states: primary border at rest and a tertiary fill on hover (no
+ * edit pencil — the input is already editable). A `suffix` (e.g. a unit) sits
+ * right after the value — the input is as wide as its text — while trailing
+ * icons stay at the right edge. `className` goes on the field box; the rest of the props go on
  * the `<input>`.
  */
 export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function TextField(
@@ -92,14 +91,6 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(function T
               if (document.activeElement !== inputRef.current) inputRef.current?.focus();
             }
           : undefined
-      }
-      after={
-        // A search field clears instead of editing — no pencil beside its ✕.
-        inputProps.type === 'search' ? null : (
-          <span className="sikat-field__edit" aria-hidden="true">
-            <Icon size={20}>edit</Icon>
-          </span>
-        )
       }
     >
       {suffix != null ? (

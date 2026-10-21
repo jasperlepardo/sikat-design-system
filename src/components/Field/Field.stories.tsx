@@ -626,8 +626,7 @@ export const ResponsiveOrientation: Story = {
 
 /**
  * Suffix right after the value (e.g. units): the input is as wide as its text,
- * so "0 cm" reads as one value. Trailing icons and the hover edit icon stay at
- * the right edge; a long value scrolls while the suffix stays visible.
+ * so "0 cm" reads as one value. Trailing icons stay at the right edge; a long value scrolls while the suffix stays visible.
  */
 export const SuffixInline: Story = {
   render: () => (
@@ -710,6 +709,9 @@ export const SuffixInline: Story = {
     // Clicking the empty part of the box focuses the input.
     await userEvent.click(length.field);
     await expect(length.input).toHaveFocus();
+
+    // A text field has no edit pencil — it's already an input.
+    await expect(length.field.querySelector('.sikat-field__edit')).toBeNull();
 
     // Trailing icon stays at the right edge (inside the 12px padding).
     const icon = parts('With icon');
@@ -905,7 +907,7 @@ export const WithError: Story = {
 /**
  * Mirrors the Figma Field frame: States × has Content, per Orientation. Hover
  * states are live — hover a field to see them (empty: primary border; with
- * content: tertiary fill + edit icon).
+ * content: tertiary fill, plus an edit icon on Textarea / DatePicker).
  */
 export const Matrix: Story = {
   render: () => {
