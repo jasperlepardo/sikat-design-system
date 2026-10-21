@@ -14,8 +14,7 @@
       "align-items": "center",
       "justify-content": "center",
       "box-sizing": "border-box",
-      "width": "--icon-btn-box",
-      "height": "--icon-btn-box",
+      "padding": "--icon-btn-padding",
       "border": "none",
       "border-radius": "--icon-btn-radius",
       "background-color": "--icon-btn-bg",
@@ -510,27 +509,27 @@
   },
   "sizing": {
     "extra-large": {
-      "box": "--spacing-10",
+      "padding": "--spacing-2_5",
       "radius": "--rounded-xl"
     },
     "large": {
-      "box": "--spacing-9",
+      "padding": "--spacing-2",
       "radius": "--rounded-lg"
     },
     "medium": {
-      "box": "--spacing-8",
+      "padding": "--spacing-1_5",
       "radius": "--rounded-lg"
     },
     "small": {
-      "box": "--spacing-7",
+      "padding": "--spacing-1",
       "radius": "--rounded-lg"
     },
     "extra-small": {
-      "box": "--spacing-6",
+      "padding": "--spacing-0_5",
       "radius": "--rounded-md"
     },
     "2xs": {
-      "box": "--spacing-5",
+      "padding": "--spacing-0",
       "radius": "--rounded-2xs"
     }
   }
