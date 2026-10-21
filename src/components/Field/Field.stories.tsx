@@ -734,6 +734,97 @@ export const SuffixInline: Story = {
   },
 };
 
+/**
+ * A prefix / suffix can be a link-style dropdown (`Field.AffixSelect`) — e.g.
+ * to switch the unit or currency of the value. Clicking it opens the choices
+ * without focusing the input; it follows the field's disabled / read-only state.
+ */
+export const SuffixDropdown: Story = {
+  render: function Render() {
+    const [unit, setUnit] = useState('cm');
+    return (
+      <div style={{ display: 'grid', gap: 12, width: 320 }}>
+        <Field.Group label="Length">
+          {(props) => (
+            <Field.Text
+              type="number"
+              defaultValue="100"
+              suffix={
+                <Field.AffixSelect
+                  aria-label="Unit"
+                  options={['cm', 'in', 'mm']}
+                  value={unit}
+                  onValueChange={setUnit}
+                />
+              }
+              {...props}
+            />
+          )}
+        </Field.Group>
+        <Field.Text
+          aria-label="Price"
+          defaultValue="1,250.00"
+          prefix={<Field.AffixSelect aria-label="Currency" options={['PHP', 'USD', 'EUR']} />}
+          suffix="/mo"
+        />
+        <Field.Text
+          aria-label="Disabled"
+          defaultValue="12.5"
+          disabled
+          suffix={<Field.AffixSelect aria-label="Disabled unit" options={['kg', 'lb']} />}
+        />
+        {fieldSizes.map((size) => (
+          <Field.Text
+            key={size}
+            aria-label={`Size ${size}`}
+            size={size}
+            defaultValue="42"
+            suffix={<Field.AffixSelect aria-label={`Unit ${size}`} options={['kg', 'lb']} />}
+          />
+        ))}
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const input = canvas.getByRole('spinbutton', { name: 'Length' });
+    const unit = canvas.getByRole('combobox', { name: 'Unit' });
+
+    // Clicking the suffix opens the list and leaves the input alone.
+    await userEvent.click(unit);
+    await expect(unit).toHaveAttribute('aria-expanded', 'true');
+    await expect(input).not.toHaveFocus();
+    await expect(body.getByRole('option', { name: 'cm' })).toHaveAttribute('aria-selected', 'true');
+
+    // Keyboard: ↓ + Enter picks the next unit.
+    await userEvent.keyboard('{ArrowDown}{Enter}');
+    await expect(unit).toHaveAttribute('aria-expanded', 'false');
+    await expect(unit).toHaveTextContent('in');
+    await expect(unit).toHaveFocus();
+
+    // Clicking an option chooses it, still without focusing the input.
+    await userEvent.click(unit);
+    await userEvent.click(body.getByRole('option', { name: 'mm' }));
+    await expect(unit).toHaveTextContent('mm');
+    await expect(input).not.toHaveFocus();
+
+    // Escape closes it.
+    await userEvent.click(unit);
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(unit).toHaveAttribute('aria-expanded', 'false'));
+
+    // The affix is the 20px line, like a text suffix.
+    await expect(Math.round(unit.getBoundingClientRect().height)).toBe(20);
+
+    // A disabled field disables its dropdown.
+    await expect(canvas.getByRole('combobox', { name: 'Disabled unit' })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
+  },
+};
+
 /** Figma Form Label with Show Sub Label + Show Tooltip. */
 export const WithSubLabel: Story = {
   render: () => (

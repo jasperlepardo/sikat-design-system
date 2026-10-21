@@ -105,6 +105,7 @@ export {
   Radio,
   FormField,
   FormLabel,
+  AffixSelect,
 } from './components/Field/Field';
 export type {
   ReadOnlyProps,
@@ -116,6 +117,8 @@ export type {
   RadioProps,
   FormFieldProps,
   FormLabelProps,
+  AffixSelectProps,
+  AffixSelectOption,
 } from './components/Field/Field';
 
 export { Navbar, navbarTypes } from './components/Navbar/Navbar';

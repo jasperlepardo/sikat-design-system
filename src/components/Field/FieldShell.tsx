@@ -2,7 +2,7 @@
  * Internal building blocks shared across field controls.
  * Not part of the public package API — import from here within the Field folder only.
  */
-import { useState, type ReactNode } from 'react';
+import { createContext, useState, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
 import { fieldSizes, type FieldSize } from '../../tokens/generated/field.manifest';
@@ -49,6 +49,9 @@ export type ShellState = {
   dataState?: string;
 };
 
+/** The enclosing field's state, for interactive adornments (e.g. AffixSelect). */
+export const FieldStateContext = createContext<{ disabled?: boolean; readOnly?: boolean }>({});
+
 /** Box that carries the field styling + state; the native control sits inside. */
 export function FieldShell({
   className,
@@ -79,25 +82,30 @@ export function FieldShell({
       data-state={state.dataState}
       onClick={onClick}
     >
-      {leadingIcon ? (
-        <span className="sikat-field__icon sikat-field__icon--leading" data-align={leadingAlign}>
-          {leadingIcon}
-        </span>
-      ) : null}
-      {prefix != null ? (
-        <span className="sikat-field__affix sikat-field__affix--prefix">{prefix}</span>
-      ) : null}
-      {before}
-      {children}
-      {suffix != null ? (
-        <span className="sikat-field__affix sikat-field__affix--suffix">{suffix}</span>
-      ) : null}
-      {trailingIcon ? (
-        <span className="sikat-field__icon sikat-field__icon--trailing" data-align={trailingAlign}>
-          {trailingIcon}
-        </span>
-      ) : null}
-      {after}
+      <FieldStateContext.Provider value={{ disabled: state.disabled, readOnly: state.readOnly }}>
+        {leadingIcon ? (
+          <span className="sikat-field__icon sikat-field__icon--leading" data-align={leadingAlign}>
+            {leadingIcon}
+          </span>
+        ) : null}
+        {prefix != null ? (
+          <span className="sikat-field__affix sikat-field__affix--prefix">{prefix}</span>
+        ) : null}
+        {before}
+        {children}
+        {suffix != null ? (
+          <span className="sikat-field__affix sikat-field__affix--suffix">{suffix}</span>
+        ) : null}
+        {trailingIcon ? (
+          <span
+            className="sikat-field__icon sikat-field__icon--trailing"
+            data-align={trailingAlign}
+          >
+            {trailingIcon}
+          </span>
+        ) : null}
+        {after}
+      </FieldStateContext.Provider>
     </span>
   );
 }

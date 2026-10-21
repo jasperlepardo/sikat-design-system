@@ -310,6 +310,9 @@
   --link-text: var(--color-text-black);
   --link-icon: var(--color-fg-black);
 }
+.sikat-link[data-intent='caption'] {
+  --link-text: var(--color-text-caption); /* Figma Prefix / Suffix */
+}
 .sikat-link[data-state='disabled'] {
   --link-text: var(--color-text-disabled);
   --link-icon: var(--color-fg-disabled);
