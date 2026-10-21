@@ -1,4 +1,4 @@
-import { useId, useMemo, useRef, useState, isValidElement, Children } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, isValidElement, Children } from 'react';
 import type { ReactNode, OptionHTMLAttributes, ReactElement } from 'react';
 import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
@@ -147,7 +147,9 @@ export function Select({
   const getItemId = (i: number) => `${id}-opt-${i}`;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const [query, setQuery] = useState('');
+  // Search text the user typed; `null` until they type, so a reopened field
+  // shows the selected value (not the placeholder) and lists every option.
+  const [query, setQuery] = useState<string | null>(null);
 
   const parsed = useMemo(() => parseOptionChildren(children), [children]);
   const options = optionsProp ?? parsed.options;
@@ -164,9 +166,11 @@ export function Select({
 
   // Indices into `options` that are shown — all of them unless searching.
   const visible = useMemo(
-    () => matching(options, searchable ? query : ''),
+    () => matching(options, searchable ? (query ?? '') : ''),
     [options, query, searchable],
   );
+  // The search field's text: what was typed, else the selected value.
+  const searchText = query ?? (selectedOption ? optionText(selectedOption) : '');
 
   const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
   const interactive = !disabled && !readOnly;
@@ -199,7 +203,12 @@ export function Select({
   });
 
   // Searchable: focus moves into the panel's search field and back.
-  usePanelFocus(open && !!searchable, searchRef, triggerRef, () => setQuery(''));
+  usePanelFocus(open && !!searchable, searchRef, triggerRef, () => setQuery(null));
+  // Opened onto the selected value: select it, so typing replaces it.
+  useEffect(() => {
+    if (open && searchable && query === null) searchRef.current?.select();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Filter, and highlight the first enabled match.
   const search = (next: string) => {
@@ -302,7 +311,7 @@ export function Select({
           header={
             searchable ? (
               <FieldShell
-                state={{ size, filled: query !== '', disabled, invalid }}
+                state={{ size, filled: searchText !== '', disabled, invalid }}
                 adornments={{
                   leadingIcon,
                   prefix,
@@ -330,8 +339,8 @@ export function Select({
                   aria-controls={listId}
                   aria-activedescendant={activeId}
                   autoComplete="off"
-                  placeholder={selectedOption ? optionText(selectedOption) : searchPlaceholder}
-                  value={query}
+                  placeholder={searchPlaceholder}
+                  value={searchText}
                   onChange={(e) => search(e.currentTarget.value)}
                   onKeyDown={(e) => {
                     // Tab: close and hand focus back to the trigger first, so the
