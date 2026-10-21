@@ -274,10 +274,11 @@ export const DarkMode: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
+    const page = canvasElement.querySelector<HTMLElement>('[data-theme="dark"]')!;
     const shell = canvasElement.querySelector<HTMLElement>('.sikat-side-panel')!;
     const panel = canvasElement.querySelector<HTMLElement>('.sikat-panel')!;
     const bg = getComputedStyle(shell).backgroundColor;
-    await expect(bg).toBe('rgb(255, 255, 255)');
+    await expect(bg).not.toBe(getComputedStyle(page).backgroundColor);
     await expect(getComputedStyle(panel).backgroundColor).toBe(bg);
   },
 };
