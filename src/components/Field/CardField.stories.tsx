@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { CardField, type CardFieldOption } from './CardField';
 import { Icon } from '../Icon/Icon';
 import { Button } from '../Button/Button';
+import { Link } from '../Button/Link';
+import { Avatar } from '../Avatar/Avatar';
 
 const options: CardFieldOption[] = [
   {
@@ -246,6 +248,56 @@ export const WithAdornments: Story = {
           {...args}
           label="Ship to"
           leadingIcon={<Icon size={20}>location_on</Icon>}
+          value={value}
+          onValueChange={setValue}
+        />
+      </div>
+    );
+  },
+};
+
+/**
+ * `texts` — a per-option `Text` stack for the selected view, mirroring Table's
+ * `TableContent.texts`. Each item renders as `<Text as="span">`, so you control
+ * the typography per level (variant, weight, tone). It replaces the derived
+ * label + address lines and drives both the selected view and the dropdown rows.
+ * Wrap a level's children in `<Link>` for a linked title — it renders as a real
+ * link in the selected view, and as plain text in the dropdown rows (so clicking
+ * a row selects instead of navigating). Pairs well with an `Avatar` leadingIcon.
+ */
+export const TextStack: Story = {
+  render: () => {
+    const people: CardFieldOption[] = [
+      {
+        value: 'jl',
+        label: 'Jasper Lepardo',
+        icon: <Avatar size={32} initials="JL" />,
+        texts: [
+          {
+            weight: 'medium',
+            tone: 'heading',
+            children: <Link href="#people/jl">Jasper Lepardo</Link>,
+          },
+          { variant: 'caption', children: 'Design systems · Engineering' },
+        ],
+      },
+      {
+        value: 'mg',
+        label: 'Maria Garcia',
+        icon: <Avatar size={32} initials="MG" />,
+        texts: [
+          { weight: 'medium', tone: 'heading', children: 'Maria Garcia' },
+          { variant: 'caption', children: 'Product · Operations' },
+        ],
+      },
+    ];
+    const [value, setValue] = useState('jl');
+    return (
+      <div style={{ maxWidth: 420 }}>
+        <CardField
+          label="Assignee"
+          options={people}
+          placeholder="Select a person"
           value={value}
           onValueChange={setValue}
         />

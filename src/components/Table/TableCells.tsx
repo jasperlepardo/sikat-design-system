@@ -1,4 +1,5 @@
 import { Children, type ReactNode } from 'react';
+import { Avatar, type AvatarProps } from '../Avatar/Avatar';
 import { Badge, type BadgeProps } from '../Badge/Badge';
 import { Button } from '../Button/Button';
 import { DecorativeIcon, type DecorativeIconProps } from '../DecorativeIcon/DecorativeIcon';
@@ -45,8 +46,8 @@ export function TableContent({
   alt?: string;
   /** Leading DecorativeIcon — full DecorativeIconProps; size defaults to 32. */
   decorativeIcon?: DecorativeIconProps;
-  /** Avatar DecorativeIcon props — intent, variant, shape, etc. Defaults: primary/subtle/circle. */
-  avatar?: Omit<DecorativeIconProps, 'size' | 'children'>;
+  /** Avatar styling props — intent, variant, shape, icon. Defaults: primary/subtle/circle. */
+  avatar?: Omit<AvatarProps, 'src' | 'alt' | 'initials' | 'size' | 'children'>;
   /** Avatar photo URL — rendered inside the avatar container. */
   avatarSrc?: string;
   /** Initials shown when there is no avatar photo. */
@@ -100,16 +101,7 @@ export function TableContent({
   if (isUser) {
     return (
       <span className="sikat-table-cell__row sikat-table-cell__user">
-        <DecorativeIcon
-          intent="primary"
-          variant="subtle"
-          size={32}
-          {...avatar}
-          className="sikat-table-cell__avatar"
-          aria-hidden={avatarSrc ? undefined : 'true'}
-        >
-          {avatarSrc ? <img src={avatarSrc} alt="" /> : initials}
-        </DecorativeIcon>
+        <Avatar size={32} {...avatar} src={avatarSrc} initials={initials} />
         {textStack}
       </span>
     );

@@ -1,4 +1,5 @@
-import { useContext, useId, type ReactNode } from 'react';
+import { Children, isValidElement, useContext, useId, type ReactNode } from 'react';
+import { Button } from '../Button/Button';
 import { IconButton } from '../Button/IconButton';
 import { Link } from '../Button/Link';
 import { Icon } from '../Icon/Icon';
@@ -8,6 +9,7 @@ import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
 import { cn } from '../../lib/cn';
 import { type ListCardField } from '../List/List';
 import { FieldOrientationCtx } from '../Form/fields';
+import { Text, type TextProps } from '../Text/Text';
 
 export interface CardFieldOption {
   value: string;
@@ -16,6 +18,17 @@ export interface CardFieldOption {
   fields?: ListCardField[];
   /** When set, the selected card's title renders as a `Link` to this URL. */
   href?: string;
+  /**
+   * Generic multi-level text stack, mirroring Table's `TableContent.texts`. Each
+   * item renders as `<Text as="span">`. When set, it drives both the selected
+   * view and the dropdown row, replacing the derived `label` + address lines
+   * (`label` is still used for type-ahead/filtering; the option `href` is
+   * ignored — wrap a level's children in `<Link>` yourself for a linked title).
+   * A `<Link>`/`<Button>` renders as a real control in the selected view but is
+   * flattened to plain text in dropdown rows, since the row itself is the
+   * selector. In the selected view the `badge` appends to the first line.
+   */
+  texts?: TextProps[];
 }
 
 export interface CardFieldProps extends FieldAdornments {
@@ -53,8 +66,8 @@ export interface CardFieldProps extends FieldAdornments {
   /** Icon for the edit action. Defaults to `<Icon size={16}>edit</Icon>`. */
   editIcon?: ReactNode;
   /**
-   * Shown inline after the selected value's label. Defaults to a check icon;
-   * pass `null` to hide it.
+   * Optional node shown inline after the selected value's label (e.g. a check
+   * icon). Nothing is shown by default.
    */
   badge?: ReactNode;
   className?: string;
@@ -64,7 +77,40 @@ export interface CardFieldProps extends FieldAdornments {
   'aria-describedby'?: string;
 }
 
+/**
+ * Unwrap `<Link>` / `<Button>` nodes to their children so a `texts` level that
+ * renders a real link in the selected view shows as plain text in a dropdown
+ * row — the row is already the selector (`role="option"`), so a nested
+ * interactive link would hijack the click.
+ */
+function stripInteractive(node: ReactNode): ReactNode {
+  return Children.map(node, (child) => {
+    if (isValidElement(child) && (child.type === Link || child.type === Button)) {
+      return stripInteractive((child.props as { children?: ReactNode }).children);
+    }
+    return child;
+  });
+}
+
 function toComboboxOption(opt: CardFieldOption): ComboboxOption {
+  // When an option supplies a `texts` stack, mirror the selected view in the
+  // dropdown row: render the levels as a column of `<Text>`. `text` keeps the
+  // plain label for type-ahead + filtering since `label` is now a node.
+  if (opt.texts && opt.texts.length > 0) {
+    return {
+      value: opt.value,
+      text: opt.label,
+      label: (
+        <span className="sikat-field__multiline">
+          {opt.texts.map(({ children, ...rest }, i) => (
+            <Text key={i} as="span" {...rest}>
+              {stripInteractive(children)}
+            </Text>
+          ))}
+        </span>
+      ),
+    };
+  }
   const address =
     opt.fields
       ?.map((f) => (Array.isArray(f.value) ? f.value.join(' ') : String(f.value)))
@@ -100,13 +146,15 @@ export function CardField({
   onEdit,
   editLabel = 'Edit',
   editIcon = <Icon size={16}>edit</Icon>,
-  badge = <Icon size={12}>check</Icon>,
+  badge,
   className,
   id: idProp,
   leadingIcon,
   prefix,
   suffix,
   trailingIcon,
+  leadingAlign,
+  trailingAlign,
   'aria-label': ariaLabel,
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
@@ -143,17 +191,19 @@ export function CardField({
         prefix,
         suffix,
         trailingIcon,
+        leadingAlign,
+        trailingAlign,
       }}
       after={
         interactive ? (
-          <div style={{ display: 'flex', flex: 'none', gap: 'var(--spacing-1, 4px)' }}>
+          <div className="sikat-field__actions">
             {onEdit ? (
               <IconButton
                 type="button"
                 label={editLabel}
                 intent="default"
                 variant="link"
-                size="extra-small"
+                size="2xs"
                 onClick={onEdit}
               >
                 {editIcon}
@@ -164,7 +214,7 @@ export function CardField({
               label="Clear selection"
               intent="default"
               variant="link"
-              size="extra-small"
+              size="2xs"
               onClick={() => onValueChange?.('')}
             >
               <Icon size={16}>close</Icon>
@@ -174,7 +224,16 @@ export function CardField({
       }
     >
       <span className="sikat-field__display">
-        {addressDesc ? (
+        {selected.texts && selected.texts.length > 0 ? (
+          <span className="sikat-field__multiline">
+            {selected.texts.map(({ children: textChildren, ...textRest }, i) => (
+              <Text key={i} as="span" {...textRest}>
+                {textChildren}
+                {i === 0 && badge != null ? badge : null}
+              </Text>
+            ))}
+          </span>
+        ) : addressDesc ? (
           <span className="sikat-field__multiline">
             <span>
               {selected.href ? <Link href={selected.href}>{selected.label}</Link> : selected.label}
@@ -211,6 +270,8 @@ export function CardField({
       prefix={prefix}
       suffix={suffix}
       trailingIcon={trailingIcon}
+      leadingAlign={leadingAlign}
+      trailingAlign={trailingAlign}
       footer={footer}
     />
   );

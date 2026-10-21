@@ -82,7 +82,7 @@
 /* Nothing to show (e.g. a search with no matches). */
 .sikat-dropdown__empty {
   padding: var(--spacing-2);
-  color: var(--color-text-muted);
+  color: var(--color-text-placeholder);
   font-size: var(--text-body-sm-font-size);
   line-height: var(--text-body-sm-line-height);
 }
@@ -136,14 +136,14 @@
   font-size: var(--text-body-xs-font-size);
   line-height: var(--text-body-xs-line-height);
   font-weight: var(--text-regular);
-  color: var(--color-text-muted);
+  color: var(--color-text-caption);
 }
 .sikat-dropdown__description {
   display: block;
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
+  font-size: var(--text-body-xs-font-size);
+  line-height: var(--text-body-xs-line-height);
   font-weight: var(--text-regular);
-  color: var(--color-text-muted);
+  color: var(--color-text-caption);
 }
 .sikat-dropdown__item:has(.sikat-dropdown__description) {
   align-items: flex-start;

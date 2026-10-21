@@ -66,20 +66,43 @@
     opacity 120ms ease,
     transform 150ms ease;
 }
+/* Compound selector so the solid colour wins over the base `.sikat-field__icon`
+   (which is defined later in the file at equal specificity). */
+.sikat-field__icon.sikat-field__chevron {
+  color: var(--color-fg-quarternary-solid);
+}
 .sikat-field:is(:hover, [data-state='hover'], :focus-within, :has([aria-expanded='true'])):not(
     [data-disabled]
   )
   :is(.sikat-field__chevron, .sikat-field__clear) {
   opacity: 1;
 }
+/* Touch devices (no hover) always show the chevron, clear and CardField actions. */
 @media (hover: none) {
   .sikat-field__chevron,
-  .sikat-field__clear {
+  .sikat-field__clear,
+  .sikat-field__actions {
     opacity: 1;
   }
 }
 .sikat-field:has([aria-expanded='true']) .sikat-field__chevron {
   transform: rotate(180deg);
+}
+
+/* CardField edit / clear actions: hidden until the field is hovered or focused,
+   mirroring the chevron/clear reveal. The slot stays reserved so the value
+   doesn't shift; buttons stay focusable, so tabbing in reveals them. Touch
+   devices (no hover) always show them. */
+.sikat-field__actions {
+  display: flex;
+  flex: none;
+  gap: var(--spacing-1);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.sikat-field:is(:hover, [data-state='hover'], :focus-within):not([data-disabled])
+  .sikat-field__actions {
+  opacity: 1;
 }
 
 /* ── Shell: [leading icon][prefix] control [suffix][trailing icon][chevron|edit] ── */
@@ -114,11 +137,40 @@
 .sikat-field__icon {
   display: flex;
   flex: none;
-  color: var(--color-fg-quarternary); /* Figma Leading/Trailing Icon */
+  align-items: center;
+  color: var(--color-fg-quarternary); /* Trailing icon / chevron / clear — faint chrome */
 }
-.sikat-field__icon .sikat-icon,
+/* Leading icon is meaningful content, so it reads as a solid foreground. */
+.sikat-field__icon--leading {
+  color: var(--color-fg-quarternary-solid);
+}
+/* Default glyph size for a plain Icon in the slot — scoped to a direct child so
+   a DecorativeIcon or avatar (which carries its own sizing) isn't shrunk. An
+   inline `size` on the Icon still wins over this. */
+.sikat-field__icon > .sikat-icon,
 .sikat-field__edit .sikat-icon {
   font-size: 20px;
+}
+/* Per-slot vertical alignment (default: center). */
+.sikat-field__icon[data-align='top'] {
+  align-self: flex-start;
+}
+.sikat-field__icon[data-align='bottom'] {
+  align-self: flex-end;
+}
+/* Auto-height field variants — a leading/trailing adornment, a multi-line
+   selected value, or wrapped MultiSelect chips let the field grow past
+   --field-h. The box never shrinks below --field-h, and 8px block padding wraps
+   the taller content (avatar, image, stacked value, chip rows) rather than
+   clipping or resizing it. Single-line fields are unchanged: line-height (20px)
+   + 2×8px padding == --field-h. (The --wrap align-items override lives with that
+   variant below; shells are centered by default.) */
+.sikat-field--shell:has(> .sikat-field__icon),
+.sikat-field--shell:has(.sikat-field__multiline),
+.sikat-field--wrap {
+  height: auto;
+  min-height: var(--field-h);
+  padding-block: var(--spacing-2);
 }
 .sikat-field__affix {
   flex: none;
@@ -211,22 +263,15 @@
 .sikat-field__multiline {
   display: flex;
   flex-direction: column;
-  gap: 2px;
   text-align: start;
 }
-.sikat-field__sublabel {
+.sikat-field__sublabel,
+.sikat-field__description {
   display: block;
   font-size: var(--text-body-xs-font-size);
   line-height: var(--text-body-xs-line-height);
   font-weight: var(--text-regular);
-  color: var(--color-text-muted);
-}
-.sikat-field__description {
-  display: block;
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
-  font-weight: var(--text-regular);
-  color: var(--color-text-muted);
+  color: var(--color-text-caption);
 }
 .sikat-field__multiline .sikat-field__sublabel {
   margin-inline-start: 0;
@@ -236,12 +281,6 @@
   flex-direction: row;
   align-items: baseline;
   gap: var(--spacing-2);
-}
-.sikat-field--shell:has(.sikat-field__multiline) {
-  height: auto;
-  min-height: var(--field-h);
-  padding-block: var(--spacing-2);
-  align-items: center;
 }
 .sikat-field--select:has(.sikat-field__multiline) .sikat-field__input {
   height: auto;
@@ -254,7 +293,7 @@
 .sikat-field__edit {
   display: none;
   flex: none;
-  color: var(--color-fg-quarternary);
+  color: var(--color-fg-quarternary-solid);
 }
 .sikat-field:is(:hover, [data-state='hover']):not(:focus-within):not(
     :is([data-disabled], [data-readonly], [data-invalid])
@@ -297,11 +336,9 @@
 
 /* MultiSelect: wraps chips; each chip is the Figma Badge (Default / Solid /
    Extra Small) with a dismiss button. */
+/* MultiSelect shell aligns chips to the top as rows wrap (base shells center). */
 .sikat-field--wrap {
-  height: auto;
-  min-height: var(--field-h);
   align-items: flex-start;
-  padding-block: var(--spacing-2); /* 8px */
 }
 .sikat-field__chips {
   display: flex;
@@ -478,7 +515,7 @@
   right: var(--spacing-2);
   display: flex;
   pointer-events: none;
-  color: var(--color-fg-quarternary);
+  color: var(--color-fg-quarternary-solid);
   opacity: 0;
   transition: opacity 120ms ease;
 }
