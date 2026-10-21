@@ -178,7 +178,9 @@
   flex: none;
   color: var(--color-fg-primary);
 }
-.sikat-dropdown__icon .sikat-icon {
+/* Default glyph size for a plain Icon in the slot — scoped to a direct child so
+   an Avatar or DecorativeIcon (which carries its own sizing) isn't shrunk. */
+.sikat-dropdown__icon > .sikat-icon {
   font-size: 20px;
 }
 /* Disabled = Figma Dropdown Item variables, States mode "Disabled":

@@ -100,6 +100,7 @@ function toComboboxOption(opt: CardFieldOption): ComboboxOption {
     return {
       value: opt.value,
       text: opt.label,
+      icon: opt.icon,
       label: (
         <span className="sikat-field__multiline">
           {opt.texts.map(({ children, ...rest }, i) => (
@@ -116,7 +117,12 @@ function toComboboxOption(opt: CardFieldOption): ComboboxOption {
       ?.map((f) => (Array.isArray(f.value) ? f.value.join(' ') : String(f.value)))
       .filter(Boolean)
       .join(', ') ?? '';
-  return { value: opt.value, label: opt.label, description: address || undefined };
+  return {
+    value: opt.value,
+    label: opt.label,
+    icon: opt.icon,
+    description: address || undefined,
+  };
 }
 
 /**

@@ -1,22 +1,17 @@
-import { useContext, useId, useState, type ReactNode } from 'react';
+import { useContext, useId, useState } from 'react';
 import { Link } from '../Button/Link';
 import { Icon } from '../Icon/Icon';
-import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { cn } from '../../lib/cn';
 import { FieldStateContext } from './FieldShell';
+import { OptionItem, optionText, toOption, type FieldOption } from './options';
 
-export interface AffixSelectOption {
-  value: string;
-  label?: ReactNode;
-  /** Plain text for type-ahead (when `label` is a node). */
-  text?: string;
-  disabled?: boolean;
-}
+export type AffixSelectOption = FieldOption;
 
 export interface AffixSelectProps {
-  /** Options — plain strings or `{ value, label }` objects. */
+  /** Options — plain strings or `FieldOption` objects (the same shape as Select's). */
   options: (string | AffixSelectOption)[];
   /** Controlled value. */
   value?: string;
@@ -30,11 +25,6 @@ export interface AffixSelectProps {
   'aria-label': string;
   className?: string;
 }
-
-const toOption = (o: string | AffixSelectOption): AffixSelectOption =>
-  typeof o === 'string' ? { value: o } : o;
-const optionText = (o: AffixSelectOption) =>
-  o.text ?? (typeof o.label === 'string' ? o.label : o.value);
 
 /**
  * Field.AffixSelect — a link-style dropdown for a TextField `prefix` / `suffix`
@@ -128,16 +118,14 @@ export function AffixSelect({
           style={{ width: Math.max(anchor.width, 120) }}
         >
           {options.map((o, i) => (
-            <DropdownItem
+            <OptionItem
               key={o.value}
+              option={o}
               id={getItemId(i)}
               selected={o.value === selected}
               active={i === activeIndex}
-              disabled={o.disabled}
               onSelect={() => selectAt(i)}
-            >
-              {o.label ?? optionText(o)}
-            </DropdownItem>
+            />
           ))}
         </Dropdown>
       ) : null}
