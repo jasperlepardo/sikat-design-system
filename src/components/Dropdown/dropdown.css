@@ -84,7 +84,7 @@
   /* Nothing to show (e.g. a search with no matches). */
   .sikat-dropdown__empty {
     padding: var(--spacing-2);
-    color: var(--color-text-muted);
+    color: var(--color-text-placeholder);
     font-size: var(--text-body-sm-font-size);
     line-height: var(--text-body-sm-line-height);
   }
@@ -138,14 +138,14 @@
     font-size: var(--text-body-xs-font-size);
     line-height: var(--text-body-xs-line-height);
     font-weight: var(--text-regular);
-    color: var(--color-text-muted);
+    color: var(--color-text-caption);
   }
   .sikat-dropdown__description {
     display: block;
-    font-size: var(--text-body-sm-font-size);
-    line-height: var(--text-body-sm-line-height);
+    font-size: var(--text-body-xs-font-size);
+    line-height: var(--text-body-xs-line-height);
     font-weight: var(--text-regular);
-    color: var(--color-text-muted);
+    color: var(--color-text-caption);
   }
   .sikat-dropdown__item:has(.sikat-dropdown__description) {
     align-items: flex-start;
@@ -157,12 +157,11 @@
     align-items: baseline;
     gap: var(--spacing-2);
   }
-  /* Stacked subLabel (top) or description: column. */
+  /* Stacked subLabel (top) or description: column, lines touching. */
   .sikat-dropdown__label:has(.sikat-dropdown__description),
   .sikat-dropdown__label:has(> .sikat-dropdown__sublabel:first-child) {
     display: flex;
     flex-direction: column;
-    gap: 2px;
   }
   .sikat-dropdown__affix {
     flex: none;
@@ -181,7 +180,9 @@
     flex: none;
     color: var(--color-fg-primary);
   }
-  .sikat-dropdown__icon .sikat-icon {
+  /* Default glyph size for a plain Icon in the slot — scoped to a direct child so
+     an Avatar or DecorativeIcon (which carries its own sizing) isn't shrunk. */
+  .sikat-dropdown__icon > .sikat-icon {
     font-size: 20px;
   }
   /* Disabled = Figma Dropdown Item variables, States mode "Disabled":

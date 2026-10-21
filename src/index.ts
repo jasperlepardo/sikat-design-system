@@ -16,11 +16,21 @@ export type { TextProps, TextVariant, TextWeight, TextTone } from './components/
 export { Icon } from './components/Icon/Icon';
 export type { IconProps } from './components/Icon/Icon';
 
-export { DecorativeIcon, decorativeIconVariants } from './components/DecorativeIcon/DecorativeIcon';
+export {
+  DecorativeIcon,
+  decorativeIconIntents,
+  decorativeIconVariants,
+  decorativeIconRoundeds,
+} from './components/DecorativeIcon/DecorativeIcon';
 export type {
   DecorativeIconProps,
+  DecorativeIconIntent,
   DecorativeIconVariant,
+  DecorativeIconRounded,
 } from './components/DecorativeIcon/DecorativeIcon';
+
+export { Avatar, avatarVariants, avatarIntents } from './components/Avatar/Avatar';
+export type { AvatarProps, AvatarVariant, AvatarIntent } from './components/Avatar/Avatar';
 
 export { Link, linkIntents } from './components/Button/Link';
 export type { LinkProps, LinkIntent } from './components/Button/Link';
@@ -110,6 +120,7 @@ export type {
   TextareaProps,
   SelectProps,
   SelectOption,
+  FieldOption,
   CheckboxProps,
   RadioProps,
   FormFieldProps,

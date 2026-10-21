@@ -10,6 +10,7 @@ import { ButtonGroup } from '../Button/ButtonGroup';
 import { Tabs } from '../Tabs/Tabs';
 import { Select } from '../Field/Select';
 import { figmaControls } from '../../docs/figma-controls';
+import { decorativeIconVariants } from '../DecorativeIcon/DecorativeIcon';
 
 const meta = {
   title: 'Components/Panel',
@@ -199,11 +200,11 @@ export const Horizontal: Story = {
   ),
 };
 
-/** PanelHeader icon variants — solid, subtle, outline. */
+/** PanelHeader icon variants — solid, ghost, outline, link. */
 export const HeaderOnly: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 2, width: 632 }}>
-      {(['solid', 'subtle', 'outline'] as const).map((variant) => (
+      {decorativeIconVariants.map((variant) => (
         <PanelHeader
           key={variant}
           icon="inventory_2"
@@ -239,7 +240,7 @@ export const Summary: Story = {
       />
       <Panel.Summary
         icon="receipt_long"
-        iconVariant="subtle"
+        iconVariant="ghost"
         iconSize={40}
         name="A very long entity name that should truncate gracefully"
         code="INV-00999"

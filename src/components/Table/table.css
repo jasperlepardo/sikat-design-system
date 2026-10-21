@@ -322,19 +322,6 @@
   .sikat-table-cell__user {
     margin-block: var(--spacing-1);
   }
-  /* Avatar: extends DecorativeIcon — adds overflow clip, initials text scale, and photo fill. */
-  .sikat-table-cell__avatar {
-    overflow: hidden;
-    font-size: var(--text-body-xs-font-size);
-    line-height: var(--text-body-xs-line-height);
-    font-weight: var(--text-semibold);
-  }
-  .sikat-table-cell__avatar > img {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-  }
   /* Amount: 4px gap; the value in Body/sm Bold. */
   .sikat-table-cell__amount {
     gap: var(--spacing-1);

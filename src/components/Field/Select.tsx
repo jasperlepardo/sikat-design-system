@@ -1,6 +1,6 @@
-import { useId, useMemo, useRef, useState, isValidElement, Children } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, isValidElement, Children } from 'react';
 import type { ReactNode, OptionHTMLAttributes, ReactElement } from 'react';
-import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { usePanelFocus } from '../../lib/usePanelFocus';
@@ -12,23 +12,9 @@ import {
   type FieldAdornments,
   type FieldSize,
 } from './FieldShell';
+import { OptionItem, optionText, type FieldOption } from './options';
 
-export interface SelectOption {
-  value: string;
-  label?: ReactNode;
-  /** Plain text for type-ahead + the closed display (when `label` is a node). */
-  text?: string;
-  /** Short secondary text shown in the dropdown. */
-  subLabel?: ReactNode;
-  subLabelPlacement?: 'top' | 'inline';
-  /** Third line shown below the label in the dropdown (body/xs, muted). */
-  description?: ReactNode;
-  /** Text before the label in the dropdown item (text/muted). */
-  prefix?: ReactNode;
-  /** Text after the label in the dropdown item (text/muted). */
-  suffix?: ReactNode;
-  disabled?: boolean;
-}
+export type SelectOption = FieldOption;
 
 export interface SelectProps extends FieldAdornments {
   /** Options. Alternatively pass `<option>` children (as with a native select). */
@@ -83,8 +69,6 @@ export interface SelectProps extends FieldAdornments {
   'data-state'?: string;
 }
 
-const optionText = (o: SelectOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
-
 /** Indices of the options whose text contains `query` (case-insensitive). */
 const matching = (options: SelectOption[], query: string) => {
   const q = query.trim().toLowerCase();
@@ -136,6 +120,8 @@ export function Select({
   prefix,
   suffix,
   trailingIcon,
+  leadingAlign,
+  trailingAlign,
   'data-state': dataState,
   ...aria
 }: SelectProps) {
@@ -145,7 +131,9 @@ export function Select({
   const getItemId = (i: number) => `${id}-opt-${i}`;
   const triggerRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const [query, setQuery] = useState('');
+  // Search text the user typed; `null` until they type, so a reopened field
+  // shows the selected value (not the placeholder) and lists every option.
+  const [query, setQuery] = useState<string | null>(null);
 
   const parsed = useMemo(() => parseOptionChildren(children), [children]);
   const options = optionsProp ?? parsed.options;
@@ -162,9 +150,11 @@ export function Select({
 
   // Indices into `options` that are shown — all of them unless searching.
   const visible = useMemo(
-    () => matching(options, searchable ? query : ''),
+    () => matching(options, searchable ? (query ?? '') : ''),
     [options, query, searchable],
   );
+  // The search field's text: what was typed, else the selected value.
+  const searchText = query ?? (selectedOption ? optionText(selectedOption) : '');
 
   const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
   const interactive = !disabled && !readOnly;
@@ -197,7 +187,12 @@ export function Select({
   });
 
   // Searchable: focus moves into the panel's search field and back.
-  usePanelFocus(open && !!searchable, searchRef, triggerRef, () => setQuery(''));
+  usePanelFocus(open && !!searchable, searchRef, triggerRef, () => setQuery(null));
+  // Opened onto the selected value: select it, so typing replaces it.
+  useEffect(() => {
+    if (open && searchable && query === null) searchRef.current?.select();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Filter, and highlight the first enabled match.
   const search = (next: string) => {
@@ -230,7 +225,15 @@ export function Select({
       <FieldShell
         className={cn('sikat-field--select', className)}
         state={{ size, filled: selectedOption != null, disabled, readOnly, invalid, dataState }}
-        adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+        adornments={{
+          // The field's own leading icon wins; otherwise the chosen option's icon.
+          leadingIcon: leadingIcon ?? selectedOption?.icon,
+          prefix,
+          suffix,
+          trailingIcon,
+          leadingAlign,
+          trailingAlign,
+        }}
         after={
           <>
             {clearable && interactive && selectedOption ? <FieldClear onClear={clear} /> : null}
@@ -300,8 +303,15 @@ export function Select({
           header={
             searchable ? (
               <FieldShell
-                state={{ size, filled: query !== '', disabled, invalid }}
-                adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
+                state={{ size, filled: searchText !== '', disabled, invalid }}
+                adornments={{
+                  leadingIcon,
+                  prefix,
+                  suffix,
+                  trailingIcon,
+                  leadingAlign,
+                  trailingAlign,
+                }}
                 after={
                   <span
                     className="sikat-field__icon sikat-field__icon--trailing sikat-field__chevron"
@@ -321,8 +331,8 @@ export function Select({
                   aria-controls={listId}
                   aria-activedescendant={activeId}
                   autoComplete="off"
-                  placeholder={selectedOption ? optionText(selectedOption) : searchPlaceholder}
-                  value={query}
+                  placeholder={searchPlaceholder}
+                  value={searchText}
                   onChange={(e) => search(e.currentTarget.value)}
                   onKeyDown={(e) => {
                     // Tab: close and hand focus back to the trigger first, so the
@@ -347,21 +357,14 @@ export function Select({
             : visible.map((oi, i) => {
                 const o = options[oi];
                 return (
-                  <DropdownItem
+                  <OptionItem
                     key={o.value}
+                    option={o}
                     id={getItemId(i)}
                     selected={o.value === selected}
                     active={i === activeIndex}
-                    disabled={o.disabled}
-                    prefix={o.prefix}
-                    suffix={o.suffix}
-                    subLabel={o.subLabel}
-                    subLabelPlacement={o.subLabelPlacement}
-                    description={o.description}
                     onSelect={() => selectAt(i)}
-                  >
-                    {o.label ?? optionText(o)}
-                  </DropdownItem>
+                  />
                 );
               })}
           {footer}

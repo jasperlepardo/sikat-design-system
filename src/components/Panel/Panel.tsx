@@ -1,7 +1,11 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { PanelHeader } from './PanelHeader';
-import { DecorativeIcon, type DecorativeIconVariant } from '../DecorativeIcon/DecorativeIcon';
+import {
+  DecorativeIcon,
+  type DecorativeIconIntent,
+  type DecorativeIconVariant,
+} from '../DecorativeIcon/DecorativeIcon';
 import './panel.css';
 
 export interface PanelProps extends HTMLAttributes<HTMLDivElement> {
@@ -81,6 +85,8 @@ function PanelMain({ className, children, ...rest }: PanelSlotProps) {
 export interface PanelSummaryProps extends HTMLAttributes<HTMLDivElement> {
   /** Material Symbol name for the leading DecorativeIcon. */
   icon?: string;
+  /** DecorativeIcon intent. Default: primary. */
+  iconIntent?: DecorativeIconIntent;
   /** DecorativeIcon variant. Default: outline. */
   iconVariant?: DecorativeIconVariant;
   /** DecorativeIcon size in px. Default: 40. */
@@ -94,6 +100,7 @@ export interface PanelSummaryProps extends HTMLAttributes<HTMLDivElement> {
 /** Entity identity block: DecorativeIcon + name + muted code. Use at the top of `Panel.Sidebar`. */
 function PanelSummary({
   icon,
+  iconIntent = 'primary',
   iconVariant = 'outline',
   iconSize = 40,
   name,
@@ -103,7 +110,9 @@ function PanelSummary({
 }: PanelSummaryProps) {
   return (
     <div className={cn('sikat-panel__summary', className)} {...rest}>
-      {icon ? <DecorativeIcon icon={icon} variant={iconVariant} size={iconSize} /> : null}
+      {icon ? (
+        <DecorativeIcon icon={icon} intent={iconIntent} variant={iconVariant} size={iconSize} />
+      ) : null}
       <div className="sikat-panel__summary-text">
         {name != null ? <span className="sikat-panel__summary-name">{name}</span> : null}
         {code != null ? <span className="sikat-panel__summary-code">{code}</span> : null}

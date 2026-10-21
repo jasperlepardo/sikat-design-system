@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react';
 import { Select } from './Select';
-import type { SelectOption } from './Select';
+import type { FieldOption } from './options';
 import type { FieldAdornments, FieldSize } from './FieldShell';
 
-export type ComboboxOption = SelectOption;
+export type ComboboxOption = FieldOption;
 
 export interface ComboboxProps extends FieldAdornments {
   options: ComboboxOption[];

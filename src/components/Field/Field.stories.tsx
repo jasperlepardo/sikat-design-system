@@ -18,6 +18,8 @@ import {
   type FigmaAdornmentArgs,
 } from '../../docs/figma-controls';
 import { Icon } from '../Icon/Icon';
+import { DecorativeIcon } from '../DecorativeIcon/DecorativeIcon';
+import { Avatar } from '../Avatar/Avatar';
 
 const CircleIcon = <Icon size={20}>radio_button_unchecked</Icon>;
 const adorn = (a: FigmaAdornmentArgs) => ({
@@ -336,6 +338,65 @@ export const Adornments: StoryObj<FigmaAdornmentArgs> = {
       </div>
     );
   },
+};
+
+/**
+ * Leading/trailing slots accept any node, not just a plain `Icon` — a
+ * `DecorativeIcon`, an `Avatar`, or custom markup all work. Size the node
+ * itself: the adornment keeps its declared size and the field grows to contain
+ * it inside its padding (never shorter than a standard row).
+ */
+export const AdornmentContent: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 12, width: 480 }}>
+      <Field.Text
+        aria-label="Plain icon"
+        placeholder="Plain Icon (20px)"
+        leadingIcon={<Icon size={20}>search</Icon>}
+      />
+      <Field.Text
+        aria-label="Decorative icon"
+        placeholder="DecorativeIcon (24px)"
+        leadingIcon={<DecorativeIcon size={24} icon="person" />}
+      />
+      <Field.Text
+        aria-label="Avatar"
+        placeholder="Avatar (24px) — fits the row"
+        leadingIcon={<Avatar src="https://i.pravatar.cc/80" size={24} />}
+      />
+      <Field.Text
+        aria-label="Large avatar"
+        placeholder="Avatar (48px) — field grows to contain it"
+        leadingIcon={<Avatar src="https://i.pravatar.cc/80" size={48} />}
+      />
+    </div>
+  ),
+};
+
+/**
+ * Per-slot vertical alignment: `leadingAlign` / `trailingAlign` accept
+ * `top` | `center` (default) | `bottom`. It positions the adornment within a
+ * field taller than one row — here a MultiSelect whose chips wrap in a narrow box.
+ */
+export const AdornmentAlignment: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 16 }}>
+      {(['top', 'center', 'bottom'] as const).map((align) => (
+        <div key={align} style={{ width: 260 }}>
+          <p style={{ margin: '0 0 4px', fontSize: 12, color: 'var(--color-text-muted)' }}>
+            leadingAlign=&quot;{align}&quot;
+          </p>
+          <Field.MultiSelect
+            aria-label={`align ${align}`}
+            options={COUNTRIES}
+            value={COUNTRIES.map((c) => c.value)}
+            leadingIcon={<Icon size={20}>public</Icon>}
+            leadingAlign={align}
+          />
+        </div>
+      ))}
+    </div>
+  ),
 };
 
 /**
@@ -942,6 +1003,29 @@ export const ComboboxField: Story = {
       </Field.Group>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('combobox', { name: 'Country' });
+    const search = () =>
+      canvasElement.ownerDocument.querySelector<HTMLInputElement>('.sikat-dropdown__header input')!;
+
+    await userEvent.click(trigger);
+    await userEvent.click(body.getByRole('option', { name: 'Japan' }));
+
+    // Reopening keeps the value as content (has-content state), not the
+    // placeholder, and still lists every option.
+    await userEvent.click(trigger);
+    await expect(search()).toHaveValue('Japan');
+    await expect(search().closest('.sikat-field')).toHaveAttribute('data-filled', 'true');
+    await expect(body.getAllByRole('option')).toHaveLength(COUNTRIES.length);
+
+    // Typing replaces the selected text and filters.
+    await userEvent.keyboard('sing');
+    await expect(search()).toHaveValue('sing');
+    await expect(body.getAllByRole('option')).toHaveLength(1);
+    await userEvent.keyboard('{Escape}');
+  },
 };
 
 /**
@@ -1372,5 +1456,67 @@ export const UtilityWidth: Story = {
   play: async ({ canvasElement }) => {
     const shell = canvasElement.querySelector('.sikat-field') as HTMLElement;
     await expect(shell.getBoundingClientRect().width).toBe(96);
+  },
+};
+
+const PEOPLE = [
+  {
+    value: 'ana',
+    label: 'Ana Reyes',
+    icon: <Avatar initials="AR" size={24} />,
+    description: 'Procurement',
+  },
+  {
+    value: 'ben',
+    label: 'Ben Cruz',
+    icon: <Avatar initials="BC" size={24} />,
+    description: 'Finance',
+  },
+  { value: 'cara', label: 'Cara Lim', icon: <Avatar icon="person" size={24} /> },
+];
+
+/**
+ * An option's `icon` (an `Icon`, `Avatar` or `DecorativeIcon`) shows in its
+ * dropdown row in every option-based control, and — in Select / Combobox — in
+ * the field's leading slot once chosen. One option model (`FieldOption`) and
+ * one row renderer back all of them.
+ */
+export const OptionMedia: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 12, width: 320 }}>
+      <Field.Select aria-label="Requester" placeholder="Pick a person" options={PEOPLE} />
+      <Field.Combobox aria-label="Approver" placeholder="Search people…" options={PEOPLE} />
+      <Field.MultiSelect aria-label="Watchers" placeholder="Add people" options={PEOPLE} />
+      <Field.Autocomplete aria-label="Assignee" placeholder="Type a name" suggestions={PEOPLE} />
+      <Field.Card aria-label="Contact" placeholder="Pick a contact" options={PEOPLE} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const rowAvatar = (name: string) =>
+      body
+        .getByRole('option', { name: new RegExp(name) })
+        .querySelector('.sikat-dropdown__icon > .sikat-avatar');
+
+    // Select: each row shows its avatar; the chosen one moves to the leading slot.
+    const select = canvas.getByRole('combobox', { name: 'Requester' });
+    await userEvent.click(select);
+    await expect(rowAvatar('Ana Reyes')).not.toBeNull();
+    await userEvent.click(body.getByRole('option', { name: /Ben Cruz/ }));
+    const field = select.closest('.sikat-field')!;
+    await expect(field.querySelector('.sikat-field__icon--leading .sikat-avatar')).not.toBeNull();
+
+    // MultiSelect and Autocomplete rows come from the same renderer.
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Watchers' }));
+    await expect(rowAvatar('Cara Lim')).not.toBeNull();
+    await userEvent.keyboard('{Escape}');
+    await userEvent.type(canvas.getByRole('combobox', { name: 'Assignee' }), 'a');
+    await expect(rowAvatar('Ana Reyes')).not.toBeNull();
+    await userEvent.keyboard('{Escape}');
+
+    // CardField's list rows too.
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Contact' }));
+    await expect(rowAvatar('Ben Cruz')).not.toBeNull();
   },
 };
