@@ -495,29 +495,9 @@
     color: var(--color-text-danger);
   }
 
-  /* Textarea pencil-icon wrapper — positions the icon relative to the box. */
+  /* Textarea wrapper — a full-width block around the auto-growing textarea. */
   .sikat-textarea {
-    position: relative;
     display: block;
     width: 100%;
-  }
-  .sikat-textarea__edit {
-    position: absolute;
-    top: var(--spacing-2);
-    right: var(--spacing-2);
-    display: flex;
-    pointer-events: none;
-    color: var(--color-fg-quarternary-solid);
-    opacity: 0;
-    transition: opacity 120ms ease;
-  }
-  .sikat-textarea__edit .sikat-icon {
-    font-size: 20px;
-  }
-  .sikat-textarea:hover:not(
-      :has(.sikat-field:is(:disabled, [data-disabled], [readonly], [data-readonly]))
-    )
-    > .sikat-textarea__edit {
-    opacity: 1;
   }
 }
