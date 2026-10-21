@@ -5,6 +5,7 @@
 import { createContext, useState, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
+import { IconButton } from '../Button/IconButton';
 import { fieldSizes, type FieldSize } from '../../tokens/generated/field.manifest';
 import '../../styles/components/field.css';
 import './field.css';
@@ -128,25 +129,33 @@ export function takeDataState<T extends object>(rest: T) {
 
 export const ChevronDown = <Icon size={20}>expand_more</Icon>;
 
-/** The small ✕ that `clearable` Select / Combobox show while a value is set. */
+/**
+ * The ✕ that clears a field (`clearable` Select / Combobox, CardField, search
+ * boxes): a 2xs link IconButton. The wrapper only reveals it on hover / focus;
+ * pass `reveal={false}` when a parent (CardField's actions) already does that.
+ */
 export function FieldClear({
   onClear,
   label = 'Clear selection',
+  reveal = true,
 }: {
   onClear: () => void;
   label?: string;
+  reveal?: boolean;
 }) {
-  return (
-    <button
-      type="button"
-      className="sikat-field__clear"
-      aria-label={label}
+  const button = (
+    <IconButton
+      label={label}
+      intent="default"
+      variant="link"
+      size="2xs"
       onClick={(e) => {
         e.stopPropagation();
         onClear();
       }}
     >
       <Icon size={16}>close</Icon>
-    </button>
+    </IconButton>
   );
+  return reveal ? <span className="sikat-field__clear">{button}</span> : button;
 }

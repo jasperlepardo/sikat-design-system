@@ -1003,6 +1003,29 @@ export const ComboboxField: Story = {
       </Field.Group>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const trigger = canvas.getByRole('combobox', { name: 'Country' });
+    const search = () =>
+      canvasElement.ownerDocument.querySelector<HTMLInputElement>('.sikat-dropdown__header input')!;
+
+    await userEvent.click(trigger);
+    await userEvent.click(body.getByRole('option', { name: 'Japan' }));
+
+    // Reopening keeps the value as content (has-content state), not the
+    // placeholder, and still lists every option.
+    await userEvent.click(trigger);
+    await expect(search()).toHaveValue('Japan');
+    await expect(search().closest('.sikat-field')).toHaveAttribute('data-filled', 'true');
+    await expect(body.getAllByRole('option')).toHaveLength(COUNTRIES.length);
+
+    // Typing replaces the selected text and filters.
+    await userEvent.keyboard('sing');
+    await expect(search()).toHaveValue('sing');
+    await expect(body.getAllByRole('option')).toHaveLength(1);
+    await userEvent.keyboard('{Escape}');
+  },
 };
 
 /**
