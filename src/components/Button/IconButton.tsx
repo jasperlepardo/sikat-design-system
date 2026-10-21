@@ -59,7 +59,9 @@ export function IconButton({
       disabled={disabled}
       {...rest}
     >
-      {children}
+      {/* A 20px slot, like Button's 20px text line: the size's padding goes
+          around it, so a 16px or 20px glyph gives the same square box. */}
+      <span className="sikat-icon-btn__icon">{children}</span>
     </button>
   );
 }
