@@ -486,6 +486,8 @@ export const TextareaAutoGrow: Story = {
     const grows = canvas.getByRole('textbox', { name: 'Grows' });
     const rest = height(grows);
     await expect(rest).toBe(height(canvas.getByRole('textbox', { name: 'Regular field' })));
+    // No edit pencil — a textarea is already editable.
+    await expect(grows.parentElement!.querySelector('.sikat-textarea__edit')).toBeNull();
 
     // Uncontrolled: +1 line of height per new line typed.
     await userEvent.type(grows, 'one{Enter}two{Enter}three');
@@ -907,7 +909,7 @@ export const WithError: Story = {
 /**
  * Mirrors the Figma Field frame: States × has Content, per Orientation. Hover
  * states are live — hover a field to see them (empty: primary border; with
- * content: tertiary fill, plus an edit icon on Textarea / DatePicker).
+ * content: tertiary fill, plus an edit icon on DatePicker).
  */
 export const Matrix: Story = {
   render: () => {
