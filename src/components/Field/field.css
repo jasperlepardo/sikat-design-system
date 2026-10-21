@@ -267,6 +267,14 @@
     flex-direction: column;
     text-align: start;
   }
+  /* CardField's name line. A flex row, not a line box: a Link (inline-flex,
+     vertical-align: middle) in a line box sits off the strut's baseline and
+     stretches the line past 20px (~21.5px). As a flex item it's exactly 20px. */
+  .sikat-field__title {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
   .sikat-field__sublabel,
   .sikat-field__description {
     display: block;

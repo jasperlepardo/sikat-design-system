@@ -234,7 +234,7 @@ export function CardField({
           <span className="sikat-field__multiline">
             {/* Keeps the name (and badge) on one line, and the link only as wide
                 as its text — the column would otherwise stretch it. */}
-            <span>
+            <span className="sikat-field__title">
               {selected.href ? <Link href={selected.href}>{selected.label}</Link> : selected.label}
               {badge != null ? badge : null}
             </span>

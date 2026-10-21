@@ -147,6 +147,16 @@ export const Default: Story = {
       actions,
     );
     await expect(actions.querySelector('.sikat-field__clear')).toBeNull();
+
+    // The linked name line is exactly one 20px line (no line-box overhang from
+    // the inline-flex Link), and the link only spans its text.
+    const link = canvas.getByRole('link');
+    const title = link.parentElement!;
+    await expect(title).toHaveClass('sikat-field__title');
+    await expect(title.getBoundingClientRect().height).toBe(20);
+    await expect(link.getBoundingClientRect().width).toBeLessThan(
+      title.getBoundingClientRect().width,
+    );
   },
 };
 
