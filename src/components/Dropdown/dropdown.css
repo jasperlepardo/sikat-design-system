@@ -3,216 +3,219 @@
    under the trigger; the consumer wraps trigger + panel in a `position: relative`
    root (see useDropdown). Pairs with useDropdown (open/close) + useListbox
    (keyboard). */
-.sikat-dropdown {
-  position: absolute;
-  z-index: 20;
-  top: 100%;
-  left: 0;
-  margin-top: var(--spacing-1); /* 4px — Figma Fieldset gap */
-  margin-bottom: 0;
-  width: 100%;
-  max-height: 16rem;
-  overflow: auto;
-  box-sizing: border-box;
-  padding: var(--spacing-1); /* 4px inset — inner items use --rounded-lg (12−4=8px) */
-  border-radius: var(--rounded-2xl); /* 12px — floating surface, Polaris-aligned */
-  background-color: var(--color-bg-default);
-  box-shadow: var(--shadow-xl);
-}
 
-/* Flip to above the trigger when data-side="top". */
-.sikat-dropdown[data-side='top'] {
-  top: auto;
-  bottom: 100%;
-  margin-top: 0;
-  margin-bottom: var(--spacing-1);
-}
+@layer components {
+  .sikat-dropdown {
+    position: absolute;
+    z-index: 20;
+    top: 100%;
+    left: 0;
+    margin-top: var(--spacing-1); /* 4px — Figma Fieldset gap */
+    margin-bottom: 0;
+    width: 100%;
+    max-height: 16rem;
+    overflow: auto;
+    box-sizing: border-box;
+    padding: var(--spacing-1); /* 4px inset — inner items use --rounded-lg (12−4=8px) */
+    border-radius: var(--rounded-2xl); /* 12px — floating surface, Polaris-aligned */
+    background-color: var(--color-bg-default);
+    box-shadow: var(--shadow-xl);
+  }
 
-/* Cover: open over the trigger, overhanging it by the panel's 4px padding on
-   every side, with items at the field's 8px inline padding — the first item
-   (last when flipped) sits exactly on the field. Fixed mode positions inline. */
-.sikat-dropdown[data-cover]:not(.sikat-dropdown--fixed) {
-  top: 0;
-  left: calc(-1 * var(--spacing-1));
-  width: calc(100% + 2 * var(--spacing-1));
-  margin-top: calc(-1 * var(--spacing-1));
-}
-.sikat-dropdown[data-cover][data-side='top']:not(.sikat-dropdown--fixed) {
-  top: auto;
-  bottom: 0;
-  margin-top: 0;
-  margin-bottom: calc(-1 * var(--spacing-1));
-}
-.sikat-dropdown[data-cover] .sikat-dropdown__item {
-  padding-inline: var(--spacing-2); /* 8px — field inline padding */
-}
+  /* Flip to above the trigger when data-side="top". */
+  .sikat-dropdown[data-side='top'] {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: var(--spacing-1);
+  }
 
-/* Header (e.g. a search field) pinned above the items; only the list scrolls.
-   The panel itself doesn't clip, so the header field's focus ring shows in
-   full (cover mode puts it flush with the panel's top edge). */
-.sikat-dropdown[data-header] {
-  display: flex;
-  flex-direction: column;
-  overflow: visible;
-}
-.sikat-dropdown__header {
-  flex: none;
-  margin-bottom: var(--spacing-1);
-}
-/* Dropup: header is at the bottom — flip the gap */
-.sikat-dropdown[data-side='top'] .sikat-dropdown__header {
-  margin-bottom: 0;
-  margin-top: var(--spacing-1);
-}
-.sikat-dropdown__list {
-  min-height: 0;
-  overflow: auto;
-}
-/* Nothing below the header (e.g. free text with no matching suggestions). */
-.sikat-dropdown__list:empty {
-  display: none;
-}
-.sikat-dropdown__header:has(+ .sikat-dropdown__list:empty) {
-  margin-bottom: 0;
-}
-/* Dropup + empty list: no gap above the header */
-.sikat-dropdown[data-side='top'] .sikat-dropdown__list:empty + .sikat-dropdown__header {
-  margin-top: 0;
-}
-/* Nothing to show (e.g. a search with no matches). */
-.sikat-dropdown__empty {
-  padding: var(--spacing-2);
-  color: var(--color-text-muted);
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
-}
+  /* Cover: open over the trigger, overhanging it by the panel's 4px padding on
+     every side, with items at the field's 8px inline padding — the first item
+     (last when flipped) sits exactly on the field. Fixed mode positions inline. */
+  .sikat-dropdown[data-cover]:not(.sikat-dropdown--fixed) {
+    top: 0;
+    left: calc(-1 * var(--spacing-1));
+    width: calc(100% + 2 * var(--spacing-1));
+    margin-top: calc(-1 * var(--spacing-1));
+  }
+  .sikat-dropdown[data-cover][data-side='top']:not(.sikat-dropdown--fixed) {
+    top: auto;
+    bottom: 0;
+    margin-top: 0;
+    margin-bottom: calc(-1 * var(--spacing-1));
+  }
+  .sikat-dropdown[data-cover] .sikat-dropdown__item {
+    padding-inline: var(--spacing-2); /* 8px — field inline padding */
+  }
 
-/* Portaled (fixed) mode — coordinates set by inline style; clear absolute offsets. */
-.sikat-dropdown--fixed {
-  position: fixed;
-  left: unset;
-  top: unset;
-  bottom: unset;
-  margin-top: 0;
-  margin-bottom: 0;
-  z-index: 1000;
-}
+  /* Header (e.g. a search field) pinned above the items; only the list scrolls.
+     The panel itself doesn't clip, so the header field's focus ring shows in
+     full (cover mode puts it flush with the panel's top edge). */
+  .sikat-dropdown[data-header] {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+  }
+  .sikat-dropdown__header {
+    flex: none;
+    margin-bottom: var(--spacing-1);
+  }
+  /* Dropup: header is at the bottom — flip the gap */
+  .sikat-dropdown[data-side='top'] .sikat-dropdown__header {
+    margin-bottom: 0;
+    margin-top: var(--spacing-1);
+  }
+  .sikat-dropdown__list {
+    min-height: 0;
+    overflow: auto;
+  }
+  /* Nothing below the header (e.g. free text with no matching suggestions). */
+  .sikat-dropdown__list:empty {
+    display: none;
+  }
+  .sikat-dropdown__header:has(+ .sikat-dropdown__list:empty) {
+    margin-bottom: 0;
+  }
+  /* Dropup + empty list: no gap above the header */
+  .sikat-dropdown[data-side='top'] .sikat-dropdown__list:empty + .sikat-dropdown__header {
+    margin-top: 0;
+  }
+  /* Nothing to show (e.g. a search with no matches). */
+  .sikat-dropdown__empty {
+    padding: var(--spacing-2);
+    color: var(--color-text-muted);
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+  }
 
-/* Dropdown Item: [icon][prefix] label [suffix][icon], 36px row. */
-.sikat-dropdown__item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2); /* 8px */
-  padding: var(--spacing-2) var(--spacing-4); /* 8px 16px */
-  border-radius: var(--rounded-lg); /* 8px — inner: 12px container − 4px padding */
-  background-color: var(--color-bg-default);
-  color: var(--color-text-body);
-  font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
-  font-size: var(--text-body-sm-font-size); /* 14px */
-  line-height: var(--text-body-sm-line-height); /* 20px */
-  letter-spacing: var(--text-body-sm-letter-spacing);
-  font-weight: var(--text-medium);
-  cursor: pointer;
-  user-select: none;
-}
-/* Hover (and the keyboard-active option) = Figma State=Hover. */
-.sikat-dropdown__item:hover:not([aria-disabled='true']),
-.sikat-dropdown__item[data-active='true'] {
-  background-color: var(--color-bg-primary-subtle);
-}
-/* Selected = Figma isSelected=True: yellow-subtle bg + semibold label. */
-.sikat-dropdown__item[aria-selected='true'] {
-  background-color: var(--color-bg-primary-subtle);
-}
-.sikat-dropdown__item[aria-selected='true'] .sikat-dropdown__label {
-  font-weight: var(--text-semibold);
-}
-.sikat-dropdown__label {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-.sikat-dropdown__sublabel {
-  display: block;
-  font-size: var(--text-body-xs-font-size);
-  line-height: var(--text-body-xs-line-height);
-  font-weight: var(--text-regular);
-  color: var(--color-text-muted);
-}
-.sikat-dropdown__description {
-  display: block;
-  font-size: var(--text-body-sm-font-size);
-  line-height: var(--text-body-sm-line-height);
-  font-weight: var(--text-regular);
-  color: var(--color-text-muted);
-}
-.sikat-dropdown__item:has(.sikat-dropdown__description) {
-  align-items: flex-start;
-}
-/* Inline subLabel: label and code on the same row. */
-.sikat-dropdown__label:has(> .sikat-dropdown__sublabel:last-child) {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: var(--spacing-2);
-}
-/* Stacked subLabel (top) or description: column. */
-.sikat-dropdown__label:has(.sikat-dropdown__description),
-.sikat-dropdown__label:has(> .sikat-dropdown__sublabel:first-child) {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.sikat-dropdown__affix {
-  flex: none;
-  color: var(--color-text-caption);
-  font-weight: var(--text-regular);
-}
-/* Prefix / suffix sit 4px from the label (item gap is 8px; −4px brings it to 4px). */
-.sikat-dropdown__affix + .sikat-dropdown__label {
-  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
-}
-.sikat-dropdown__label + .sikat-dropdown__affix {
-  margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
-}
-.sikat-dropdown__icon {
-  display: flex;
-  flex: none;
-  color: var(--color-fg-primary);
-}
-.sikat-dropdown__icon .sikat-icon {
-  font-size: 20px;
-}
-/* Disabled = Figma Dropdown Item variables, States mode "Disabled":
-   background bg/disabled, label + affixes text/disabled, icon bg/disabled.
-   Disabled options are skipped by the keyboard, can't be selected, and don't
-   take the hover tint (above). */
-.sikat-dropdown__item[aria-disabled='true'] {
-  background-color: var(--color-bg-disabled);
-  color: var(--color-text-disabled);
-  cursor: not-allowed;
-}
-.sikat-dropdown__item[aria-disabled='true'] .sikat-dropdown__affix {
-  color: var(--color-text-disabled);
-}
-.sikat-dropdown__item[aria-disabled='true'] .sikat-dropdown__icon {
-  color: var(--color-bg-disabled);
-}
+  /* Portaled (fixed) mode — coordinates set by inline style; clear absolute offsets. */
+  .sikat-dropdown--fixed {
+    position: fixed;
+    left: unset;
+    top: unset;
+    bottom: unset;
+    margin-top: 0;
+    margin-bottom: 0;
+    z-index: 1000;
+  }
 
-/* Scrollbar — Figma "Scrollbar": 8px, bg/secondary track, bg/quarternary thumb,
-   fully rounded, 1px inset. Native scrollbar, styled. */
-.sikat-dropdown {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-bg-quarternary) var(--color-bg-secondary);
-}
-.sikat-dropdown::-webkit-scrollbar {
-  width: 8px;
-}
-.sikat-dropdown::-webkit-scrollbar-track {
-  border-radius: var(--rounded-full);
-  background-color: var(--color-bg-secondary);
-}
-.sikat-dropdown::-webkit-scrollbar-thumb {
-  border: var(--spacing-px) solid var(--color-bg-secondary);
-  border-radius: var(--rounded-full);
-  background-color: var(--color-bg-quarternary);
+  /* Dropdown Item: [icon][prefix] label [suffix][icon], 36px row. */
+  .sikat-dropdown__item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2); /* 8px */
+    padding: var(--spacing-2) var(--spacing-4); /* 8px 16px */
+    border-radius: var(--rounded-lg); /* 8px — inner: 12px container − 4px padding */
+    background-color: var(--color-bg-default);
+    color: var(--color-text-body);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-sm-font-size); /* 14px */
+    line-height: var(--text-body-sm-line-height); /* 20px */
+    letter-spacing: var(--text-body-sm-letter-spacing);
+    font-weight: var(--text-medium);
+    cursor: pointer;
+    user-select: none;
+  }
+  /* Hover (and the keyboard-active option) = Figma State=Hover. */
+  .sikat-dropdown__item:hover:not([aria-disabled='true']),
+  .sikat-dropdown__item[data-active='true'] {
+    background-color: var(--color-bg-primary-subtle);
+  }
+  /* Selected = Figma isSelected=True: yellow-subtle bg + semibold label. */
+  .sikat-dropdown__item[aria-selected='true'] {
+    background-color: var(--color-bg-primary-subtle);
+  }
+  .sikat-dropdown__item[aria-selected='true'] .sikat-dropdown__label {
+    font-weight: var(--text-semibold);
+  }
+  .sikat-dropdown__label {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .sikat-dropdown__sublabel {
+    display: block;
+    font-size: var(--text-body-xs-font-size);
+    line-height: var(--text-body-xs-line-height);
+    font-weight: var(--text-regular);
+    color: var(--color-text-muted);
+  }
+  .sikat-dropdown__description {
+    display: block;
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+    font-weight: var(--text-regular);
+    color: var(--color-text-muted);
+  }
+  .sikat-dropdown__item:has(.sikat-dropdown__description) {
+    align-items: flex-start;
+  }
+  /* Inline subLabel: label and code on the same row. */
+  .sikat-dropdown__label:has(> .sikat-dropdown__sublabel:last-child) {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--spacing-2);
+  }
+  /* Stacked subLabel (top) or description: column. */
+  .sikat-dropdown__label:has(.sikat-dropdown__description),
+  .sikat-dropdown__label:has(> .sikat-dropdown__sublabel:first-child) {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .sikat-dropdown__affix {
+    flex: none;
+    color: var(--color-text-caption);
+    font-weight: var(--text-regular);
+  }
+  /* Prefix / suffix sit 4px from the label (item gap is 8px; −4px brings it to 4px). */
+  .sikat-dropdown__affix + .sikat-dropdown__label {
+    margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
+  }
+  .sikat-dropdown__label + .sikat-dropdown__affix {
+    margin-inline-start: calc(var(--spacing-1) - var(--spacing-2));
+  }
+  .sikat-dropdown__icon {
+    display: flex;
+    flex: none;
+    color: var(--color-fg-primary);
+  }
+  .sikat-dropdown__icon .sikat-icon {
+    font-size: 20px;
+  }
+  /* Disabled = Figma Dropdown Item variables, States mode "Disabled":
+     background bg/disabled, label + affixes text/disabled, icon bg/disabled.
+     Disabled options are skipped by the keyboard, can't be selected, and don't
+     take the hover tint (above). */
+  .sikat-dropdown__item[aria-disabled='true'] {
+    background-color: var(--color-bg-disabled);
+    color: var(--color-text-disabled);
+    cursor: not-allowed;
+  }
+  .sikat-dropdown__item[aria-disabled='true'] .sikat-dropdown__affix {
+    color: var(--color-text-disabled);
+  }
+  .sikat-dropdown__item[aria-disabled='true'] .sikat-dropdown__icon {
+    color: var(--color-bg-disabled);
+  }
+
+  /* Scrollbar — Figma "Scrollbar": 8px, bg/secondary track, bg/quarternary thumb,
+     fully rounded, 1px inset. Native scrollbar, styled. */
+  .sikat-dropdown {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-bg-quarternary) var(--color-bg-secondary);
+  }
+  .sikat-dropdown::-webkit-scrollbar {
+    width: 8px;
+  }
+  .sikat-dropdown::-webkit-scrollbar-track {
+    border-radius: var(--rounded-full);
+    background-color: var(--color-bg-secondary);
+  }
+  .sikat-dropdown::-webkit-scrollbar-thumb {
+    border: var(--spacing-px) solid var(--color-bg-secondary);
+    border-radius: var(--rounded-full);
+    background-color: var(--color-bg-quarternary);
+  }
 }

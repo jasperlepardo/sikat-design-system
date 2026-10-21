@@ -22,9 +22,11 @@ body {
 }
 
 /* Inline-SVG icons sized by <Icon>; mono icons use currentColor so they
-   follow text color. */
-.sikat-icon {
-  display: inline-flex;
-  flex: none;
-  line-height: 0;
+   follow text color. Layered like all component CSS so utilities override it. */
+@layer components {
+  .sikat-icon {
+    display: inline-flex;
+    flex: none;
+    line-height: 0;
+  }
 }
