@@ -56,6 +56,7 @@ export const Playground: StoryObj<LinkPlaygroundArgs> = {
       'Danger',
       'White',
       'Black',
+      'Caption',
     ]),
     State: figmaSelect('State', ['default', 'hover', 'disabled'] as const, [
       'Default',
