@@ -155,12 +155,11 @@
   align-items: baseline;
   gap: var(--spacing-2);
 }
-/* Stacked subLabel (top) or description: column. */
+/* Stacked subLabel (top) or description: column, lines touching. */
 .sikat-dropdown__label:has(.sikat-dropdown__description),
 .sikat-dropdown__label:has(> .sikat-dropdown__sublabel:first-child) {
   display: flex;
   flex-direction: column;
-  gap: 2px;
 }
 .sikat-dropdown__affix {
   flex: none;
