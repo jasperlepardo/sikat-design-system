@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+import { expect, within } from 'storybook/test';
 import { CardField, type CardFieldOption } from './CardField';
 import { Icon } from '../Icon/Icon';
 import { Button } from '../Button/Button';
@@ -133,6 +134,19 @@ export const Default: Story = {
         ) : null}
       </div>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Edit + clear sit directly in one actions group (a span, valid inside the
+    // field's span) — no second reveal wrapper around the clear button.
+    const clear = canvas.getByRole('button', { name: 'Clear selection' });
+    const actions = clear.parentElement!;
+    await expect(actions).toHaveClass('sikat-field__actions');
+    await expect(actions.tagName).toBe('SPAN');
+    await expect(canvas.getByRole('button', { name: 'Edit for this PO' }).parentElement).toBe(
+      actions,
+    );
+    await expect(actions.querySelector('.sikat-field__clear')).toBeNull();
   },
 };
 
