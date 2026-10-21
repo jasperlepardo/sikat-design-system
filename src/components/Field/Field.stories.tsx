@@ -1416,3 +1416,65 @@ export const OptionWithDescription: StoryObj<FigmaAdornmentArgs> = {
     );
   },
 };
+
+const PEOPLE = [
+  {
+    value: 'ana',
+    label: 'Ana Reyes',
+    icon: <Avatar initials="AR" size={24} />,
+    description: 'Procurement',
+  },
+  {
+    value: 'ben',
+    label: 'Ben Cruz',
+    icon: <Avatar initials="BC" size={24} />,
+    description: 'Finance',
+  },
+  { value: 'cara', label: 'Cara Lim', icon: <Avatar icon="person" size={24} /> },
+];
+
+/**
+ * An option's `icon` (an `Icon`, `Avatar` or `DecorativeIcon`) shows in its
+ * dropdown row in every option-based control, and — in Select / Combobox — in
+ * the field's leading slot once chosen. One option model (`FieldOption`) and
+ * one row renderer back all of them.
+ */
+export const OptionMedia: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 12, width: 320 }}>
+      <Field.Select aria-label="Requester" placeholder="Pick a person" options={PEOPLE} />
+      <Field.Combobox aria-label="Approver" placeholder="Search people…" options={PEOPLE} />
+      <Field.MultiSelect aria-label="Watchers" placeholder="Add people" options={PEOPLE} />
+      <Field.Autocomplete aria-label="Assignee" placeholder="Type a name" suggestions={PEOPLE} />
+      <Field.Card aria-label="Contact" placeholder="Pick a contact" options={PEOPLE} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const rowAvatar = (name: string) =>
+      body
+        .getByRole('option', { name: new RegExp(name) })
+        .querySelector('.sikat-dropdown__icon > .sikat-avatar');
+
+    // Select: each row shows its avatar; the chosen one moves to the leading slot.
+    const select = canvas.getByRole('combobox', { name: 'Requester' });
+    await userEvent.click(select);
+    await expect(rowAvatar('Ana Reyes')).not.toBeNull();
+    await userEvent.click(body.getByRole('option', { name: /Ben Cruz/ }));
+    const field = select.closest('.sikat-field')!;
+    await expect(field.querySelector('.sikat-field__icon--leading .sikat-avatar')).not.toBeNull();
+
+    // MultiSelect and Autocomplete rows come from the same renderer.
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Watchers' }));
+    await expect(rowAvatar('Cara Lim')).not.toBeNull();
+    await userEvent.keyboard('{Escape}');
+    await userEvent.type(canvas.getByRole('combobox', { name: 'Assignee' }), 'a');
+    await expect(rowAvatar('Ana Reyes')).not.toBeNull();
+    await userEvent.keyboard('{Escape}');
+
+    // CardField's list rows too.
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Contact' }));
+    await expect(rowAvatar('Ben Cruz')).not.toBeNull();
+  },
+};

@@ -1,14 +1,14 @@
 import { useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { cn } from '../../lib/cn';
 import { Icon } from '../Icon/Icon';
-import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { fieldLabelText, usePanelFocus } from '../../lib/usePanelFocus';
-import type { ComboboxOption } from './Combobox';
+import { OptionItem, optionText, type FieldOption } from './options';
 import { FieldShell, ChevronDown, type FieldAdornments } from './FieldShell';
 
-export type MultiSelectOption = ComboboxOption;
+export type MultiSelectOption = FieldOption;
 
 export interface MultiSelectProps extends FieldAdornments {
   options: MultiSelectOption[];
@@ -26,9 +26,6 @@ export interface MultiSelectProps extends FieldAdornments {
   'aria-label'?: string;
   'aria-labelledby'?: string;
 }
-
-const optText = (o: MultiSelectOption) =>
-  o.text ?? (typeof o.label === 'string' ? o.label : o.value);
 
 /**
  * MultiSelect — a searchable multi-value combobox on the Popover/Listbox
@@ -74,7 +71,7 @@ export function MultiSelect({
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return q ? options.filter((o) => optText(o).toLowerCase().includes(q)) : options;
+    return q ? options.filter((o) => optionText(o).toLowerCase().includes(q)) : options;
   }, [options, query]);
 
   const commit = (next: string[]) => {
@@ -144,10 +141,10 @@ export function MultiSelect({
         <span className="sikat-field__chips">
           {selectedOptions.map((o) => (
             <span key={o.value} className="sikat-field__chip">
-              <span className="sikat-field__chip-label">{o.label ?? optText(o)}</span>
+              <span className="sikat-field__chip-label">{o.label ?? optionText(o)}</span>
               <button
                 type="button"
-                aria-label={`Remove ${optText(o)}`}
+                aria-label={`Remove ${optionText(o)}`}
                 className="sikat-field__chip-remove"
                 disabled={disabled}
                 onMouseDown={(e) => {
@@ -223,22 +220,15 @@ export function MultiSelect({
             <div className="sikat-dropdown__empty">No results</div>
           ) : (
             filtered.map((o, i) => (
-              <DropdownItem
+              <OptionItem
                 key={o.value}
+                option={o}
                 id={getItemId(i)}
                 selected={selected.includes(o.value)}
                 active={i === activeIndex}
-                disabled={o.disabled}
-                prefix={o.prefix}
-                suffix={o.suffix}
-                subLabel={o.subLabel}
-                subLabelPlacement={o.subLabelPlacement}
-                description={o.description}
                 onSelect={() => toggleAt(i)}
                 trailingIcon={selected.includes(o.value) ? <Icon size={20}>check</Icon> : undefined}
-              >
-                {o.label ?? optText(o)}
-              </DropdownItem>
+              />
             ))
           )}
         </Dropdown>

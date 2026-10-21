@@ -113,6 +113,7 @@ export type {
   TextareaProps,
   SelectProps,
   SelectOption,
+  FieldOption,
   CheckboxProps,
   RadioProps,
   FormFieldProps,

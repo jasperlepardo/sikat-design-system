@@ -1,6 +1,6 @@
 import { useId, useMemo, useRef, useState, isValidElement, Children } from 'react';
 import type { ReactNode, OptionHTMLAttributes, ReactElement } from 'react';
-import { Dropdown, DropdownItem } from '../Dropdown/Dropdown';
+import { Dropdown } from '../Dropdown/Dropdown';
 import { useDropdown } from '../../lib/useDropdown';
 import { useListbox } from '../../lib/useListbox';
 import { usePanelFocus } from '../../lib/usePanelFocus';
@@ -12,23 +12,9 @@ import {
   type FieldAdornments,
   type FieldSize,
 } from './FieldShell';
+import { OptionItem, optionText, type FieldOption } from './options';
 
-export interface SelectOption {
-  value: string;
-  label?: ReactNode;
-  /** Plain text for type-ahead + the closed display (when `label` is a node). */
-  text?: string;
-  /** Short secondary text shown in the dropdown. */
-  subLabel?: ReactNode;
-  subLabelPlacement?: 'top' | 'inline';
-  /** Third line shown below the label in the dropdown (body/xs, muted). */
-  description?: ReactNode;
-  /** Text before the label in the dropdown item (text/muted). */
-  prefix?: ReactNode;
-  /** Text after the label in the dropdown item (text/muted). */
-  suffix?: ReactNode;
-  disabled?: boolean;
-}
+export type SelectOption = FieldOption;
 
 export interface SelectProps extends FieldAdornments {
   /** Options. Alternatively pass `<option>` children (as with a native select). */
@@ -82,8 +68,6 @@ export interface SelectProps extends FieldAdornments {
   /** Story/docs hook: force the Figma "Hover" look. */
   'data-state'?: string;
 }
-
-const optionText = (o: SelectOption) => o.text ?? (typeof o.label === 'string' ? o.label : o.value);
 
 /** Indices of the options whose text contains `query` (case-insensitive). */
 const matching = (options: SelectOption[], query: string) => {
@@ -232,7 +216,15 @@ export function Select({
       <FieldShell
         className={cn('sikat-field--select', className)}
         state={{ size, filled: selectedOption != null, disabled, readOnly, invalid, dataState }}
-        adornments={{ leadingIcon, prefix, suffix, trailingIcon, leadingAlign, trailingAlign }}
+        adornments={{
+          // The field's own leading icon wins; otherwise the chosen option's icon.
+          leadingIcon: leadingIcon ?? selectedOption?.icon,
+          prefix,
+          suffix,
+          trailingIcon,
+          leadingAlign,
+          trailingAlign,
+        }}
         after={
           <>
             {clearable && interactive && selectedOption ? <FieldClear onClear={clear} /> : null}
@@ -356,21 +348,14 @@ export function Select({
             : visible.map((oi, i) => {
                 const o = options[oi];
                 return (
-                  <DropdownItem
+                  <OptionItem
                     key={o.value}
+                    option={o}
                     id={getItemId(i)}
                     selected={o.value === selected}
                     active={i === activeIndex}
-                    disabled={o.disabled}
-                    prefix={o.prefix}
-                    suffix={o.suffix}
-                    subLabel={o.subLabel}
-                    subLabelPlacement={o.subLabelPlacement}
-                    description={o.description}
                     onSelect={() => selectAt(i)}
-                  >
-                    {o.label ?? optionText(o)}
-                  </DropdownItem>
+                  />
                 );
               })}
           {footer}
