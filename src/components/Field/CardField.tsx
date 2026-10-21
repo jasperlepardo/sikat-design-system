@@ -5,7 +5,7 @@ import { Link } from '../Button/Link';
 import { Icon } from '../Icon/Icon';
 import { Combobox, type ComboboxOption } from './Combobox';
 import { FormLabel } from './FormLabel';
-import { FieldShell, type FieldAdornments, type FieldSize } from './FieldShell';
+import { FieldShell, FieldClear, type FieldAdornments, type FieldSize } from './FieldShell';
 import { cn } from '../../lib/cn';
 import { type ListCardField } from '../List/List';
 import { FieldOrientationCtx } from '../Form/fields';
@@ -196,7 +196,7 @@ export function CardField({
       }}
       after={
         interactive ? (
-          <div className="sikat-field__actions">
+          <span className="sikat-field__actions">
             {onEdit ? (
               <IconButton
                 type="button"
@@ -209,17 +209,8 @@ export function CardField({
                 {editIcon}
               </IconButton>
             ) : null}
-            <IconButton
-              type="button"
-              label="Clear selection"
-              intent="default"
-              variant="link"
-              size="2xs"
-              onClick={() => onValueChange?.('')}
-            >
-              <Icon size={16}>close</Icon>
-            </IconButton>
-          </div>
+            <FieldClear reveal={false} onClear={() => onValueChange?.('')} />
+          </span>
         ) : undefined
       }
     >
@@ -235,6 +226,8 @@ export function CardField({
           </span>
         ) : addressDesc ? (
           <span className="sikat-field__multiline">
+            {/* Keeps the name (and badge) on one line, and the link only as wide
+                as its text — the column would otherwise stretch it. */}
             <span>
               {selected.href ? <Link href={selected.href}>{selected.label}</Link> : selected.label}
               {badge != null ? badge : null}
