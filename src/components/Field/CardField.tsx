@@ -177,22 +177,14 @@ export function CardField({
         {addressDesc ? (
           <span className="sikat-field__multiline">
             <span>
-              {selected.href ? (
-                <Link href={selected.href}>{selected.label}</Link>
-              ) : (
-                selected.label
-              )}
+              {selected.href ? <Link href={selected.href}>{selected.label}</Link> : selected.label}
               {badge != null ? badge : null}
             </span>
             <span className="sikat-field__description">{addressDesc}</span>
           </span>
         ) : (
           <>
-            {selected.href ? (
-              <Link href={selected.href}>{selected.label}</Link>
-            ) : (
-              selected.label
-            )}
+            {selected.href ? <Link href={selected.href}>{selected.label}</Link> : selected.label}
             {badge != null ? badge : null}
           </>
         )}
