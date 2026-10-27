@@ -28,5 +28,9 @@ body {
     display: inline-flex;
     flex: none;
     line-height: 0;
+    /* A Material Symbols ligature: until the font loads (or if it's blocked) the
+       glyph name ("keyboard_arrow_down") lays out as wide text past the icon's box
+       and can cover neighbouring buttons, swallowing their clicks. */
+    overflow: hidden;
   }
 }

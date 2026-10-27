@@ -196,9 +196,13 @@ export function Select({
 
   // Searchable: focus moves into the panel's search field and back.
   usePanelFocus(open && !!searchable, searchRef, triggerRef, () => setQuery(null));
-  // Opened onto the selected value: select it, so typing replaces it.
+  // Opened onto the selected value: select it, so typing replaces it. Selecting scrolls a
+  // value longer than the field to its end; show it from the start instead.
   useEffect(() => {
-    if (open && searchable && query === null) searchRef.current?.select();
+    if (open && searchable && query === null && searchRef.current) {
+      searchRef.current.select();
+      searchRef.current.scrollLeft = 0;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 

@@ -1168,6 +1168,12 @@ export const ComboboxEmptySearch: Story = {
       'aria-selected',
       'true',
     );
+    // Code over name with the lines touching: a top subLabel takes no gap.
+    const label = body
+      .getByRole('option', { name: /Apple South Asia/ })
+      .querySelector('.sikat-dropdown__label')!;
+    await expect(getComputedStyle(label).flexDirection).toBe('column');
+    await expect(['0px', 'normal']).toContain(getComputedStyle(label).rowGap);
 
     // Typing a code filters.
     await userEvent.keyboard('0016');

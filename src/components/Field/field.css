@@ -261,11 +261,19 @@
   .sikat-field--select[data-readonly] .sikat-field__input {
     pointer-events: none;
   }
-  /* Multi-line selected value (label + description). */
+  /* Multi-line selected value (label + description). Each line stays one line and
+     ends in an ellipsis, so a long name doesn't wrap and grow the field. */
   .sikat-field__multiline {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     text-align: start;
+  }
+  .sikat-field__multiline > * {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   /* CardField's name line. A flex row, not a line box: a Link (inline-flex,
      vertical-align: middle) in a line box sits off the strut's baseline and
@@ -294,8 +302,9 @@
   }
   .sikat-field--select:has(.sikat-field__multiline) .sikat-field__input {
     height: auto;
+    min-width: 0;
     white-space: normal;
-    overflow: visible;
+    overflow: hidden;
     text-overflow: clip;
   }
 

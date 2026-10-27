@@ -199,7 +199,10 @@ export function DropdownItem({
         {subLabel != null && subLabelPlacement === 'top' ? (
           <span className="sikat-dropdown__sublabel">{subLabel}</span>
         ) : null}
-        {children}
+        {/* Its own element beside a subLabel/description, as in the field's selected value:
+            bare text isn't an element, so a lone subLabel would match both the inline
+            (:last-child, with its gap) and the top (:first-child) rules. */}
+        {subLabel != null || description != null ? <span>{children}</span> : children}
         {subLabel != null && subLabelPlacement === 'inline' ? (
           <span className="sikat-dropdown__sublabel">{subLabel}</span>
         ) : null}
