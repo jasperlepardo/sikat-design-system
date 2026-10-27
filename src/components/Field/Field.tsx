@@ -7,6 +7,7 @@ import { DatePicker } from './DatePicker';
 import { Autocomplete } from './Autocomplete';
 import { Checkbox } from './Checkbox';
 import { Radio } from './Radio';
+import { Toggle } from './Toggle';
 import { CardField } from './CardField';
 import { AffixSelect } from './AffixSelect';
 import { ReadOnly } from './ReadOnly';
@@ -41,6 +42,9 @@ export type { CheckboxProps } from './Checkbox';
 export { Radio };
 export type { RadioProps } from './Radio';
 
+export { Toggle, toggleShapes } from './Toggle';
+export type { ToggleProps, ToggleShape } from './Toggle';
+
 export { Combobox };
 export type { ComboboxProps, ComboboxOption } from './Combobox';
 
@@ -72,6 +76,7 @@ export const Field = {
   Autocomplete,
   Checkbox,
   Radio,
+  Toggle,
   Card: CardField,
   AffixSelect,
   ReadOnly,
