@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { expect, userEvent, waitFor, within } from 'storybook/test';
-import { DateFormatProvider, Field, fieldSizes } from './Field';
+import { DateFormatProvider, Field, fieldSizes, toggleShapes } from './Field';
 import { Button } from '../Button/Button';
 import { SidePanel } from '../SidePanel/SidePanel';
 import { Panel } from '../Panel/Panel';
@@ -975,8 +975,87 @@ export const Controls: Story = {
           Enterprise (soon)
         </Field.Radio>
       </fieldset>
+      <fieldset className="flex flex-col gap-2">
+        <Field.Toggle defaultChecked>Dark mode</Field.Toggle>
+        <Field.Toggle shape="soft-edge">Compact rows</Field.Toggle>
+      </fieldset>
     </div>
   ),
+};
+
+/** The Figma selection-control states: Default · Active · Disable · Read-Only (hover live). */
+export const SelectionControls: Story = {
+  render: () => {
+    const states = [
+      { label: 'Default', props: {} },
+      { label: 'Active', props: { defaultChecked: true } },
+      { label: 'Disable', props: { disabled: true } },
+      { label: 'Read-Only', props: { readOnly: true, defaultChecked: true } },
+    ];
+    return (
+      <div className="grid grid-cols-[auto_repeat(4,max-content)] items-center gap-x-8 gap-y-4 text-sm text-body">
+        <span />
+        {states.map((s) => (
+          <span key={s.label} className="text-xs text-muted">
+            {s.label}
+          </span>
+        ))}
+        <span>Checkbox</span>
+        {states.map((s) => (
+          <Field.Checkbox key={s.label} aria-label={`Checkbox ${s.label}`} {...s.props} />
+        ))}
+        <span>Radio</span>
+        {states.map((s) => (
+          <Field.Radio
+            key={s.label}
+            name={`radio-${s.label}`}
+            aria-label={`Radio ${s.label}`}
+            {...s.props}
+          />
+        ))}
+        {toggleShapes.map((shape) => (
+          <Fragment key={shape}>
+            <span>Toggle · {shape}</span>
+            {states.map((s) => (
+              <Field.Toggle
+                key={s.label}
+                shape={shape}
+                aria-label={`Toggle ${shape} ${s.label}`}
+                {...s.props}
+              />
+            ))}
+          </Fragment>
+        ))}
+        <span>Indeterminate</span>
+        <Field.Checkbox aria-label="Checkbox mixed" indeterminate />
+      </div>
+    );
+  },
+};
+
+/** Selection controls — clicking toggles; Read-Only keeps its value. */
+export const SelectionControlsInteractions: Story = {
+  ...SelectionControls,
+  name: 'Selection Controls · Interactions',
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const box = canvas.getByRole('checkbox', { name: 'Checkbox Default' });
+    await userEvent.click(box);
+    await expect(box).toBeChecked();
+    const sw = canvas.getByRole('switch', { name: 'Toggle pill Default' });
+    await userEvent.click(sw);
+    await expect(sw).toBeChecked();
+    // Read-only keeps its value.
+    const ro = canvas.getByRole('checkbox', { name: 'Checkbox Read-Only' });
+    await userEvent.click(ro);
+    await expect(ro).toBeChecked();
+    const roSwitch = canvas.getByRole('switch', { name: 'Toggle soft-edge Read-Only' });
+    await userEvent.click(roSwitch);
+    await expect(roSwitch).toBeChecked();
+    await expect(
+      canvas.getByRole('checkbox', { name: 'Checkbox mixed' }) as HTMLInputElement,
+    ).toHaveProperty('indeterminate', true);
+  },
 };
 
 const FRUITS = ['Apple', 'Apricot', 'Banana', 'Blueberry', 'Cherry', 'Mango'];

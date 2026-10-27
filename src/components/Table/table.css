@@ -1,6 +1,5 @@
 /* Table structure. Mirrors the Figma Table (Components file, Table section
-   17239:6201: Table 17239:6506, Table Header Cell, Table Cell, Table Row,
-   Scroll Indicator). */
+   17239:6201: Table 17239:6506, Table Header Cell, Table Cell, Table Row). */
 
 @layer components {
   .sikat-table {
@@ -14,10 +13,7 @@
   .sikat-table__scroller--scroll {
     overflow-x: auto;
     overflow-y: clip; /* prevent overflow-x: auto from promoting overflow-y to auto */
-    scrollbar-width: none; /* the Figma Scroll Indicator replaces the scrollbar */
-  }
-  .sikat-table__scroller--scroll::-webkit-scrollbar {
-    display: none;
+    scrollbar-width: thin;
   }
 
   /* layout="fill" — table expands to fill available flex space; rows scroll inside it. */
@@ -28,19 +24,12 @@
   }
 
   /* layout="fill" and layout="scroll" — rows scroll inside a bounded area under a
-     sticky header. The native scrollbar is shown (thin vertical, no horizontal — the
-     Figma Scroll Indicator still handles horizontal). */
+     sticky header, with the native thin scrollbar. */
   .sikat-table--fill .sikat-table__scroller,
   .sikat-table--scroll .sikat-table__scroller {
     overflow: auto;
     overscroll-behavior-x: contain;
     scrollbar-width: thin;
-  }
-  .sikat-table--fill .sikat-table__scroller::-webkit-scrollbar,
-  .sikat-table--scroll .sikat-table__scroller::-webkit-scrollbar {
-    display: block;
-    width: 8px;
-    height: 0; /* the Figma Scroll Indicator replaces the horizontal scrollbar */
   }
   .sikat-table--fill .sikat-table__th,
   .sikat-table--scroll .sikat-table__th {
@@ -57,27 +46,18 @@
   .sikat-table__table {
     width: 100%;
     border-collapse: separate;
-    /* No border-spacing: it would also pad above the header and below the last row.
-       The 2px row gap is each body cell's transparent top border (see .sikat-table__td). */
     border-spacing: 0;
   }
 
-  /* Row radius: 8px on the leading and trailing cells of every row. */
+  /* Row padding: 8px left/right on top of the cell padding, on the leading and
+     trailing cells of every row. */
   .sikat-table__th:first-child,
   .sikat-table__td:first-child {
-    border-radius: var(--rounded-lg) 0 0 var(--rounded-lg);
+    padding-inline-start: calc(var(--spacing-2) * 2);
   }
   .sikat-table__th:last-child,
   .sikat-table__td:last-child {
-    border-radius: 0 var(--rounded-lg) var(--rounded-lg) 0;
-  }
-  /* A body cell's top border is the row gap, so its top corners are 2px taller; the
-     visible (padding-box) corner is then a true 8px. */
-  .sikat-table__td:first-child {
-    border-top-left-radius: var(--rounded-lg) calc(var(--rounded-lg) + var(--spacing-0_5));
-  }
-  .sikat-table__td:last-child {
-    border-top-right-radius: var(--rounded-lg) calc(var(--rounded-lg) + var(--spacing-0_5));
+    padding-inline-end: calc(var(--spacing-2) * 2);
   }
   .sikat-table__caption,
   .sikat-table__visually-hidden {
@@ -137,12 +117,10 @@
     width: 36px;
     padding: var(--spacing-2);
   }
-  .sikat-table__th--check,
-  .sikat-table__th--end {
-    --table-check: var(--color-fg-quarternary);
-  }
-  .sikat-table__th--check:hover {
-    --table-check: var(--color-fg-primary);
+  /* …plus the 8px row padding when they lead or trail the row. */
+  :is(.sikat-table__th--check, .sikat-table__td--check):first-child,
+  :is(.sikat-table__th--end, .sikat-table__td--end):last-child {
+    width: calc(36px + var(--spacing-2));
   }
   /* The sort control appears on hover (and stays while sorted or focused). Hidden
      with opacity, so it stays in the accessibility tree and keyboard order. */
@@ -159,12 +137,7 @@
      border/default, Body/sm/Medium text/body. */
   .sikat-table__td {
     box-sizing: border-box;
-    height: calc(36px + var(--spacing-0_5)); /* 36px cell + the 2px row gap above it */
-    /* The 2px gap between rows (and under the header): a transparent top border the
-       background doesn't paint, so the container shows through. Only between rows, so
-       nothing pads above the header or below the last row. */
-    border-top: var(--spacing-0_5) solid transparent;
-    background-clip: padding-box;
+    height: 36px;
     padding: var(--spacing-2);
     background-color: var(--color-bg-default-alt);
     color: var(--color-text-body);
@@ -175,7 +148,7 @@
     white-space: nowrap;
     --table-check: var(--color-fg-quarternary);
   }
-  /* Table Cell State=Hover: secondary background, checkbox darkens. */
+  /* Table Cell State=Hover: secondary background, drag handle darkens. */
   .sikat-table__row:hover > .sikat-table__td {
     background-color: var(--color-bg-secondary);
     --table-check: var(--color-fg-quarternary-solid);
@@ -191,42 +164,10 @@
     justify-content: flex-end;
   }
 
-  /* Checkbox: the Figma 20px outline asset in --table-check; checked uses the
-     library's primary checkbox (Figma defines no checked state). */
+  /* Checkbox: the library Checkbox. Its inline-flex label sits at the line top, so
+     no baseline gap adds height to the 36px cells. */
   .sikat-table__check {
-    display: block;
-    width: 20px;
-    height: 20px;
-    margin: 0;
-    appearance: none;
-    background-color: var(--table-check);
-    mask-size: 100% 100%;
-    -webkit-mask-size: 100% 100%;
-    cursor: pointer;
-  }
-  .sikat-table__check:is(:checked, :indeterminate) {
-    appearance: auto;
-    background: none;
-    mask-image: none !important;
-    -webkit-mask-image: none !important;
-    accent-color: var(--color-bg-primary);
-  }
-  .sikat-table__check:focus-visible {
-    outline: 2px solid var(--color-border-primary);
-    outline-offset: 2px;
-  }
-
-  /* Scroll Indicator: the Figma 4px #E7E5E4 thumb over an invisible track. */
-  .sikat-table__scroll {
-    position: relative;
-    height: 4px;
-    margin-inline: var(--spacing-1);
-  }
-  .sikat-table__scroll-thumb {
-    position: absolute;
-    top: 0;
-    height: 4px;
-    max-width: none;
+    vertical-align: top;
   }
 
   /* Bottom Action › Pagination Container — Figma uses legacy styles here

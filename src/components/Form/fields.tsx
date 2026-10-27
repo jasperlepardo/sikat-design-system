@@ -240,7 +240,8 @@ export function bind<T>(obj: T, update: (patch: Partial<T>) => void) {
       <Checkbox
         key={String(key)}
         checked={Boolean(obj[key])}
-        disabled={o.disabled || !!o.readOnly}
+        disabled={o.disabled}
+        readOnly={o.readOnly}
         onChange={(e) => patch(key, e.currentTarget.checked)}
       >
         {label}

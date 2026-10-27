@@ -1,0 +1,171 @@
+/* Checkbox, Radio and Toggle — the Figma selection controls (Components file:
+   Checkbox 20855:130206, Radio 20855:138378, Toggle 20855:130165). Each is the
+   native input restyled (appearance: none), so forms, keyboard and a11y stay native.
+
+   States: Default bg/tertiary · Hover bg/neutral-hover · Active bg/primary on
+   bg/primary-muted · Disable bg/quarternary · Read-Only ([data-readonly]) a neutral
+   bg/neutral-* mark on bg/quarternary. All share the Figma 4px inner shadow. */
+
+@layer components {
+  .sikat-checkbox,
+  .sikat-radio,
+  .sikat-switch {
+    appearance: none;
+    position: relative;
+    flex: none;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    background-color: var(--color-bg-tertiary);
+    box-shadow: inset 0 0 4px rgb(0 0 0 / 0.1);
+    cursor: pointer;
+  }
+  :is(.sikat-checkbox, .sikat-radio, .sikat-switch):hover:not(
+      :checked,
+      :indeterminate,
+      :disabled,
+      [data-readonly]
+    ) {
+    background-color: var(--color-bg-neutral-hover);
+  }
+  :is(.sikat-checkbox, .sikat-radio, .sikat-switch):is(:disabled, [data-readonly]) {
+    background-color: var(--color-bg-quarternary);
+  }
+  :is(.sikat-checkbox, .sikat-radio, .sikat-switch):disabled {
+    cursor: not-allowed;
+  }
+  :is(.sikat-checkbox, .sikat-radio, .sikat-switch)[data-readonly] {
+    cursor: default;
+  }
+  :is(.sikat-checkbox, .sikat-radio, .sikat-switch):focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 2px;
+  }
+
+  /* Checkbox: 6px box. Checked / indeterminate draw the Figma cut-out mark (the
+     square with the tick knocked out, set as --sikat-checkbox-* by the component) in
+     bg/primary, so the tick shows the bg/primary-muted box beneath. */
+  .sikat-checkbox {
+    border-radius: var(--rounded-md);
+  }
+  .sikat-checkbox::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    display: none;
+    border-radius: inherit; /* clip the mark to the 6px box, as the Figma clip path does */
+    background-color: var(--color-bg-primary);
+    box-shadow: inset 0 0 4px rgb(0 0 0 / 0.1); /* the inner shadow sits over the mark */
+    mask: var(--sikat-checkbox-checked) center / 100% 100% no-repeat;
+    -webkit-mask: var(--sikat-checkbox-checked) center / 100% 100% no-repeat;
+  }
+  .sikat-checkbox:is(:checked, :indeterminate) {
+    background-color: var(--color-bg-primary-muted);
+  }
+  .sikat-checkbox:is(:checked, :indeterminate)::before {
+    display: block;
+  }
+  .sikat-checkbox:indeterminate::before {
+    mask-image: var(--sikat-checkbox-indeterminate);
+    -webkit-mask-image: var(--sikat-checkbox-indeterminate);
+  }
+  .sikat-checkbox:is(:disabled, [data-readonly]):is(:checked, :indeterminate) {
+    background-color: var(--color-bg-quarternary);
+  }
+  .sikat-checkbox:is(:disabled, [data-readonly])::before {
+    background-color: var(--color-bg-neutral-hover);
+  }
+
+  /* Radio: a 20px circle; Active fills it bg/primary inside a 2px
+     border/primary-subtle ring. */
+  .sikat-radio {
+    border-radius: var(--rounded-full);
+  }
+  .sikat-radio:checked {
+    border: var(--border-width-2) solid var(--color-border-primary-subtle);
+    background-color: var(--color-bg-primary);
+    box-shadow:
+      0 2px 12px rgb(0 0 0 / 0.03),
+      inset 0 0 4px rgb(0 0 0 / 0.1);
+  }
+  .sikat-radio:is(:disabled, [data-readonly]):checked {
+    border-color: var(--color-border-default);
+    background-color: var(--color-bg-neutral-active);
+    box-shadow:
+      0 0 9.4px rgb(0 0 0 / 0.1),
+      inset 0 0 4px rgb(0 0 0 / 0.1);
+  }
+
+  /* Toggle: a 32×20 track with a 20px thumb (2px ring) that slides to the end when
+     on. shape="pill" is fully round, shape="soft-edge" 6px. */
+  .sikat-switch {
+    --sikat-switch-thumb: var(--color-bg-quarternary-solid);
+    --sikat-switch-ring: var(--color-border-neutral-subtle);
+    --sikat-switch-shadow: 0 0 9.4px rgb(0 0 0 / 0.1);
+    width: 32px;
+    overflow: hidden;
+    border-radius: var(--rounded-full);
+  }
+  .sikat-switch[data-shape='soft-edge'] {
+    border-radius: var(--rounded-md);
+  }
+  .sikat-switch::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    box-sizing: border-box;
+    width: 20px;
+    height: 20px;
+    border: var(--border-width-2) solid var(--sikat-switch-ring);
+    border-radius: inherit;
+    background-color: var(--sikat-switch-thumb);
+    box-shadow: var(--sikat-switch-shadow);
+    transition: inset-inline-start 150ms ease;
+  }
+  /* The Figma inner shadow is the top layer, over the thumb. */
+  .sikat-switch {
+    box-shadow: none;
+  }
+  .sikat-switch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 4px rgb(0 0 0 / 0.1);
+    pointer-events: none;
+  }
+  .sikat-switch:checked::before {
+    inset-inline-start: 12px;
+  }
+  .sikat-switch:hover:not(:checked, :disabled, [data-readonly]) {
+    --sikat-switch-thumb: var(--color-bg-tertiary-solid);
+    --sikat-switch-ring: var(--color-border-neutral);
+  }
+  .sikat-switch:checked {
+    --sikat-switch-thumb: var(--color-bg-primary);
+    --sikat-switch-ring: var(--color-border-primary-subtle);
+    --sikat-switch-shadow: 0 2px 12px rgb(0 0 0 / 0.03);
+    background-color: var(--color-bg-primary-muted);
+  }
+  /* Figma rings these with border/default-level-1 (#e7e5e4), which has no token
+     here; border/neutral-subtle is the same value. */
+  .sikat-switch:disabled {
+    --sikat-switch-thumb: var(--color-bg-disabled);
+    --sikat-switch-ring: var(--color-border-neutral-subtle);
+    --sikat-switch-shadow: 0 0 9.4px rgb(0 0 0 / 0.1);
+    background-color: var(--color-bg-quarternary);
+  }
+  .sikat-switch[data-readonly] {
+    --sikat-switch-thumb: var(--color-bg-neutral-active);
+    --sikat-switch-ring: var(--color-border-neutral-subtle);
+    --sikat-switch-shadow: 0 0 9.4px rgb(0 0 0 / 0.1);
+    background-color: var(--color-bg-quarternary);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sikat-switch::before {
+      transition: none;
+    }
+  }
+}

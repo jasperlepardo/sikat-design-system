@@ -102,11 +102,6 @@ const ORDERS: Order[] = [
 const statusIntent = (s: Order['status']) =>
   s === 'Paid' ? 'success' : s === 'Pending' ? 'warning' : 'danger';
 
-/** Visible height of a body row — excludes the 2px transparent top border. */
-const visibleRowHeight = (row: HTMLElement) =>
-  row.getBoundingClientRect().height -
-  parseFloat(getComputedStyle(row.querySelector('td')!).borderTopWidth);
-
 // ---------------------------------------------------------------------------
 // Meta
 // ---------------------------------------------------------------------------
@@ -174,7 +169,7 @@ export const Playground: StoryObj<PlaygroundArgs> = {
             {
               key: 'id',
               header: 'Order',
-              cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+              cell: (r) => <Table.Content href="#">{r.id}</Table.Content>,
             },
             {
               key: 'product',
@@ -296,7 +291,7 @@ export const Sorting: StoryObj<typeof meta> = {
 // Scroll
 // ---------------------------------------------------------------------------
 
-/** Wider than its container — the scroll indicator thumb tracks horizontal scroll. */
+/** Wider than its container — scrolls horizontally with the native thin scrollbar. */
 export const Scroll: StoryObj<typeof meta> = {
   render: () => (
     <div style={{ width: 480 }}>
@@ -335,16 +330,10 @@ export const Scroll: StoryObj<typeof meta> = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const thumb = canvasElement.querySelector<HTMLElement>('.sikat-table__scroll-thumb');
-    await expect(thumb).not.toBeNull();
-    await expect(thumb!.style.left).toBe('0%');
     const scroller = canvasElement.querySelector<HTMLElement>('.sikat-table__scroller')!;
+    await expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
     scroller.scrollLeft = scroller.scrollWidth;
-    await new Promise((r) => setTimeout(r, 50));
-    await expect(parseFloat(thumb!.style.left) + parseFloat(thumb!.style.width)).toBeCloseTo(
-      100,
-      0,
-    );
+    await expect(scroller.scrollLeft).toBeGreaterThan(0);
   },
 };
 
@@ -366,7 +355,7 @@ export const LayoutScroll: StoryObj<typeof meta> = {
           {
             key: 'id',
             header: 'Order',
-            cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+            cell: (r) => <Table.Content href="#">{r.id}</Table.Content>,
           },
           {
             key: 'product',
@@ -417,7 +406,7 @@ export const LayoutFill: StoryObj<typeof meta> = {
             {
               key: 'id',
               header: 'Order',
-              cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+              cell: (r) => <Table.Content href="#">{r.id}</Table.Content>,
             },
             {
               key: 'product',
@@ -549,7 +538,7 @@ export const CellTypes: StoryObj<typeof meta> = {
           {
             key: 'id',
             header: 'Order',
-            cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+            cell: (r) => <Table.Content href="#">{r.id}</Table.Content>,
           },
           {
             key: 'product',
@@ -614,11 +603,11 @@ export const CellTypes: StoryObj<typeof meta> = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const rows = canvas.getAllByRole('row').slice(1);
-    for (const r of rows) await expect(Math.round(visibleRowHeight(r))).toBe(60);
+    for (const r of rows) await expect(Math.round(r.getBoundingClientRect().height)).toBe(60);
     const expand = within(rows[1]).getByRole('button', { name: 'Expand row' });
     await userEvent.click(expand);
     await expect(expand).toHaveAttribute('aria-expanded', 'true');
-    await expect(within(rows[0]).getByRole('button', { name: 'SO-1042' })).toBeInTheDocument();
+    await expect(within(rows[0]).getByRole('link', { name: 'SO-1042' })).toBeInTheDocument();
     await expect(within(rows[2]).getByText('Overdue')).toBeInTheDocument();
     await expect(within(rows[0]).getByText('PHP')).toBeInTheDocument();
   },
@@ -1048,7 +1037,7 @@ export const InPanel: StoryObj<PlaygroundArgs> = {
                   {
                     key: 'id',
                     header: 'Order',
-                    cell: (r) => <Table.Content onClick={() => {}}>{r.id}</Table.Content>,
+                    cell: (r) => <Table.Content href="#">{r.id}</Table.Content>,
                   },
                   {
                     key: 'product',

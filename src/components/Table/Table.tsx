@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useEffect,
   useMemo,
   useRef,
   useState,
@@ -10,6 +9,7 @@ import {
 } from 'react';
 import { cn } from '../../lib/cn';
 import { Button } from '../Button/Button';
+import { Checkbox } from '../Field/Checkbox';
 import {
   TableActions,
   TableAmount,
@@ -18,8 +18,6 @@ import {
   type TableActionItem,
 } from './TableCells';
 import { Icon } from '../Icon/Icon';
-import checkboxGlyph from './assets/checkbox.svg';
-import scrollThumb from './assets/scroll-thumb.svg';
 import chevronDown from './assets/chevron-down.svg';
 import './table.css';
 
@@ -152,52 +150,13 @@ function Check({
   onChange: (checked: boolean) => void;
 }) {
   return (
-    <input
-      type="checkbox"
+    <Checkbox
       className="sikat-table__check"
       aria-label={label}
       checked={checked}
-      ref={(el) => {
-        if (el) el.indeterminate = !!indeterminate;
-      }}
-      style={{ maskImage: `url("${checkboxGlyph}")`, WebkitMaskImage: `url("${checkboxGlyph}")` }}
+      indeterminate={indeterminate}
       onChange={(e) => onChange(e.currentTarget.checked)}
     />
-  );
-}
-
-/** Figma Scroll Indicator: a 4px thumb tracking the horizontal scroll. */
-function ScrollIndicator({ scroller }: { scroller: HTMLDivElement | null }) {
-  const [state, setState] = useState({ visible: false, width: 0, left: 0 });
-  useEffect(() => {
-    if (!scroller) return;
-    const update = () => {
-      const { scrollWidth, clientWidth, scrollLeft } = scroller;
-      const visible = scrollWidth > clientWidth + 1;
-      const width = visible ? (clientWidth / scrollWidth) * 100 : 0;
-      const left = visible ? (scrollLeft / (scrollWidth - clientWidth)) * (100 - width) : 0;
-      setState({ visible, width, left });
-    };
-    update();
-    scroller.addEventListener('scroll', update, { passive: true });
-    const ro = new ResizeObserver(update);
-    ro.observe(scroller);
-    if (scroller.firstElementChild) ro.observe(scroller.firstElementChild);
-    return () => {
-      scroller.removeEventListener('scroll', update);
-      ro.disconnect();
-    };
-  }, [scroller]);
-  if (!state.visible) return null;
-  return (
-    <div className="sikat-table__scroll" aria-hidden="true">
-      <img
-        className="sikat-table__scroll-thumb"
-        src={scrollThumb}
-        alt=""
-        style={{ width: `${state.width}%`, left: `${state.left}%` }}
-      />
-    </div>
   );
 }
 
@@ -208,7 +167,7 @@ function ScrollIndicator({ scroller }: { scroller: HTMLDivElement | null }) {
  * body of 36px rows (8px cells, bottom `border/default`, 14/20 Medium body text;
  * hover turns the row's rule `border/primary-subtle`; selected rows are
  * `bg/primary-subtle`). Optional checkbox column, trailing "…" action column,
- * header column-settings button, horizontal scroll indicator and pagination.
+ * header column-settings button and pagination.
  */
 export function Table<T>({
   columns,
@@ -233,7 +192,6 @@ export function Table<T>({
   className,
   ...rest
 }: TableProps<T>) {
-  const [scroller, setScroller] = useState<HTMLDivElement | null>(null);
   const bodyRef = useRef<HTMLTableSectionElement>(null);
   const [ownExpanded, setOwnExpanded] = useState(defaultExpandedIds);
 
@@ -353,10 +311,7 @@ export function Table<T>({
 
   return (
     <div className={cn('sikat-table', layout && `sikat-table--${layout}`, className)} {...rest}>
-      <div
-        ref={setScroller}
-        className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}
-      >
+      <div className={cn('sikat-table__scroller', scroll && 'sikat-table__scroller--scroll')}>
         <table className="sikat-table__table" role={tree ? 'treegrid' : undefined}>
           {caption ? <caption className="sikat-table__caption">{caption}</caption> : null}
           <thead>
@@ -534,7 +489,6 @@ export function Table<T>({
           </tbody>
         </table>
       </div>
-      <ScrollIndicator scroller={scroller} />
       {pagination ? <Pagination {...pagination} /> : null}
     </div>
   );
