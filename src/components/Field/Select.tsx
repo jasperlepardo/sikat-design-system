@@ -42,6 +42,13 @@ export interface SelectProps extends FieldAdornments {
   /** Search field placeholder (searchable). Default: "Search". */
   searchPlaceholder?: string;
   /**
+   * Searchable: open onto an empty search field (showing `searchPlaceholder`)
+   * instead of the selected option's text. The selected option stays marked in
+   * the list. Use when the options carry more than their text shows — e.g. a
+   * code over a name — so the list, not a one-line search field, displays it.
+   */
+  emptySearch?: boolean;
+  /**
    * Replaces the default "No results" message when the search matches nothing.
    * Pass a function to receive a `close` callback — use it to dismiss the
    * dropdown before opening a modal or navigating away.
@@ -106,6 +113,7 @@ export function Select({
   clearable,
   searchable,
   searchPlaceholder = 'Search',
+  emptySearch,
   emptyContent,
   footer,
   onQueryChange,
@@ -153,8 +161,8 @@ export function Select({
     () => matching(options, searchable ? (query ?? '') : ''),
     [options, query, searchable],
   );
-  // The search field's text: what was typed, else the selected value.
-  const searchText = query ?? (selectedOption ? optionText(selectedOption) : '');
+  // The search field's text: what was typed, else the selected value (or empty with `emptySearch`).
+  const searchText = query ?? (selectedOption && !emptySearch ? optionText(selectedOption) : '');
 
   const { open, setOpen, rootRef, panelRef, side, hSide, anchor } = useDropdown<HTMLDivElement>();
   const interactive = !disabled && !readOnly;

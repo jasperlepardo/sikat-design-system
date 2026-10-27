@@ -12,6 +12,14 @@ export interface ComboboxProps extends FieldAdornments {
   defaultValue?: string | null;
   onValueChange?: (value: string | null) => void;
   placeholder?: string;
+  /** The open search field's placeholder. Default: `placeholder`. */
+  searchPlaceholder?: string;
+  /**
+   * Open onto an empty search field instead of the selected option's text; the
+   * selected option stays marked in the list. Use when options show more than one
+   * line (a `subLabel` code over the name), which a one-line search field can't.
+   */
+  emptySearch?: boolean;
   /**
    * Show a ✕ while a value is set; clicking it resets to none and calls
    * `onValueChange(null)`, so the `placeholder` shows again. Use for optional
@@ -49,6 +57,7 @@ export function Combobox({
   defaultValue = null,
   onValueChange,
   placeholder,
+  searchPlaceholder,
   leadingIcon,
   prefix,
   suffix,
@@ -64,7 +73,7 @@ export function Combobox({
       trailingIcon={trailingIcon}
       searchable
       placeholder={placeholder}
-      searchPlaceholder={placeholder}
+      searchPlaceholder={searchPlaceholder ?? placeholder}
       value={value === undefined ? undefined : (value ?? '')}
       defaultValue={defaultValue ?? ''}
       onValueChange={(v) => onValueChange?.(v === '' ? null : v)}

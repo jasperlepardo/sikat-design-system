@@ -1112,6 +1112,71 @@ export const ComboboxField: Story = {
 };
 
 /**
+ * `emptySearch` — opens onto an empty search field instead of the selected option's text,
+ * for options that show more than one line (a code over a name): the list displays them,
+ * with the selected one marked, and the search field is only for typing.
+ */
+export const ComboboxEmptySearch: Story = {
+  name: 'Combobox · empty search',
+  render: () => {
+    const [vendor, setVendor] = useState<string | null>('bp-17');
+    return (
+      <div style={{ maxWidth: 360 }}>
+        <Field.Group label="Vendor">
+          {(props) => (
+            <Field.Combobox
+              {...props}
+              emptySearch
+              clearable
+              searchPlaceholder="Search vendors"
+              value={vendor}
+              onValueChange={setVendor}
+              options={[
+                {
+                  value: 'bp-16',
+                  label: 'Luzon iDistribution Corp.',
+                  subLabel: 'BP-0016',
+                  subLabelPlacement: 'top',
+                  text: 'BP-0016 Luzon iDistribution Corp.',
+                },
+                {
+                  value: 'bp-17',
+                  label: 'Apple South Asia Pte. Ltd.',
+                  subLabel: 'BP-0017',
+                  subLabelPlacement: 'top',
+                  text: 'BP-0017 Apple South Asia Pte. Ltd.',
+                },
+              ]}
+            />
+          )}
+        </Field.Group>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
+    const search = () =>
+      canvasElement.ownerDocument.querySelector<HTMLInputElement>('.sikat-dropdown__header input')!;
+
+    await userEvent.click(canvas.getByRole('combobox', { name: 'Vendor' }));
+    // Opens empty, showing the search placeholder, with every option listed and the value marked.
+    await expect(search()).toHaveValue('');
+    await expect(search()).toHaveAttribute('placeholder', 'Search vendors');
+    await expect(body.getAllByRole('option')).toHaveLength(2);
+    await expect(body.getByRole('option', { name: /Apple South Asia/ })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+
+    // Typing a code filters.
+    await userEvent.keyboard('0016');
+    await expect(body.getAllByRole('option')).toHaveLength(1);
+    await userEvent.keyboard('{Escape}');
+  },
+};
+
+/**
  * `clearable` — for optional fields, instead of a "None" option. A ✕ shows while a
  * value is set; clicking it resets to the placeholder (Select → `''`, Combobox → `null`).
  */
