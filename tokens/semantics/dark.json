@@ -6,6 +6,14 @@
           "value": "{primitive.color.neutral.950}",
           "type": "color"
         },
+        "default-2": {
+          "value": "{primitive.color.neutral.800}",
+          "type": "color"
+        },
+        "default-3": {
+          "value": "{primitive.color.neutral.700}",
+          "type": "color"
+        },
         "default-alt": {
           "value": "{primitive.color.neutral.900}",
           "type": "color"
@@ -220,6 +228,10 @@
         },
         "disabled": {
           "value": "{primitive.color.neutral.600}",
+          "type": "color"
+        },
+        "disabled-subtle": {
+          "value": "{primitive.color.neutral.900}",
           "type": "color"
         },
         "transparent": {
@@ -492,6 +504,14 @@
           "value": "{primitive.color.neutral.700}",
           "type": "color"
         },
+        "default-level-1": {
+          "value": "{primitive.color.neutral.700}",
+          "type": "color"
+        },
+        "default-level-2": {
+          "value": "{primitive.color.neutral.700}",
+          "type": "color"
+        },
         "neutral": {
           "value": "{primitive.color.neutral.700}",
           "type": "color"
@@ -557,7 +577,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{primitive.color.neutral.600}",
+          "value": "{primitive.color.neutral.700}",
           "type": "color"
         },
         "transparent": {
