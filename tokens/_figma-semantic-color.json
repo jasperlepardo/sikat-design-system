@@ -149,7 +149,10 @@
   "bg/black-subtle": { "l": "{primitive.color.black.a100}", "d": "{primitive.color.black.a900}" },
   "bg/black-muted": { "l": "{primitive.color.black.a300}", "d": "{primitive.color.black.a700}" },
   "bg/disabled": { "l": "{primitive.color.neutral.400}", "d": "{primitive.color.neutral.600}" },
-  "bg/disabled-subtle": { "l": "{primitive.color.neutral.100}", "d": "{primitive.color.neutral.900}" },
+  "bg/disabled-subtle": {
+    "l": "{primitive.color.neutral.100}",
+    "d": "{primitive.color.neutral.900}"
+  },
   "bg/transparent": {
     "l": "{primitive.color.white.transparent}",
     "d": "{primitive.color.black.transparent}"
@@ -333,8 +336,14 @@
   },
   "text/disabled": { "l": "{primitive.color.neutral.400}", "d": "{primitive.color.neutral.600}" },
   "border/default": { "l": "{primitive.color.neutral.100}", "d": "{primitive.color.neutral.700}" },
-  "border/default-level-1": { "l": "{primitive.color.neutral.200}", "d": "{primitive.color.neutral.700}" },
-  "border/default-level-2": { "l": "{primitive.color.neutral.300}", "d": "{primitive.color.neutral.700}" },
+  "border/default-level-1": {
+    "l": "{primitive.color.neutral.200}",
+    "d": "{primitive.color.neutral.700}"
+  },
+  "border/default-level-2": {
+    "l": "{primitive.color.neutral.300}",
+    "d": "{primitive.color.neutral.700}"
+  },
   "border/neutral": { "l": "{primitive.color.neutral.300}", "d": "{primitive.color.neutral.700}" },
   "border/neutral-subtle": {
     "l": "{primitive.color.neutral.200}",

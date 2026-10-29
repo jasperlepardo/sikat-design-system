@@ -43,16 +43,16 @@ or Automation mode**. Adding them touches every component that reads `00 Intent`
 
 Semantic tokens live in the Tokens library (`dhDHo6ZpJnAOpB3WUZoZFg`).
 
-| Intent · Style | background | text | icon | border |
-|---|---|---|---|---|
-| Information · Solid | `color/bg/information` | `color/text/heading_on-primary` | `color/fg/white` | transparent |
-| Information · Outline | `color/bg/information-subtle` | `color/text/heading` | `color/fg/information` | `color/border/information-subtle` |
-| Information · Ghost | `color/bg/information-subtle` | `color/text/heading` | `color/fg/information` | transparent |
-| Information · Link | transparent | `color/text/information` | `color/fg/information` | transparent |
-| Automation · Solid | `color/bg/automation` | `color/text/heading_on-primary` | `color/fg/white` | transparent |
-| Automation · Outline | `color/bg/automation-subtle` | `color/text/heading` | `color/fg/automation` | `color/border/automation-subtle` |
-| Automation · Ghost | `color/bg/automation-subtle` | `color/text/heading` | `color/fg/automation` | transparent |
-| Automation · Link | transparent | `color/text/automation` | `color/fg/automation` | transparent |
+| Intent · Style        | background                    | text                            | icon                   | border                            |
+| --------------------- | ----------------------------- | ------------------------------- | ---------------------- | --------------------------------- |
+| Information · Solid   | `color/bg/information`        | `color/text/heading_on-primary` | `color/fg/white`       | transparent                       |
+| Information · Outline | `color/bg/information-subtle` | `color/text/heading`            | `color/fg/information` | `color/border/information-subtle` |
+| Information · Ghost   | `color/bg/information-subtle` | `color/text/heading`            | `color/fg/information` | transparent                       |
+| Information · Link    | transparent                   | `color/text/information`        | `color/fg/information` | transparent                       |
+| Automation · Solid    | `color/bg/automation`         | `color/text/heading_on-primary` | `color/fg/white`       | transparent                       |
+| Automation · Outline  | `color/bg/automation-subtle`  | `color/text/heading`            | `color/fg/automation`  | `color/border/automation-subtle`  |
+| Automation · Ghost    | `color/bg/automation-subtle`  | `color/text/heading`            | `color/fg/automation`  | transparent                       |
+| Automation · Link     | transparent                   | `color/text/automation`         | `color/fg/automation`  | transparent                       |
 
 ## Already done in this sync (for reference)
 

@@ -40,7 +40,15 @@ export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /** Header row: framed media + semibold title on the left, optional actions on the right. */
-function CardHeader({ media, icon, actions, sticky, className, children, ...rest }: CardHeaderProps) {
+function CardHeader({
+  media,
+  icon,
+  actions,
+  sticky,
+  className,
+  children,
+  ...rest
+}: CardHeaderProps) {
   const leadingMedia = media ?? icon;
   return (
     <div

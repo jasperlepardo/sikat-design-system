@@ -37,7 +37,12 @@ export function Tag({
   ...rest
 }: TagProps) {
   return (
-    <span className={cn('sikat-tag', className)} data-intent={intent} data-style={variant} {...rest}>
+    <span
+      className={cn('sikat-tag', className)}
+      data-intent={intent}
+      data-style={variant}
+      {...rest}
+    >
       {leadingIcon ? <span className="sikat-tag__icon">{leadingIcon}</span> : null}
       {children != null ? <span className="sikat-tag__label">{children}</span> : null}
     </span>
