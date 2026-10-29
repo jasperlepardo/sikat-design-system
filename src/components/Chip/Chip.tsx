@@ -22,6 +22,8 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'onSele
   variant?: ChipStyle;
   /** Size. */
   size?: ChipSize;
+  /** Corner style — `pill` (fully rounded, default) or `rounded` (button radius). */
+  shape?: 'pill' | 'rounded';
   /** Selected/pressed state — for filter & choice chips. */
   selected?: boolean;
   /**
@@ -49,8 +51,9 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'onSele
  */
 export function Chip({
   intent = 'default',
-  variant = 'soft',
+  variant = 'outline',
   size = 'medium',
+  shape = 'pill',
   selected = false,
   onSelect,
   onRemove,
@@ -76,6 +79,7 @@ export function Chip({
       data-intent={intent}
       data-style={variant}
       data-size={size}
+      data-shape={shape}
       data-selected={selected || undefined}
       aria-disabled={disabled || undefined}
       {...rest}
