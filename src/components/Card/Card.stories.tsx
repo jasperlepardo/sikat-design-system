@@ -16,19 +16,28 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const ArtTrackIcon = <Icon size={24}>art_track</Icon>;
+const ArtTrackIcon = <Icon size={20}>art_track</Icon>;
 
 const AvatarIcon = <Icon size={20}>person</Icon>;
 
 const AddCircleIcon = <Icon size={20}>add_circle</Icon>;
 
-const CircleIcon = <Icon size={20}>radio_button_unchecked</Icon>;
+const DropDownIcon = <Icon size={20}>arrow_drop_down</Icon>;
 
-/** Figma node 18266:140530 — Customer Details section card. */
+/** Figma node 20725:85540 — Customer Details section card. */
 export const Default: Story = {
   render: () => (
     <Card style={{ maxWidth: 600 }}>
-      <Card.Header icon={ArtTrackIcon}>Customer Details</Card.Header>
+      <Card.Header
+        media={ArtTrackIcon}
+        actions={
+          <IconButton label="Toggle" intent="default" variant="ghost" size="small">
+            {DropDownIcon}
+          </IconButton>
+        }
+      >
+        Customer Details
+      </Card.Header>
       <Card.Content>
         <Form.Group className="grid grid-cols-2 gap-2">
           <FormField label="Customer">
@@ -73,7 +82,7 @@ export const StickyHeader: Story = {
       }}
     >
       <Card style={{ maxWidth: 600 }}>
-        <Card.Header icon={ArtTrackIcon} sticky>
+        <Card.Header media={ArtTrackIcon} sticky>
           Customer Details
         </Card.Header>
         <Card.Content>
@@ -120,10 +129,10 @@ export const WithHeaderActions: Story = {
   render: () => (
     <Card style={{ maxWidth: 600 }}>
       <Card.Header
-        icon={ArtTrackIcon}
+        media={ArtTrackIcon}
         actions={
           <IconButton label="More" intent="default" variant="ghost" size="small">
-            {CircleIcon}
+            {DropDownIcon}
           </IconButton>
         }
       >

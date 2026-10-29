@@ -6,6 +6,14 @@
           "value": "{primitive.color.neutral.white}",
           "type": "color"
         },
+        "default-2": {
+          "value": "{primitive.color.neutral.white}",
+          "type": "color"
+        },
+        "default-3": {
+          "value": "{primitive.color.neutral.white}",
+          "type": "color"
+        },
         "default-alt": {
           "value": "{primitive.color.neutral.white}",
           "type": "color"
@@ -222,6 +230,10 @@
           "value": "{primitive.color.neutral.400}",
           "type": "color"
         },
+        "disabled-subtle": {
+          "value": "{primitive.color.neutral.100}",
+          "type": "color"
+        },
         "transparent": {
           "value": "{primitive.color.white.transparent}",
           "type": "color"
@@ -395,7 +407,7 @@
           "type": "color"
         },
         "muted": {
-          "value": "{primitive.color.neutral.400}",
+          "value": "{primitive.color.neutral.500}",
           "type": "color"
         },
         "muted_on-primary": {
@@ -489,6 +501,14 @@
       },
       "border": {
         "default": {
+          "value": "{primitive.color.neutral.100}",
+          "type": "color"
+        },
+        "default-level-1": {
+          "value": "{primitive.color.neutral.200}",
+          "type": "color"
+        },
+        "default-level-2": {
           "value": "{primitive.color.neutral.300}",
           "type": "color"
         },
@@ -557,7 +577,7 @@
           "type": "color"
         },
         "disabled": {
-          "value": "{primitive.color.neutral.400}",
+          "value": "{primitive.color.neutral.300}",
           "type": "color"
         },
         "transparent": {

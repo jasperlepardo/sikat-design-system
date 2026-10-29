@@ -7,9 +7,10 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * Card — section container (Figma node 18266:140530). A `bg-tertiary` outer
- * shell (2px padding, rounded-xl) around a `bg-default` white content box.
- * Compose with `Card.Header` (icon + title) and `Card.Content` (white inner area).
+ * Card — section container (Figma node 20725:85540). A bordered, rounded-2xl
+ * white shell (no padding, clips its children) wrapping a tinted `Card.Header`
+ * and a 12px-padded `Card.Content` area. Compose with `Card.Header` (media +
+ * title + actions) and `Card.Content` (inner content area).
  */
 export function Card({ className, children, ...rest }: CardProps) {
   return (
@@ -24,24 +25,40 @@ export interface CardSlotProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export interface CardHeaderProps extends HTMLAttributes<HTMLDivElement> {
-  /** Leading icon (e.g. `<Icon size={24}>…</Icon>`). */
+  /**
+   * Leading media shown in a framed container — an `<Icon>`, `<DecorativeIcon>`,
+   * or `<Avatar>`.
+   */
+  media?: ReactNode;
+  /** @deprecated Use `media`. */
   icon?: ReactNode;
-  /** Trailing slot — e.g. an action button. */
+  /** Trailing slot — e.g. an action or dropdown button. */
   actions?: ReactNode;
   /** Pin the header to the top of the nearest scroll container while content scrolls past. */
   sticky?: boolean;
   children?: ReactNode;
 }
 
-/** Header row: icon + semibold title on the left, optional actions on the right. */
-function CardHeader({ icon, actions, sticky, className, children, ...rest }: CardHeaderProps) {
+/** Header row: framed media + semibold title on the left, optional actions on the right. */
+function CardHeader({
+  media,
+  icon,
+  actions,
+  sticky,
+  className,
+  children,
+  ...rest
+}: CardHeaderProps) {
+  const leadingMedia = media ?? icon;
   return (
     <div
       className={cn('sikat-card__header', sticky && 'sikat-card__header--sticky', className)}
       {...rest}
     >
       <div className="sikat-card__header-leading">
-        {icon != null ? <span className="sikat-card__header-icon">{icon}</span> : null}
+        {leadingMedia != null ? (
+          <span className="sikat-card__header-media">{leadingMedia}</span>
+        ) : null}
         <span className="sikat-card__header-title">{children}</span>
       </div>
       {actions != null ? <div className="sikat-card__header-actions">{actions}</div> : null}
@@ -49,7 +66,7 @@ function CardHeader({ icon, actions, sticky, className, children, ...rest }: Car
   );
 }
 
-/** White inner content area: 14px padding, 24px gap between children. */
+/** Inner content area: 12px padding, 24px gap between children. */
 function CardContent({ className, children, ...rest }: CardSlotProps) {
   return (
     <div className={cn('sikat-card__content', className)} {...rest}>

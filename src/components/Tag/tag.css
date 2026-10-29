@@ -1,0 +1,36 @@
+/* Tag structure. Colors come from the generated component CSS
+   (src/styles/components/tag.css → --tag-* per [data-intent][data-style], from
+   tokens/components/tag.json). A Tag is a NON-interactive categorization label —
+   distinct from Badge (status pill, fully rounded) by a squared rounded-sm
+   corner, and from Chip (interactive) by having no states. Tag is single-size:
+   padding is fixed here rather than driven by a size axis. */
+
+@layer components {
+  .sikat-tag {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    gap: var(--spacing-1);
+    padding: var(--spacing-1) var(--spacing-2_5);
+    box-shadow: inset 0 0 0 var(--border-width-1) var(--tag-border, transparent);
+    border-radius: var(--rounded-sm);
+    background-color: var(--tag-bg);
+    color: var(--tag-text);
+    font-family: var(--text-body-xs-font-family), system-ui, sans-serif;
+    font-weight: var(--text-medium);
+    font-size: var(--text-body-xs-font-size);
+    line-height: var(--text-body-xs-line-height);
+    letter-spacing: var(--text-body-xs-letter-spacing);
+    white-space: nowrap;
+  }
+
+  .sikat-tag__icon {
+    flex: none;
+    display: inline-flex;
+    color: var(--tag-icon, currentColor);
+  }
+
+  .sikat-tag__label {
+    display: inline-block;
+  }
+}

@@ -190,7 +190,7 @@ export interface ListCardProps extends Omit<HTMLAttributes<HTMLLIElement>, 'titl
   title: ReactNode;
   /** Leading icon shown in a bordered box — typically `<Icon size={16}>…</Icon>`. */
   icon?: ReactNode;
-  /** Shown after the title — typically a `<Badge size="extra-small">`. */
+  /** Shown after the title — typically a `<Badge size="small">`. */
   badge?: ReactNode;
   /** Trailing actions (e.g. a `more_vert` `IconButton`), right-aligned in the header. */
   actions?: ReactNode;
