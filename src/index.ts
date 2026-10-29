@@ -170,6 +170,9 @@ export type { TableContentTextProps, TableActionItem } from './components/Table/
 export type {
   TableProps,
   TableColumn,
+  TableCellSpan,
+  TableHeaderGroup,
+  TableFreeze,
   TableSort,
   TableSortDirection,
   TablePagination,

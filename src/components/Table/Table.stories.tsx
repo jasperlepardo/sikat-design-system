@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Table, type TableSort } from './Table';
+import { Table } from './Table';
 import { Button } from '../Button/Button';
 import { Link } from '../Button/Link';
 import { Icon } from '../Icon/Icon';
@@ -232,58 +232,106 @@ export const Playground: StoryObj<PlaygroundArgs> = {
 // Sorting
 // ---------------------------------------------------------------------------
 
-/** Sortable columns — clicking a header cycles asc → desc → off. */
+/** Built-in sorting — `sortRows` reorders rows, clicking a header cycles asc → desc → off.
+ *  Uncontrolled: the Table owns sort state (no `sort`/`onSortChange` wiring needed). */
 export const Sorting: StoryObj<typeof meta> = {
-  render: () => {
-    const [sort, setSort] = useState<TableSort | null>(null);
-    const rows = useMemo(() => {
-      if (!sort) return ORDERS.slice(0, 4);
-      const dir = sort.direction === 'asc' ? 1 : -1;
-      return [...ORDERS.slice(0, 4)].sort((x, y) => {
-        const a = x[sort.key as keyof Order];
-        const b = y[sort.key as keyof Order];
-        return (a > b ? 1 : a < b ? -1 : 0) * dir;
-      });
-    }, [sort]);
-    return (
-      <Table
-        caption="Orders"
-        getRowId={(r) => r.id}
-        rows={rows}
-        sort={sort}
-        onSortChange={setSort}
-        columns={[
-          { key: 'id', header: 'Order', sortable: true },
-          { key: 'product', header: 'Product', sortable: true },
-          { key: 'customer', header: 'Customer', sortable: true },
-          {
-            key: 'status',
-            header: 'Status',
-            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
-          },
-          {
-            key: 'amount',
-            header: 'Amount',
-            sortable: true,
-            align: 'end',
-            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
-          },
-        ]}
-      />
-    );
-  },
+  render: () => (
+    <Table
+      caption="Orders"
+      getRowId={(r) => r.id}
+      rows={ORDERS.slice(0, 4)}
+      sortRows
+      columns={[
+        { key: 'id', header: 'Order', sortable: true },
+        { key: 'product', header: 'Product', sortable: true },
+        { key: 'customer', header: 'Customer', sortable: true },
+        {
+          key: 'status',
+          header: 'Status',
+          cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+        },
+        {
+          key: 'amount',
+          header: 'Amount',
+          sortable: true,
+          align: 'end',
+          // Amounts are formatted strings ("1,340.00") — compare the parsed number.
+          sortAccessor: (r) => Number(r.amount.replace(/,/g, '')),
+          cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+        },
+      ]}
+    />
+  ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const header = canvas.getByRole('columnheader', { name: /Customer/ });
+    const sortBtn = () => canvas.getByRole('button', { name: /^Sort by Customer/ });
     const firstCustomer = () => within(canvas.getAllByRole('row')[1]).getAllByRole('cell')[2];
-    await userEvent.click(canvas.getByRole('button', { name: 'Sort by Customer' }));
+    await userEvent.click(sortBtn());
     await expect(header).toHaveAttribute('aria-sort', 'ascending');
+    await expect(within(header).getByText('arrow_upward')).toBeInTheDocument();
     await expect(firstCustomer()).toHaveTextContent('Acme Corp');
-    await userEvent.click(canvas.getByRole('button', { name: 'Sort by Customer' }));
+    await userEvent.click(sortBtn());
     await expect(header).toHaveAttribute('aria-sort', 'descending');
+    await expect(within(header).getByText('arrow_downward')).toBeInTheDocument();
     await expect(firstCustomer()).toHaveTextContent('Umbrella');
-    await userEvent.click(canvas.getByRole('button', { name: 'Sort by Customer' }));
+    await userEvent.click(sortBtn());
     await expect(header).not.toHaveAttribute('aria-sort');
+    await expect(within(header).getByText('unfold_more')).toBeInTheDocument();
+  },
+};
+
+/** Multi-column sort — each header cycles independently and keeps the others; the small
+ *  number shows sort priority. Rows order by status, then amount within each status. */
+export const MultiSort: StoryObj<typeof meta> = {
+  render: () => (
+    <Table
+      caption="Orders"
+      getRowId={(r) => r.id}
+      rows={ORDERS}
+      multiSort
+      sortRows
+      defaultSort={[
+        { key: 'status', direction: 'asc' },
+        { key: 'amount', direction: 'desc' },
+      ]}
+      columns={[
+        { key: 'id', header: 'Order', sortable: true },
+        { key: 'customer', header: 'Customer', sortable: true },
+        {
+          key: 'status',
+          header: 'Status',
+          sortable: true,
+          cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+        },
+        {
+          key: 'amount',
+          header: 'Amount',
+          sortable: true,
+          align: 'end',
+          sortAccessor: (r) => Number(r.amount.replace(/,/g, '')),
+          cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+        },
+      ]}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const statusHeader = canvas.getByRole('columnheader', { name: /Status/ });
+    const amountHeader = canvas.getByRole('columnheader', { name: /Amount/ });
+    // defaultSort: both columns active, status is priority 1, amount priority 2.
+    await expect(statusHeader).toHaveAttribute('aria-sort', 'ascending');
+    await expect(amountHeader).toHaveAttribute('aria-sort', 'descending');
+    await expect(within(statusHeader).getByText('1')).toBeInTheDocument();
+    await expect(within(amountHeader).getByText('2')).toBeInTheDocument();
+    // Within the first status group (Overdue), amount is descending.
+    const statusOf = (row: HTMLElement) => within(row).getAllByRole('cell')[2];
+    const rows = canvas.getAllByRole('row').slice(1);
+    await expect(statusOf(rows[0])).toHaveTextContent('Overdue');
+    // Amount starts descending; one click cycles it off, leaving status sorting intact.
+    await userEvent.click(canvas.getByRole('button', { name: /^Sort by Amount/ }));
+    await expect(amountHeader).not.toHaveAttribute('aria-sort');
+    await expect(statusHeader).toHaveAttribute('aria-sort', 'ascending');
   },
 };
 
@@ -334,6 +382,85 @@ export const Scroll: StoryObj<typeof meta> = {
     await expect(scroller.scrollWidth).toBeGreaterThan(scroller.clientWidth);
     scroller.scrollLeft = scroller.scrollWidth;
     await expect(scroller.scrollLeft).toBeGreaterThan(0);
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Frozen columns
+// ---------------------------------------------------------------------------
+
+/** `freeze={{ start: 2, end: 1 }}` — the first two and the last column stay pinned
+ *  while the middle scrolls horizontally. Boundary shadows appear over hidden content. */
+export const FrozenColumns: StoryObj<typeof meta> = {
+  render: () => (
+    <div style={{ width: 520 }}>
+      <Table
+        caption="Orders"
+        getRowId={(r) => r.id}
+        rows={ORDERS.slice(0, 5)}
+        freeze={{ start: 2, end: 1 }}
+        columns={[
+          { key: 'id', header: 'Order' },
+          { key: 'product', header: 'Product' },
+          { key: 'customer', header: 'Customer' },
+          { key: 'email', header: 'Email' },
+          { key: 'note', header: 'Terms' },
+          {
+            key: 'status',
+            header: 'Status',
+            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+          },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
+        ]}
+      />
+    </div>
+  ),
+};
+
+/** Freeze with `selectable` + `rowActions` — the checkbox auto-pins left and the
+ *  actions column auto-pins right, so selection and actions stay visible. */
+export const FrozenWithSelection: StoryObj<typeof meta> = {
+  render: () => {
+    const [selected, setSelected] = useState<string[]>([]);
+    return (
+      <div style={{ width: 520 }}>
+        <Table
+          caption="Orders"
+          getRowId={(r) => r.id}
+          rows={ORDERS.slice(0, 5)}
+          freeze={{ start: 1, end: 1 }}
+          selectable
+          selectedIds={selected}
+          onSelectionChange={setSelected}
+          columns={[
+            { key: 'id', header: 'Order' },
+            { key: 'product', header: 'Product' },
+            { key: 'customer', header: 'Customer' },
+            { key: 'email', header: 'Email' },
+            { key: 'note', header: 'Terms' },
+            {
+              key: 'amount',
+              header: 'Amount',
+              align: 'end',
+              cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+            },
+          ]}
+          rowActions={[
+            {
+              type: 'button',
+              icon: <Icon size={20}>more_horiz</Icon>,
+              label: 'Row actions',
+              onClick: () => {},
+            },
+          ]}
+        />
+      </div>
+    );
   },
 };
 
@@ -482,6 +609,140 @@ export const FooterRow: StoryObj<typeof meta> = {
       ]}
     />
   ),
+};
+
+// ---------------------------------------------------------------------------
+// Spanning cells
+// ---------------------------------------------------------------------------
+
+/** `headerGroups` — a top header tier whose cells span several data columns.
+ *  Here "Customer" spans the customer + email columns and "Order" spans the rest. */
+export const HeaderGroups: StoryObj<typeof meta> = {
+  render: () => (
+    <Table
+      caption="Orders by group"
+      getRowId={(r) => r.id}
+      rows={ORDERS.slice(0, 4)}
+      headerGroups={[
+        { header: 'Order', colSpan: 2 },
+        { header: 'Customer', colSpan: 2 },
+        { header: 'Amount', colSpan: 1, align: 'end' },
+      ]}
+      columns={[
+        { key: 'id', header: 'Ref' },
+        { key: 'product', header: 'Product' },
+        { key: 'customer', header: 'Name' },
+        { key: 'email', header: 'Email' },
+        { key: 'amount', header: 'Total', align: 'end' },
+      ]}
+    />
+  ),
+};
+
+/** `getSectionRow` — full-width rows interleaved between data rows. Here each
+ *  status becomes a section header above its orders. */
+export const SectionRows: StoryObj<typeof meta> = {
+  render: () => {
+    // A flat list where some entries are section markers.
+    const grouped = (['Paid', 'Pending', 'Overdue'] as Order['status'][]).flatMap((status) => [
+      { id: `section-${status}`, status, section: true } as Order & { section?: boolean },
+      ...ORDERS.filter((o) => o.status === status).slice(0, 2),
+    ]);
+    return (
+      <Table
+        caption="Orders by status"
+        getRowId={(r) => r.id}
+        rows={grouped}
+        getSectionRow={(r) => ((r as { section?: boolean }).section ? r.status : null)}
+        columns={[
+          { key: 'id', header: 'Order' },
+          { key: 'product', header: 'Product' },
+          { key: 'customer', header: 'Customer' },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
+        ]}
+      />
+    );
+  },
+};
+
+/** Per-cell `colSpan` — a cell absorbs the columns to its right. Here the
+ *  "Overdue" rows merge Product + Customer into a single note cell. */
+export const CellColSpan: StoryObj<typeof meta> = {
+  render: () => (
+    <Table
+      caption="Orders with notes"
+      getRowId={(r) => r.id}
+      rows={ORDERS.slice(0, 5)}
+      columns={[
+        { key: 'id', header: 'Order' },
+        {
+          key: 'product',
+          header: 'Product',
+          span: (r) => (r.status === 'Overdue' ? { colSpan: 2 } : undefined),
+          cell: (r) =>
+            r.status === 'Overdue' ? (
+              <em>⚠ Overdue — contact {r.customer}</em>
+            ) : (
+              r.product
+            ),
+        },
+        { key: 'customer', header: 'Customer' },
+        {
+          key: 'amount',
+          header: 'Amount',
+          align: 'end',
+          cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+        },
+      ]}
+    />
+  ),
+};
+
+/** Per-cell `rowSpan` — the first cell of each status group merges down over its
+ *  members (rows are pre-sorted into groups). rowSpan is ignored under `sortRows`
+ *  or tree mode, where reordering would break the merge. */
+export const CellRowSpan: StoryObj<typeof meta> = {
+  render: () => {
+    // Group consecutive rows by status so the merge is contiguous.
+    const byStatus = [...ORDERS.slice(0, 6)].sort((a, b) => a.status.localeCompare(b.status));
+    const runStart = byStatus.map((r, i) => i === 0 || byStatus[i - 1].status !== r.status);
+    const runLength = (i: number) => {
+      let n = 1;
+      while (i + n < byStatus.length && byStatus[i + n].status === byStatus[i].status) n++;
+      return n;
+    };
+    return (
+      <Table
+        caption="Orders grouped by status"
+        getRowId={(r) => r.id}
+        rows={byStatus}
+        columns={[
+          {
+            key: 'status',
+            header: 'Status',
+            span: (r) => {
+              const i = byStatus.indexOf(r);
+              return runStart[i] ? { rowSpan: runLength(i) } : undefined;
+            },
+            cell: (r) => <Table.Status intent={statusIntent(r.status)}>{r.status}</Table.Status>,
+          },
+          { key: 'id', header: 'Order' },
+          { key: 'product', header: 'Product' },
+          {
+            key: 'amount',
+            header: 'Amount',
+            align: 'end',
+            cell: (r) => <Table.Amount currency="PHP">{r.amount}</Table.Amount>,
+          },
+        ]}
+      />
+    );
+  },
 };
 
 // ---------------------------------------------------------------------------

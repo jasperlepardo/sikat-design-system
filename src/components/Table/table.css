@@ -132,6 +132,13 @@
   .sikat-table__sort:focus-visible {
     opacity: 1;
   }
+  /* Multi-sort priority: a tiny muted number next to the direction arrow. */
+  .sikat-table__sort-rank {
+    font-size: 10px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-fg-muted, currentColor);
+  }
 
   /* Table Body: white, 12px-rounded; Table Cell = 8px padding, 6px gap, bottom
      border/default, Body/sm/Medium text/body. */
@@ -156,6 +163,54 @@
   /* Table Row Variant2 (selected): bg/primary-subtle. */
   .sikat-table__row[data-selected] > .sikat-table__td {
     background-color: var(--color-bg-primary-subtle);
+  }
+
+  /* Grouped header tier (headerGroups): a spanning cell above the per-column
+     headers. Shares the header type scale; its label sits at the group's start. */
+  .sikat-table__th--group {
+    color: var(--color-text-body);
+  }
+
+  /* Spanning body cells (colSpan/rowSpan): let a wide/tall merged cell wrap and
+     top-align its content so a rowSpan cell reads against the first merged row. */
+  .sikat-table__td[data-span] {
+    white-space: normal;
+    vertical-align: top;
+  }
+
+  /* Section rows (getSectionRow): one full-width cell between data rows — group
+     separators, subtotals. No hover/selected shift; its own rounded corners come
+     from the first/last-child rules (it is both). */
+  .sikat-table__td--section {
+    white-space: normal;
+    font-weight: var(--text-semibold);
+  }
+  .sikat-table__row--section:hover > .sikat-table__td--section {
+    background-color: var(--color-bg-default-alt);
+  }
+
+  /* Frozen columns (freeze prop): cells pinned to the left/right while the middle
+     scrolls. `left`/`right` offsets are set inline from measured column widths. */
+  .sikat-table__frozen {
+    position: sticky;
+  }
+  /* Body frozen cells sit above normal cells; header frozen cells sit above the
+     sticky-top header (z-index: 1) so the corner stays covered in layout modes. */
+  .sikat-table__td.sikat-table__frozen {
+    z-index: 2;
+  }
+  .sikat-table__th.sikat-table__frozen {
+    z-index: 4;
+    /* Opaque so scrolling content never shows through (header has no bg otherwise). */
+    background-color: var(--color-bg-tertiary);
+  }
+  /* Boundary shadow: only while there is content scrolled under that edge. The
+     scroller carries data-at-start / data-at-end at the scroll extremes. */
+  .sikat-table__scroller:not([data-at-start]) .sikat-table__frozen--edge-start {
+    box-shadow: 4px 0 6px -4px rgb(0 0 0 / 0.18);
+  }
+  .sikat-table__scroller:not([data-at-end]) .sikat-table__frozen--edge-end {
+    box-shadow: -4px 0 6px -4px rgb(0 0 0 / 0.18);
   }
   /* Column settings / row "…": a flex wrapper (no line box adds height to the 36px
      cells) that ends the button at the cell's trailing edge. */
