@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, fn, userEvent, within } from 'storybook/test';
+import { expect, within } from 'storybook/test';
 import {
   Badge,
   badgeIntents,
@@ -45,8 +45,6 @@ type BadgePlaygroundArgs = {
   showDot: boolean;
   showLeadingIcon: boolean;
   showTrailingIcon: boolean;
-  isDismissable: boolean;
-  onDismiss: () => void;
 };
 
 export const Playground: StoryObj<BadgePlaygroundArgs> = {
@@ -58,8 +56,6 @@ export const Playground: StoryObj<BadgePlaygroundArgs> = {
     showDot: true,
     showLeadingIcon: true,
     showTrailingIcon: true,
-    isDismissable: true,
-    onDismiss: fn(),
   },
   argTypes: {
     Intent: figmaSelect('Intent', badgeIntents, [
@@ -71,19 +67,12 @@ export const Playground: StoryObj<BadgePlaygroundArgs> = {
       'White',
       'Black',
     ]),
-    Style: figmaSelect('Style', badgeStyles, ['Solid', 'Outline', 'Ghost']),
-    Size: figmaSelect('Size', badgeSizes, [
-      'Extra Small',
-      'Small',
-      'Medium',
-      'Large',
-      'Extra Large',
-    ]),
+    Style: figmaSelect('Style', badgeStyles, ['Solid', 'Outline', 'Ghost', 'Link']),
+    Size: figmaSelect('Size', badgeSizes, ['Small', 'Medium']),
     badgeLabel: { name: 'Badge Label', control: 'text' },
     showDot: { name: 'Show Dot', control: 'boolean' },
     showLeadingIcon: { name: 'Show Leading Icon', control: 'boolean' },
     showTrailingIcon: { name: 'Show Trailing Icon', control: 'boolean' },
-    isDismissable: { name: 'Is Dismissable', control: 'boolean' },
   },
   parameters: figmaControls([
     'Intent',
@@ -93,7 +82,6 @@ export const Playground: StoryObj<BadgePlaygroundArgs> = {
     'Show Dot',
     'Show Leading Icon',
     'Show Trailing Icon',
-    'Is Dismissable',
   ]),
   render: (a) => (
     <Badge
@@ -103,16 +91,13 @@ export const Playground: StoryObj<BadgePlaygroundArgs> = {
       dot={a.showDot}
       leadingIcon={a.showLeadingIcon ? CircleGlyph : undefined}
       trailingIcon={a.showTrailingIcon ? CircleGlyph : undefined}
-      onDismiss={a.isDismissable ? a.onDismiss : undefined}
     >
       {a.badgeLabel}
     </Badge>
   ),
-  play: async ({ args, canvasElement }) => {
+  play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     await expect(canvas.getByText('Badge')).toBeInTheDocument();
-    await userEvent.click(canvas.getByRole('button', { name: /dismiss/i }));
-    await expect(args.onDismiss).toHaveBeenCalledOnce();
   },
 };
 
@@ -122,16 +107,6 @@ export const WithDot: Story = {
 
 export const WithIcon: Story = {
   args: { intent: 'primary', leadingIcon: CheckGlyph, children: 'Verified' },
-};
-
-export const Dismissible: Story = {
-  args: { intent: 'danger', children: 'Error', onDismiss: fn() },
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    const btn = canvas.getByRole('button', { name: /dismiss/i });
-    await userEvent.click(btn);
-    await expect(args.onDismiss).toHaveBeenCalledOnce();
-  },
 };
 
 export const Matrix: Story = {
@@ -173,7 +148,6 @@ export const Anatomy: Story = {
           dot
           leadingIcon={CircleGlyph}
           trailingIcon={CircleGlyph}
-          onDismiss={() => {}}
           data-testid={`badge-${size}`}
         >
           Badge
@@ -183,7 +157,7 @@ export const Anatomy: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const heights = { 'extra-small': 20, small: 24, medium: 28, large: 32, 'extra-large': 36 };
+    const heights = { small: 24, medium: 28 };
     for (const size of badgeSizes) {
       const badge = canvas.getByTestId(`badge-${size}`);
       await expect(badge.getBoundingClientRect().height).toBe(heights[size]);

@@ -59,26 +59,6 @@
   .sikat-badge__label {
     display: inline-block;
   }
-  .sikat-badge__dismiss {
-    flex: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--spacing-0);
-    border: 0;
-    background: transparent;
-    color: var(--badge-icon, currentColor);
-    cursor: pointer;
-    border-radius: var(--rounded-md);
-    transition: opacity 0.15s ease;
-  }
-  .sikat-badge__dismiss:hover {
-    opacity: 0.7;
-  }
-  .sikat-badge__dismiss:focus-visible {
-    outline: 2px solid var(--color-border-primary);
-    outline-offset: 1px;
-  }
 
   /* Badge Counter — a fixed 20px circular count pill (e.g. unread notifications).
      Reuses the Badge color matrix via the shared .sikat-badge[data-intent][data-style]

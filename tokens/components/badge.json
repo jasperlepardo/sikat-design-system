@@ -134,6 +134,54 @@
         "border": "--color-border-transparent"
       }
     },
+    "information/solid": {
+      "rest": {
+        "bg": "--color-bg-information",
+        "icon": "--color-fg-white",
+        "text": "--color-text-heading_on-primary",
+        "border": "--color-border-transparent"
+      }
+    },
+    "information/outline": {
+      "rest": {
+        "bg": "--color-bg-information-subtle",
+        "icon": "--color-fg-information",
+        "text": "--color-text-heading",
+        "border": "--color-border-information-subtle"
+      }
+    },
+    "information/ghost": {
+      "rest": {
+        "bg": "--color-bg-information-subtle",
+        "icon": "--color-fg-information",
+        "text": "--color-text-heading",
+        "border": "--color-border-transparent"
+      }
+    },
+    "automation/solid": {
+      "rest": {
+        "bg": "--color-bg-automation",
+        "icon": "--color-fg-white",
+        "text": "--color-text-heading_on-primary",
+        "border": "--color-border-transparent"
+      }
+    },
+    "automation/outline": {
+      "rest": {
+        "bg": "--color-bg-automation-subtle",
+        "icon": "--color-fg-automation",
+        "text": "--color-text-heading",
+        "border": "--color-border-automation-subtle"
+      }
+    },
+    "automation/ghost": {
+      "rest": {
+        "bg": "--color-bg-automation-subtle",
+        "icon": "--color-fg-automation",
+        "text": "--color-text-heading",
+        "border": "--color-border-transparent"
+      }
+    },
     "white/solid": {
       "rest": {
         "bg": "--color-bg-white",
@@ -181,13 +229,81 @@
         "text": "--color-text-heading",
         "border": "--color-border-transparent"
       }
+    },
+    "default/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-heading",
+        "border": "--color-border-transparent"
+      }
+    },
+    "primary/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-primary",
+        "text": "--color-text-primary",
+        "border": "--color-border-transparent"
+      }
+    },
+    "success/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-success",
+        "text": "--color-text-success",
+        "border": "--color-border-transparent"
+      }
+    },
+    "warning/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-warning",
+        "text": "--color-text-warning",
+        "border": "--color-border-transparent"
+      }
+    },
+    "danger/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-danger",
+        "text": "--color-text-danger",
+        "border": "--color-border-transparent"
+      }
+    },
+    "information/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-information",
+        "text": "--color-text-information",
+        "border": "--color-border-transparent"
+      }
+    },
+    "automation/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-automation",
+        "text": "--color-text-automation",
+        "border": "--color-border-transparent"
+      }
+    },
+    "white/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-white",
+        "text": "--color-text-white",
+        "border": "--color-border-transparent"
+      }
+    },
+    "black/link": {
+      "rest": {
+        "bg": "--color-bg-transparent",
+        "icon": "--color-fg-black",
+        "text": "--color-text-black",
+        "border": "--color-border-transparent"
+      }
     }
   },
   "sizing": {
-    "extra-small": {
-      "pad-x": "--spacing-1",
-      "pad-y": "--spacing-0_5"
-    },
     "small": {
       "pad-x": "--spacing-2",
       "pad-y": "--spacing-1"
@@ -195,14 +311,6 @@
     "medium": {
       "pad-x": "--spacing-3",
       "pad-y": "--spacing-1_5"
-    },
-    "large": {
-      "pad-x": "--spacing-4",
-      "pad-y": "--spacing-2"
-    },
-    "extra-large": {
-      "pad-x": "--spacing-5",
-      "pad-y": "--spacing-2_5"
     }
   }
 }

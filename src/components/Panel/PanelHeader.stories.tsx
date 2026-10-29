@@ -85,7 +85,7 @@ const prevNext = (
 );
 
 const statusBadge = (
-  <Badge intent="default" variant="outline" size="extra-small" dot>
+  <Badge intent="default" variant="outline" size="small" dot>
     Status
   </Badge>
 );

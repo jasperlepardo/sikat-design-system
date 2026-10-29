@@ -169,7 +169,7 @@ const onMore = fn();
 const cardProps = {
   icon: <Icon size={16}>location_on</Icon>,
   title: 'Manila HQ',
-  badge: <Badge size="extra-small">Default</Badge>,
+  badge: <Badge size="small">Default</Badge>,
   fields: addressFields,
   actions: (
     <IconButton

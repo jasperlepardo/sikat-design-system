@@ -1,6 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import { Icon } from '../Icon/Icon';
 import {
   badgeIntents,
   badgeStyles,
@@ -72,10 +71,6 @@ export interface BadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'style
   leadingIcon?: ReactNode;
   /** Trailing icon slot — typically an `<Icon size={16}>…</Icon>`. */
   trailingIcon?: ReactNode;
-  /** When provided, renders a dismiss (×) button. */
-  onDismiss?: () => void;
-  /** Accessible label for the dismiss button. */
-  dismissLabel?: string;
   children?: ReactNode;
 }
 
@@ -83,8 +78,8 @@ export interface BadgeProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'style
  * Badge — compact status/label pill. `intent`, `variant`, and `size` become
  * data-attributes that select generated CSS rules; every value resolves through
  * semantic CSS vars, so the badge re-themes across light/dark for free. The
- * optional dot, leading/trailing icons, and dismiss button mirror the Figma
- * Badge slots and all follow the intent's icon color.
+ * optional dot and leading/trailing icons follow the intent's icon color. For a
+ * removable token use `Chip` (with `onRemove`), not a badge.
  */
 export function Badge({
   intent = 'default',
@@ -93,8 +88,6 @@ export function Badge({
   dot = false,
   leadingIcon,
   trailingIcon,
-  onDismiss,
-  dismissLabel = 'Dismiss',
   className,
   children,
   ...rest
@@ -120,19 +113,6 @@ export function Badge({
       </span>
 
       {trailingIcon ? <span className="sikat-badge__icon">{trailingIcon}</span> : null}
-
-      {onDismiss ? (
-        <button
-          type="button"
-          className="sikat-badge__dismiss"
-          onClick={onDismiss}
-          aria-label={dismissLabel}
-        >
-          <Icon size={16} aria-hidden>
-            close
-          </Icon>
-        </button>
-      ) : null}
     </span>
   );
 }
