@@ -51,6 +51,8 @@
   }
   .sikat-field:is([readonly], [data-readonly]) {
     cursor: default;
+    /* Figma read-only Text Field: flush value, no inline padding (borderless). */
+    padding-inline: var(--spacing-0);
   }
 
   /* Chevron and clear (✕) on Select / Combobox / MultiSelect: hidden until the
@@ -67,11 +69,6 @@
     transition:
       opacity 120ms ease,
       transform 150ms ease;
-  }
-  /* Compound selector so the solid colour wins over the base `.sikat-field__icon`
-     (which is defined later in the file at equal specificity). */
-  .sikat-field__icon.sikat-field__chevron {
-    color: var(--color-fg-quarternary-solid);
   }
   .sikat-field:is(:hover, [data-state='hover'], :focus-within, :has([aria-expanded='true'])):not(
       [data-disabled]
@@ -140,10 +137,8 @@
     display: flex;
     flex: none;
     align-items: center;
-    color: var(--color-fg-quarternary); /* Trailing icon / chevron / clear — faint chrome */
-  }
-  /* Leading icon is meaningful content, so it reads as a solid foreground. */
-  .sikat-field__icon--leading {
+    /* Figma Input/Field/icon-color → fg/quarternary-solid: leading, trailing,
+       chevron and clear icons all read as a solid foreground. */
     color: var(--color-fg-quarternary-solid);
   }
   /* Default glyph size for a plain Icon in the slot — scoped to a direct child so
@@ -398,6 +393,7 @@
   .sikat-field-group {
     display: flex;
     flex-direction: column;
+    gap: var(--spacing-1); /* 4px — Figma Input/gap: label ↔ fieldset */
   }
   .sikat-field__fieldset {
     display: flex;
@@ -456,7 +452,7 @@
   }
 
   .sikat-field__label {
-    padding-inline: var(--spacing-2); /* 8px */
+    padding-inline: var(--spacing-0); /* Figma _Form Label: flush, no inline padding */
     font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
     font-size: var(--text-body-sm-font-size); /* 14px */
     line-height: var(--text-body-sm-line-height); /* 20px */
@@ -485,7 +481,7 @@
   }
   .sikat-field__hint,
   .sikat-field__error {
-    padding-inline: var(--spacing-2); /* 8px — matches label */
+    padding-inline: var(--spacing-0); /* Figma Helper: flush, no inline padding */
     font-size: var(--text-body-xs-font-size); /* 12px */
     line-height: var(--text-body-xs-line-height); /* 16px */
     font-weight: var(--text-regular);

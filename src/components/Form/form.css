@@ -43,14 +43,13 @@
     margin: 0;
   }
 
-  /* Form.Group — vertical field stack with -8px inline offset so labels align flush. */
+  /* Form.Group — vertical field stack. Labels/helpers are now flush (no inline
+     padding), so the group sits inside its container with no offset. */
   .sikat-form__group {
     display: flex;
     flex-direction: column;
     align-self: stretch;
     gap: var(--spacing-4); /* 16px between fields */
-    margin-left: calc(var(--spacing-2) * -1); /* -8px to offset label padding */
-    margin-right: calc(var(--spacing-2) * -1);
   }
 
   /* Vertical: fixed 4px — side-label fields never collapse. */
