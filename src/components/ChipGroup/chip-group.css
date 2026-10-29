@@ -1,0 +1,28 @@
+/* ChipGroup structure — a filter token: an optional leading label (e.g.
+   "Category is") followed by one or more value <Chip>s. Composition only; colors
+   come from the chips and semantic text vars, so it re-themes for free. */
+
+@layer components {
+  .sikat-chip-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2); /* 8px between label and the values */
+  }
+
+  .sikat-chip-group__label {
+    color: var(--color-text-body);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-weight: var(--text-medium);
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+    letter-spacing: var(--text-body-sm-letter-spacing);
+    white-space: nowrap;
+  }
+
+  /* Values wrapper keeps chip-to-chip spacing tighter than label-to-values. */
+  .sikat-chip-group__values {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1); /* 4px between chips */
+  }
+}
