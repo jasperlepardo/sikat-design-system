@@ -1,0 +1,135 @@
+{
+  "$component": {
+    "name": "Chip",
+    "className": "sikat-chip",
+    "prefix": "chip",
+    "element": "button",
+    "colorAxes": ["intent", "style"],
+    "sizeAxis": "size",
+    "states": ["rest", "hover", "selected", "disabled"],
+    "stateSelectors": {
+      "rest": "",
+      "hover": ":is(:hover, [data-state=\"hover\"]):not([aria-disabled=\"true\"]):not([data-selected=\"true\"])",
+      "selected": "[data-selected=\"true\"]:not([aria-disabled=\"true\"])",
+      "disabled": "[aria-disabled=\"true\"]"
+    },
+    "slots": {},
+    "base": {}
+  },
+  "colors": {
+    "default/soft": {
+      "rest": {
+        "bg": "--color-bg-secondary",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-body",
+        "border": "--color-border-default"
+      },
+      "hover": {
+        "bg": "--color-bg-tertiary",
+        "icon": "--color-fg-default-solid",
+        "text": "--color-text-body",
+        "border": "--color-border-default"
+      },
+      "selected": {
+        "bg": "--color-bg-neutral",
+        "icon": "--color-fg-secondary-solid",
+        "text": "--color-text-heading",
+        "border": "--color-border-transparent"
+      },
+      "disabled": {
+        "bg": "--color-bg-disabled-subtle",
+        "icon": "--color-fg-disabled",
+        "text": "--color-text-disabled",
+        "border": "--color-border-transparent"
+      }
+    },
+    "primary/soft": {
+      "rest": {
+        "bg": "--color-bg-primary-subtle",
+        "icon": "--color-fg-primary",
+        "text": "--color-text-primary",
+        "border": "--color-border-primary-subtle"
+      },
+      "hover": {
+        "bg": "--color-bg-primary-muted",
+        "icon": "--color-fg-primary",
+        "text": "--color-text-primary",
+        "border": "--color-border-primary-subtle"
+      },
+      "selected": {
+        "bg": "--color-bg-primary",
+        "icon": "--color-fg-default",
+        "text": "--color-text-heading_on-primary",
+        "border": "--color-border-transparent"
+      },
+      "disabled": {
+        "bg": "--color-bg-disabled-subtle",
+        "icon": "--color-fg-disabled",
+        "text": "--color-text-disabled",
+        "border": "--color-border-transparent"
+      }
+    },
+    "success/soft": {
+      "rest": {
+        "bg": "--color-bg-success-subtle",
+        "icon": "--color-fg-success",
+        "text": "--color-text-success",
+        "border": "--color-border-success-subtle"
+      },
+      "hover": {
+        "bg": "--color-bg-success-muted",
+        "icon": "--color-fg-success",
+        "text": "--color-text-success",
+        "border": "--color-border-success-subtle"
+      },
+      "selected": {
+        "bg": "--color-bg-success",
+        "icon": "--color-fg-white",
+        "text": "--color-text-heading_on-primary",
+        "border": "--color-border-transparent"
+      },
+      "disabled": {
+        "bg": "--color-bg-disabled-subtle",
+        "icon": "--color-fg-disabled",
+        "text": "--color-text-disabled",
+        "border": "--color-border-transparent"
+      }
+    },
+    "danger/soft": {
+      "rest": {
+        "bg": "--color-bg-danger-subtle",
+        "icon": "--color-fg-danger",
+        "text": "--color-text-danger",
+        "border": "--color-border-danger-subtle"
+      },
+      "hover": {
+        "bg": "--color-bg-danger-muted",
+        "icon": "--color-fg-danger",
+        "text": "--color-text-danger",
+        "border": "--color-border-danger-subtle"
+      },
+      "selected": {
+        "bg": "--color-bg-danger",
+        "icon": "--color-fg-white",
+        "text": "--color-text-heading_on-primary",
+        "border": "--color-border-transparent"
+      },
+      "disabled": {
+        "bg": "--color-bg-disabled-subtle",
+        "icon": "--color-fg-disabled",
+        "text": "--color-text-disabled",
+        "border": "--color-border-transparent"
+      }
+    }
+  },
+  "sizing": {
+    "small": {
+      "pad-x": "--spacing-2",
+      "pad-y": "--spacing-1"
+    },
+    "medium": {
+      "pad-x": "--spacing-3",
+      "pad-y": "--spacing-1_5"
+    }
+  }
+}

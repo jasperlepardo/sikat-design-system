@@ -47,6 +47,12 @@ export type {
 export { Card } from './components/Card/Card';
 export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Card/Card';
 
+export { Chip, chipIntents, chipStyles, chipSizes } from './components/Chip/Chip';
+export type { ChipProps, ChipIntent, ChipStyle, ChipSize } from './components/Chip/Chip';
+
+export { Tag, tagIntents, tagStyles } from './components/Tag/Tag';
+export type { TagProps, TagIntent, TagStyle } from './components/Tag/Tag';
+
 export { Breadcrumbs } from './components/Breadcrumbs/Breadcrumbs';
 export type { BreadcrumbsProps, BreadcrumbItem } from './components/Breadcrumbs/Breadcrumbs';
 

@@ -1,0 +1,93 @@
+/* Chip structure. Colors + sizing come from the generated component CSS
+   (src/styles/components/chip.css → --chip-* per [data-intent][data-style] and
+   [data-size], from tokens/components/chip.json), including rest / hover /
+   [data-selected] / [aria-disabled] states. A Chip is INTERACTIVE — selectable
+   (filter/choice) and/or removable (input) — distinct from Badge (passive
+   status) and Tag (passive label). The coloured box is the container span; the
+   selectable body and remove button are sibling buttons inside it (never nested,
+   which would be invalid HTML). */
+
+@layer components {
+  .sikat-chip {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    gap: var(--spacing-0_5);
+    padding: var(--chip-pad-y) var(--chip-pad-x);
+    box-shadow: inset 0 0 0 var(--border-width-1) var(--chip-border, transparent);
+    border-radius: var(--rounded-full);
+    background-color: var(--chip-bg);
+    color: var(--chip-text);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-weight: var(--text-medium);
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+    letter-spacing: var(--text-body-sm-letter-spacing);
+    white-space: nowrap;
+    transition:
+      background-color 120ms ease,
+      box-shadow 120ms ease,
+      color 120ms ease;
+  }
+  .sikat-chip[aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  /* Selectable body — a <button> when interactive, else a plain <span>. */
+  .sikat-chip__main {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin: 0;
+    padding: 0 var(--spacing-1);
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    border-radius: var(--rounded-full);
+  }
+  button.sikat-chip__main {
+    cursor: pointer;
+  }
+  button.sikat-chip__main:disabled {
+    cursor: not-allowed;
+  }
+
+  .sikat-chip__icon {
+    flex: none;
+    display: inline-flex;
+    color: var(--chip-icon, currentColor);
+  }
+  .sikat-chip__label {
+    display: inline-block;
+  }
+
+  /* Trailing remove (×) button — input-chip affordance. */
+  .sikat-chip__remove {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: var(--spacing-0_5);
+    border: 0;
+    background: transparent;
+    color: var(--chip-icon, currentColor);
+    cursor: pointer;
+    border-radius: var(--rounded-full);
+    transition: opacity 0.15s ease;
+  }
+  .sikat-chip__remove:hover {
+    opacity: 0.7;
+  }
+  .sikat-chip__remove:disabled {
+    cursor: not-allowed;
+  }
+
+  .sikat-chip__main:focus-visible,
+  .sikat-chip__remove:focus-visible {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 2px;
+  }
+}
