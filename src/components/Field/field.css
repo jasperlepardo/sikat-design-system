@@ -417,7 +417,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 0 var(--spacing-4);
+    gap: var(--spacing-1) var(--spacing-4); /* row gap = label ↔ fieldset when stacked */
   }
   .sikat-field-group[data-orientation='vertical'] > .sikat-field__label,
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
