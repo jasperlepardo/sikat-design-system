@@ -15,13 +15,15 @@ const meta = {
     intent: { control: 'select', options: chipIntents },
     variant: { control: 'select', options: chipStyles },
     size: { control: 'select', options: chipSizes },
+    shape: { control: 'inline-radio', options: ['pill', 'rounded'] },
     selected: { control: 'boolean' },
     disabled: { control: 'boolean' },
   },
   args: {
     intent: 'default',
-    variant: 'soft',
+    variant: 'outline',
     size: 'medium',
+    shape: 'pill',
     children: 'Chip',
     onSelect: fn(),
   },
@@ -91,21 +93,54 @@ export const ChoiceGroup: Story = {
   },
 };
 
-/** Every intent, rest vs selected. */
-export const Matrix: Story = {
+/** Pill (default) vs rounded corners (button radius). */
+export const Shapes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 8 }}>
+      <Chip shape="pill" intent="primary" onRemove={fn()}>
+        Pill
+      </Chip>
+      <Chip shape="rounded" intent="primary" onRemove={fn()}>
+        Rounded
+      </Chip>
+    </div>
+  ),
+};
+
+/** Every style (mirrors Badge) across a few intents. */
+export const Styles: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {chipStyles.map((variant) => (
+        <div key={variant} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ width: 72, fontSize: 12, color: 'var(--color-text-caption)' }}>
+            {variant}
+          </span>
+          {(['default', 'primary', 'success', 'danger'] as const).map((intent) => (
+            <Chip key={intent} intent={intent} variant={variant} onSelect={fn()}>
+              {intent}
+            </Chip>
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+/** Full intent × style matrix (parity with Badge). */
+export const Matrix: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       {chipIntents.map((intent) => (
-        <div key={intent} style={{ display: 'flex', gap: 8 }}>
-          <Chip intent={intent} onSelect={fn()}>
+        <div key={intent} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span style={{ width: 88, fontSize: 12, color: 'var(--color-text-caption)' }}>
             {intent}
-          </Chip>
-          <Chip intent={intent} selected onSelect={fn()}>
-            {intent} selected
-          </Chip>
-          <Chip intent={intent} onSelect={fn()} onRemove={fn()}>
-            {intent}
-          </Chip>
+          </span>
+          {chipStyles.map((variant) => (
+            <Chip key={variant} intent={intent} variant={variant} onSelect={fn()}>
+              {variant}
+            </Chip>
+          ))}
         </div>
       ))}
     </div>
