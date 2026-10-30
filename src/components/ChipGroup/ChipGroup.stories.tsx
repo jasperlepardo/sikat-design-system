@@ -3,6 +3,8 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { fn } from 'storybook/test';
 import { ChipGroup } from './ChipGroup';
 import { Chip } from '../Chip/Chip';
+import { IconButton } from '../Button/IconButton';
+import { Icon } from '../Icon/Icon';
 
 const meta = {
   title: 'Components/ChipGroup',
@@ -53,7 +55,10 @@ export const Joined: Story = {
   ),
 };
 
-/** The filter-bar pattern from the design: several labeled tokens in a row. */
+/**
+ * The filter-bar pattern from the design: several labeled tokens in a row, with a
+ * "+" add-filter button shown after the filled filters.
+ */
 export const FilterBar: Story = {
   render: () => {
     const [hasCategory, setHasCategory] = useState(true);
@@ -67,6 +72,16 @@ export const FilterBar: Story = {
         <ChipGroup label="Sales channel is">
           <Chip intent="primary">Online Store, Point of Sale</Chip>
         </ChipGroup>
+        {/* Add filter — a plus IconButton after the filled filters. */}
+        <IconButton
+          label="Add filter"
+          intent="default"
+          variant="outline"
+          size="small"
+          onClick={fn()}
+        >
+          <Icon size={20}>add</Icon>
+        </IconButton>
       </div>
     );
   },
