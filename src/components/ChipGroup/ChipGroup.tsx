@@ -1,4 +1,4 @@
-import type { HTMLAttributes, ReactNode } from 'react';
+import { Children, cloneElement, isValidElement, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 import './chip-group.css';
 
@@ -12,11 +12,26 @@ export interface ChipGroupProps extends HTMLAttributes<HTMLDivElement> {
   joined?: boolean;
   /**
    * Outer corner style of the joined pill — `pill` (fully rounded, default) or
-   * `rounded` (button radius). Only applies when `joined`.
+   * `rounded` (button radius). Injected into the chips; only applies when `joined`.
    */
   shape?: 'pill' | 'rounded';
   /** One or more `<Chip>` elements (the group's values). */
   children?: ReactNode;
+}
+
+/**
+ * Join the chip children: inject `data-attached` (first/middle/last/only) and the
+ * group `shape` so each Chip flattens its own inner corners. The corner styling
+ * lives in the Chip component — ChipGroup never styles `.sikat-chip`.
+ */
+function joinChildren(children: ReactNode, shape: 'pill' | 'rounded'): ReactNode {
+  const items = Children.toArray(children).filter(isValidElement);
+  const n = items.length;
+  return items.map((child, i) => {
+    const position = n === 1 ? 'only' : i === 0 ? 'first' : i === n - 1 ? 'last' : 'middle';
+    const props: Record<string, unknown> = { shape, 'data-attached': position };
+    return cloneElement(child, props);
+  });
 }
 
 /**
@@ -41,11 +56,12 @@ export function ChipGroup({
       role="group"
       aria-label={ariaLabel}
       data-joined={joined || undefined}
-      data-shape={joined && shape === 'rounded' ? 'rounded' : undefined}
       {...rest}
     >
       {label != null ? <span className="sikat-chip-group__label">{label}</span> : null}
-      <span className="sikat-chip-group__values">{children}</span>
+      <span className="sikat-chip-group__values">
+        {joined ? joinChildren(children, shape) : children}
+      </span>
     </div>
   );
 }

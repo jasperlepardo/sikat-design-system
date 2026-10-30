@@ -26,40 +26,10 @@
     gap: var(--spacing-1); /* 4px between chips */
   }
 
-  /* Joined: chips attach into one big chip — no gap, inner corners flattened,
-     only the outer (first/last) corners stay rounded. Each chip keeps its own
-     background, so differing intents read as segments of a single pill. */
+  /* Joined: drop the gap so the chips sit flush. The per-chip corner flattening
+     lives in the Chip component (driven by data-attached, injected below) — this
+     stylesheet never styles .sikat-chip. */
   .sikat-chip-group[data-joined] .sikat-chip-group__values {
     gap: 0;
-  }
-  .sikat-chip-group[data-joined] .sikat-chip-group__values > .sikat-chip {
-    border-radius: 0;
-  }
-  .sikat-chip-group[data-joined] .sikat-chip-group__values > .sikat-chip:first-child {
-    border-radius: var(--rounded-full) 0 0 var(--rounded-full);
-  }
-  .sikat-chip-group[data-joined] .sikat-chip-group__values > .sikat-chip:last-child {
-    border-radius: 0 var(--rounded-full) var(--rounded-full) 0;
-  }
-  /* A single segment stays a full pill. */
-  .sikat-chip-group[data-joined] .sikat-chip-group__values > .sikat-chip:only-child {
-    border-radius: var(--rounded-full);
-  }
-
-  /* Rounded joined pill — soft outer corners (button radius) instead of a pill. */
-  .sikat-chip-group[data-joined][data-shape='rounded']
-    .sikat-chip-group__values
-    > .sikat-chip:first-child {
-    border-radius: var(--rounded-lg) 0 0 var(--rounded-lg);
-  }
-  .sikat-chip-group[data-joined][data-shape='rounded']
-    .sikat-chip-group__values
-    > .sikat-chip:last-child {
-    border-radius: 0 var(--rounded-lg) var(--rounded-lg) 0;
-  }
-  .sikat-chip-group[data-joined][data-shape='rounded']
-    .sikat-chip-group__values
-    > .sikat-chip:only-child {
-    border-radius: var(--rounded-lg);
   }
 }
