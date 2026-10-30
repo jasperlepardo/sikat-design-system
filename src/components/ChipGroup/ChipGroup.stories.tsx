@@ -24,6 +24,29 @@ export const Default: Story = {
   ),
 };
 
+/**
+ * `joined` — two chips attach into one big chip (shared edge, only outer corners
+ * rounded). Different intents read as segments of a single pill, e.g. a
+ * field/value filter token.
+ */
+export const Joined: Story = {
+  args: { label: undefined },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <ChipGroup joined>
+        <Chip>Category</Chip>
+        <Chip intent="primary" onRemove={fn()}>
+          Laptops
+        </Chip>
+      </ChipGroup>
+      <ChipGroup joined>
+        <Chip>Sales channel</Chip>
+        <Chip intent="primary">Online Store, Point of Sale</Chip>
+      </ChipGroup>
+    </div>
+  ),
+};
+
 /** The filter-bar pattern from the design: several labeled tokens in a row. */
 export const FilterBar: Story = {
   render: () => {
