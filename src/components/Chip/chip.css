@@ -39,8 +39,7 @@
 
   /* Rounded shape — soft corners from the component's size radius (button spec),
      instead of the default pill. The round remove button stays circular. */
-  .sikat-chip[data-shape='rounded'],
-  .sikat-chip[data-shape='rounded'] .sikat-chip__content {
+  .sikat-chip[data-shape='rounded'] {
     border-radius: var(--chip-radius);
   }
 
@@ -57,7 +56,6 @@
     color: inherit;
     font: inherit;
     letter-spacing: inherit;
-    border-radius: var(--rounded-full);
   }
   button.sikat-chip__content {
     cursor: pointer;
@@ -97,7 +95,15 @@
     cursor: not-allowed;
   }
 
-  .sikat-chip__content:focus-visible,
+  /* Focus ring sits on the chip shell — matches its pill/rounded radius, like
+     Button rings .sikat-btn. So __content needs no radius of its own. */
+  .sikat-chip:has(> .sikat-chip__content:focus-visible) {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 2px;
+  }
+  .sikat-chip__content:focus-visible {
+    outline: none;
+  }
   .sikat-chip__remove:focus-visible {
     outline: 2px solid var(--color-border-primary);
     outline-offset: 2px;
