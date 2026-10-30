@@ -87,7 +87,7 @@ export function Chip({
       {interactive ? (
         <button
           type="button"
-          className="sikat-chip__main"
+          className="sikat-chip__content"
           aria-pressed={selected}
           onClick={onSelect}
           disabled={disabled}
@@ -95,7 +95,7 @@ export function Chip({
           {body}
         </button>
       ) : (
-        <span className="sikat-chip__main">{body}</span>
+        <span className="sikat-chip__content">{body}</span>
       )}
 
       {onRemove ? (

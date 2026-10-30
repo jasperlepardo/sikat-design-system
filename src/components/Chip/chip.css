@@ -40,13 +40,13 @@
   /* Rounded shape — soft corners from the component's size radius (button spec),
      instead of the default pill. The round remove button stays circular. */
   .sikat-chip[data-shape='rounded'],
-  .sikat-chip[data-shape='rounded'] .sikat-chip__main {
+  .sikat-chip[data-shape='rounded'] .sikat-chip__content {
     border-radius: var(--chip-radius);
   }
 
   /* Selectable body — a <button> when interactive, else a plain <span>.
      Content frame mirrors Button's __content (per-size tokens). */
-  .sikat-chip__main {
+  .sikat-chip__content {
     display: inline-flex;
     align-items: center;
     gap: var(--chip-content-gap);
@@ -59,10 +59,10 @@
     letter-spacing: inherit;
     border-radius: var(--rounded-full);
   }
-  button.sikat-chip__main {
+  button.sikat-chip__content {
     cursor: pointer;
   }
-  button.sikat-chip__main:disabled {
+  button.sikat-chip__content:disabled {
     cursor: not-allowed;
   }
 
@@ -97,7 +97,7 @@
     cursor: not-allowed;
   }
 
-  .sikat-chip__main:focus-visible,
+  .sikat-chip__content:focus-visible,
   .sikat-chip__remove:focus-visible {
     outline: 2px solid var(--color-border-primary);
     outline-offset: 2px;
