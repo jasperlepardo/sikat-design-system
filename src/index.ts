@@ -50,6 +50,9 @@ export type { CardProps, CardSlotProps, CardHeaderProps } from './components/Car
 export { Chip, chipIntents, chipStyles, chipSizes } from './components/Chip/Chip';
 export type { ChipProps, ChipIntent, ChipStyle, ChipSize } from './components/Chip/Chip';
 
+export { ChipGroup } from './components/ChipGroup/ChipGroup';
+export type { ChipGroupProps } from './components/ChipGroup/ChipGroup';
+
 export { Tag, tagIntents, tagStyles } from './components/Tag/Tag';
 export type { TagProps, TagIntent, TagStyle } from './components/Tag/Tag';
 

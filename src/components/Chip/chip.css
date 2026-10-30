@@ -12,10 +12,10 @@
     display: inline-flex;
     align-items: center;
     box-sizing: border-box;
-    gap: var(--spacing-0_5);
-    padding: var(--chip-pad-y) var(--chip-pad-x);
+    gap: var(--chip-gap); /* outer slot gap (body ↔ remove), per size — button spec */
+    padding: var(--chip-padding); /* uniform padding, per size — button spec */
     box-shadow: inset 0 0 0 var(--border-width-1) var(--chip-border, transparent);
-    border-radius: var(--rounded-full);
+    border-radius: var(--rounded-full); /* pill (default) */
     background-color: var(--chip-bg);
     color: var(--chip-text);
     font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
@@ -32,25 +32,61 @@
   .sikat-chip[aria-disabled='true'] {
     cursor: not-allowed;
   }
+  /* Pill shape widens horizontally (button spec: padding-inline ×1.5). */
+  .sikat-chip[data-shape='pill'] {
+    padding-inline: calc(var(--chip-padding) * 1.5);
+  }
 
-  /* Selectable body — a <button> when interactive, else a plain <span>. */
-  .sikat-chip__main {
+  /* Rounded shape — soft corners from the component's size radius (button spec),
+     instead of the default pill. The round remove button stays circular. */
+  .sikat-chip[data-shape='rounded'] {
+    border-radius: var(--chip-radius);
+  }
+
+  /* Attached — when joined in a group, flatten inner corners and round only the
+     outer (first/last) edge so the chips read as one pill. Driven by data-attached
+     set on the chip (e.g. by ChipGroup); kept here so no other component's CSS
+     targets .sikat-chip. */
+  .sikat-chip[data-attached] {
+    border-radius: 0;
+  }
+  .sikat-chip[data-attached='first'] {
+    border-radius: var(--rounded-full) 0 0 var(--rounded-full);
+  }
+  .sikat-chip[data-attached='last'] {
+    border-radius: 0 var(--rounded-full) var(--rounded-full) 0;
+  }
+  .sikat-chip[data-attached='only'] {
+    border-radius: var(--rounded-full);
+  }
+  .sikat-chip[data-shape='rounded'][data-attached='first'] {
+    border-radius: var(--chip-radius) 0 0 var(--chip-radius);
+  }
+  .sikat-chip[data-shape='rounded'][data-attached='last'] {
+    border-radius: 0 var(--chip-radius) var(--chip-radius) 0;
+  }
+  .sikat-chip[data-shape='rounded'][data-attached='only'] {
+    border-radius: var(--chip-radius);
+  }
+
+  /* Selectable body — a <button> when interactive, else a plain <span>.
+     Content frame mirrors Button's __content (per-size tokens). */
+  .sikat-chip__content {
     display: inline-flex;
     align-items: center;
-    gap: var(--spacing-1);
+    gap: var(--chip-content-gap);
     margin: 0;
-    padding: 0 var(--spacing-1);
+    padding: var(--chip-content-pad-y) var(--chip-content-pad-x);
     border: 0;
     background: transparent;
     color: inherit;
     font: inherit;
     letter-spacing: inherit;
-    border-radius: var(--rounded-full);
   }
-  button.sikat-chip__main {
+  button.sikat-chip__content {
     cursor: pointer;
   }
-  button.sikat-chip__main:disabled {
+  button.sikat-chip__content:disabled {
     cursor: not-allowed;
   }
 
@@ -85,7 +121,15 @@
     cursor: not-allowed;
   }
 
-  .sikat-chip__main:focus-visible,
+  /* Focus ring sits on the chip shell — matches its pill/rounded radius, like
+     Button rings .sikat-btn. So __content needs no radius of its own. */
+  .sikat-chip:has(> .sikat-chip__content:focus-visible) {
+    outline: 2px solid var(--color-border-primary);
+    outline-offset: 2px;
+  }
+  .sikat-chip__content:focus-visible {
+    outline: none;
+  }
   .sikat-chip__remove:focus-visible {
     outline: 2px solid var(--color-border-primary);
     outline-offset: 2px;
