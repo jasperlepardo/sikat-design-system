@@ -43,6 +43,12 @@ export const Joined: Story = {
         <Chip>Sales channel</Chip>
         <Chip intent="primary">Online Store, Point of Sale</Chip>
       </ChipGroup>
+      <ChipGroup joined shape="rounded">
+        <Chip>Category</Chip>
+        <Chip intent="primary" onRemove={fn()}>
+          Laptops
+        </Chip>
+      </ChipGroup>
     </div>
   ),
 };

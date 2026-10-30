@@ -10,6 +10,11 @@ export interface ChipGroupProps extends HTMLAttributes<HTMLDivElement> {
    * outer corners rounded) — e.g. `[ Category | Laptops ]` as a single big chip.
    */
   joined?: boolean;
+  /**
+   * Outer corner style of the joined pill — `pill` (fully rounded, default) or
+   * `rounded` (button radius). Only applies when `joined`.
+   */
+  shape?: 'pill' | 'rounded';
   /** One or more `<Chip>` elements (the group's values). */
   children?: ReactNode;
 }
@@ -21,7 +26,14 @@ export interface ChipGroupProps extends HTMLAttributes<HTMLDivElement> {
  * chips under a shared label, such as a condition in a filter bar. Pure
  * composition over `Chip`; no new tokens.
  */
-export function ChipGroup({ label, joined = false, className, children, ...rest }: ChipGroupProps) {
+export function ChipGroup({
+  label,
+  joined = false,
+  shape = 'pill',
+  className,
+  children,
+  ...rest
+}: ChipGroupProps) {
   const ariaLabel = typeof label === 'string' ? label : undefined;
   return (
     <div
@@ -29,6 +41,7 @@ export function ChipGroup({ label, joined = false, className, children, ...rest 
       role="group"
       aria-label={ariaLabel}
       data-joined={joined || undefined}
+      data-shape={joined && shape === 'rounded' ? 'rounded' : undefined}
       {...rest}
     >
       {label != null ? <span className="sikat-chip-group__label">{label}</span> : null}

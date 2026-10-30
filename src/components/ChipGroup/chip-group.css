@@ -45,4 +45,21 @@
   .sikat-chip-group[data-joined] .sikat-chip-group__values > .sikat-chip:only-child {
     border-radius: var(--rounded-full);
   }
+
+  /* Rounded joined pill — soft outer corners (button radius) instead of a pill. */
+  .sikat-chip-group[data-joined][data-shape='rounded']
+    .sikat-chip-group__values
+    > .sikat-chip:first-child {
+    border-radius: var(--rounded-lg) 0 0 var(--rounded-lg);
+  }
+  .sikat-chip-group[data-joined][data-shape='rounded']
+    .sikat-chip-group__values
+    > .sikat-chip:last-child {
+    border-radius: 0 var(--rounded-lg) var(--rounded-lg) 0;
+  }
+  .sikat-chip-group[data-joined][data-shape='rounded']
+    .sikat-chip-group__values
+    > .sikat-chip:only-child {
+    border-radius: var(--rounded-lg);
+  }
 }
