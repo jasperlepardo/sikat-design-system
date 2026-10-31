@@ -94,19 +94,17 @@
     /* Figma "Inner Shadow": inset 0 0 4px, shadow/default color (dark-aware). */
     box-shadow: inset 0 0 4px 0 var(--color-shadow-default);
   }
-  /* Each solid tab carries the same inner shadow (Figma applies it to both the
-     Fill track and every Tab Item). */
-  .sikat-tabs[data-variant='solid'] .sikat-tabs__tab {
-    box-shadow: inset 0 0 4px 0 var(--color-shadow-default);
-  }
   .sikat-tabs[data-variant='solid'] .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
     background-color: var(--color-bg-quarternary);
     color: var(--color-text-body);
     --tabs-icon: var(--color-fg-tertiary-solid);
   }
+  /* Only the active tab is recessed into the track with its own inner shadow;
+     default/hover tabs stay flat, matching the Figma Fill render. */
   .sikat-tabs[data-variant='solid'] .sikat-tabs__tab[aria-selected='true'] {
     background-color: var(--color-bg-primary-muted);
     color: var(--color-text-primary);
+    box-shadow: inset 0 0 4px 0 var(--color-shadow-default);
     --tabs-icon: var(--color-fg-primary);
   }
   .sikat-tabs[data-variant='solid'] .sikat-tabs__tab:disabled {
