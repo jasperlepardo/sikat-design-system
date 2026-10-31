@@ -23,23 +23,32 @@ export function FormLabel({
   disabled,
   className,
   children,
+  htmlFor,
   ...rest
 }: FormLabelProps) {
   const hasHoverTooltip = !disabled && tooltip != null;
 
   return (
-    <label className={cn('sikat-field__label', className)} {...rest}>
-      {hasHoverTooltip ? <Tooltip message={tooltip}>{children}</Tooltip> : children}
-      {disabled ? (
-        tooltip != null ? (
-          <Tooltip message={tooltip} icon="lock" label="Why this field is locked" />
-        ) : (
-          <Icon size={12}>lock</Icon>
-        )
-      ) : required ? (
-        <span className="sikat-field__required"> *</span>
-      ) : null}
-      {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
-    </label>
+    <span className={cn('sikat-field__label', className)}>
+      {/* The <label> wraps the label content (text + markers + sub-label) and shrinks
+          to fit it, so the click-to-focus hit area is the text — not the full-width
+          row (stacked) or the fixed label column (inline) — while the accessible name
+          still includes the sub-label. */}
+      <label className="sikat-field__label-text" htmlFor={htmlFor} {...rest}>
+        {hasHoverTooltip ? <Tooltip message={tooltip}>{children}</Tooltip> : children}
+        {disabled ? (
+          tooltip != null ? (
+            <Tooltip message={tooltip} icon="lock" label="Why this field is locked" />
+          ) : (
+            <Icon size={12} label="Field is locked">
+              lock
+            </Icon>
+          )
+        ) : required ? (
+          <span className="sikat-field__required"> *</span>
+        ) : null}
+        {subLabel != null ? <span className="sikat-field__sublabel">{subLabel}</span> : null}
+      </label>
+    </span>
   );
 }

@@ -25,6 +25,7 @@ export function Radio({ readOnly, children, className, disabled, onClick, ...res
         type="radio"
         className="sikat-radio"
         disabled={disabled}
+        aria-readonly={readOnly || undefined}
         data-readonly={readOnly || undefined}
         onClick={readOnly ? (e) => e.preventDefault() : onClick}
         {...rest}

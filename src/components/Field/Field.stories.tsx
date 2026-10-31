@@ -59,7 +59,7 @@ type FieldPlaygroundArgs = {
   showDropdown: boolean;
   State: 'default' | 'hover' | 'error' | 'disabled' | 'read-only';
   hasContent: boolean;
-  Orientation: 'vertical' | 'horizontal';
+  Orientation: 'stacked' | 'inline';
 };
 
 export const Playground: StoryObj<FieldPlaygroundArgs> = {
@@ -75,7 +75,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
     showDropdown: false,
     State: 'default',
     hasContent: false,
-    Orientation: 'horizontal',
+    Orientation: 'stacked',
   },
   argTypes: {
     showHelper: { name: 'Show Helper', control: 'boolean' },
@@ -100,10 +100,7 @@ export const Playground: StoryObj<FieldPlaygroundArgs> = {
       'Read-only',
     ]),
     hasContent: figmaSelect('has Content', [false, true], ['False', 'True']),
-    Orientation: figmaSelect('Orientation', ['vertical', 'horizontal'] as const, [
-      'Vertical',
-      'Horizontal',
-    ]),
+    Orientation: figmaSelect('Orientation', ['stacked', 'inline'] as const, ['Stacked', 'Inline']),
   },
   parameters: figmaControls([
     'Show Helper',
@@ -556,9 +553,9 @@ export const WithLabelAndHint: Story = {
 };
 
 /**
- * Label-beside fields (`orientation="vertical"`) respond to the width of their
+ * Label-beside fields (`orientation="inline"`) respond to the width of their
  * container, not the viewport: below 28.5rem the label moves above the control,
- * matching the stacked (`horizontal`) layout exactly.
+ * matching the stacked (`stacked`) layout exactly.
  */
 export const ResponsiveOrientation: Story = {
   render: () => {
@@ -858,17 +855,17 @@ export const WithSubLabel: Story = {
   },
 };
 
-/** ReadOnly — static computed value displayed in the disabled field shell. */
+/** ReadOnly — static computed value in the borderless read-only shell (Figma: no box, dark text, plain label). */
 export const ReadOnlyField: Story = {
   render: () => (
     <div style={{ maxWidth: 480, display: 'grid', gap: 8 }}>
-      <Field.Group label="Average delay" disabled tooltip="Calculated from payment history.">
+      <Field.Group label="Average delay" tooltip="Calculated from payment history.">
         <Field.ReadOnly value="5 days" />
       </Field.Group>
-      <Field.Group label="Normal balance" disabled tooltip="Determined by the account drawer.">
+      <Field.Group label="Normal balance" tooltip="Determined by the account drawer.">
         <Field.ReadOnly value="Debit" />
       </Field.Group>
-      <Field.Group label="Inventory account" disabled tooltip="From the item group.">
+      <Field.Group label="Inventory account" tooltip="From the item group.">
         <Field.ReadOnly value="1300 Raw Materials Inventory" />
       </Field.Group>
     </div>
@@ -883,13 +880,13 @@ export const ReadOnlyWithDescription: Story = {
   name: 'ReadOnly — with Description',
   render: () => (
     <div style={{ maxWidth: 480, display: 'grid', gap: 8 }}>
-      <Field.Group label="Assigned employee" disabled>
+      <Field.Group label="Assigned employee">
         <Field.ReadOnly value="Juan dela Cruz" subLabel="EMP001" description="Engineering" />
       </Field.Group>
-      <Field.Group label="Chart of account" disabled>
+      <Field.Group label="Chart of account">
         <Field.ReadOnly value="Cash and Cash Equivalents" subLabel="1000" description="Assets" />
       </Field.Group>
-      <Field.Group label="Vendor" disabled>
+      <Field.Group label="Vendor">
         <Field.ReadOnly value="Acme Supplies Co." subLabel="VND-0042" description="Active" />
       </Field.Group>
     </div>
@@ -904,6 +901,69 @@ export const WithError: Story = {
       </Field.Group>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('textbox');
+    const error = canvas.getByText('That username is taken.');
+    await expect(input).toHaveAttribute('aria-invalid', 'true');
+    await expect(error).toHaveAttribute('role', 'alert');
+    await expect(input).toHaveAttribute('aria-describedby', error.id);
+  },
+};
+
+/** Required — FormField forwards `required` + `aria-required` to the control. */
+export const RequiredField: Story = {
+  render: () => (
+    <div style={{ maxWidth: 360 }}>
+      <Field.Group label="Email" required>
+        {(props) => <Field.Text aria-label="Email" {...props} />}
+      </Field.Group>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const input = within(canvasElement).getByRole('textbox', { name: 'Email' });
+    await expect(input).toBeRequired();
+    await expect(input).toHaveAttribute('aria-required', 'true');
+  },
+};
+
+/** Disabled and read-only block interaction; read-only keeps its value when typed into. */
+export const DisabledAndReadOnlyStates: Story = {
+  name: 'Disabled & Read-only states',
+  render: () => (
+    <div style={{ display: 'grid', gap: 12, width: 360 }}>
+      <Field.Text aria-label="Disabled field" defaultValue="Locked" disabled />
+      <Field.Text aria-label="Read-only field" defaultValue="Fixed" readOnly />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const disabled = canvas.getByRole('textbox', { name: 'Disabled field' });
+    await expect(disabled).toBeDisabled();
+    const readonly = canvas.getByRole('textbox', { name: 'Read-only field' });
+    await expect(readonly).toHaveAttribute('readonly');
+    await userEvent.type(readonly, 'xyz');
+    await expect(readonly).toHaveValue('Fixed');
+  },
+};
+
+/** DatePicker — open the calendar and pick today's cell; the field fills and the dialog closes. */
+export const DatePickerSelection: Story = {
+  render: () => (
+    <div style={{ width: 320 }}>
+      <Field.DatePicker aria-label="Appointment date" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole('combobox', { name: 'Appointment date' });
+    const body = within(document.body);
+    await expect(trigger).toHaveValue('');
+    await userEvent.click(trigger);
+    await expect(await body.findByRole('dialog', { name: 'Choose date' })).toBeInTheDocument();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await expect(trigger).not.toHaveValue('');
+  },
 };
 
 /**
@@ -922,7 +982,7 @@ export const Matrix: Story = {
     ];
     return (
       <div className="flex flex-col gap-10">
-        {(['horizontal', 'vertical'] as const).map((orientation) => (
+        {(['stacked', 'inline'] as const).map((orientation) => (
           <div
             key={orientation}
             className="grid gap-10"

@@ -148,7 +148,7 @@ export function Autocomplete({
           cover
           header={
             <FieldShell
-              state={{ size, filled: text !== '', disabled, invalid }}
+              state={{ size, filled: text !== '', disabled, readOnly, invalid }}
               adornments={{ leadingIcon, prefix, suffix, trailingIcon }}
             >
               <input

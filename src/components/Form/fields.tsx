@@ -27,8 +27,8 @@ export interface FieldOptions {
   suffix?: ReactNode;
   /** Dropdowns: show a ✕ that empties an optional field. */
   clearable?: boolean;
-  /** `vertical` puts the label in a column beside the control (the design system's naming); default stacks it above. */
-  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  /** `inline` puts the label in a column beside the control; default (`stacked`) stacks it above. */
+  orientation?: 'stacked' | 'inline' | 'responsive';
 }
 
 /** Keys of T whose values are V (ignoring undefined). */
@@ -36,7 +36,7 @@ export type KeysOf<T, V> = { [K in keyof T]-?: NonNullable<T[K]> extends V ? K :
 
 export type Option = { value: string; label: string };
 
-type Orientation = 'horizontal' | 'vertical' | 'responsive';
+type Orientation = 'stacked' | 'inline' | 'responsive';
 
 /**
  * Set by Fields/FieldStack so that bind() fields and CtxFormField inherit the group orientation
@@ -47,12 +47,12 @@ export const FieldOrientationCtx = createContext<Orientation | null>(null);
 /** A FormField that inherits orientation from the enclosing Fields/FieldStack context. */
 export function CtxFormField(props: FormFieldProps) {
   const ctxO = useContext(FieldOrientationCtx);
-  return <FormField {...props} orientation={props.orientation ?? ctxO ?? 'horizontal'} />;
+  return <FormField {...props} orientation={props.orientation ?? ctxO ?? 'stacked'} />;
 }
 
 function ApplyOrientation({ o, fn }: { o: FieldOptions; fn: (opts: FieldOptions) => JSX.Element }) {
   const ctxO = useContext(FieldOrientationCtx);
-  const orientation: Orientation = o.orientation ?? ctxO ?? 'horizontal';
+  const orientation: Orientation = o.orientation ?? ctxO ?? 'stacked';
   return fn({ orientation, ...o });
 }
 
@@ -270,13 +270,7 @@ export function ReadOnlyField({
 }) {
   const ctxO = useContext(FieldOrientationCtx);
   return (
-    <FormField
-      label={label}
-      disabled
-      tooltip={hint}
-      error={error}
-      orientation={ctxO ?? 'horizontal'}
-    >
+    <FormField label={label} disabled tooltip={hint} error={error} orientation={ctxO ?? 'stacked'}>
       <DSReadOnly
         value={value}
         subLabel={subLabel}
@@ -287,10 +281,10 @@ export function ReadOnlyField({
   );
 }
 
-/** Responsive field grid. Fields inside inherit `orientation="horizontal"`. */
+/** Responsive field grid. Fields inside inherit `orientation="stacked"`. */
 export function Fields({ children, cols = 2 }: { children: ReactNode; cols?: 1 | 2 | 3 }) {
   return (
-    <FieldOrientationCtx.Provider value="horizontal">
+    <FieldOrientationCtx.Provider value="stacked">
       <Form.Group columns={cols}>{children}</Form.Group>
     </FieldOrientationCtx.Provider>
   );

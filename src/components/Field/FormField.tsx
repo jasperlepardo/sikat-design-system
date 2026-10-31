@@ -4,10 +4,12 @@ import { FormLabel } from './FormLabel';
 
 export interface FormFieldProps {
   /**
-   * Figma "Orientation": `horizontal` (default) stacks the label above the
-   * control; `vertical` puts the label in a fixed 200px column beside it.
+   * Label placement: `stacked` (default) puts the label above the control;
+   * `inline` puts it in a fixed column beside the control; `responsive` is
+   * inline when wide and stacked when narrow. (Matches the Figma "Orientation"
+   * variant: Stacked / Inline.)
    */
-  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  orientation?: 'stacked' | 'inline' | 'responsive';
   label?: ReactNode;
   /** Muted text after the label (Figma "Sub Label"), e.g. "(optional)". */
   subLabel?: ReactNode;
@@ -28,8 +30,10 @@ export interface FormFieldProps {
         id: string;
         'aria-describedby'?: string;
         'aria-invalid'?: boolean;
+        'aria-required'?: boolean;
         invalid?: boolean;
         disabled?: boolean;
+        required?: boolean;
       }) => ReactNode)
     | ReactNode;
 }
@@ -39,7 +43,7 @@ export interface FormFieldProps {
  * `aria-describedby`, and `aria-invalid` for you via a render prop.
  */
 export function FormField({
-  orientation = 'horizontal',
+  orientation = 'stacked',
   label,
   subLabel,
   tooltip,
@@ -74,12 +78,14 @@ export function FormField({
               id,
               'aria-describedby': describedBy,
               'aria-invalid': error ? true : undefined,
+              'aria-required': required || undefined,
               invalid: !!error,
               disabled,
+              required,
             })
           : children}
         {error ? (
-          <p id={errorId} className="sikat-field__error">
+          <p id={errorId} role="alert" className="sikat-field__error">
             {error}
           </p>
         ) : hint ? (

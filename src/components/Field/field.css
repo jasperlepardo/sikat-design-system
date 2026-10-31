@@ -155,6 +155,15 @@
   .sikat-field__icon[data-align='bottom'] {
     align-self: flex-end;
   }
+  /* Figma Input/Fieldset/Field/gap = 8px between an adornment icon and the field
+     content. The shell's own 4px gap + 4px here = 8px; content-internal spacing
+     (prefix/suffix ↔ value) stays at the shell's 4px. */
+  .sikat-field__icon--leading {
+    margin-inline-end: var(--spacing-1);
+  }
+  .sikat-field__icon--trailing {
+    margin-inline-start: var(--spacing-1);
+  }
   /* Auto-height field variants — a leading/trailing adornment, a multi-line
      selected value, or wrapped MultiSelect chips let the field grow past
      --field-h. The box never shrinks below --field-h, and 8px block padding wraps
@@ -318,11 +327,8 @@
     -webkit-appearance: none;
   }
 
-  /* Readonly fields: show edit icon and a subtle background on hover so the user
-     knows the field can be interacted with (e.g. unlocked/edited). */
-  .sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled])) {
-    --field-bg: var(--color-bg-secondary);
-  }
+  /* Readonly fields are static on hover (Figma has no read-only hover state).
+     Fields with an inline-edit affordance still reveal the edit icon on hover. */
   .sikat-field[data-readonly]:is(:hover, [data-state='hover']):not(:is([data-disabled]))
     > .sikat-field__edit {
     display: flex;
@@ -403,15 +409,15 @@
     align-items: flex-start;
     gap: var(--spacing-1); /* control ↔ helper: 4px */
   }
-  /* Figma Orientation=Vertical: label in a fixed 200px column beside the field,
-     vertically centered on the 36px control row.
+  /* orientation="inline": label in a fixed 200px column beside the field,
+     vertically centered on the 36px control row. (Figma variant: "Inline".)
 
-     Vertical: fixed side-label, never collapses.
+     inline: fixed side-label, never collapses.
      Responsive: side-label when wide (≥ 28.5rem), stacks when narrow — reacts
      to the width it's given (a Panel, SidePanel or column), not the viewport.
      Width 100% keeps the container from collapsing in a flex row (an
      inline-size container ignores its content). */
-  .sikat-field-group[data-orientation='vertical'],
+  .sikat-field-group[data-orientation='inline'],
   .sikat-field-group[data-orientation='responsive'] {
     width: 100%;
     flex-direction: row;
@@ -419,7 +425,7 @@
     align-items: flex-start;
     gap: var(--spacing-1) var(--spacing-4); /* row gap = label ↔ fieldset when stacked */
   }
-  .sikat-field-group[data-orientation='vertical'] > .sikat-field__label,
+  .sikat-field-group[data-orientation='inline'] > .sikat-field__label,
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__label {
     display: flex;
     flex: none;
@@ -433,7 +439,7 @@
     width: 12.5rem;
     min-height: var(--field-h, var(--spacing-9));
   }
-  .sikat-field-group[data-orientation='vertical'] > .sikat-field__fieldset,
+  .sikat-field-group[data-orientation='inline'] > .sikat-field__fieldset,
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
     flex: 1 1 0;
   }
@@ -458,6 +464,15 @@
     line-height: var(--text-body-sm-line-height); /* 20px */
     font-weight: var(--text-medium);
     color: var(--color-text-caption);
+  }
+  /* The click-to-focus target is the text only — it shrinks to its content so the
+     empty part of the row (stacked) or label column (inline) isn't clickable. */
+  .sikat-field__label-text {
+    width: fit-content;
+    cursor: pointer;
+  }
+  .sikat-field-group:has(.sikat-field:is(:disabled, [data-disabled])) .sikat-field__label-text {
+    cursor: default;
   }
   /* Label follows the control's state (Figma: read-only →
      bg/quarternary-solid as bound in the Figma file). */

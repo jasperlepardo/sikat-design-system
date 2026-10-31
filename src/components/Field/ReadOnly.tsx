@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
-import { cn } from '../../lib/cn';
-import type { FieldSize } from './FieldShell';
+import { FieldShell, type FieldSize } from './FieldShell';
 import '../../styles/components/field.css';
 import './field.css';
 
@@ -16,9 +15,10 @@ export interface ReadOnlyProps {
 }
 
 /**
- * ReadOnly — a non-interactive field that displays a computed or locked value.
- * Renders the same shell as a disabled TextField so the appearance is identical.
- * Use inside `<FormField disabled>` so the label carries the lock icon.
+ * ReadOnly — a non-interactive field that displays a computed value.
+ * Renders the borderless read-only shell (Figma Read-only: no border, no
+ * background, dark value text, flush). Use inside a plain `<FormField>` (no
+ * `disabled`) so the label stays plain — Figma's read-only has no lock icon.
  */
 export function ReadOnly({
   value,
@@ -30,10 +30,10 @@ export function ReadOnly({
 }: ReadOnlyProps) {
   const hasExtra = subLabel != null || description != null;
   return (
-    <span
-      className={cn('sikat-field sikat-field--shell', className)}
-      data-size={size}
-      data-disabled
+    <FieldShell
+      className={className}
+      state={{ size, filled: value != null, readOnly: true }}
+      adornments={{}}
     >
       <span className="sikat-field__display">
         {hasExtra ? (
@@ -53,6 +53,6 @@ export function ReadOnly({
           value
         )}
       </span>
-    </span>
+    </FieldShell>
   );
 }
