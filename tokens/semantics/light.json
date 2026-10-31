@@ -584,6 +584,20 @@
           "value": "{primitive.color.white.transparent}",
           "type": "color"
         }
+      },
+      "shadow": {
+        "subtle": {
+          "value": "rgb(0 0 0 / 0.05)",
+          "type": "color"
+        },
+        "default": {
+          "value": "rgb(0 0 0 / 0.1)",
+          "type": "color"
+        },
+        "strong": {
+          "value": "rgb(0 0 0 / 0.25)",
+          "type": "color"
+        }
       }
     }
   }

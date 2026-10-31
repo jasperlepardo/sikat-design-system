@@ -397,5 +397,8 @@
   "border/transparent": {
     "l": "{primitive.color.white.transparent}",
     "d": "{primitive.color.black.transparent}"
-  }
+  },
+  "shadow/subtle": { "l": "rgb(0 0 0 / 0.05)", "d": "rgb(0 0 0 / 0.18)" },
+  "shadow/default": { "l": "rgb(0 0 0 / 0.1)", "d": "rgb(0 0 0 / 0.36)" },
+  "shadow/strong": { "l": "rgb(0 0 0 / 0.25)", "d": "rgb(0 0 0 / 0.6)" }
 }

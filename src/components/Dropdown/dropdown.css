@@ -19,7 +19,7 @@
     padding: var(--spacing-1); /* 4px inset — inner items use --rounded-lg (12−4=8px) */
     border-radius: var(--rounded-2xl); /* 12px — floating surface, Polaris-aligned */
     background-color: var(--color-bg-default);
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-elevation-overlay);
   }
 
   /* Flip to above the trigger when data-side="top". */

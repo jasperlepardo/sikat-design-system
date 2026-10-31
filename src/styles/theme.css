@@ -129,20 +129,34 @@
   --leading-loose: var(--p-leading-loose);
 
   /* shadow → shadow-* (composed from decomposed parts) */
-  --shadow-2xs: var(--p-shadow-2xs-1-offset-x) var(--p-shadow-2xs-1-offset-y) var(--p-shadow-2xs-1-blur) var(--p-shadow-2xs-1-spread) var(--p-shadow-2xs-1-color);
-  --shadow-xs: var(--p-shadow-xs-1-offset-x) var(--p-shadow-xs-1-offset-y) var(--p-shadow-xs-1-blur) var(--p-shadow-xs-1-spread) var(--p-shadow-xs-1-color);
-  --shadow-sm: var(--p-shadow-sm-1-offset-x) var(--p-shadow-sm-1-offset-y) var(--p-shadow-sm-1-blur) var(--p-shadow-sm-1-spread) var(--p-shadow-sm-1-color), var(--p-shadow-sm-2-offset-x) var(--p-shadow-sm-2-offset-y) var(--p-shadow-sm-2-blur) var(--p-shadow-sm-2-spread) var(--p-shadow-sm-2-color);
-  --shadow-md: var(--p-shadow-md-1-offset-x) var(--p-shadow-md-1-offset-y) var(--p-shadow-md-1-blur) var(--p-shadow-md-1-spread) var(--p-shadow-md-1-color), var(--p-shadow-md-2-offset-x) var(--p-shadow-md-2-offset-y) var(--p-shadow-md-2-blur) var(--p-shadow-md-2-spread) var(--p-shadow-md-2-color);
-  --shadow-lg: var(--p-shadow-lg-1-offset-x) var(--p-shadow-lg-1-offset-y) var(--p-shadow-lg-1-blur) var(--p-shadow-lg-1-spread) var(--p-shadow-lg-1-color), var(--p-shadow-lg-2-offset-x) var(--p-shadow-lg-2-offset-y) var(--p-shadow-lg-2-blur) var(--p-shadow-lg-2-spread) var(--p-shadow-lg-2-color);
-  --shadow-xl: var(--p-shadow-xl-1-offset-x) var(--p-shadow-xl-1-offset-y) var(--p-shadow-xl-1-blur) var(--p-shadow-xl-1-spread) var(--p-shadow-xl-1-color), var(--p-shadow-xl-2-offset-x) var(--p-shadow-xl-2-offset-y) var(--p-shadow-xl-2-blur) var(--p-shadow-xl-2-spread) var(--p-shadow-xl-2-color);
-  --shadow-2xl: var(--p-shadow-2xl-1-offset-x) var(--p-shadow-2xl-1-offset-y) var(--p-shadow-2xl-1-blur) var(--p-shadow-2xl-1-spread) var(--p-shadow-2xl-1-color);
-  --shadow-inner: inset var(--p-shadow-inner-1-offset-x) var(--p-shadow-inner-1-offset-y) var(--p-shadow-inner-1-blur) var(--p-shadow-inner-1-spread) var(--p-shadow-inner-1-color);
+  --shadow-2xs: var(--p-shadow-2xs-1-offset-x) var(--p-shadow-2xs-1-offset-y) var(--p-shadow-2xs-1-blur) var(--p-shadow-2xs-1-spread) var(--color-shadow-subtle);
+  --shadow-xs: var(--p-shadow-xs-1-offset-x) var(--p-shadow-xs-1-offset-y) var(--p-shadow-xs-1-blur) var(--p-shadow-xs-1-spread) var(--color-shadow-subtle);
+  --shadow-sm: var(--p-shadow-sm-1-offset-x) var(--p-shadow-sm-1-offset-y) var(--p-shadow-sm-1-blur) var(--p-shadow-sm-1-spread) var(--color-shadow-default), var(--p-shadow-sm-2-offset-x) var(--p-shadow-sm-2-offset-y) var(--p-shadow-sm-2-blur) var(--p-shadow-sm-2-spread) var(--color-shadow-default);
+  --shadow-md: var(--p-shadow-md-1-offset-x) var(--p-shadow-md-1-offset-y) var(--p-shadow-md-1-blur) var(--p-shadow-md-1-spread) var(--color-shadow-default), var(--p-shadow-md-2-offset-x) var(--p-shadow-md-2-offset-y) var(--p-shadow-md-2-blur) var(--p-shadow-md-2-spread) var(--color-shadow-default);
+  --shadow-lg: var(--p-shadow-lg-1-offset-x) var(--p-shadow-lg-1-offset-y) var(--p-shadow-lg-1-blur) var(--p-shadow-lg-1-spread) var(--color-shadow-default), var(--p-shadow-lg-2-offset-x) var(--p-shadow-lg-2-offset-y) var(--p-shadow-lg-2-blur) var(--p-shadow-lg-2-spread) var(--color-shadow-default);
+  --shadow-xl: var(--p-shadow-xl-1-offset-x) var(--p-shadow-xl-1-offset-y) var(--p-shadow-xl-1-blur) var(--p-shadow-xl-1-spread) var(--color-shadow-default), var(--p-shadow-xl-2-offset-x) var(--p-shadow-xl-2-offset-y) var(--p-shadow-xl-2-blur) var(--p-shadow-xl-2-spread) var(--color-shadow-default);
+  --shadow-2xl: var(--p-shadow-2xl-1-offset-x) var(--p-shadow-2xl-1-offset-y) var(--p-shadow-2xl-1-blur) var(--p-shadow-2xl-1-spread) var(--color-shadow-strong);
+  --shadow-inner: inset var(--p-shadow-inner-1-offset-x) var(--p-shadow-inner-1-offset-y) var(--p-shadow-inner-1-blur) var(--p-shadow-inner-1-spread) var(--color-shadow-subtle);
   --shadow-bevel: var(--p-shadow-bevel);
+
+  /* elevation → shadow-elevation-* (role-named aliases over the size ramp) */
+  --shadow-elevation-flat: 0 0 #0000;
+  --shadow-elevation-raised: var(--shadow-sm);
+  --shadow-elevation-popover: var(--shadow-md);
+  --shadow-elevation-overlay: var(--shadow-xl);
+  --shadow-elevation-modal: var(--shadow-xl);
+  --shadow-elevation-sheet: var(--shadow-2xl);
 }
 
 /* ════ Semantic color utilities — per property, Figma-named, themed ════ */
 @utility bg-default {
   background-color: var(--color-bg-default);
+}
+@utility bg-default-2 {
+  background-color: var(--color-bg-default-2);
+}
+@utility bg-default-3 {
+  background-color: var(--color-bg-default-3);
 }
 @utility bg-default-alt {
   background-color: var(--color-bg-default-alt);
@@ -306,6 +320,9 @@
 @utility bg-disabled {
   background-color: var(--color-bg-disabled);
 }
+@utility bg-disabled-subtle {
+  background-color: var(--color-bg-disabled-subtle);
+}
 @utility bg-transparent {
   background-color: var(--color-bg-transparent);
 }
@@ -395,6 +412,12 @@
 }
 @utility border-default {
   border-color: var(--color-border-default);
+}
+@utility border-default-level-1 {
+  border-color: var(--color-border-default-level-1);
+}
+@utility border-default-level-2 {
+  border-color: var(--color-border-default-level-2);
 }
 @utility border-neutral {
   border-color: var(--color-border-neutral);
