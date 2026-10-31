@@ -1,19 +1,20 @@
-/* Tabs structure. Mirrors the Figma Tab Item set (Components file, node
-   17251:5692): Style=Solid | Outline, State=Default/Hover/Active/Disabled.
-   Each tab is a column — a content row (icon, label, badge) above a 3px accent
-   bar that is always present (transparent when idle) so Solid and Outline tabs
-   share a height. There is no shared track. */
+/* Tabs structure. Mirrors the Figma Tabs container (Components file, node
+   20479:82276) built from the Tab Item set (17251:5692). Type=Fill (solid)
+   seats the tabs flush in a bg/tertiary track with one inner shadow; Type=
+   Underline (outline) drops the track for a per-tab accent bar. Each tab is a
+   column — a content row (icon, label, badge) above a 3px accent bar that is
+   always present (transparent when idle) so both types share a height. */
 
 @layer components {
   .sikat-tabs-scroll {
     width: 100%;
   }
 
-  /* Tab bar — tabs in a row, 4px apart, horizontally scrollable. */
+  /* Tab bar — tabs flush in a row, horizontally scrollable. */
   .sikat-tabs {
     display: flex;
     align-items: stretch;
-    gap: var(--spacing-1);
+    gap: 0;
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
@@ -83,13 +84,15 @@
     outline-offset: 1px;
   }
 
-  /* ---- Style=Solid (default) — filled chips lifted by an inner shadow.
-     Default white, Hover bg/quarternary, Active primary/muted + text/primary,
-     Disabled bg/neutral-muted + disabled text. The accent bar stays hidden. */
-  .sikat-tabs[data-variant='solid'] .sikat-tabs__tab {
-    background-color: var(--color-bg-default);
-    /* Figma "Inner Shadow": inset 0 0 4px rgba(0,0,0,0.1). */
-    box-shadow: inset 0 0 4px 0 rgb(0 0 0 / 0.1);
+  /* ---- Style=Solid (Figma "Fill") — tabs sit flush in a bg/tertiary track
+     carrying one inner shadow. Default tabs are transparent so the track shows
+     through; Hover bg/quarternary, Active primary/muted + text/primary,
+     Disabled bg/neutral-muted. The per-tab accent bar stays hidden. */
+  .sikat-tabs[data-variant='solid'] {
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--rounded-lg);
+    /* Figma "Inner Shadow": inset 0 0 4px, shadow/default color (dark-aware). */
+    box-shadow: inset 0 0 4px 0 var(--color-shadow-default);
   }
   .sikat-tabs[data-variant='solid'] .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
     background-color: var(--color-bg-quarternary);

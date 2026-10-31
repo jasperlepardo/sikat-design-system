@@ -41,13 +41,14 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
 }
 
 /**
- * Tabs — the Figma Tab Item row (Components › Tabs, 17251:5692): tabs with an
+ * Tabs — the Figma Tabs container (Components › Tabs, 20479:82276): tabs with an
  * optional 20px icon, a 14/20 Medium label and a Badge Counter, over a 3px
- * accent bar. `variant="solid"` (default) renders filled chips with an inner
- * shadow — Default white, Hover `bg/quarternary`, Active `bg/primary-muted` with
- * `text/primary` text and a Primary badge, Disabled `bg/neutral-muted`.
- * `"outline"` drops the fill for a shared bottom divider and a per-tab accent
- * bar: `fg/primary` on the active tab, grey on hover. WAI-ARIA tabs: `tablist` /
+ * accent bar. `variant="solid"` (default, Figma "Fill") seats the tabs flush in
+ * a `bg/tertiary` track with one inner shadow — Default tabs are transparent,
+ * Hover `bg/quarternary`, Active `bg/primary-muted` with `text/primary` text and
+ * a Primary badge, Disabled `bg/neutral-muted`. `"outline"` (Figma "Underline")
+ * drops the track for a shared bottom divider and a per-tab accent bar:
+ * `fg/primary` on the active tab, grey on hover. WAI-ARIA tabs: `tablist` /
  * `tab` with roving focus — ←/→/Home/End move and select, skipping disabled tabs.
  */
 export function Tabs({
