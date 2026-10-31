@@ -10,9 +10,24 @@ type Story = StoryObj;
 
 // Role-named elevation aliases (theme.css @theme) — what components should use.
 const ELEVATION: { cssVar: string; role: string; size: string; usage: string }[] = [
-  { cssVar: '--shadow-elevation-flat', role: 'flat', size: 'none', usage: 'Resting / in-flow — border carries separation' },
-  { cssVar: '--shadow-elevation-raised', role: 'raised', size: 'sm', usage: 'Card, raised buttons' },
-  { cssVar: '--shadow-elevation-popover', role: 'popover', size: 'md', usage: 'Panel, non-modal popovers' },
+  {
+    cssVar: '--shadow-elevation-flat',
+    role: 'flat',
+    size: 'none',
+    usage: 'Resting / in-flow — border carries separation',
+  },
+  {
+    cssVar: '--shadow-elevation-raised',
+    role: 'raised',
+    size: 'sm',
+    usage: 'Card, raised buttons',
+  },
+  {
+    cssVar: '--shadow-elevation-popover',
+    role: 'popover',
+    size: 'md',
+    usage: 'Panel, non-modal popovers',
+  },
   { cssVar: '--shadow-elevation-overlay', role: 'overlay', size: 'xl', usage: 'Dropdown, menus' },
   { cssVar: '--shadow-elevation-modal', role: 'modal', size: 'xl', usage: 'Dialogs, modals' },
   { cssVar: '--shadow-elevation-sheet', role: 'sheet', size: '2xl', usage: 'SidePanel, drawers' },
