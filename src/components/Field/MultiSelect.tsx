@@ -19,6 +19,7 @@ export interface MultiSelectProps extends FieldAdornments {
   placeholder?: string;
   invalid?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
   /** Applied to the input, so a `<label htmlFor>` focuses it. */
   id?: string;
   className?: string;
@@ -45,6 +46,7 @@ export function MultiSelect({
   placeholder,
   invalid,
   disabled,
+  readOnly,
   id: idProp,
   className,
   leadingIcon,
@@ -101,6 +103,7 @@ export function MultiSelect({
   usePanelFocus(open, searchRef, inputRef, () => setQuery(''));
 
   const handleKeyDown = (e: KeyboardEvent<HTMLElement>) => {
+    if (readOnly) return;
     if (e.key === 'Backspace' && query === '' && selected.length) {
       commit(selected.slice(0, -1));
       return;
@@ -122,7 +125,7 @@ export function MultiSelect({
     return (
       <FieldShell
         className="sikat-field--wrap"
-        state={{ size: 'md', filled: selectedOptions.length > 0, disabled, invalid }}
+        state={{ size: 'md', filled: selectedOptions.length > 0, disabled, readOnly, invalid }}
         adornments={{ leadingIcon, prefix, suffix, trailingIcon, leadingAlign, trailingAlign }}
         after={
           <span
@@ -133,7 +136,7 @@ export function MultiSelect({
           </span>
         }
         onClick={() => {
-          if (disabled) return;
+          if (disabled || readOnly) return;
           ref.current?.focus();
           if (!inPanel) setOpen(true);
         }}
@@ -146,7 +149,7 @@ export function MultiSelect({
                 type="button"
                 aria-label={`Remove ${optionText(o)}`}
                 className="sikat-field__chip-remove"
-                disabled={disabled}
+                disabled={disabled || readOnly}
                 onMouseDown={(e) => {
                   e.preventDefault();
                   toggle(o.value);
@@ -166,8 +169,10 @@ export function MultiSelect({
             aria-autocomplete="list"
             aria-activedescendant={activeId}
             aria-invalid={invalid || undefined}
+            aria-readonly={readOnly || undefined}
             autoComplete="off"
             disabled={disabled}
+            readOnly={readOnly}
             placeholder={selectedOptions.length === 0 ? placeholder : undefined}
             value={query}
             className="sikat-field__input"

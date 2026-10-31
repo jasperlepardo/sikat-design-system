@@ -45,10 +45,10 @@
     cursor: pointer;
     display: flex;
     flex: none;
-    height: 32px;
+    height: var(--spacing-8); /* 32px */
     justify-content: center;
     padding: 0;
-    width: 32px;
+    width: var(--spacing-8); /* 32px */
   }
 
   .sikat-datepicker__nav:hover {
@@ -68,7 +68,10 @@
   .sikat-datepicker__weekdays {
     display: grid;
     gap: var(--spacing-1);
-    grid-template-columns: repeat(7, minmax(36px, 1fr)); /* stretch to the panel (field-wide) */
+    grid-template-columns: repeat(
+      7,
+      minmax(var(--spacing-9), 1fr)
+    ); /* 36px; stretch to the panel (field-wide) */
     margin-bottom: var(--spacing-1);
     text-align: center;
   }
@@ -86,7 +89,10 @@
   .sikat-datepicker__grid {
     display: grid;
     gap: var(--spacing-1);
-    grid-template-columns: repeat(7, minmax(36px, 1fr)); /* stretch to the panel (field-wide) */
+    grid-template-columns: repeat(
+      7,
+      minmax(var(--spacing-9), 1fr)
+    ); /* 36px; stretch to the panel (field-wide) */
   }
 
   .sikat-datepicker__day {
@@ -100,7 +106,7 @@
     font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
     font-size: var(--text-body-sm-font-size);
     font-weight: var(--text-medium);
-    height: 36px;
+    height: var(--spacing-9); /* 36px */
     justify-content: center;
     line-height: var(--text-body-sm-line-height);
     outline: none;

@@ -7,9 +7,10 @@ import {
   type TextareaHTMLAttributes,
 } from 'react';
 import { cn } from '../../lib/cn';
-import { useFilled } from './FieldShell';
+import { useFilled, type FieldSize } from './FieldShell';
 
 export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  size?: FieldSize;
   invalid?: boolean;
   /** Stop growing after this many lines of text; beyond it the textarea scrolls. */
   maxRows?: number;
@@ -22,7 +23,19 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
  * scrolls. Use standalone or inside <FormField>.
  */
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function Textarea(
-  { invalid, className, rows = 1, maxRows, value, defaultValue, onChange, ...rest },
+  {
+    invalid,
+    size = 'md',
+    className,
+    rows = 1,
+    maxRows,
+    value,
+    defaultValue,
+    disabled,
+    readOnly,
+    onChange,
+    ...rest
+  },
   ref,
 ) {
   const [filled, track] = useFilled(value, defaultValue);
@@ -76,9 +89,14 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(function 
         }}
         rows={rows}
         className={cn('sikat-field sikat-field--multiline', className)}
-        data-size="md"
+        data-size={size}
         data-filled={filled || undefined}
+        data-disabled={disabled || undefined}
+        data-readonly={readOnly || undefined}
+        data-invalid={invalid || undefined}
         aria-invalid={invalid || undefined}
+        disabled={disabled}
+        readOnly={readOnly}
         value={value}
         defaultValue={defaultValue}
         onChange={(e) => {

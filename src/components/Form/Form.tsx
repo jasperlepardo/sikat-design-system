@@ -82,11 +82,11 @@ export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
    */
   columns?: 1 | 2 | 3;
   /**
-   * Matches the `orientation` of the `FormField`s inside: `horizontal` (default,
-   * label above) uses 16px; `vertical` (label beside, fixed) uses 4px;
+   * Matches the `orientation` of the `FormField`s inside: `stacked` (default,
+   * label above) uses 16px; `inline` (label beside, fixed) uses 4px;
    * `responsive` (label beside when wide, stacked when narrow) uses 4px → 16px.
    */
-  orientation?: 'horizontal' | 'vertical' | 'responsive';
+  orientation?: 'stacked' | 'inline' | 'responsive';
 }
 
 // Gap comes from .sikat-form__group (per orientation), not a utility.

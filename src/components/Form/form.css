@@ -52,8 +52,8 @@
     gap: var(--spacing-4); /* 16px between fields */
   }
 
-  /* Vertical: fixed 4px — side-label fields never collapse. */
-  .sikat-form__group[data-orientation='vertical'] {
+  /* inline: fixed 4px — side-label fields never collapse. */
+  .sikat-form__group[data-orientation='inline'] {
     gap: var(--spacing-1);
   }
 

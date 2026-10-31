@@ -303,7 +303,7 @@ export function Select({
           header={
             searchable ? (
               <FieldShell
-                state={{ size, filled: searchText !== '', disabled, invalid }}
+                state={{ size, filled: searchText !== '', disabled, readOnly, invalid }}
                 adornments={{
                   leadingIcon,
                   prefix,

@@ -33,16 +33,16 @@
     "": {
       "rest": {
         "bg": "--color-bg-default",
-        "border": "--color-border-default",
+        "border": "--color-border-default-level-2",
         "text": "--color-text-body",
         "placeholder": "--color-text-placeholder"
       },
       "filled": {
-        "border": "--color-border-default"
+        "border": "--color-border-default-level-2"
       },
       "hover": {
-        "bg": "--color-bg-default",
-        "border": "--color-border-primary"
+        "bg": "--color-bg-secondary",
+        "border": "--color-border-default-level-2"
       },
       "hover-filled": {
         "bg": "--color-bg-default",
@@ -62,7 +62,7 @@
       },
       "disabled": {
         "bg": "--color-bg-tertiary",
-        "border": "--color-border-default",
+        "border": "--color-border-default-level-2",
         "text": "--color-text-disabled"
       }
     }
@@ -73,14 +73,14 @@
       "px": "--spacing-3",
       "fs": "--text-body-sm-font-size",
       "lh": "--text-body-sm-line-height",
-      "radius": "--rounded-lg"
+      "radius": "--rounded-xl"
     },
     "xl": {
       "h": "--spacing-10",
       "px": "--spacing-3",
       "fs": "--text-body-sm-font-size",
       "lh": "--text-body-sm-line-height",
-      "radius": "--rounded-lg"
+      "radius": "--rounded-xl"
     }
   }
 }

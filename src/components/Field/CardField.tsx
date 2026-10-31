@@ -169,7 +169,7 @@ export function CardField({
   const id = idProp ?? autoId;
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
-  const orientation = useContext(FieldOrientationCtx) ?? 'horizontal';
+  const orientation = useContext(FieldOrientationCtx) ?? 'stacked';
   const selected = value ? (options.find((o) => o.value === value) ?? null) : null;
   const interactive = !disabled && !readOnly;
 
