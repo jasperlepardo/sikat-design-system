@@ -9,7 +9,7 @@
     position: relative;
     background-color: var(--color-bg-default);
     border-radius: var(--rounded-lg); /* 8px — field radius */
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-elevation-popover);
     display: flex;
     flex: 1;
     flex-direction: column;

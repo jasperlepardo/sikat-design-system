@@ -17,3 +17,6 @@ figma/
 
 # Claude Code local config (machine-specific)
 .claude/
+
+# Local reference material — do not commit (copyrighted)
+*.pdf
