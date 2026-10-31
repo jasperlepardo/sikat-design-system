@@ -10,7 +10,7 @@ import { cn } from '../../lib/cn';
 import { BadgeCounter } from '../Badge/Badge';
 import './tabs.css';
 
-export const tabsVariants = ['primary', 'secondary', 'outline'] as const;
+export const tabsVariants = ['solid', 'outline'] as const;
 export type TabsVariant = (typeof tabsVariants)[number];
 
 export interface TabItem {
@@ -28,8 +28,9 @@ export interface TabItem {
 export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   items: TabItem[];
   /**
-   * Figma "Type": Primary (filled primary active tab), Secondary (white), or
-   * Outline (Tab Item Style=Outline: no track, 4px primary underline on the active tab).
+   * Figma "Style": Solid (filled chips — active is primary/muted with
+   * text/primary and a primary badge) or Outline (no fill; a 3px accent bar
+   * under the active tab, grey on hover).
    */
   variant?: TabsVariant;
   /** Controlled selected value. */
@@ -40,19 +41,18 @@ export interface TabsProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChang
 }
 
 /**
- * Tabs — the Figma `tabs` bar of `tab-button`s (Components › Tabs): a
- * `bg/tertiary` track (2px padding and gap, 12px radius, inner shadow) holding
- * 32px tabs — optional 20px icon, 14/20 Medium label and a Badge Counter. Default
- * tabs are transparent, Hover `bg/quarternary`, Disabled white with muted text;
- * the Active tab is primary with white text (`variant="primary"`) or white with
- * body text (`"secondary"`), lifted by Shadow/Default, and its badge turns
- * Primary / Ghost. `"outline"` drops the track: 40px tabs whose active state
- * is a 4px primary underline (Figma Tab Item, Style=Outline). WAI-ARIA tabs: `tablist` / `tab` with roving focus —
- * ←/→/Home/End move and select, skipping disabled tabs.
+ * Tabs — the Figma Tab Item row (Components › Tabs, 17251:5692): tabs with an
+ * optional 20px icon, a 14/20 Medium label and a Badge Counter, over a 3px
+ * accent bar. `variant="solid"` (default) renders filled chips with an inner
+ * shadow — Default white, Hover `bg/quarternary`, Active `bg/primary-muted` with
+ * `text/primary` text and a Primary badge, Disabled `bg/neutral-muted`.
+ * `"outline"` drops the fill for a shared bottom divider and a per-tab accent
+ * bar: `fg/primary` on the active tab, grey on hover. WAI-ARIA tabs: `tablist` /
+ * `tab` with roving focus — ←/→/Home/End move and select, skipping disabled tabs.
  */
 export function Tabs({
   items,
-  variant = 'primary',
+  variant = 'solid',
   value,
   defaultValue,
   onValueChange,
@@ -126,16 +126,18 @@ export function Tabs({
               onClick={() => select(tab.value)}
               onKeyDown={(e) => onKeyDown(e, i)}
             >
-              {tab.icon ? <span className="sikat-tabs__icon">{tab.icon}</span> : null}
-              <span className="sikat-tabs__label">{tab.label}</span>
-              {tab.badge != null ? (
-                <BadgeCounter
-                  intent={active ? 'primary' : 'default'}
-                  variant={active ? 'ghost' : 'solid'}
-                >
-                  {tab.badge}
-                </BadgeCounter>
-              ) : null}
+              <span className="sikat-tabs__content">
+                {tab.icon ? <span className="sikat-tabs__icon">{tab.icon}</span> : null}
+                <span className="sikat-tabs__label">{tab.label}</span>
+                {tab.badge != null ? (
+                  <BadgeCounter
+                    intent={variant === 'solid' && active ? 'primary' : 'default'}
+                    variant="solid"
+                  >
+                    {tab.badge}
+                  </BadgeCounter>
+                ) : null}
+              </span>
             </button>
           );
         })}

@@ -38,14 +38,14 @@ const makeItems = (a: TabsPlaygroundArgs): TabItem[] =>
 
 export const Playground: StoryObj<TabsPlaygroundArgs> = {
   args: {
-    Type: 'primary',
+    Type: 'solid',
     tabTitles: 'Tabs',
     showLeadingIcon: true,
     showBadge: true,
     onValueChange: fn(),
   },
   argTypes: {
-    Type: figmaSelect('Type', tabsVariants, ['Primary', 'Secondary', 'Outline']),
+    Type: figmaSelect('Type', tabsVariants, ['Solid', 'Outline']),
     tabTitles: { name: 'Tab Titles', control: 'text' },
     showLeadingIcon: { name: 'Show Leading Icon', control: 'boolean' },
     showBadge: { name: 'Show Badge', control: 'boolean' },
@@ -62,7 +62,8 @@ export const Playground: StoryObj<TabsPlaygroundArgs> = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     const tabs = canvas.getAllByRole('tab');
-    const height = args.Type === 'outline' ? 40 : 32;
+    // 6px top padding + 20px content row + 4px gap + 3px accent bar.
+    const height = 33;
     await expect(tabs.map((t) => Math.round(t.getBoundingClientRect().height))).toEqual([
       height,
       height,
@@ -115,15 +116,15 @@ export const States: StoryObj<typeof meta> = {
     const disabled = canvas.getAllByRole('tab', { name: /Disabled/ });
     for (const tab of disabled) await expect(tab).toBeDisabled();
     // Keyboard skips disabled tabs.
-    const primary = within(canvas.getByRole('tablist', { name: 'primary' })).getAllByRole('tab');
-    primary[1].focus();
+    const solid = within(canvas.getByRole('tablist', { name: 'solid' })).getAllByRole('tab');
+    solid[1].focus();
     await userEvent.keyboard('{ArrowRight}');
-    await expect(primary[0]).toHaveFocus();
+    await expect(solid[0]).toHaveFocus();
   },
 };
 
-/** Dark theme: the selected Secondary tab and disabled tabs are bg/default (not white),
- *  so their light text stays readable. */
+/** Dark theme: the selected Solid tab (bg/primary-muted) and disabled tabs
+ *  (bg/neutral-muted) keep a non-white fill so their text stays readable. */
 export const StatesDark: StoryObj<typeof meta> = {
   render: (args, ctx) => (
     <div data-theme="dark" className="bg-default p-4">
@@ -134,8 +135,8 @@ export const StatesDark: StoryObj<typeof meta> = {
     const canvas = within(canvasElement);
     const white = 'rgb(255, 255, 255)';
     const bg = (el: HTMLElement) => getComputedStyle(el).backgroundColor;
-    const secondary = within(canvas.getByRole('tablist', { name: 'secondary' }));
-    await expect(bg(secondary.getByRole('tab', { name: /Active/ }))).not.toBe(white);
+    const solid = within(canvas.getByRole('tablist', { name: 'solid' }));
+    await expect(bg(solid.getByRole('tab', { name: /Active/ }))).not.toBe(white);
     for (const tab of canvas.getAllByRole('tab', { name: /Disabled/ }))
       await expect(bg(tab)).not.toBe(white);
   },
