@@ -7,7 +7,7 @@
 @layer components {
   .sikat-panel {
     position: relative;
-    background-color: var(--color-bg-secondary);
+    background-color: var(--color-bg-default);
     border-radius: var(--rounded-lg); /* 8px — field radius */
     box-shadow: var(--shadow-md);
     display: flex;
