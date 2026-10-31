@@ -18,7 +18,7 @@ import {
   type TableActionItem,
 } from './TableCells';
 import { Icon } from '../Icon/Icon';
-import chevronDown from './assets/chevron-down.svg';
+import { Pagination, type PaginationProps } from '../Pagination/Pagination';
 import './table.css';
 
 export interface TableColumn<T> {
@@ -43,14 +43,8 @@ export interface TableSort {
   direction: TableSortDirection;
 }
 
-export interface TablePagination {
-  page: number;
-  pageSize: number;
-  total: number;
-  pageSizes?: number[];
-  onPageChange: (page: number) => void;
-  onPageSizeChange?: (pageSize: number) => void;
-}
+/** @deprecated Use {@link PaginationProps} from the Pagination component. */
+export type TablePagination = PaginationProps;
 
 export interface TableProps<T> extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   columns: TableColumn<T>[];
@@ -498,55 +492,3 @@ Table.Content = TableContent;
 Table.Status = TableStatus;
 Table.Amount = TableAmount;
 Table.Actions = TableActions;
-
-/** Figma Bottom Action › Pagination Container: "10 ▾ of 89" and ← →. */
-function Pagination({
-  page,
-  pageSize,
-  total,
-  pageSizes = [10, 25, 50],
-  onPageChange,
-  onPageSizeChange,
-}: TablePagination) {
-  const pages = Math.max(1, Math.ceil(total / pageSize));
-  return (
-    <nav className="sikat-table__pagination" aria-label="Pagination">
-      <div className="sikat-table__page-info">
-        <select
-          className="sikat-table__page-size"
-          style={{ ['--table-chevron' as string]: `url("${chevronDown}")` }}
-          aria-label="Rows per page"
-          value={pageSize}
-          onChange={(e) => onPageSizeChange?.(Number(e.currentTarget.value))}
-        >
-          {pageSizes.map((n) => (
-            <option key={n} value={n}>
-              {n}
-            </option>
-          ))}
-        </select>
-        <span className="sikat-table__page-total">of {total}</span>
-      </div>
-      <div className="sikat-table__page-nav">
-        <button
-          type="button"
-          className="sikat-table__page-btn"
-          aria-label="Previous page"
-          disabled={page <= 1}
-          onClick={() => onPageChange(page - 1)}
-        >
-          <Icon size={16}>navigate_before</Icon>
-        </button>
-        <button
-          type="button"
-          className="sikat-table__page-btn"
-          aria-label="Next page"
-          disabled={page >= pages}
-          onClick={() => onPageChange(page + 1)}
-        >
-          <Icon size={16}>navigate_next</Icon>
-        </button>
-      </div>
-    </nav>
-  );
-}
