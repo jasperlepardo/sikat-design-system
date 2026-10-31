@@ -1,5 +1,6 @@
 import type { FormHTMLAttributes, HTMLAttributes, ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import { labelWidthStyle, type LabelWidth } from '../../lib/labelWidth';
 import './form.css';
 
 export type FormProps = FormHTMLAttributes<HTMLFormElement>;
@@ -87,6 +88,12 @@ export interface FormGroupProps extends HTMLAttributes<HTMLDivElement> {
    * `responsive` (label beside when wide, stacked when narrow) uses 4px → 16px.
    */
   orientation?: 'stacked' | 'inline' | 'responsive';
+  /**
+   * Width of the side-label column for `inline` / `responsive` fields in this
+   * group. Number = px; string = any CSS length. Defaults to `12.5rem`. Cascades
+   * to every nested field (inc. CardField); a field's own `labelWidth` overrides.
+   */
+  labelWidth?: LabelWidth;
 }
 
 // Gap comes from .sikat-form__group (per orientation), not a utility.
@@ -97,11 +104,20 @@ const COLS_CLASS: Record<1 | 2 | 3, string> = {
 };
 
 /** Field group — vertical stack (or responsive grid when `columns`) inside a Card. */
-function FormGroup({ columns, orientation, className, children, ...rest }: FormGroupProps) {
+function FormGroup({
+  columns,
+  orientation,
+  labelWidth,
+  className,
+  children,
+  style,
+  ...rest
+}: FormGroupProps) {
   return (
     <div
       className={cn('sikat-form__group', columns != null && COLS_CLASS[columns], className)}
       data-orientation={orientation}
+      style={{ ...labelWidthStyle(labelWidth), ...style }}
       {...rest}
     >
       {children}

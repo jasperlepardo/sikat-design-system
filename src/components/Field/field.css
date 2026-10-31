@@ -51,7 +51,9 @@
   }
   .sikat-field:is([readonly], [data-readonly]) {
     cursor: default;
-    /* Figma read-only Text Field: flush value, no inline padding (borderless). */
+    /* Figma read-only Stacked: flush value, no inline padding (borderless). The
+       border/background go transparent via the generated read-only tokens.
+       Inline keeps the 12px padding — see the orientation rule below. */
     padding-inline: var(--spacing-0);
   }
 
@@ -436,12 +438,22 @@
     padding-block-start: calc(
       (var(--field-h, var(--spacing-9)) - var(--text-body-sm-line-height, 20px)) / 2
     );
-    width: 12.5rem;
+    /* Fixed side-label column. Override per field (FormField/CardField `labelWidth`)
+       or per column (Form.Group `labelWidth`) via the inherited --field-label-width. */
+    width: var(--field-label-width, 12.5rem);
     min-height: var(--field-h, var(--spacing-9));
   }
   .sikat-field-group[data-orientation='inline'] > .sikat-field__fieldset,
   .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
     flex: 1 1 0;
+  }
+  /* Read-only Inline keeps the field's 12px inline padding (Figma binds
+     Input/Fieldset/Field/padding-x on the inline read-only Text Field) so the
+     value lines up with editable fields in the same column. Stacked read-only
+     stays flush (base rule above). */
+  .sikat-field-group[data-orientation='inline'] .sikat-field:is([readonly], [data-readonly]),
+  .sikat-field-group[data-orientation='responsive'] .sikat-field:is([readonly], [data-readonly]) {
+    padding-inline: var(--field-px);
   }
   .sikat-field-group[data-orientation='responsive'] {
     container-type: inline-size;
@@ -454,6 +466,10 @@
     }
     .sikat-field-group[data-orientation='responsive'] > .sikat-field__fieldset {
       flex-basis: 100%;
+    }
+    /* Narrow responsive = stacked → read-only goes flush again. */
+    .sikat-field-group[data-orientation='responsive'] .sikat-field:is([readonly], [data-readonly]) {
+      padding-inline: var(--spacing-0);
     }
   }
 

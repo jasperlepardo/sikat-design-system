@@ -1,5 +1,6 @@
 import { useId, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
+import { labelWidthStyle, type LabelWidth } from '../../lib/labelWidth';
 import { FormLabel } from './FormLabel';
 
 export interface FormFieldProps {
@@ -10,6 +11,12 @@ export interface FormFieldProps {
    * variant: Stacked / Inline.)
    */
   orientation?: 'stacked' | 'inline' | 'responsive';
+  /**
+   * Width of the side-label column for `inline` / `responsive` orientation.
+   * Number = px; string = any CSS length (e.g. `'10rem'`). Defaults to `12.5rem`.
+   * No effect on `stacked`. Set it on `Form.Group` to size a whole column at once.
+   */
+  labelWidth?: LabelWidth;
   label?: ReactNode;
   /** Muted text after the label (Figma "Sub Label"), e.g. "(optional)". */
   subLabel?: ReactNode;
@@ -44,6 +51,7 @@ export interface FormFieldProps {
  */
 export function FormField({
   orientation = 'stacked',
+  labelWidth,
   label,
   subLabel,
   tooltip,
@@ -60,7 +68,11 @@ export function FormField({
   const describedBy = cn(hint ? hintId : undefined, error ? errorId : undefined) || undefined;
 
   return (
-    <div className={cn('sikat-field-group', className)} data-orientation={orientation}>
+    <div
+      className={cn('sikat-field-group', className)}
+      data-orientation={orientation}
+      style={labelWidthStyle(labelWidth)}
+    >
       {label ? (
         <FormLabel
           htmlFor={id}

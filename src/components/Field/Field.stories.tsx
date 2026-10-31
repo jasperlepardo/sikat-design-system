@@ -624,6 +624,48 @@ export const ResponsiveOrientation: Story = {
 };
 
 /**
+ * The side-label column is `12.5rem` (200px) by default. Size it with
+ * `labelWidth` — a number (px) or any CSS length string. Set it per field on
+ * `Field.Group`, or once on `Form.Group` to size a whole column (it cascades to
+ * every nested field). Only `inline` / `responsive` orientations use it.
+ */
+export const LabelWidth: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 32, width: 560 }}>
+      {/* Per-field: narrower label column via a number (px). */}
+      <div data-testid="per-field">
+        <Field.Group orientation="inline" label="Tax ID" labelWidth={120}>
+          {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+        </Field.Group>
+      </div>
+
+      {/* Per-column: Form.Group sets it once; both fields inherit the width. */}
+      <Form.Group orientation="inline" labelWidth="16rem" data-testid="per-column">
+        <Field.Group orientation="inline" label="Billing address">
+          {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+        </Field.Group>
+        <Field.Group orientation="inline" label="Shipping address">
+          {(props) => <Field.Text placeholder="Placeholder" {...props} />}
+        </Field.Group>
+      </Form.Group>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const labelOf = (name: string) => {
+      const input = within(canvasElement).getByRole('textbox', { name: new RegExp(name) });
+      return input.closest('.sikat-field-group')!.querySelector(':scope > .sikat-field__label')!;
+    };
+    const width = (name: string) => Math.round(labelOf(name).getBoundingClientRect().width);
+
+    // Per-field: 120px.
+    await expect(width('Tax ID')).toBe(120);
+    // Per-column: both inherit 16rem (256px) from Form.Group.
+    await expect(width('Billing address')).toBe(256);
+    await expect(width('Shipping address')).toBe(256);
+  },
+};
+
+/**
  * Suffix right after the value (e.g. units): the input is as wide as its text,
  * so "0 cm" reads as one value. Trailing icons stay at the right edge; a long value scrolls while the suffix stays visible.
  */
