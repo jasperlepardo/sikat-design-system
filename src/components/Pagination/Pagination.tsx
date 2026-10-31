@@ -36,9 +36,7 @@ function PageField({
 
   const commit = () => {
     const parsed = Math.floor(Number(draft));
-    const next = Number.isFinite(parsed)
-      ? Math.min(Math.max(1, parsed), totalPages)
-      : page;
+    const next = Number.isFinite(parsed) ? Math.min(Math.max(1, parsed), totalPages) : page;
     setDraft(String(next));
     if (next !== page) onPageChange(next);
   };
