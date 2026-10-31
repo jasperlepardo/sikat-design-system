@@ -170,65 +170,6 @@
     vertical-align: top;
   }
 
-  /* Bottom Action › Pagination Container — Figma uses legacy styles here
-     (Urbanist 14, #f0f0f0 / #e6e6e6 / #e9e9e9 / #414141 / #6d6e71, no tokens). */
-  .sikat-table__pagination {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: var(--spacing-6);
-  }
-  .sikat-table__page-info {
-    display: flex;
-    height: 44px;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--p-font-family-heading), system-ui, sans-serif;
-    font-size: 14px;
-    line-height: 1.4;
-    font-weight: var(--text-medium);
-    letter-spacing: 0.14px;
-  }
-  .sikat-table__page-size {
-    padding: 8px 32px 8px 8px;
-    border: 1px solid #e6e6e6;
-    border-radius: 8px;
-    background-color: #f0f0f0;
-    color: #414141;
-    font: inherit;
-    appearance: none;
-    background-image: var(--table-chevron);
-    background-repeat: no-repeat;
-    background-position: right 8px center;
-    background-size: 16px 16px;
-    cursor: pointer;
-  }
-  .sikat-table__page-total {
-    color: #6d6e71;
-  }
-  .sikat-table__page-nav {
-    display: flex;
-    gap: 8px;
-  }
-  .sikat-table__page-btn {
-    display: inline-flex;
-    padding: 8px;
-    border: 0;
-    border-radius: 12px;
-    background-color: #e9e9e9;
-    color: #414141;
-    cursor: pointer;
-  }
-  .sikat-table__page-btn:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-  .sikat-table__page-btn:focus-visible,
-  .sikat-table__page-size:focus-visible {
-    outline: 2px solid var(--color-border-primary);
-    outline-offset: 1px;
-  }
-
   /* ── Table Cell types (Figma 17239:6211) ─────────────────────────────────── */
   .sikat-table-cell__row {
     display: flex;

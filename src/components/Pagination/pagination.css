@@ -1,0 +1,73 @@
+/* Pagination structure. Mirrors the Figma "Table Footer" (Components file,
+   21446:212892): a bordered/shadowed card wrapping a tertiary tray with a
+   rows-per-page selector, a divider, a "Page n of N" indicator, and segmented
+   previous/next controls. All values are tokens, so it re-themes light/dark. */
+
+@layer components {
+  .sikat-pagination {
+    display: inline-flex;
+    align-items: stretch;
+    gap: var(--spacing-1);
+    padding: var(--spacing-1);
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--rounded-2xl);
+    box-shadow: var(--shadow-md);
+    box-sizing: border-box;
+  }
+
+  .sikat-pagination__tray {
+    display: flex;
+    flex: 1 1 0%;
+    align-items: stretch;
+    gap: var(--spacing-2);
+    min-width: 0;
+    background-color: var(--color-bg-tertiary);
+    border-radius: var(--rounded-lg);
+  }
+
+  .sikat-pagination__section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-1);
+    border-radius: var(--rounded-lg);
+  }
+
+  .sikat-pagination__page {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .sikat-pagination__text {
+    color: var(--color-text-caption);
+    font-family: var(--text-body-sm-font-family), system-ui, sans-serif;
+    font-size: var(--text-body-sm-font-size);
+    line-height: var(--text-body-sm-line-height);
+    font-weight: var(--text-medium);
+    white-space: nowrap;
+  }
+
+  /* Vertical rule between the two sections. */
+  .sikat-pagination__divider {
+    align-self: stretch;
+    width: 1px;
+    flex: 0 0 auto;
+    background-color: var(--color-border-default);
+  }
+
+  /* The rows-per-page select: compact, sized to its value + chevron. */
+  .sikat-pagination__size-select {
+    width: auto;
+  }
+  .sikat-pagination .sikat-select {
+    width: auto;
+  }
+
+  /* The current-page field: compact, sized to a few digits. */
+  .sikat-pagination__page-field {
+    width: auto;
+    min-width: 3.25rem;
+  }
+}

@@ -168,6 +168,9 @@ export type {
   PanelHeaderVariant,
 } from './components/Panel/PanelHeader';
 
+export { Pagination } from './components/Pagination/Pagination';
+export type { PaginationProps } from './components/Pagination/Pagination';
+
 export { Table } from './components/Table/Table';
 export {
   TableContent,
