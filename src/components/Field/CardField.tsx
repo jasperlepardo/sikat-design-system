@@ -7,6 +7,7 @@ import { Combobox, type ComboboxOption } from './Combobox';
 import { FormLabel } from './FormLabel';
 import { FieldShell, FieldClear, type FieldAdornments, type FieldSize } from './FieldShell';
 import { cn } from '../../lib/cn';
+import { labelWidthStyle, type LabelWidth } from '../../lib/labelWidth';
 import { type ListCardField } from '../List/List';
 import { FieldOrientationCtx } from '../Form/fields';
 import { Text, type TextProps } from '../Text/Text';
@@ -39,6 +40,12 @@ export interface CardFieldProps extends FieldAdornments {
   onValueChange?: (value: string) => void;
   /** Label rendered above the field using `FormLabel`. */
   label?: ReactNode;
+  /**
+   * Width of the side-label column when the field is `inline` / `responsive`
+   * (orientation is inherited from the enclosing `Form.Group`). Number = px;
+   * string = any CSS length. Defaults to `12.5rem`. Usually set on `Form.Group`.
+   */
+  labelWidth?: LabelWidth;
   /** Muted text after the label (Figma "Sub Label"), e.g. "(optional)". */
   subLabel?: ReactNode;
   /** Info tooltip / lock reason — see FormLabel. */
@@ -148,6 +155,7 @@ export function CardField({
   hint,
   error,
   size = 'md',
+  labelWidth,
   footer,
   onEdit,
   editLabel = 'Edit',
@@ -289,7 +297,11 @@ export function CardField({
     ) : null;
 
   return (
-    <div className={cn('sikat-field-group', className)} data-orientation={orientation}>
+    <div
+      className={cn('sikat-field-group', className)}
+      data-orientation={orientation}
+      style={labelWidthStyle(labelWidth)}
+    >
       {labelEl}
       <div className="sikat-field__fieldset">
         {content}
