@@ -96,7 +96,7 @@ export const Default: Story = {
               }
             />
             <Panel.Body>
-              <Tabs items={emailTabs} variant="secondary" />
+              <Tabs items={emailTabs} variant="solid" />
               <Card>
                 <Card.Content>
                   <Form.Group>
@@ -195,7 +195,7 @@ export const TwoColumn: Story = {
                 <SectionCard title="Remarks" />
               </Panel.Sidebar>
               <Panel.Main>
-                <Tabs items={entityTabs} variant="secondary" defaultValue="general" />
+                <Tabs items={entityTabs} variant="solid" defaultValue="general" />
                 <Card>
                   <Card.Header icon={<Icon size={24}>art_track</Icon>}>General Details</Card.Header>
                   <Card.Content>
