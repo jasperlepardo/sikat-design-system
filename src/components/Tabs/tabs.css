@@ -94,6 +94,11 @@
     /* Figma "Inner Shadow": inset 0 0 4px, shadow/default color (dark-aware). */
     box-shadow: inset 0 0 4px 0 var(--color-shadow-default);
   }
+  /* Each solid tab carries the same inner shadow (Figma applies it to both the
+     Fill track and every Tab Item). */
+  .sikat-tabs[data-variant='solid'] .sikat-tabs__tab {
+    box-shadow: inset 0 0 4px 0 var(--color-shadow-default);
+  }
   .sikat-tabs[data-variant='solid'] .sikat-tabs__tab:hover:not(:disabled, [aria-selected='true']) {
     background-color: var(--color-bg-quarternary);
     color: var(--color-text-body);
