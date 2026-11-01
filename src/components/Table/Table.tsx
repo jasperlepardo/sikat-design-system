@@ -338,7 +338,7 @@ export function Table<T>({
                           <Button
                             intent="default"
                             variant="link"
-                            size="2xs"
+                            size="extra-small"
                             aria-label={allExpanded ? 'Collapse all rows' : 'Expand all rows'}
                             onClick={() => {
                               const next = allExpanded ? [] : expandable;
@@ -364,7 +364,7 @@ export function Table<T>({
                         <Button
                           intent="default"
                           variant="link"
-                          size="2xs"
+                          size="extra-small"
                           className="sikat-table__sort"
                           data-active={sorted ? 'true' : undefined}
                           aria-label={`Sort by ${typeof col.header === 'string' ? col.header : col.key}`}

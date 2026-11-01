@@ -82,7 +82,6 @@ export const Playground: StoryObj<ButtonPlaygroundArgs> = {
       'Medium',
       'Small',
       'Extra Small',
-      '2xs',
     ]),
     Shape: figmaSelect('Shape', ['default', 'pill'] as const, ['Default', 'Pill']),
     State: figmaSelect('State', ['default', 'hover', 'disabled'] as const, [

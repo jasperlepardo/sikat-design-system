@@ -32,26 +32,32 @@
   "colors": {
     "default/solid": {
       "rest": {
-        "bg": "--color-bg-neutral",
+        "bg": "--color-bg-neutral-muted",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-text-muted",
+        "bevel-top": "--color-bevel-default-top",
+        "bevel-bottom": "--color-bevel-default-bottom"
       },
       "hover": {
-        "bg": "--color-bg-neutral-hover",
+        "bg": "--color-bg-neutral-active",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-fg-quarternary-solid"
       },
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "primary/solid": {
       "rest": {
         "bg": "--color-bg-primary",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bevel-primary-top",
+        "bevel-bottom": "--color-bevel-primary-bottom"
       },
       "hover": {
         "bg": "--color-bg-primary-hover",
@@ -61,14 +67,18 @@
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "success/solid": {
       "rest": {
         "bg": "--color-bg-success",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bevel-success-top",
+        "bevel-bottom": "--color-bevel-success-bottom"
       },
       "hover": {
         "bg": "--color-bg-success-hover",
@@ -78,14 +88,18 @@
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "warning/solid": {
       "rest": {
         "bg": "--color-bg-warning",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bevel-warning-top",
+        "bevel-bottom": "--color-bevel-warning-bottom"
       },
       "hover": {
         "bg": "--color-bg-warning-hover",
@@ -95,14 +109,18 @@
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "danger/solid": {
       "rest": {
         "bg": "--color-bg-danger",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bevel-danger-top",
+        "bevel-bottom": "--color-bevel-danger-bottom"
       },
       "hover": {
         "bg": "--color-bg-danger-hover",
@@ -112,14 +130,18 @@
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "white/solid": {
       "rest": {
         "bg": "--color-bg-white",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-black"
+        "icon": "--color-fg-black",
+        "bevel-top": "--color-bevel-white-top",
+        "bevel-bottom": "--color-bevel-white-bottom"
       },
       "hover": {
         "bg": "--color-bg-white-hover",
@@ -129,14 +151,18 @@
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "black/solid": {
       "rest": {
         "bg": "--color-bg-black",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bevel-black-top",
+        "bevel-bottom": "--color-bevel-black-bottom"
       },
       "hover": {
         "bg": "--color-bg-black-hover",
@@ -146,19 +172,21 @@
       "disabled": {
         "bg": "--color-bg-disabled",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-white"
+        "icon": "--color-fg-white",
+        "bevel-top": "--color-bg-transparent",
+        "bevel-bottom": "--color-bg-transparent"
       }
     },
     "default/outline": {
       "rest": {
         "bg": "--color-bg-transparent",
         "border": "--color-border-neutral-subtle",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-text-muted"
       },
       "hover": {
         "bg": "--color-bg-neutral-subtle",
         "border": "--color-border-neutral",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-fg-quarternary-solid"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -175,7 +203,7 @@
       "hover": {
         "bg": "--color-bg-primary-subtle",
         "border": "--color-border-primary",
-        "icon": "--color-fg-primary"
+        "icon": "--color-text-primary_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -192,7 +220,7 @@
       "hover": {
         "bg": "--color-bg-success-subtle",
         "border": "--color-border-success",
-        "icon": "--color-fg-success"
+        "icon": "--color-text-success_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -209,7 +237,7 @@
       "hover": {
         "bg": "--color-bg-warning-subtle",
         "border": "--color-border-warning",
-        "icon": "--color-fg-warning"
+        "icon": "--color-text-warning_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -226,7 +254,7 @@
       "hover": {
         "bg": "--color-bg-danger-subtle",
         "border": "--color-border-danger",
-        "icon": "--color-fg-danger"
+        "icon": "--color-text-danger_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -270,14 +298,14 @@
     },
     "default/ghost": {
       "rest": {
-        "bg": "--color-bg-neutral-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-text-muted"
       },
       "hover": {
-        "bg": "--color-bg-neutral",
+        "bg": "--color-bg-neutral-subtle",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-fg-quarternary-solid"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -287,14 +315,14 @@
     },
     "primary/ghost": {
       "rest": {
-        "bg": "--color-bg-primary-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-primary"
       },
       "hover": {
-        "bg": "--color-bg-primary-muted",
+        "bg": "--color-bg-primary-subtle",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-primary"
+        "icon": "--color-text-primary_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -304,14 +332,14 @@
     },
     "success/ghost": {
       "rest": {
-        "bg": "--color-bg-success-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-success"
       },
       "hover": {
-        "bg": "--color-bg-success-muted",
+        "bg": "--color-bg-success-subtle",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-success"
+        "icon": "--color-text-success_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -321,14 +349,14 @@
     },
     "warning/ghost": {
       "rest": {
-        "bg": "--color-bg-warning-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-warning"
       },
       "hover": {
-        "bg": "--color-bg-warning-muted",
+        "bg": "--color-bg-warning-subtle",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-warning"
+        "icon": "--color-text-warning_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -338,14 +366,14 @@
     },
     "danger/ghost": {
       "rest": {
-        "bg": "--color-bg-danger-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-danger"
       },
       "hover": {
-        "bg": "--color-bg-danger-muted",
+        "bg": "--color-bg-danger-subtle",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-danger"
+        "icon": "--color-text-danger_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -355,7 +383,7 @@
     },
     "white/ghost": {
       "rest": {
-        "bg": "--color-bg-white-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-white"
       },
@@ -372,12 +400,12 @@
     },
     "black/ghost": {
       "rest": {
-        "bg": "--color-bg-black-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-black"
       },
       "hover": {
-        "bg": "--color-bg-black-hover",
+        "bg": "--color-bg-black-subtle",
         "border": "--color-border-black",
         "icon": "--color-fg-black"
       },
@@ -391,12 +419,12 @@
       "rest": {
         "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-text-muted"
       },
       "hover": {
-        "bg": "--color-bg-neutral",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-secondary-solid"
+        "icon": "--color-fg-quarternary-solid"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -411,9 +439,9 @@
         "icon": "--color-fg-primary"
       },
       "hover": {
-        "bg": "--color-bg-primary-muted",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-primary"
+        "icon": "--color-text-primary_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -428,9 +456,9 @@
         "icon": "--color-fg-success"
       },
       "hover": {
-        "bg": "--color-bg-success-muted",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-success"
+        "icon": "--color-text-success_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -445,9 +473,9 @@
         "icon": "--color-fg-warning"
       },
       "hover": {
-        "bg": "--color-bg-warning-muted",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-warning"
+        "icon": "--color-text-warning_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -462,9 +490,9 @@
         "icon": "--color-fg-danger"
       },
       "hover": {
-        "bg": "--color-bg-danger-muted",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
-        "icon": "--color-fg-danger"
+        "icon": "--color-text-danger_hover"
       },
       "disabled": {
         "bg": "--color-bg-transparent",
@@ -479,7 +507,7 @@
         "icon": "--color-fg-white"
       },
       "hover": {
-        "bg": "--color-bg-white-subtle",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-white"
       },
@@ -496,7 +524,7 @@
         "icon": "--color-fg-black"
       },
       "hover": {
-        "bg": "--color-bg-black-hover",
+        "bg": "--color-bg-transparent",
         "border": "--color-border-transparent",
         "icon": "--color-fg-black"
       },

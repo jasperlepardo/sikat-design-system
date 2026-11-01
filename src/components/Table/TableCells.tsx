@@ -179,7 +179,7 @@ export function TableActions({
               key={i}
               intent="default"
               variant="link"
-              size="2xs"
+              size="extra-small"
               className="sikat-table-cell__drag"
               aria-label={item.label ?? 'Drag to reorder'}
               leadingIcon={<Icon size={20}>drag_indicator</Icon>}
@@ -192,7 +192,7 @@ export function TableActions({
               key={i}
               intent="default"
               variant="link"
-              size="2xs"
+              size="extra-small"
               className="sikat-table-cell__expand"
               aria-label={item.label ?? 'Expand row'}
               aria-expanded={item.expanded}
@@ -207,7 +207,7 @@ export function TableActions({
             key={item.label}
             intent="default"
             variant="link"
-            size="2xs"
+            size="extra-small"
             aria-label={item.label}
             onClick={item.onClick}
             disabled={item.disabled}

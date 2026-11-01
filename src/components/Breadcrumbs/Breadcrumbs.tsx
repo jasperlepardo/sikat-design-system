@@ -60,7 +60,7 @@ export function Breadcrumbs({
                 <Button
                   intent="default"
                   variant="link"
-                  size="2xs"
+                  size="extra-small"
                   aria-label={`Show ${items.length - 1 - tail} more`}
                   onClick={() => setExpanded(true)}
                 >
