@@ -1,6 +1,6 @@
 import { useState, type HTMLAttributes, type MouseEvent, type ReactNode } from 'react';
 import { cn } from '../../lib/cn';
-import { Button } from '../Button/Button';
+import { IconButton } from '../Button/IconButton';
 import './breadcrumbs.css';
 
 /** One step in the trail. The last item is the current page. */
@@ -57,15 +57,15 @@ export function Breadcrumbs({
           if (item === 'ellipsis')
             return (
               <li key="ellipsis" className="sikat-breadcrumbs__item">
-                <Button
+                <IconButton
                   intent="default"
                   variant="link"
                   size="2xs"
-                  aria-label={`Show ${items.length - 1 - tail} more`}
+                  label={`Show ${items.length - 1 - tail} more`}
                   onClick={() => setExpanded(true)}
                 >
                   …
-                </Button>
+                </IconButton>
               </li>
             );
           const current = item === items[items.length - 1];

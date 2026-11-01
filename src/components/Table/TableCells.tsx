@@ -2,6 +2,7 @@ import { Children, type ReactNode } from 'react';
 import { Avatar, type AvatarProps } from '../Avatar/Avatar';
 import { Badge, type BadgeProps } from '../Badge/Badge';
 import { Button } from '../Button/Button';
+import { IconButton } from '../Button/IconButton';
 import { DecorativeIcon, type DecorativeIconProps } from '../DecorativeIcon/DecorativeIcon';
 import { Icon } from '../Icon/Icon';
 import { Link } from '../Button/Link';
@@ -175,44 +176,47 @@ export function TableActions({
     ? items.map((item, i) => {
         if (item.type === 'drag') {
           return (
-            <Button
+            <IconButton
               key={i}
               intent="default"
               variant="link"
               size="2xs"
               className="sikat-table-cell__drag"
-              aria-label={item.label ?? 'Drag to reorder'}
-              leadingIcon={<Icon size={20}>drag_indicator</Icon>}
-            />
+              label={item.label ?? 'Drag to reorder'}
+            >
+              <Icon size={20}>drag_indicator</Icon>
+            </IconButton>
           );
         }
         if (item.type === 'expand') {
           return (
-            <Button
+            <IconButton
               key={i}
               intent="default"
               variant="link"
               size="2xs"
               className="sikat-table-cell__expand"
-              aria-label={item.label ?? 'Expand row'}
+              label={item.label ?? 'Expand row'}
               aria-expanded={item.expanded}
               onClick={item.onToggle}
               onKeyDown={item.onKeyDown}
-              leadingIcon={<Icon size={20}>chevron_right</Icon>}
-            />
+            >
+              <Icon size={20}>chevron_right</Icon>
+            </IconButton>
           );
         }
         return (
-          <Button
+          <IconButton
             key={item.label}
             intent="default"
             variant="link"
             size="2xs"
-            aria-label={item.label}
+            label={item.label}
             onClick={item.onClick}
             disabled={item.disabled}
-            leadingIcon={item.icon}
-          />
+          >
+            {item.icon}
+          </IconButton>
         );
       })
     : Children.toArray(children);
