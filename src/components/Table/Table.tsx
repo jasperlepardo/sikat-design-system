@@ -8,7 +8,7 @@ import {
   type ReactNode,
 } from 'react';
 import { cn } from '../../lib/cn';
-import { Button } from '../Button/Button';
+import { IconButton } from '../Button/IconButton';
 import { Checkbox } from '../Field/Checkbox';
 import {
   TableActions,
@@ -335,20 +335,19 @@ export function Table<T>({
                     <span className="sikat-table__th-inner">
                       {col.expandToggle && tree ? (
                         <span className="sikat-table__th-icon">
-                          <Button
+                          <IconButton
                             intent="default"
                             variant="link"
-                            size="extra-small"
-                            aria-label={allExpanded ? 'Collapse all rows' : 'Expand all rows'}
+                            size="2xs"
+                            label={allExpanded ? 'Collapse all rows' : 'Expand all rows'}
                             onClick={() => {
                               const next = allExpanded ? [] : expandable;
                               if (expandedIds === undefined) setOwnExpanded(next);
                               onExpandedChange?.(next);
                             }}
-                            leadingIcon={
-                              <Icon size={20}>{allExpanded ? 'collapse_all' : 'expand_all'}</Icon>
-                            }
-                          />
+                          >
+                            <Icon size={20}>{allExpanded ? 'collapse_all' : 'expand_all'}</Icon>
+                          </IconButton>
                         </span>
                       ) : null}
                       <span
@@ -361,16 +360,17 @@ export function Table<T>({
                         {col.header}
                       </span>
                       {col.sortable ? (
-                        <Button
+                        <IconButton
                           intent="default"
                           variant="link"
-                          size="extra-small"
+                          size="2xs"
                           className="sikat-table__sort"
                           data-active={sorted ? 'true' : undefined}
-                          aria-label={`Sort by ${typeof col.header === 'string' ? col.header : col.key}`}
+                          label={`Sort by ${typeof col.header === 'string' ? col.header : col.key}`}
                           onClick={() => onSortChange?.(nextSort(col.key))}
-                          leadingIcon={<Icon size={16}>unfold_more</Icon>}
-                        />
+                        >
+                          <Icon size={16}>unfold_more</Icon>
+                        </IconButton>
                       ) : null}
                     </span>
                   </th>
