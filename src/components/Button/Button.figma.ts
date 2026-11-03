@@ -1,58 +1,58 @@
 // url=https://www.figma.com/design/lFuOcYXanzzbYTJmsEEWR5/Components?node-id=72-3820
 // source=src/components/Button/Button.tsx
 // component=Button
-import figma from 'figma'
-const instance = figma.selectedInstance
+import figma from 'figma';
+const instance = figma.selectedInstance;
 
-const label = instance.getString('Button Label')
+const label = instance.getString('Button Label');
 
 const intent = instance.getEnum('Type', {
-  'Default': 'default',
-  'Primary': 'primary',
-  'Success': 'success',
-  'Warning': 'warning',
-  'Danger': 'danger',
-  'White': 'white',
-  'Black': 'black',
-})
+  Default: 'default',
+  Primary: 'primary',
+  Success: 'success',
+  Warning: 'warning',
+  Danger: 'danger',
+  White: 'white',
+  Black: 'black',
+});
 
 const variant = instance.getEnum('Style', {
-  'Solid': 'solid',
-  'Outline': 'outline',
-  'Ghost': 'ghost',
-  'Link': 'link',
-})
+  Solid: 'solid',
+  Outline: 'outline',
+  Ghost: 'ghost',
+  Link: 'link',
+});
 
 const size = instance.getEnum('Size', {
   'Extra Large': 'extra-large',
-  'Large': 'large',
-  'Medium': 'medium',
-  'Small': 'small',
+  Large: 'large',
+  Medium: 'medium',
+  Small: 'small',
   'Extra Small': 'extra-small',
-})
+});
 
 const disabled = instance.getEnum('State', {
-  'Default': false,
-  'Hover': false,
-  'Disabled': true,
-})
+  Default: false,
+  Hover: false,
+  Disabled: true,
+});
 
-const showLeadingIcon = instance.getBoolean('Show Leading Icon')
-const showTrailingIcon = instance.getBoolean('Show Trailing Icon')
+const showLeadingIcon = instance.getBoolean('Show Leading Icon');
+const showTrailingIcon = instance.getBoolean('Show Trailing Icon');
 
-let leadingIconCode
+let leadingIconCode;
 if (showLeadingIcon) {
-  const leadingIcon = instance.findInstance('Leading Icon')
+  const leadingIcon = instance.findInstance('Leading Icon');
   if (leadingIcon && leadingIcon.type === 'INSTANCE') {
-    leadingIconCode = leadingIcon.executeTemplate().example
+    leadingIconCode = leadingIcon.executeTemplate().example;
   }
 }
 
-let trailingIconCode
+let trailingIconCode;
 if (showTrailingIcon) {
-  const trailingIcon = instance.findInstance('Trailing Icon')
+  const trailingIcon = instance.findInstance('Trailing Icon');
   if (trailingIcon && trailingIcon.type === 'INSTANCE') {
-    trailingIconCode = trailingIcon.executeTemplate().example
+    trailingIconCode = trailingIcon.executeTemplate().example;
   }
 }
 
@@ -72,4 +72,4 @@ export default {
   imports: ['import { Button } from "@jasperlepardo/sikat-design-system"'],
   id: 'button',
   metadata: { nestable: true },
-}
+};
