@@ -97,6 +97,7 @@ export function MultiSelect({
     onActivate: toggleAt,
     getItemId,
     isDisabled: (i) => !!filtered[i]?.disabled,
+    selectedIndex: filtered.findIndex((o) => selected.includes(o.value)),
     closeOnActivate: false,
   });
 
