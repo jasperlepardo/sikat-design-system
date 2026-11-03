@@ -13,7 +13,7 @@
     margin-top: var(--spacing-1); /* 4px — Figma Fieldset gap */
     margin-bottom: 0;
     width: 100%;
-    max-height: 16rem;
+    max-height: 400px;
     overflow: auto;
     box-sizing: border-box;
     padding: var(--spacing-1); /* 4px inset — inner items use --rounded-lg (12−4=8px) */
@@ -46,7 +46,7 @@
     margin-bottom: calc(-1 * var(--spacing-1));
   }
   .sikat-dropdown[data-cover] .sikat-dropdown__item {
-    padding-inline: var(--spacing-2); /* 8px — field inline padding */
+    padding-inline: var(--spacing-3); /* 12px — field inline padding */
   }
 
   /* Header (e.g. a search field) pinned above the items; only the list scrolls.
@@ -105,7 +105,7 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-2); /* 8px */
-    padding: var(--spacing-2) var(--spacing-4); /* 8px 16px */
+    padding: var(--spacing-2) var(--spacing-3); /* 8px 12px */
     border-radius: var(--rounded-lg); /* 8px — inner: 12px container − 4px padding */
     background-color: var(--color-bg-default);
     color: var(--color-text-body);
