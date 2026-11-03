@@ -1,0 +1,8 @@
+{
+  "codeConnect": {
+    "include": ["src/components/**/*.figma.ts"],
+    "importPaths": {
+      "src/components/*": "@jasperlepardo/sikat-design-system"
+    }
+  }
+}
